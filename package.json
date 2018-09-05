@@ -1,0 +1,87 @@
+{
+  "name": "ipld-explorer-components",
+  "description": "React components for https://explore.ipld.io",
+  "version": "1.0.0",
+  "author": "olizilla",
+  "license": "MIT",
+  "repository": "ipfs-shipyard/ipld-explorer-components",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=8",
+    "npm": ">=5"
+  },
+  "scripts": {
+    "start": "NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js' --watch",
+    "build": "NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js'",
+    "lint": "standard",
+    "test": "react-scripts test --env=jsdom",
+    "storybook": "start-storybook -p 9009",
+    "storybook:build": "build-storybook -c .storybook -o build",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "@tableflip/react-inspector": "^2.3.0",
+    "babel-cli": "^6.26.0",
+    "cids": "^0.5.3",
+    "cytoscape": "^3.2.14",
+    "cytoscape-dagre": "^2.2.1",
+    "filesize": "^3.6.1",
+    "ipfs-unixfs": "^0.1.15",
+    "ipld": "^0.17.3",
+    "ipld-dag-pb": "^0.14.8",
+    "milliseconds": "^1.0.3",
+    "multiaddr": "^5.0.0",
+    "multibase": "^0.4.0",
+    "multicodec": "^0.2.7",
+    "multihashes": "^0.4.13"
+  },
+  "peerDependencies": {
+    "prop-types": "^15.6.4",
+    "react": "^16.0.0",
+    "react-dom": "^16.0.0",
+    "redux-bundler": "^21.2.2",
+    "redux-bundler-react": "^1.0.1",
+    "react-virtualized": "^9.20.0",
+    "react-helmet": "^5.2.0",
+    "react-loadable": "^5.4.0",
+    "tachyons": "^4.11.1",
+    "ipfs-css": "^0.9.0"
+  },
+  "devDependencies": {
+    "@storybook/addon-a11y": "^3.4.10",
+    "@storybook/addon-actions": "^3.4.10",
+    "@storybook/addon-knobs": "^3.4.10",
+    "@storybook/addon-links": "^3.4.10",
+    "@storybook/addons": "^3.4.10",
+    "@storybook/react": "^3.4.10",
+    "babel-core": "^6.26.3",
+    "babel-eslint": "^7.2.3",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react-app": "^3.1.2",
+    "eslint": "^4.19.1",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-config-standard-react": "^6.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "eslint-plugin-node": "^7.0.1",
+    "eslint-plugin-promise": "^4.0.0",
+    "eslint-plugin-react": "^7.10.0",
+    "eslint-plugin-standard": "^3.1.0",
+    "ipfs-css": "^0.9.0",
+    "react": "^16.4.1",
+    "react-dom": "^16.4.1",
+    "react-scripts": "^1.1.4",
+    "react-virtualized": "^9.20.1",
+    "tachyons": "^4.11.1"
+  },
+  "files": [
+    "dist"
+  ],
+  "browsers": [
+    ">0.25%",
+    "not ie 11",
+    "not op_mini all"
+  ],
+  "standard": {
+    "parser": "babel-eslint"
+  }
+}
