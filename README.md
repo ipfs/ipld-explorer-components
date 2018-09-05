@@ -20,11 +20,25 @@ Install it from npm:
 npm install ipld-explorer-components
 ```
 
-The ES5 friendly version of the `src` dir is generated to the `dist` dir. You can
-require the React ui components by walking the relevant path into the module:
+The ES5 friendly version of the `src` dir is generated to the `dist` dir and the
+page components are all provided as named exports so you can import them like so:
 
 ```js
-import CidInfo from `ipld-explorer-components/dist/components/cid-info/CidInfo`
+import {ExplorePage, StartExploringPage} from `ipld-explorer-components`
+```
+
+The following Components are available:
+
+```js
+export {
+  StartExploringPage,
+  ExplorePage,
+  IpldExploreForm,
+  CidInfo,
+  IpldGraph
+  ObjectInfo,
+  exploreBundle
+}
 ```
 
 There are `peer-dependencies` so that the parent app can pick the versions of common deps. You'll need to add the following deps to your project.
