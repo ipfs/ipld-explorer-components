@@ -1,9 +1,9 @@
 import React from 'react'
 import Cid from '../cid/Cid'
-import {colorForNode} from '../object-info/ObjectInfo'
-import {getCodecOrNull} from '../../lib/cid'
+import { colorForNode } from '../object-info/ObjectInfo'
+import { getCodecOrNull } from '../../lib/cid'
 
-const GraphCrumb = ({cid, pathBoundaries, localPath, hrefBase = '#/explore', ...props}) => {
+const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', ...props }) => {
   const [first, ...rest] = pathBoundaries
   const last = pathBoundaries[pathBoundaries.length - 1]
   const firstHrefBase = calculateHrefBase(hrefBase, cid, pathBoundaries, 0)
@@ -63,17 +63,17 @@ function calculateHrefBase (hrefBase, cid, boundaries, boundaryIndex) {
   return relPath ? cidHref + '/' + relPath : cidHref
 }
 
-const NodeUnderline = ({cid, children}) => {
+const NodeUnderline = ({ cid, children }) => {
   const type = getCodecOrNull(cid)
   const color = colorForNode(type)
   return (
     <div className='dib overflow-hidden'>
-      <div className='bb bw1 pb1' style={{borderColor: color}}>{children}</div>
+      <div className='bb bw1 pb1' style={{ borderColor: color }}>{children}</div>
     </div>
   )
 }
 
-const Path = ({path, hrefBase, sourceCid}) => {
+const Path = ({ path, hrefBase, sourceCid }) => {
   const parts = path.split('/').filter(p => !!p)
   return (
     <div className='dib'>

@@ -36,8 +36,8 @@ export function normaliseDagPb (node, cid, type) {
   let format
   try {
     // it's a unix system?
-    const {type, data, blockSizes} = unixfs.unmarshal(node.data)
-    node.data = {type, data, blockSizes}
+    const { type, data, blockSizes } = unixfs.unmarshal(node.data)
+    node.data = { type, data, blockSizes }
     format = `unixfs`
   } catch (err) {
     // dag-pb but not a unixfs.
@@ -59,7 +59,7 @@ export function normaliseDagPb (node, cid, type) {
  * with links found in dag-cbor
  */
 export function normaliseDagPbLinks (node, sourceCid) {
-  return node.links.map(({name, size, multihash}, index) => ({
+  return node.links.map(({ name, size, multihash }, index) => ({
     path: name || `Links/${index}`,
     source: sourceCid,
     target: multihash,
@@ -103,7 +103,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
     if (!targetCid) return []
     const target = targetCid.toBaseEncodedString()
     obj['/'] = target
-    return [{path, source: sourceCid, target}]
+    return [{ path, source: sourceCid, target }]
   } else if (keys.length > 0) {
     return keys
       .map(key => findAndReplaceDagCborLinks(obj[key], sourceCid, path ? `${path}/${key}` : `${key}`))

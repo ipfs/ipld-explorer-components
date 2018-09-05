@@ -15,8 +15,8 @@ class ExplorePage extends React.Component {
   }
 
   onLinkClick (link) {
-    const {doUpdateHash, explore} = this.props
-    const {nodes, pathBoundaries} = explore
+    const { doUpdateHash, explore } = this.props
+    const { nodes, pathBoundaries } = explore
     const cid = nodes[0].cid
     const pathParts = pathBoundaries.map(p => p.path)
     // add the extra path step from the link to the end
@@ -31,7 +31,7 @@ class ExplorePage extends React.Component {
   }
 
   render () {
-    let {explore, exploreIsLoading, explorePathFromHash} = this.props
+    let { explore, exploreIsLoading, explorePathFromHash } = this.props
     if (!explorePathFromHash) {
       // No IPLD path to explore so show the intro page
       console.log('[IPLD Explorer] ExplorePage loaded without a path to explore')
@@ -42,7 +42,7 @@ class ExplorePage extends React.Component {
     // now stale info and show a loading spinner.
     explore = explore || {}
     explore = exploreIsLoading ? {} : explore
-    const {error, targetNode, localPath, nodes, pathBoundaries} = explore
+    const { error, targetNode, localPath, nodes, pathBoundaries } = explore
     const sourceNode = (nodes && nodes[0]) || null
     return (
       <div className='nt4-l'>
@@ -51,11 +51,11 @@ class ExplorePage extends React.Component {
         </Helmet>
         {pathBoundaries && targetNode ? (
           <GraphCrumb
-            style={{padding: '15px 0 10px'}}
+            style={{ padding: '15px 0 10px' }}
             cid={sourceNode.cid}
             pathBoundaries={pathBoundaries}
             localPath={localPath} />
-        ) : <div style={{height: 54}} /> }
+        ) : <div style={{ height: 54 }} /> }
         <div className='dt-l dt--fixed'>
           <div className='dtc-l w-100 w-two-thirds-l pr3-l v-top'>
             {error ? (
@@ -65,7 +65,7 @@ class ExplorePage extends React.Component {
             ) : null}
             {targetNode ? (
               <ObjectInfo
-                style={{background: '#FBFBFB'}}
+                style={{ background: '#FBFBFB' }}
                 cid={targetNode.cid}
                 localPath={localPath}
                 size={targetNode.size}
@@ -82,13 +82,13 @@ class ExplorePage extends React.Component {
           <div className='dtc-l w-third-l v-top pt3 pt0-l'>
             {targetNode ? (
               <CidInfo
-                style={{background: '#FBFBFB', overflow: 'hidden'}}
+                style={{ background: '#FBFBFB', overflow: 'hidden' }}
                 cid={targetNode.cid} />
             ) : null}
             {targetNode ? (
               <ErrorBoundary>
                 <IpldGraph
-                  style={{width: '100%', height: 300}}
+                  style={{ width: '100%', height: 300 }}
                   path={targetNode.cid}
                   links={targetNode.links}
                   onNodeClick={this.onLinkClick} />

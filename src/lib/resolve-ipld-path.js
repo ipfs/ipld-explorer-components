@@ -37,7 +37,7 @@ import normaliseDagNode from './normalise-dag-node'
  * @returns {{targetNode: Object, canonicalPath: String, localPath: String, nodes: Object[], pathBoundaries: Object[]}} resolved path info
  */
 export default async function resolveIpldPath (getIpfs, sourceCid, path, nodes = [], pathBoundaries = []) {
-  const {value, remainderPath} = await ipldGetNodeAndRemainder(getIpfs, sourceCid, path)
+  const { value, remainderPath } = await ipldGetNodeAndRemainder(getIpfs, sourceCid, path)
 
   const node = normaliseDagNode(value, sourceCid)
   nodes.push(node)
@@ -53,7 +53,7 @@ export default async function resolveIpldPath (getIpfs, sourceCid, path, nodes =
   // we made it to the containing node. Hand back the info
   const canonicalPath = path ? `${sourceCid}${path}` : sourceCid
   let targetNode = node
-  return {targetNode, canonicalPath, localPath: path, nodes, pathBoundaries}
+  return { targetNode, canonicalPath, localPath: path, nodes, pathBoundaries }
 }
 
 export async function ipldGetNodeAndRemainder (getIpfs, sourceCid, path) {
@@ -66,9 +66,9 @@ export async function ipldGetNodeAndRemainder (getIpfs, sourceCid, path) {
 
   // TODO: handle indexing into dag-pb links without using Links prefix as per go-ipfs dag.get does.
   // Current js-ipld-dag-pb resolver will throw with a path not available error if Links prefix is missing.
-  const {value} = await ipldGet(getIpfs, sourceCid)
-  const {remainderPath} = await ipldGet(getIpfs, sourceCid, path, {localResolve: true})
-  return {value, remainderPath}
+  const { value } = await ipldGet(getIpfs, sourceCid)
+  const { remainderPath } = await ipldGet(getIpfs, sourceCid, path, { localResolve: true })
+  return { value, remainderPath }
 }
 
 export function ipldGet (getIpfs, cid, path, options) {
@@ -91,7 +91,7 @@ export function ipldGet (getIpfs, cid, path, options) {
 export function findLink (node, linkPath) {
   if (!linkPath) return null
   if (!node) return null
-  const {links} = node
+  const { links } = node
   const link = links.find(link => link.path === linkPath)
   return link
 }
@@ -101,7 +101,7 @@ export function findLinkPath (fullPath, remainderPath) {
   if (!fullPath || fullPath === '/') return null
   if (!remainderPath) return trimSlashes(fullPath)
   if (!fullPath.endsWith(remainderPath)) {
-    throw new Error('Requested IPLD path should end with the remainder path', {fullPath, remainderPath})
+    throw new Error('Requested IPLD path should end with the remainder path', { fullPath, remainderPath })
   }
   // Remove remainder path from end of full path to get link path
   const linkPath = fullPath.substring(0, fullPath.length - remainderPath.length)

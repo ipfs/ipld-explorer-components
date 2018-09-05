@@ -5,10 +5,10 @@ import { colorForNode, nameForNode, shortNameForNode } from './object-info/Objec
 import ipldLogoSrc from './ipld.svg'
 import IpldExploreForm from './IpldExploreForm'
 
-const ExploreSuggestion = ({cid, name, type}) => {
+const ExploreSuggestion = ({ cid, name, type }) => {
   return (
     <a className='flex items-center lh-copy pl3 pl0-l pv3 bb b--black-10 link focus-outline' href={`#/explore/${cid}`}>
-      <span className='flex items-center justify-center w3 h3 flex-shrink-0 br-100 tc' style={{background: colorForNode(type)}}>
+      <span className='flex items-center justify-center w3 h3 flex-shrink-0 br-100 tc' style={{ background: colorForNode(type) }}>
         <span className='montserrat fw2 f4 snow' title={nameForNode(type)}>{shortNameForNode(type)}</span>
       </span>
       <span className='pl3 flex-auto'>
@@ -19,7 +19,7 @@ const ExploreSuggestion = ({cid, name, type}) => {
   )
 }
 
-const StartExploringPage = ({embed}) => {
+const StartExploringPage = ({ embed }) => {
   return (
     <div>
       <Helmet>
@@ -53,7 +53,7 @@ const StartExploringPage = ({embed}) => {
           <Box className='tl dib pa4 avenir measure-wide-l lh-copy dark-gray ba-l b--black-10'>
             <div className='tc'>
               <a className='link' href='https://ipld.io'>
-                <img src={ipldLogoSrc} alt='IPLD' style={{height: 60}} />
+                <img src={ipldLogoSrc} alt='IPLD' style={{ height: 60 }} />
               </a>
             </div>
             <p>IPLD is <strong>the data model of the content-addressable web.</strong> It allows us to treat all hash-linked data structures as subsets of a unified information space, unifying all data models that link data with hashes as instances of IPLD.</p>

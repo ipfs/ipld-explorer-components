@@ -8,12 +8,12 @@ const bundle = createAsyncResourceBundle({
   name: 'explore',
   actionBaseType: 'EXPLORE',
   getPromise: async (args) => {
-    const {store, getIpfs} = args
+    const { store, getIpfs } = args
     let path = store.selectExplorePathFromHash()
     if (!path) return null
     const pathParts = parseIpldPath(path)
     if (!pathParts) return null
-    const {cidOrFqdn, rest} = pathParts
+    const { cidOrFqdn, rest } = pathParts
     try {
       // TODO: handle ipns, which would give us a fqdn in the cid position.
       const cid = new Cid(cidOrFqdn)

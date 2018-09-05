@@ -1,8 +1,8 @@
 import React from 'react'
 import cytoscape from 'cytoscape'
 import dagre from 'cytoscape-dagre'
-import {getCodecOrNull} from '../../lib/cid'
-import {colorForNode} from '../object-info/ObjectInfo'
+import { getCodecOrNull } from '../../lib/cid'
+import { colorForNode } from '../object-info/ObjectInfo'
 
 cytoscape.use(dagre)
 
@@ -64,18 +64,18 @@ export default class IpldGraphCytoscape extends React.Component {
   }
 
   componentDidMount () {
-    const {path} = this.props
-    const {truncatedLinks: links} = this.state
+    const { path } = this.props
+    const { truncatedLinks: links } = this.state
     const container = this.graphRef.current
-    this.cy = this.renderTree({path, links, container})
+    this.cy = this.renderTree({ path, links, container })
   }
 
   componentDidUpdate () {
     this.cy.destroy()
-    const {path} = this.props
-    const {truncatedLinks: links} = this.state
+    const { path } = this.props
+    const { truncatedLinks: links } = this.state
     const container = this.graphRef.current
-    this.cy = this.renderTree({path, links, container})
+    this.cy = this.renderTree({ path, links, container })
   }
 
   render () {
@@ -84,10 +84,10 @@ export default class IpldGraphCytoscape extends React.Component {
     return <div ref={this.graphRef} {...props} />
   }
 
-  renderTree ({path, links, container}) {
+  renderTree ({ path, links, container }) {
     const cyLinks = this.ipfsLinksToCy(links)
     // TODO: path is currently alwasys the root cid, but this will change.
-    const root = this.makeNode({target: path}, '')
+    const root = this.makeNode({ target: path }, '')
 
     // list of graph elements to start with
     const elements = [
@@ -120,7 +120,7 @@ export default class IpldGraphCytoscape extends React.Component {
     return [...nodes, ...edges]
   }
 
-  makeNode ({target, path}, index) {
+  makeNode ({ target, path }, index) {
     const type = getCodecOrNull(target)
     const bg = colorForNode(type)
     return {
@@ -134,7 +134,7 @@ export default class IpldGraphCytoscape extends React.Component {
     }
   }
 
-  makeLink ({source, target, path}, index) {
+  makeLink ({ source, target, path }, index) {
     return {
       group: 'edges',
       data: {
