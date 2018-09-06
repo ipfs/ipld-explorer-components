@@ -1,0 +1,10 @@
+{
+  "cidInfo": {
+    "header": "CID Info",
+    "hashDigest": "Message digest"
+  },
+  "base": "base",
+  "version": "version",
+  "codec": "codec",
+  "multihash": "WOO HAA"
+}

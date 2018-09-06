@@ -15,8 +15,8 @@
     "build": "NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js'",
     "lint": "standard",
     "test": "react-scripts test --env=jsdom",
-    "storybook": "start-storybook -p 9009",
-    "storybook:build": "build-storybook -c .storybook -o build",
+    "storybook": "start-storybook -p 9009 --static-dir public",
+    "storybook:build": "build-storybook -c .storybook --static-dir public --output-dir build",
     "prepare": "npm run build"
   },
   "dependencies": {
@@ -26,6 +26,10 @@
     "cytoscape": "^3.2.14",
     "cytoscape-dagre": "^2.2.1",
     "filesize": "^3.6.1",
+    "i18next": "^11.7.0",
+    "i18next-browser-languagedetector": "^2.2.3",
+    "i18next-icu": "^0.6.0",
+    "i18next-xhr-backend": "^1.5.1",
     "ipfs-unixfs": "^0.1.15",
     "ipld": "^0.17.3",
     "ipld-dag-pb": "^0.14.8",
@@ -33,7 +37,8 @@
     "multiaddr": "^5.0.0",
     "multibase": "^0.4.0",
     "multicodec": "^0.2.7",
-    "multihashes": "^0.4.13"
+    "multihashes": "^0.4.13",
+    "react-i18next": "^7.11.1"
   },
   "peerDependencies": {
     "prop-types": "^15.6.4",

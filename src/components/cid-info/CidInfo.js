@@ -1,5 +1,6 @@
 import React from 'react'
 import { decodeCid } from './decode-cid'
+import { translate } from 'react-i18next'
 
 function extractInfo (cid) {
   const cidInfo = decodeCid(cid)
@@ -28,7 +29,7 @@ function extractInfo (cid) {
   }
 }
 
-const CidInfo = ({ cid, className, ...props }) => {
+export const CidInfo = ({ t, cid, className, ...props }) => {
   let cidErr = null
   let cidInfo = null
   try {
@@ -40,7 +41,7 @@ const CidInfo = ({ cid, className, ...props }) => {
     <section className={`ph3 pv4 sans-serif ${className}`} {...props}>
       <label className='db pb2'>
         <a className='tracked ttu f5 fw2 teal-muted hover-aqua link' href='https://docs.ipfs.io/guides/concepts/cid/'>
-          CID info
+          {t('cidInfo.header')}
         </a>
       </label>
       {!cidInfo ? null : (
@@ -51,11 +52,13 @@ const CidInfo = ({ cid, className, ...props }) => {
           <div className='f6 sans-serif fw4 ma0 pb2 truncate' id='CidInfo-human-readable-cid'>
             {cidInfo.humanReadable}
           </div>
-          <label htmlFor='CidInfo-human-readable-cid' className='db fw2 ma0 gray ttu f7 tracked'>base - version -  codec - multihash</label>
+          <label htmlFor='CidInfo-human-readable-cid' className='db fw2 ma0 gray ttu f7 tracked'>
+            {t('base')} - {t('version')} - {t('codec')} - {t('multihash')}
+          </label>
           <a
             href='https://github.com/multiformats/multihash#visual-examples'
             className='dib tracked ttu f6 fw2 teal-muted hover-aqua link mt4'>
-            multihash
+            {t('multihash')}
           </a>
           <div>
             <div className='dib monospace f6 pt2 tr dark-gray lh-title ph2'>
@@ -68,7 +71,7 @@ const CidInfo = ({ cid, className, ...props }) => {
                 ))}
               </span>
               <label htmlFor='CidInfo-multihash' className='sans-serif fw2 ma0 gray ttu f7 tracked'>
-                hash digest
+                {t('cidInfo.hashDigest')}
               </label>
               <div className='tl lh-copy'>
                 <a className='db link orange pt2' href='https://github.com/multiformats/multihash/blob/master/hashtable.csv'>
@@ -96,4 +99,4 @@ const CidInfo = ({ cid, className, ...props }) => {
   )
 }
 
-export default CidInfo
+export default translate('explore')(CidInfo)

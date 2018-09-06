@@ -1,8 +1,11 @@
 import React from 'react'
 import { storiesOf } from '@storybook/react'
+import { I18nextProvider } from 'react-i18next'
+import i18n from '../../i18n'
 import CidInfo from './CidInfo'
 
 storiesOf('CID Info', module)
+  .addDecorator(i18nDecorator)
   .add('cid v0 dag-pb', () => (
     <CidInfo className='ma2' cid='QmYPNmahJAvkMTU6tDx5zvhEkoLzEFeTDz6azDCSNqzKkW' />
   ))
@@ -23,3 +26,11 @@ storiesOf('CID Info', module)
   .add('no cid', () => (
     <CidInfo />
   ))
+
+function i18nDecorator (story) {
+  return (
+    <I18nextProvider i18n={i18n} >
+      {story()}
+    </I18nextProvider>
+  )
+}
