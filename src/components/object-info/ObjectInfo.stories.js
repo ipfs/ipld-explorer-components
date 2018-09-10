@@ -2,6 +2,7 @@ import React from 'react'
 import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
 import { checkA11y } from '@storybook/addon-a11y'
+import i18n from '../../i18n-decorator'
 
 import ObjectInfo from './ObjectInfo'
 
@@ -13,6 +14,7 @@ import dagNodeC from './fixtures/object-info-1240-links.json'
 
 storiesOf('IPLD Node Info', module)
   .addDecorator(checkA11y)
+  .addDecorator(i18n)
   .add('cid v0 dag-pb', () => (
     <ObjectInfo
       className='ma2'

@@ -59,7 +59,7 @@ const DagNodeIcon = ({ type, ...props }) => (
   </svg>
 )
 
-const ObjectInfo = ({ t, className, type, cid, localPath, size, data, links, format, onLinkClick, ...props }) => {
+const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, links, format, onLinkClick, ...props }) => {
   return (
     <section className={`pa4 sans-serif ${className}`} {...props}>
       <h2 className='ma0 lh-title f4 fw4 montserrat pb2' title={type}>
