@@ -12,8 +12,8 @@
     "npm": ">=5"
   },
   "scripts": {
-    "start": "NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js' --watch",
-    "build": "NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js'",
+    "start": "cross-env NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js' --watch",
+    "build": "cross-env NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js'",
     "lint": "standard",
     "test": "react-scripts test --env=jsdom",
     "storybook": "start-storybook -p 9009 --static-dir public",
@@ -64,6 +64,7 @@
     "babel-eslint": "^7.2.3",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react-app": "^3.1.2",
+    "cross-env": "^5.2.0",
     "eslint": "^4.19.1",
     "eslint-config-standard": "^11.0.0",
     "eslint-config-standard-react": "^6.0.0",
