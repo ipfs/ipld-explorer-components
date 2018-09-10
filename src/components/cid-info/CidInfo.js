@@ -29,7 +29,7 @@ function extractInfo (cid) {
   }
 }
 
-export const CidInfo = ({ t, cid, className, ...props }) => {
+export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
   let cidErr = null
   let cidInfo = null
   try {
@@ -41,7 +41,7 @@ export const CidInfo = ({ t, cid, className, ...props }) => {
     <section className={`ph3 pv4 sans-serif ${className}`} {...props}>
       <label className='db pb2'>
         <a className='tracked ttu f5 fw2 teal-muted hover-aqua link' href='https://docs.ipfs.io/guides/concepts/cid/'>
-          {t('cidInfo.header')}
+          {t('CidInfo.header')}
         </a>
       </label>
       {!cidInfo ? null : (
@@ -71,7 +71,7 @@ export const CidInfo = ({ t, cid, className, ...props }) => {
                 ))}
               </span>
               <label htmlFor='CidInfo-multihash' className='sans-serif fw2 ma0 gray ttu f7 tracked'>
-                {t('cidInfo.hashDigest')}
+                {t('CidInfo.hashDigest')}
               </label>
               <div className='tl lh-copy'>
                 <a className='db link orange pt2' href='https://github.com/multiformats/multihash/blob/master/hashtable.csv'>

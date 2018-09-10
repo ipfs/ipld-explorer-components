@@ -1,4 +1,5 @@
 import React from 'react'
+import { translate } from 'react-i18next'
 import { ObjectInspector, chromeLight } from '@tableflip/react-inspector'
 import filesize from 'filesize'
 import LinksTable from './LinksTable'
@@ -58,7 +59,7 @@ const DagNodeIcon = ({ type, ...props }) => (
   </svg>
 )
 
-const ObjectInfo = ({ className, type, cid, localPath, size, data, links, format, onLinkClick, ...props }) => {
+const ObjectInfo = ({ t, className, type, cid, localPath, size, data, links, format, onLinkClick, ...props }) => {
   return (
     <section className={`pa4 sans-serif ${className}`} {...props}>
       <h2 className='ma0 lh-title f4 fw4 montserrat pb2' title={type}>
@@ -71,7 +72,7 @@ const ObjectInfo = ({ className, type, cid, localPath, size, data, links, format
         ) : null}
         {format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type) ? (
           <a className='link avenir ml2 pa2 fw5 f6 blue' href={`https://ipfs.io/ipfs/${cid}`} target='_external'>
-            View on IPFS Gateway
+            {t('')}
           </a>
         ) : null}
       </h2>
@@ -107,7 +108,7 @@ const ObjectInfo = ({ className, type, cid, localPath, size, data, links, format
         )}
       </div>
       { !links || !links.length ? null : (
-        <div className='mt2 nl3 nr3 mh0-l' style={{ height: 360 }}>
+        <div className='mv2 nl3 nr3 mh0-l'>
           <LinksTable links={links} onLinkClick={onLinkClick} />
         </div>
       )}
@@ -115,4 +116,4 @@ const ObjectInfo = ({ className, type, cid, localPath, size, data, links, format
   )
 }
 
-export default ObjectInfo
+export default translate('explore')(ObjectInfo)

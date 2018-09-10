@@ -70,4 +70,31 @@ bundle.reactExploreFetch = createSelector(
   }
 )
 
+// Unpack append a dag link target to the current path and update the url hash
+bundle.doExploreLink = (link) => ({ store }) => {
+  const { nodes, pathBoundaries } = store.selectExplore()
+  const cid = nodes[0].cid
+  const pathParts = pathBoundaries.map(p => p.path)
+  // add the extra path step from the link to the end
+  if (link && link.path) {
+    pathParts.push(link.path)
+  }
+  // add the root cid to the start
+  pathParts.unshift(cid)
+  const path = pathParts.join('/')
+  const hash = `#/explore/${path}`
+  store.doUpdateHash(hash)
+}
+
+// validate user submitted path and put it in url hash fragment
+bundle.doExploreUserProvidedPath = (path) => ({ store }) => {
+  const hash = path ? `#/explore${ensureLeadingSlash(path)}` : `#/explore`
+  store.doUpdateHash(hash)
+}
+
+function ensureLeadingSlash (str) {
+  if (str.startsWith('/')) return str
+  return `/${str}`
+}
+
 export default bundle
