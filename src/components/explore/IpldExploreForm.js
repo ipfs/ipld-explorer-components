@@ -26,7 +26,7 @@ class IpldExploreForm extends React.Component {
   render () {
     const { t } = this.props
     return (
-      <form data-id='IpldExploreForm' className='sans-serif black-80 flex' style={{ maxWidth: 560 }} onSubmit={this.onSubmit}>
+      <form data-id='IpldExploreForm' className='sans-serif black-80 flex' onSubmit={this.onSubmit}>
         <div className='flex-auto'>
           <div className='relative'>
             <input id='ipfs-path' className='input-reset bn pa2 mb2 db w-100 f6 br-0 placeholder-light focus-outline' style={{ borderRadius: '3px 0 0 3px' }} type='text' placeholder='QmHash' aria-describedby='name-desc' onChange={this.onChange} value={this.state.path} />

@@ -1,6 +1,6 @@
 import StartExploringPage from './components/StartExploringPage'
 import ExplorePage from './components/LoadableExplorePage.js'
-import IpldExploreForm from './components/IpldExploreForm.js'
+import IpldExploreForm from './components/explore/IpldExploreForm.js'
 import CidInfo from './components/cid-info/CidInfo'
 import IpldGraph from './components/graph/LoadableIpldGraph'
 import ObjectInfo from './components/object-info/ObjectInfo'

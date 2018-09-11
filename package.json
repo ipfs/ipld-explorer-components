@@ -12,6 +12,7 @@
     "npm": ">=5"
   },
   "scripts": {
+    "clean": "rm -rf dist",
     "start": "cross-env NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js' --watch",
     "build": "cross-env NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js'",
     "lint": "standard",
