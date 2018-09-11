@@ -1,9 +1,9 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import Box from '../components/box/Box'
+import { translate } from 'react-i18next'
 import { colorForNode, nameForNode, shortNameForNode } from './object-info/ObjectInfo'
-import ipldLogoSrc from './ipld.svg'
-import IpldExploreForm from './IpldExploreForm'
+import IpldExploreForm from './explore/IpldExploreForm'
+import AboutIpld from './about/AboutIpld'
 
 const ExploreSuggestion = ({ cid, name, type }) => {
   return (
@@ -19,18 +19,18 @@ const ExploreSuggestion = ({ cid, name, type }) => {
   )
 }
 
-const StartExploringPage = ({ embed }) => {
+const StartExploringPage = ({ t, embed }) => {
   return (
     <div>
       <Helmet>
-        <title>Explore - IPLD</title>
+        <title>{t('StartExploringPage.title')}</title>
       </Helmet>
       <div className='flex-l'>
         <div className='flex-none mr3-l'>
           <div className='measure-l'>
             <div className='pl3 pl0-l pt4 pt2-l'>
-              <h1 className='f3 f2-l ma0 fw4 montserrat charcoal'>Explore the Merkle Forest</h1>
-              <p className='lh-copy f5 avenir charcoal-muted'>Paste a CID into the box to fetch the IPLD node it addresses, or choose a featured dataset.</p>
+              <h1 className='f3 f2-l ma0 fw4 montserrat charcoal'>{t('StartExploringPage.header')}</h1>
+              <p className='lh-copy f5 avenir charcoal-muted'>{t('StartExploringPage.leadParagraph')}</p>
             </div>
             {embed ? <IpldExploreForm /> : null}
             <ul className='list pl0 ma0 mt4 mt0-l bt bn-l b--black-10'>
@@ -50,20 +50,11 @@ const StartExploringPage = ({ embed }) => {
           </div>
         </div>
         <div className='flex-auto tc pt2-l'>
-          <Box className='tl dib pa4 avenir measure-wide-l lh-copy dark-gray ba-l b--black-10'>
-            <div className='tc'>
-              <a className='link' href='https://ipld.io'>
-                <img src={ipldLogoSrc} alt='IPLD' style={{ height: 60 }} />
-              </a>
-            </div>
-            <p>IPLD is <strong>the data model of the content-addressable web.</strong> It allows us to treat all hash-linked data structures as subsets of a unified information space, unifying all data models that link data with hashes as instances of IPLD.</p>
-            <p>Content addressing through hashes has become a widely-used means of connecting data in distributed systems, from the blockchains that run your favorite cryptocurrencies, to the commits that back your code, to the web’s content at large. Yet, whilst all of these tools rely on some common primitives, their specific underlying data structures are not interoperable.</p>
-            <p>Enter IPLD: a single namespace for all hash-inspired protocols. Through IPLD, links can be traversed across protocols, allowing you to explore data regardless of the underlying protocol.</p>
-          </Box>
+          <AboutIpld />
         </div>
       </div>
     </div>
   )
 }
 
-export default StartExploringPage
+export default translate('explore')(StartExploringPage)
