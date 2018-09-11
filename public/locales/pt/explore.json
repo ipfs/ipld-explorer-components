@@ -20,6 +20,9 @@
     "header": "Info do CID",
     "hashDigest": "Hash digest"
   },
+  "ObjectInfo": {
+    "gatewayLink": "View on IPFS Gateway"
+  },
   "base": "base",
   "version": "versão",
   "codec": "codec",

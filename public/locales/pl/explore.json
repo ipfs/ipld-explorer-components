@@ -20,6 +20,9 @@
     "header": "Szczegóły CID",
     "hashDigest": "wynik funkcji haszującej"
   },
+  "ObjectInfo": {
+    "gatewayLink": "View on IPFS Gateway"
+  },
   "base": "baza",
   "version": "wersja",
   "codec": "kodek",
