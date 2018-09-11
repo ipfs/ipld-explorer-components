@@ -10,6 +10,10 @@ const mockExploreBundle = {
   'selectExplore': () => ({
     targetNode: {
       type: 'dag-pb',
+      format: 'unixfs',
+      data: {
+        type: 'directory'
+      },
       cid: 'QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm',
       links: [{
         source: 'QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm',

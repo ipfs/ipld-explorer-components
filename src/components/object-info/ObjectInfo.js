@@ -72,7 +72,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
         ) : null}
         {format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type) ? (
           <a className='link avenir ml2 pa2 fw5 f6 blue' href={`https://ipfs.io/ipfs/${cid}`} target='_external'>
-            {t('')}
+            {t('ObjectInfo.gatewayLink')}
           </a>
         ) : null}
       </h2>
