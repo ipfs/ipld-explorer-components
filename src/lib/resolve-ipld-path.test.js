@@ -1,19 +1,15 @@
 /* global it expect jest */
 import { DAGNode } from 'ipld-dag-pb'
-import {
-  resolveIpldPath,
+import resolveIpldPath, {
   findLinkPath
 } from './resolve-ipld-path'
 
-// TODO: Figure out how to mock the block store for IPLD resolver
-it.skip('resolves all nodes traversed along a path', async () => {
-  const dagGetMock = jest.fn()
-  const getIpfsMock = () => ({ dag: { get: dagGetMock } })
+it('resolves all nodes traversed along a path', async () => {
+  const ipldGetMock = jest.fn()
   const cid = 'zdpuAs8sJjcmsPUfB1bUViftCZ8usnvs2cXrPH6MDyT4zrvSs'
   const path = '/a/b/a'
   const linkCid = 'zdpuAyzU5ahAKr5YV24J5TqrDX8PhzHLMkxx69oVzkBDWHnjq'
   const dagGetRes1 = {
-    remainderPath: 'a',
     value: {
       a: {
         b: {
@@ -23,16 +19,25 @@ it.skip('resolves all nodes traversed along a path', async () => {
     }
   }
   const dagGetRes2 = {
-    remainderPath: '',
-    value: 'hello world'
+    remainderPath: '/a'
+  }
+  const dagGetRes3 = {
+    value: {
+      a: 'hello world'
+    }
+  }
+  const dagGetRes4 = {
+    remainderPath: '/a'
   }
 
-  dagGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes1))
-  dagGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes2))
+  ipldGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes1))
+  ipldGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes2))
+  ipldGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes3))
+  ipldGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes4))
 
-  const res = await resolveIpldPath(getIpfsMock, cid, path)
+  const res = await resolveIpldPath(ipldGetMock, cid, path)
 
-  expect(dagGetMock.mock.calls.length).toBe(2)
+  expect(ipldGetMock.mock.calls.length).toBe(4)
   expect(res.canonicalPath).toBe(`${linkCid}/a`)
   expect(res.nodes.length).toBe(2)
   expect(res.nodes[0].type).toBe('dag-cbor')
@@ -47,11 +52,8 @@ it.skip('resolves all nodes traversed along a path', async () => {
   })
 })
 
-// TODO: Figure out how to mock the block store for IPLD resolver
-it.skip('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
-  const dagGetMock = jest.fn()
-  const getIpfsMock = () => ({ dag: { get: dagGetMock } })
-
+it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
+  const ipldGetMock = jest.fn()
   const cid = 'zdpuAs8sJjcmsPUfB1bUViftCZ8usnvs2cXrPH6MDyT4zrvSs'
   const path = '/a/b/pb1'
 
@@ -72,27 +74,39 @@ it.skip('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
   }
 
   const dagGetRes1 = {
-    remainderPath: 'pb1',
     value: dagNode1
   }
 
   const dagGetRes2 = {
-    remainderPath: '',
-    value: dagNode2
+    remainderPath: 'pb1'
   }
 
   const dagGetRes3 = {
-    remainderPath: '',
+    value: dagNode2
+  }
+
+  const dagGetRes4 = {
+    remainderPath: ''
+  }
+
+  const dagGetRes5 = {
     value: dagNode3
   }
 
-  dagGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes1))
-  dagGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes2))
-  dagGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes3))
+  const dagGetRes6 = {
+    remainderPath: ''
+  }
 
-  const res = await resolveIpldPath(getIpfsMock, cid, path)
+  ipldGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes1))
+  ipldGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes2))
+  ipldGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes3))
+  ipldGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes4))
+  ipldGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes5))
+  ipldGetMock.mockReturnValueOnce(Promise.resolve(dagGetRes6))
 
-  expect(dagGetMock.mock.calls.length).toBe(3)
+  const res = await resolveIpldPath(ipldGetMock, cid, path)
+
+  expect(ipldGetMock.mock.calls.length).toBe(6)
   expect(res.targetNode.cid).toEqual(dagNode3.toJSON().multihash)
   expect(res.canonicalPath).toBe(dagNode3.toJSON().multihash)
   expect(res.nodes.length).toBe(3)
@@ -112,6 +126,7 @@ it.skip('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
     target: dagNode2.toJSON().multihash
   })
   expect(res.pathBoundaries[1]).toEqual({
+    index: 0,
     path: 'pb1',
     size: dagNode2.toJSON().links[0].size,
     source: dagNode2.toJSON().multihash,

@@ -6,6 +6,8 @@ See: https://github.com/ipfs-shipyard/ipld-explorer
 
 ![Screenshot of the IPLD explorer](https://user-images.githubusercontent.com/58871/43152632-f310763c-8f66-11e8-9449-2e362a9f3047.png)
 
+[![](https://img.shields.io/badge/made%20by-Protocol%20Labs-blue.svg)](https://protocol.ai/) [![](https://img.shields.io/badge/project-IPFS-blue.svg)](http://ipfs.io/) [![](https://img.shields.io/badge/freenode-%23ipfs-blue.svg)](http://webchat.freenode.net/?channels=%23ipfs) [![Build Status](https://travis-ci.org/ipfs-shipyard/ipld-explorer-components.svg)](https://travis-ci.org/ipfs-shipyard/ipld-explorer-components) [![dependencies Status](https://david-dm.org/ipfs-shipyard/ipld-explorer-components/master/status.svg)](https://david-dm.org/ipfs-shipyard/ipld-explorer-components/master)
+
 ## Background
 
 This module was extracted from the [IPLD Explorer](https://github.com/ipfs-shipyard/ipld-explorer) so it could be reused from the [IPFS Web UI](https://github.com/ipfs-shipyard/ipfs-webui).
