@@ -6,10 +6,12 @@ import LanguageDetector from 'i18next-browser-languagedetector'
 import en from 'i18next-icu/locale-data/en'
 import pl from 'i18next-icu/locale-data/pl'
 import pt from 'i18next-icu/locale-data/pt'
+import fr from 'i18next-icu/locale-data/fr'
+import ko from 'i18next-icu/locale-data/ko'
 
 i18n
   .use(new ICU({
-    localeData: [en, pl, pt]
+    localeData: [en, pl, pt, fr, ko]
   }))
   .use(XHR)
   .use(LanguageDetector)
