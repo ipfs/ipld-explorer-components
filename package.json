@@ -1,7 +1,7 @@
 {
   "name": "ipld-explorer-components",
   "description": "React components for https://explore.ipld.io",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "author": "olizilla",
   "license": "MIT",
   "repository": "ipfs-shipyard/ipld-explorer-components",
