@@ -3,6 +3,16 @@ import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import resolveIpldPath from '../lib/resolve-ipld-path'
 import parseIpldPath from '../lib/parse-ipld-path'
 
+// All known IPLD formats
+import ipldBitcoin from 'ipld-bitcoin'
+import ipldDagCbor from 'ipld-dag-cbor'
+import ipldDagPb from 'ipld-dag-pb'
+import { ethAccountSnapshot, ethBlock, ethBlockList, ethStateTrie,
+  ethStorageTrie, ethTxTrie, ethTx } from 'ipld-ethereum'
+import ipldGit from 'ipld-git'
+import ipldRaw from 'ipld-raw'
+import ipldZcash from 'ipld-zcash'
+
 // Find all the nodes and path boundaries traversed along a given path
 const makeBundle = (fetchIpld) => {
   // Lazy load ipld because it is a large dependency
@@ -114,7 +124,14 @@ function makeIpldResolver (IpldResolver, getIpfs) {
 
 export function ipldGet (IpldResolver, getIpfs, cid, path, options) {
   return new Promise((resolve, reject) => {
-    const ipld = new IpldResolver(getIpfs().block)
+    const ipld = new IpldResolver({
+      blockService: getIpfs().block,
+      formats: [
+        ipldBitcoin, ipldDagCbor, ipldDagPb, ethAccountSnapshot, ethBlock,
+        ethBlockList, ethStateTrie, ethStorageTrie, ethTxTrie, ethTx,
+        ipldGit, ipldRaw, ipldZcash
+      ]
+    })
     ipld.get(new Cid(cid), path, options, (err, res) => {
       if (err) return reject(err)
       resolve(res)

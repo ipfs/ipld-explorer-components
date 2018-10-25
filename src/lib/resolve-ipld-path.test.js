@@ -1,4 +1,5 @@
 /* global it expect jest */
+import CID from 'cids'
 import { DAGNode } from 'ipld-dag-pb'
 import resolveIpldPath, {
   findLinkPath
@@ -12,9 +13,7 @@ it('resolves all nodes traversed along a path', async () => {
   const dagGetRes1 = {
     value: {
       a: {
-        b: {
-          '/': linkCid
-        }
+        b: new CID(linkCid)
       }
     }
   }
@@ -67,9 +66,7 @@ it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
 
   const dagNode1 = {
     a: {
-      b: {
-        '/': dagNode2.toJSON().multihash
-      }
+      b: new CID(dagNode2.toJSON().multihash)
     }
   }
 

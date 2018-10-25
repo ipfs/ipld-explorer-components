@@ -1,5 +1,6 @@
 import unixfs from 'ipfs-unixfs'
-import { toCidOrNull, getCodecOrNull } from './cid'
+import CID from 'cids'
+import { getCodecOrNull } from './cid'
 
 /**
  * Provide a uniform shape for all^ node types.
@@ -89,6 +90,10 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
     return []
   }
 
+  if (CID.isCID(obj)) {
+    return [{ path, source: sourceCid, target: obj.toBaseEncodedString() }]
+  }
+
   if (Array.isArray(obj)) {
     return obj
       .map((val, i) => findAndReplaceDagCborLinks(val, sourceCid, path ? `${path}/${i}` : `${i}`))
@@ -97,14 +102,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
   }
 
   const keys = Object.keys(obj)
-
-  if (keys.length === 1 && keys[0] === '/') {
-    const targetCid = toCidOrNull(obj['/'])
-    if (!targetCid) return []
-    const target = targetCid.toBaseEncodedString()
-    obj['/'] = target
-    return [{ path, source: sourceCid, target }]
-  } else if (keys.length > 0) {
+  if (keys.length > 0) {
     return keys
       .map(key => findAndReplaceDagCborLinks(obj[key], sourceCid, path ? `${path}/${key}` : `${key}`))
       .reduce((a, b) => a.concat(b))
