@@ -24,14 +24,14 @@
   "dependencies": {
     "@tableflip/react-inspector": "^2.3.0",
     "babel-cli": "^6.26.0",
-    "cids": "^0.5.3",
+    "cids": "^0.5.5",
     "cytoscape": "^3.2.14",
-    "cytoscape-dagre": "^2.2.1",
+    "cytoscape-dagre": "^2.2.2",
     "filesize": "^3.6.1",
     "ipfs-unixfs": "^0.1.15",
     "ipld-dag-pb": "^0.14.8",
     "milliseconds": "^1.0.3",
-    "multiaddr": "^5.0.0",
+    "multiaddr": "^5.0.2",
     "multibase": "^0.4.0",
     "multicodec": "^0.2.7",
     "multihashes": "^0.4.13"
