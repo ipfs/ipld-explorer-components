@@ -1,5 +1,5 @@
 /* global it expect jest */
-import { DAGNode } from 'ipld-dag-pb'
+import { DAGNode, DAGLink, util as DAGUtil } from 'ipld-dag-pb'
 import resolveIpldPath, {
   findLinkPath
 } from './resolve-ipld-path'
@@ -59,19 +59,13 @@ it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
 
   const dagNode3 = await createDagPbNode(Buffer.from('the second pb node'), [])
 
-  const dagNode2 = await createDagPbNode(Buffer.from('the first pb node'), [{
-    name: 'pb1',
-    multihash: dagNode3.toJSON().multihash,
-    size: 101
-  }])
+  let dagNode2 = await createDagPbNode(Buffer.from('the first pb node'), [])
 
-  const dagNode1 = {
-    a: {
-      b: {
-        '/': dagNode2.toJSON().multihash
-      }
-    }
-  }
+  dagNode2 = await addDagPbNodeLink(dagNode2, dagNode3)
+
+  const dagNode1 = await createDagPbNode('', [
+    new DAGLink('/a/b', dagNode2.size, await cidFromDagPbNode(dagNode2))
+  ])
 
   const dagGetRes1 = {
     value: dagNode1
@@ -107,30 +101,30 @@ it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
   const res = await resolveIpldPath(ipldGetMock, cid, path)
 
   expect(ipldGetMock.mock.calls.length).toBe(6)
-  expect(res.targetNode.cid).toEqual(dagNode3.toJSON().multihash)
-  expect(res.canonicalPath).toBe(dagNode3.toJSON().multihash)
+  expect(res.targetNode).toEqual(await cidFromDagPbNode(dagNode3))
+  expect(res.canonicalPath).toBe(await cidFromDagPbNode(dagNode3))
   expect(res.nodes.length).toBe(3)
   expect(res.nodes[0].type).toBe('dag-cbor')
   expect(res.nodes[0].cid).toBe(cid)
   expect(res.nodes[0].links.length).toBe(1)
   expect(res.nodes[1].type).toBe('dag-pb')
-  expect(res.nodes[1].cid).toBe(dagNode2.toJSON().multihash)
+  expect(res.nodes[1].cid).toBe(await cidFromDagPbNode(dagNode2.toJSON()))
   expect(res.nodes[1].links.length).toBe(1)
   expect(res.nodes[2].type).toBe('dag-pb')
-  expect(res.nodes[2].cid).toBe(dagNode3.toJSON().multihash)
+  expect(res.nodes[2].cid).toBe(await cidFromDagPbNode(dagNode3.toJSON()))
   expect(res.nodes[2].links.length).toBe(0)
   expect(res.pathBoundaries.length).toBe(2)
   expect(res.pathBoundaries[0]).toEqual({
     path: 'a/b',
     source: cid,
-    target: dagNode2.toJSON().multihash
+    target: await cidFromDagPbNode(dagNode2)
   })
   expect(res.pathBoundaries[1]).toEqual({
     index: 0,
     path: 'pb1',
     size: dagNode2.toJSON().links[0].size,
-    source: dagNode2.toJSON().multihash,
-    target: dagNode3.toJSON().multihash
+    source: await cidFromDagPbNode(dagNode2.toJSON()),
+    target: await cidFromDagPbNode(dagNode3.toJSON())
   })
 })
 
@@ -139,6 +133,24 @@ function createDagPbNode (data, links) {
     DAGNode.create(data, links, (err, dagNode) => {
       if (err) return reject(err)
       resolve(dagNode)
+    })
+  })
+}
+
+function addDagPbNodeLink (dagNode, link) {
+  return new Promise((resolve, reject) => {
+    DAGNode.addLink(dagNode, link, (err, dagNodeA) => {
+      if (err) return reject(err)
+      resolve(dagNodeA)
+    })
+  })
+}
+
+function cidFromDagPbNode (dagNode) {
+  return new Promise((resolve, reject) => {
+    DAGUtil.cid(dagNode, {}, (err, cid) => {
+      if (err) return reject(err)
+      resolve(cid)
     })
   })
 }
