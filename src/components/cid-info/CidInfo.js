@@ -74,7 +74,7 @@ export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
                 {t('CidInfo.hashDigest')}
               </label>
               <div className='tl lh-copy'>
-                <a className='db link orange pt2' href='https://github.com/multiformats/multihash/blob/master/hashtable.csv'>
+                <a className='db link orange pt2' href='https://github.com/multiformats/multicodec/blob/master/table.csv'>
                   <code className='gray'>0x</code>
                   <code>{cidInfo.hashFnCode}</code> = {cidInfo.hashFn}
                 </a>
