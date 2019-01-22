@@ -1,4 +1,5 @@
 /* global it expect */
+import CID from 'cids'
 import normaliseDagCbor from './normalise-dag-node'
 
 const cid1 = 'zdpuAwkGh9cLskW5z7pH8V2uC5nwtSXd76L7ZTEXs5f8V89db'
@@ -31,11 +32,8 @@ it('normalizes a cbor node with an empty array', () => {
 
 it('normalizes a cbor node with links', () => {
   const obj = {
-    foo: { '/': cid2 },
-    bar: [
-      { '/': cid2 },
-      { '/': cid3 }
-    ]
+    foo: new CID(cid2),
+    bar: [new CID(cid2), new CID(cid3)]
   }
 
   const res = normaliseDagCbor(obj, cid1, 'dag-cbor')
