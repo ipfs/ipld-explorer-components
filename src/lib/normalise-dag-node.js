@@ -95,6 +95,8 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
   }
 
   if (Array.isArray(obj)) {
+    if (!obj.length) return []
+
     return obj
       .map((val, i) => findAndReplaceDagCborLinks(val, sourceCid, path ? `${path}/${i}` : `${i}`))
       .reduce((a, b) => a.concat(b))
