@@ -60,10 +60,10 @@ export function normaliseDagPb (node, cid, type) {
  * with links found in dag-cbor
  */
 export function normaliseDagPbLinks (node, sourceCid) {
-  return node.links.map(({ name, size, multihash }, index) => ({
+  return node.links.map(({ name, size, cid }, index) => ({
     path: name || `Links/${index}`,
     source: sourceCid,
-    target: multihash,
+    target: cid,
     size,
     index
   }))

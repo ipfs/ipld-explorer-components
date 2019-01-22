@@ -1,9 +1,7 @@
 /* global it expect jest */
 import CID from 'cids'
 import { DAGNode } from 'ipld-dag-pb'
-import resolveIpldPath, {
-  findLinkPath
-} from './resolve-ipld-path'
+import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
 
 it('resolves all nodes traversed along a path', async () => {
   const ipldGetMock = jest.fn()
@@ -57,16 +55,18 @@ it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
   const path = '/a/b/pb1'
 
   const dagNode3 = await createDagPbNode(Buffer.from('the second pb node'), [])
+  const dagNode3CID = 'QmRLacjo71FTzKFELa7Yf5YqMwdftKNDNFq7EiE13uohar'
 
   const dagNode2 = await createDagPbNode(Buffer.from('the first pb node'), [{
     name: 'pb1',
-    multihash: dagNode3.toJSON().multihash,
+    cid: dagNode3CID,
     size: 101
   }])
+  const dagNode2CID = 'QmW4sMkvHnTnVPkBJYToRW4burdMk9DHP5qGE4CYGUtHiQ'
 
   const dagNode1 = {
     a: {
-      b: new CID(dagNode2.toJSON().multihash)
+      b: new CID(dagNode2CID)
     }
   }
 
@@ -104,30 +104,30 @@ it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
   const res = await resolveIpldPath(ipldGetMock, cid, path)
 
   expect(ipldGetMock.mock.calls.length).toBe(6)
-  expect(res.targetNode.cid).toEqual(dagNode3.toJSON().multihash)
-  expect(res.canonicalPath).toBe(dagNode3.toJSON().multihash)
+  expect(res.targetNode.cid).toEqual(dagNode3CID)
+  expect(res.canonicalPath).toBe(dagNode3CID)
   expect(res.nodes.length).toBe(3)
   expect(res.nodes[0].type).toBe('dag-cbor')
   expect(res.nodes[0].cid).toBe(cid)
   expect(res.nodes[0].links.length).toBe(1)
   expect(res.nodes[1].type).toBe('dag-pb')
-  expect(res.nodes[1].cid).toBe(dagNode2.toJSON().multihash)
+  expect(res.nodes[1].cid).toBe(dagNode2CID)
   expect(res.nodes[1].links.length).toBe(1)
   expect(res.nodes[2].type).toBe('dag-pb')
-  expect(res.nodes[2].cid).toBe(dagNode3.toJSON().multihash)
+  expect(res.nodes[2].cid).toBe(dagNode3CID)
   expect(res.nodes[2].links.length).toBe(0)
   expect(res.pathBoundaries.length).toBe(2)
   expect(res.pathBoundaries[0]).toEqual({
     path: 'a/b',
     source: cid,
-    target: dagNode2.toJSON().multihash
+    target: dagNode2CID
   })
   expect(res.pathBoundaries[1]).toEqual({
     index: 0,
     path: 'pb1',
     size: dagNode2.toJSON().links[0].size,
-    source: dagNode2.toJSON().multihash,
-    target: dagNode3.toJSON().multihash
+    source: dagNode2CID,
+    target: dagNode3CID
   })
 })
 
