@@ -3,20 +3,11 @@ import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import resolveIpldPath from '../lib/resolve-ipld-path'
 import parseIpldPath from '../lib/parse-ipld-path'
 
-// All known IPLD formats
-import ipldBitcoin from 'ipld-bitcoin'
-import ipldDagCbor from 'ipld-dag-cbor'
-import ipldDagPb from 'ipld-dag-pb'
-import { ethAccountSnapshot, ethBlock, ethBlockList, ethStateTrie,
-  ethStorageTrie, ethTxTrie, ethTx } from 'ipld-ethereum'
-import ipldGit from 'ipld-git'
-import ipldRaw from 'ipld-raw'
-import ipldZcash from 'ipld-zcash'
-
 // Find all the nodes and path boundaries traversed along a given path
 const makeBundle = (fetchIpld) => {
   // Lazy load ipld because it is a large dependency
   let IpldResolver = null
+  let ipldFormats = null
 
   const bundle = createAsyncResourceBundle({
     name: 'explore',
@@ -30,9 +21,12 @@ const makeBundle = (fetchIpld) => {
       const { cidOrFqdn, rest } = pathParts
       try {
         if (!IpldResolver) {
-          IpldResolver = await fetchIpld()
+          const { ipld, formats } = await fetchIpld()
+
+          IpldResolver = ipld
+          ipldFormats = formats
         }
-        const ipldGet = makeIpldResolver(IpldResolver, getIpfs)
+        const ipldGet = makeIpldResolver(IpldResolver, ipldFormats, getIpfs)
         // TODO: handle ipns, which would give us a fqdn in the cid position.
         const cid = new Cid(cidOrFqdn)
         const {
@@ -118,19 +112,15 @@ function ensureLeadingSlash (str) {
   return `/${str}`
 }
 
-function makeIpldResolver (IpldResolver, getIpfs) {
-  return ipldGet.bind(null, IpldResolver, getIpfs)
+function makeIpldResolver (IpldResolver, ipldFormats, getIpfs) {
+  return ipldGet.bind(null, IpldResolver, ipldFormats, getIpfs)
 }
 
-export function ipldGet (IpldResolver, getIpfs, cid, path, options) {
+export function ipldGet (IpldResolver, ipldFormats, getIpfs, cid, path, options) {
   return new Promise((resolve, reject) => {
     const ipld = new IpldResolver({
       blockService: getIpfs().block,
-      formats: [
-        ipldBitcoin, ipldDagCbor, ipldDagPb, ethAccountSnapshot, ethBlock,
-        ethBlockList, ethStateTrie, ethStorageTrie, ethTxTrie, ethTx,
-        ipldGit, ipldRaw, ipldZcash
-      ]
+      formats: ipldFormats
     })
     ipld.get(new Cid(cid), path, options, (err, res) => {
       if (err) return reject(err)
