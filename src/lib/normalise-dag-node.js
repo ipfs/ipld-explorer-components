@@ -105,7 +105,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
 
   const keys = Object.keys(obj)
 
-  // To guarantee backward compatibility until new IPLD gets released
+  // Support older `{ "/": Buffer } style links until all the IPLD formats are updated.
   if (keys.length === 1 && keys[0] === '/') {
     const targetCid = toCidOrNull(obj['/'])
 
