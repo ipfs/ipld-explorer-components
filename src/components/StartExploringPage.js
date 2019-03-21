@@ -4,6 +4,8 @@ import { translate } from 'react-i18next'
 import { colorForNode, nameForNode, shortNameForNode } from './object-info/ObjectInfo'
 import IpldExploreForm from './explore/IpldExploreForm'
 import AboutIpld from './about/AboutIpld'
+import ReactJoyride from 'react-joyride'
+import { projectsTour } from '../lib/tours'
 
 const ExploreSuggestion = ({ cid, name, type }) => {
   return (
@@ -19,9 +21,9 @@ const ExploreSuggestion = ({ cid, name, type }) => {
   )
 }
 
-const StartExploringPage = ({ t, embed }) => {
+const StartExploringPage = ({ t, embed, runTour, joyrideCallback }) => {
   return (
-    <div className='mw9 center'>
+    <div className='mw9 center explore-sug-2'>
       <Helmet>
         <title>{t('StartExploringPage.title')}</title>
       </Helmet>
@@ -51,6 +53,13 @@ const StartExploringPage = ({ t, embed }) => {
           <AboutIpld />
         </div>
       </div>
+
+      <ReactJoyride
+        run={runTour}
+        steps={projectsTour.getSteps({ t })}
+        styles={projectsTour.styles}
+        callback={joyrideCallback}
+        scrollToFirstStep />
     </div>
   )
 }

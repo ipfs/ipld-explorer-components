@@ -80,8 +80,8 @@ export default class IpldGraphCytoscape extends React.Component {
 
   render () {
     // pluck out custom props. Pass anything else on
-    const { onNodeClick, path, cid, ...props } = this.props
-    return <div ref={this.graphRef} {...props} />
+    const { onNodeClick, path, cid, className, ...props } = this.props
+    return <div className={className} ref={this.graphRef} {...props} />
   }
 
   renderTree ({ path, links, container }) {

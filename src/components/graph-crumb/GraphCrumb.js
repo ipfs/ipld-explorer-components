@@ -3,13 +3,13 @@ import Cid from '../cid/Cid'
 import { colorForNode } from '../object-info/ObjectInfo'
 import { getCodecOrNull } from '../../lib/cid'
 
-const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', ...props }) => {
+const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', className = '', ...props }) => {
   const [first, ...rest] = pathBoundaries
   const last = pathBoundaries[pathBoundaries.length - 1]
   const firstHrefBase = calculateHrefBase(hrefBase, cid, pathBoundaries, 0)
   return (
     <div {...props}>
-      <div className='sans-serif'>
+      <div className={`sans-serif ${className}`}>
         <NodeUnderline cid={cid}>
           <a href={firstHrefBase} className='monospace link dark-gray o-50 glow'>
             <Cid value={cid} />
