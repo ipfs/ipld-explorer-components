@@ -8,7 +8,7 @@ jobs:
       - run:
           command: npm ci
       - run:
-          command: npm lint
+          command: npm run lint
       - run:
           command: npm test
       - run:
