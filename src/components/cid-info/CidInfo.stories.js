@@ -11,6 +11,9 @@ storiesOf('CID Info', module)
   .add('cid v1 raw', () => (
     <CidInfo className='ma2' cid='zb2rhZMC2PFynWT7oBj7e6BpDpzge367etSQi6ZUA81EVVCxG' />
   ))
+  .add('cid v1 base32', () => (
+    <CidInfo className='ma2' cid='bafybeihj5nwgbaan7eh4ryrx5vjsi3zzn2dvpgv2ibvku6lwublilhxcfu' />
+  ))
   // echo "ooh la la" | ipfs add --hash sha3
   .add('cid v1 raw sha3', () => (
     <CidInfo className='ma2' cid='zB7NbGN5wyfSbNNNwo3smZczHZutiWERdvWuMcHXTj393RnbhwsHjrP7bPDRPA79YWPbS69cZLWXSANcwUMmk4Rp3hP9Y' />

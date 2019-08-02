@@ -1,7 +1,7 @@
 {
   "name": "ipld-explorer-components",
   "description": "React components for https://explore.ipld.io",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "author": "olizilla",
   "license": "MIT",
   "repository": "ipfs-shipyard/ipld-explorer-components",
@@ -24,7 +24,7 @@
   "dependencies": {
     "@tableflip/react-inspector": "^2.3.0",
     "babel-cli": "^6.26.0",
-    "cids": "^0.5.7",
+    "cids": "^0.6.0",
     "cytoscape": "^3.2.14",
     "cytoscape-dagre": "^2.2.1",
     "filesize": "^3.6.1",
@@ -61,12 +61,12 @@
     "ipfs-css": "^0.9.0"
   },
   "devDependencies": {
-    "@storybook/addon-a11y": "^3.4.10",
-    "@storybook/addon-actions": "^3.4.10",
-    "@storybook/addon-knobs": "^3.4.10",
-    "@storybook/addon-links": "^3.4.10",
-    "@storybook/addons": "^3.4.10",
-    "@storybook/react": "^3.4.10",
+    "@storybook/addon-a11y": "^5.0.1",
+    "@storybook/addon-actions": "^5.0.1",
+    "@storybook/addon-knobs": "^5.0.1",
+    "@storybook/addon-links": "^5.0.1",
+    "@storybook/addons": "^5.0.1",
+    "@storybook/react": "^5.0.1",
     "babel-core": "^6.26.3",
     "babel-eslint": "^7.2.3",
     "babel-preset-env": "^1.7.0",
