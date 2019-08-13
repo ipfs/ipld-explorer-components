@@ -26,7 +26,7 @@ const makeBundle = (fetchIpld) => {
           IpldResolver = ipld
           ipldFormats = formats
         }
-        const ipldGet = makeIpldResolver(IpldResolver, ipldFormats, getIpfs)
+        const ipld = makeIpld(IpldResolver, ipldFormats, getIpfs)
         // TODO: handle ipns, which would give us a fqdn in the cid position.
         const cid = new Cid(cidOrFqdn)
         const {
@@ -35,7 +35,7 @@ const makeBundle = (fetchIpld) => {
           localPath,
           nodes,
           pathBoundaries
-        } = await resolveIpldPath(ipldGet, cid.toBaseEncodedString(), rest)
+        } = await resolveIpldPath(ipld, cid, rest)
 
         return {
           path,
@@ -112,20 +112,10 @@ function ensureLeadingSlash (str) {
   return `/${str}`
 }
 
-function makeIpldResolver (IpldResolver, ipldFormats, getIpfs) {
-  return ipldGet.bind(null, IpldResolver, ipldFormats, getIpfs)
-}
-
-export function ipldGet (IpldResolver, ipldFormats, getIpfs, cid, path, options) {
-  return new Promise((resolve, reject) => {
-    const ipld = new IpldResolver({
-      blockService: getIpfs().block,
-      formats: ipldFormats
-    })
-    ipld.get(new Cid(cid), path, options, (err, res) => {
-      if (err) return reject(err)
-      resolve(res)
-    })
+function makeIpld (IpldResolver, ipldFormats, getIpfs) {
+  return new IpldResolver({
+    blockService: getIpfs().block,
+    formats: ipldFormats
   })
 }
 
