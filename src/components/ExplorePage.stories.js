@@ -7,7 +7,7 @@ import ExplorePage from './ExplorePage'
 
 const mockExploreBundle = {
   name: 'explore',
-  'selectExplore': () => ({
+  selectExplore: () => ({
     targetNode: {
       type: 'dag-pb',
       format: 'unixfs',
@@ -33,9 +33,9 @@ const mockExploreBundle = {
     }],
     pathBoundaries: []
   }),
-  'selectExploreIsLoading': () => false,
-  'selectExplorePathFromHash': () => 'QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm',
-  'doExploreLink': action('explore')
+  selectExploreIsLoading: () => false,
+  selectExplorePathFromHash: () => 'QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm',
+  doExploreLink: action('explore')
 }
 
 storiesOf('Explore page', module)

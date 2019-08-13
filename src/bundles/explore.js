@@ -14,7 +14,7 @@ const makeBundle = (fetchIpld) => {
     actionBaseType: 'EXPLORE',
     getPromise: async (args) => {
       const { store, getIpfs } = args
-      let path = store.selectExplorePathFromHash()
+      const path = store.selectExplorePathFromHash()
       if (!path) return null
       const pathParts = parseIpldPath(path)
       if (!pathParts) return null
