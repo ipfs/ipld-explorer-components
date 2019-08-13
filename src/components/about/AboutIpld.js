@@ -1,5 +1,5 @@
 import React from 'react'
-import { Trans, translate } from 'react-i18next'
+import { Trans, withTranslation } from 'react-i18next'
 import Box from '../box/Box'
 import ipldLogoSrc from './ipld.svg'
 
@@ -24,4 +24,4 @@ export const AboutIpld = () => {
   )
 }
 
-export default translate('explore')(AboutIpld)
+export default withTranslation('explore')(AboutIpld)

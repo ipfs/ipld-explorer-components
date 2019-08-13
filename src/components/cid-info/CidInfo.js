@@ -1,6 +1,6 @@
 import React from 'react'
 import { decodeCid } from './decode-cid'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 
 function extractInfo (cid) {
   const cidInfo = decodeCid(cid)
@@ -99,4 +99,4 @@ export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
   )
 }
 
-export default translate('explore')(CidInfo)
+export default withTranslation('explore')(CidInfo)

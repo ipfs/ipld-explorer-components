@@ -1,5 +1,5 @@
 import React from 'react'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { ObjectInspector, chromeLight } from '@tableflip/react-inspector'
 import filesize from 'filesize'
 import LinksTable from './LinksTable'
@@ -116,4 +116,4 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
   )
 }
 
-export default translate('explore')(ObjectInfo)
+export default withTranslation('explore')(ObjectInfo)
