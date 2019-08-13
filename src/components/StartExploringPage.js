@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { colorForNode, nameForNode, shortNameForNode } from './object-info/ObjectInfo'
 import IpldExploreForm from './explore/IpldExploreForm'
 import AboutIpld from './about/AboutIpld'
@@ -60,4 +60,4 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
   </div>
 )
 
-export default translate('explore')(StartExploringPage)
+export default withTranslation('explore')(StartExploringPage)

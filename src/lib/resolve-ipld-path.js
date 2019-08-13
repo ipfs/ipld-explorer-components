@@ -49,7 +49,7 @@ export default async function resolveIpldPath (ipldGet, sourceCid, path, nodes =
   }
   // we made it to the containing node. Hand back the info
   const canonicalPath = path ? `${sourceCid}${path}` : sourceCid
-  let targetNode = node
+  const targetNode = node
   return { targetNode, canonicalPath, localPath: path, nodes, pathBoundaries }
 }
 

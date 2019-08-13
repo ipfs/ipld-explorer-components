@@ -1,6 +1,6 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { connect } from 'redux-bundler-react'
 import ErrorBoundary from './error/ErrorBoundary'
 import CidInfo from './cid-info/CidInfo'
@@ -111,5 +111,5 @@ export default connect(
   'selectExploreIsLoading',
   'selectExplorePathFromHash',
   'doExploreLink',
-  translate('explore')(ExplorePage)
+  withTranslation('explore')(ExplorePage)
 )

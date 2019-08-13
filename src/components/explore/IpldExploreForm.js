@@ -1,6 +1,6 @@
 import React from 'react'
 import { connect } from 'redux-bundler-react'
-import { translate } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import StrokeIpld from '../../icons/StrokeIpld'
 
 class IpldExploreForm extends React.Component {
@@ -49,5 +49,5 @@ class IpldExploreForm extends React.Component {
 
 export default connect(
   'doExploreUserProvidedPath',
-  translate('explore')(IpldExploreForm)
+  withTranslation('explore')(IpldExploreForm)
 )
