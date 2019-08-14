@@ -121,14 +121,14 @@ function makeIpld (IpldResolver, ipldFormats, getIpfs) {
 
 async function getIpld () {
   const ipldDeps = await Promise.all([
-    import('ipld'),
-    import('ipld-bitcoin'),
-    import('ipld-dag-cbor'),
-    import('ipld-dag-pb'),
-    import('ipld-git'),
-    import('ipld-raw'),
-    import('ipld-zcash'),
-    import('ipld-ethereum')
+    import(/* webpackChunkName: "ipld" */ 'ipld'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-bitcoin'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-dag-cbor'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-dag-pb'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-git'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-raw'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-zcash'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-ethereum')
   ])
 
   // CommonJs exports object is .default when imported ESM style
