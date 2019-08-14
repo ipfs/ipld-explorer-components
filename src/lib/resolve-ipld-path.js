@@ -37,7 +37,7 @@ import Cid from 'cids'
  */
 export default async function resolveIpldPath (ipld, sourceCid, path, nodes = [], pathBoundaries = []) {
   const { value, remainderPath } = await ipldGetNodeAndRemainder(ipld, sourceCid, path)
-  const sourceCidStr = sourceCid.toBaseEncodedString()
+  const sourceCidStr = sourceCid.toString()
 
   const node = normaliseDagNode(value, sourceCidStr)
   nodes.push(node)
