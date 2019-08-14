@@ -4,7 +4,7 @@ import resolveIpldPath from '../lib/resolve-ipld-path'
 import parseIpldPath from '../lib/parse-ipld-path'
 
 // Find all the nodes and path boundaries traversed along a given path
-const makeBundle = (fetchIpld) => {
+const makeBundle = () => {
   // Lazy load ipld because it is a large dependency
   let IpldResolver = null
   let ipldFormats = null
@@ -21,7 +21,7 @@ const makeBundle = (fetchIpld) => {
       const { cidOrFqdn, rest } = pathParts
       try {
         if (!IpldResolver) {
-          const { ipld, formats } = await fetchIpld()
+          const { ipld, formats } = await getIpld()
 
           IpldResolver = ipld
           ipldFormats = formats
@@ -117,6 +117,28 @@ function makeIpld (IpldResolver, ipldFormats, getIpfs) {
     blockService: getIpfs().block,
     formats: ipldFormats
   })
+}
+
+async function getIpld () {
+  const ipldDeps = await Promise.all([
+    import('ipld'),
+    import('ipld-bitcoin'),
+    import('ipld-dag-cbor'),
+    import('ipld-dag-pb'),
+    import('ipld-git'),
+    import('ipld-raw'),
+    import('ipld-zcash'),
+    import('ipld-ethereum')
+  ])
+
+  // CommonJs exports object is .default when imported ESM style
+  const [ipld, ...formats] = ipldDeps.map(mod => mod.default)
+
+  // ipldEthereum is an Object, each key points to a ipld format impl
+  const ipldEthereum = formats.pop()
+  formats.push(...Object.values(ipldEthereum))
+
+  return { ipld, formats }
 }
 
 export default makeBundle

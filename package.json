@@ -33,7 +33,16 @@
     "multibase": "^0.6.0",
     "multicodec": "^0.5.5",
     "multihashes": "^0.4.15",
-    "react-joyride": "^2.1.1"
+    "react-joyride": "^2.1.1",
+    "ipld": "^0.24.0",
+    "ipfs-unixfs": "^0.1.16",
+    "ipld-bitcoin": "^0.3.0",
+    "ipld-dag-cbor": "^0.15.0",
+    "ipld-dag-pb": "^0.18.0",
+    "ipld-ethereum": "^4.0.0",
+    "ipld-git": "^0.5.0",
+    "ipld-raw": "^4.0.0",
+    "ipld-zcash": "~0.3.0"
   },
   "peerDependencies": {
     "i18next": "^17.0.11",
@@ -50,16 +59,7 @@
     "react-helmet": "^5.2.1",
     "react-loadable": "^5.5.0",
     "tachyons": "^4.11.1",
-    "ipfs-css": "^0.13.1",
-    "ipld": "^0.24.0",
-    "ipfs-unixfs": "^0.1.16",
-    "ipld-bitcoin": "^0.3.0",
-    "ipld-dag-cbor": "^0.15.0",
-    "ipld-dag-pb": "^0.18.0",
-    "ipld-ethereum": "^4.0.0",
-    "ipld-git": "^0.5.0",
-    "ipld-raw": "^4.0.0",
-    "ipld-zcash": "~0.3.0"
+    "ipfs-css": "^0.13.1"
   },
   "devDependencies": {
     "@babel/core": "^7.5.5",
@@ -98,8 +98,6 @@
     "redux-bundler-react": "^1.1.1",
     "standard": "^13.1.0",
     "tachyons": "^4.11.1",
-    "ipld-dag-pb": "^0.18.0",
-    "ipfs-unixfs": "^0.1.16",
     "webpack": "4.39.1"
   },
   "files": [
