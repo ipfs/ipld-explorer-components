@@ -46,8 +46,8 @@ const makeBundle = () => {
           pathBoundaries
         }
       } catch (error) {
-        console.log('Failed to resolve path', path, error)
-        return { path, error }
+        console.warn('Failed to resolve path', path, error)
+        return { path, error: error.toString() }
       }
     },
     staleAfter: Infinity,

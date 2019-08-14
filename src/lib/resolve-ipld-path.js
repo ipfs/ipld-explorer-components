@@ -67,7 +67,7 @@ export async function ipldGetNodeAndRemainder (ipld, sourceCid, path) {
   // Current js-ipld-dag-pb resolver will throw with a path not available error if Links prefix is missing.
   return {
     value: await ipld.get(sourceCid),
-    remainderPath: (await ipld.resolve(sourceCid, path || '').last()).remainderPath
+    remainderPath: (await ipld.resolve(sourceCid, path || '').first()).remainderPath
   }
 }
 
