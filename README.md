@@ -43,19 +43,24 @@ export {
 }
 ```
 
-There are `peer-dependencies` so that the parent app can pick the versions of common deps. You'll need to add the following deps to your project.
+There are `peerDependencies` so that the parent app can pick the versions of common deps. You'll need to add the following deps to your project.
 
 ```js
-  "prop-types": "^15.6.4",
-  "react": "^16.0.0",
-  "react-dom": "^16.0.0",
-  "redux-bundler": "^21.2.2",
-  "redux-bundler-react": "^1.0.1",
-  "react-virtualized": "^9.20.0",
-  "react-helmet": "^5.2.0",
-  "react-loadable": "^5.4.0",
-  "tachyons": "^4.11.1",
-  "ipfs-css": "^0.9.0"
+ "i18next": "^17.0.11",
+"i18next-browser-languagedetector": "^3.0.3",
+"i18next-icu": "^1.1.2",
+"i18next-xhr-backend": "^3.1.1",
+"ipfs-css": "^0.13.1",
+"prop-types": "^15.7.2",
+"react": "^16.9.0",
+"react-dom": "^16.9.0",
+"react-helmet": "^5.2.1",
+"react-i18next": "^10.12.1",
+"react-loadable": "^5.5.0",
+"react-virtualized": "^9.21.1",
+"redux-bundler": "^25.0.0",
+"redux-bundler-react": "^1.1.1",
+"tachyons": "^4.11.1"
 ```
 
 And, assuming you are using `create-react-app` or a similar webpack set up, you'll need the following CSS imports:
