@@ -17,13 +17,13 @@ it('resolves all nodes traversed along a path', async () => {
     }
   }
   const dagGetRes2 = {
-    last: () => Promise.resolve({ remainderPath: '/a' })
+    first: () => Promise.resolve({ remainderPath: '/a' })
   }
   const dagGetRes3 = {
     a: 'hello world'
   }
   const dagGetRes4 = {
-    last: () => Promise.resolve({ remainderPath: '/a' })
+    first: () => Promise.resolve({ remainderPath: '/a' })
   }
 
   ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes1))
@@ -77,19 +77,19 @@ it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
   const dagGetRes1 = dagNode1
 
   const dagGetRes2 = {
-    last: () => Promise.resolve({ remainderPath: 'pb1' })
+    first: () => Promise.resolve({ remainderPath: 'pb1' })
   }
 
   const dagGetRes3 = dagNode2
 
   const dagGetRes4 = {
-    last: () => Promise.resolve({ remainderPath: '' })
+    first: () => Promise.resolve({ remainderPath: '' })
   }
 
   const dagGetRes5 = dagNode3
 
   const dagGetRes6 = {
-    last: () => Promise.resolve({ remainderPath: '' })
+    first: () => Promise.resolve({ remainderPath: '' })
   }
 
   ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes1))
