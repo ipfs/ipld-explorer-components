@@ -46,7 +46,7 @@ export {
 There are `peerDependencies` so that the parent app can pick the versions of common deps. You'll need to add the following deps to your project.
 
 ```js
- "i18next": "^17.0.11",
+"i18next": "^17.0.11",
 "i18next-browser-languagedetector": "^3.0.3",
 "i18next-icu": "^1.1.2",
 "i18next-xhr-backend": "^3.1.1",
