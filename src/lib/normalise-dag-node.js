@@ -91,7 +91,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
   }
 
   if (CID.isCID(obj)) {
-    return [{ path, source: sourceCid, target: obj.toBaseEncodedString() }]
+    return [{ path, source: sourceCid, target: obj.toString() }]
   }
 
   if (Array.isArray(obj)) {
@@ -111,7 +111,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
 
     if (!targetCid) return []
 
-    const target = targetCid.toBaseEncodedString()
+    const target = targetCid.toString()
     obj['/'] = target
 
     return [{ path, source: sourceCid, target }]

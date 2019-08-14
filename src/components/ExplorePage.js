@@ -49,7 +49,7 @@ export class ExplorePage extends React.Component {
           <div className='dtc-l w-100 w-two-thirds-l pr3-l v-top'>
             {error ? (
               <div className='bg-red white pa3 lh-copy'>
-                {error.message || error}
+                { error }
               </div>
             ) : null}
 

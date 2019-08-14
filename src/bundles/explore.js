@@ -4,7 +4,7 @@ import resolveIpldPath from '../lib/resolve-ipld-path'
 import parseIpldPath from '../lib/parse-ipld-path'
 
 // Find all the nodes and path boundaries traversed along a given path
-const makeBundle = (fetchIpld) => {
+const makeBundle = () => {
   // Lazy load ipld because it is a large dependency
   let IpldResolver = null
   let ipldFormats = null
@@ -21,12 +21,12 @@ const makeBundle = (fetchIpld) => {
       const { cidOrFqdn, rest } = pathParts
       try {
         if (!IpldResolver) {
-          const { ipld, formats } = await fetchIpld()
+          const { ipld, formats } = await getIpld()
 
           IpldResolver = ipld
           ipldFormats = formats
         }
-        const ipldGet = makeIpldResolver(IpldResolver, ipldFormats, getIpfs)
+        const ipld = makeIpld(IpldResolver, ipldFormats, getIpfs)
         // TODO: handle ipns, which would give us a fqdn in the cid position.
         const cid = new Cid(cidOrFqdn)
         const {
@@ -35,7 +35,7 @@ const makeBundle = (fetchIpld) => {
           localPath,
           nodes,
           pathBoundaries
-        } = await resolveIpldPath(ipldGet, cid.toBaseEncodedString(), rest)
+        } = await resolveIpldPath(ipld, cid, rest)
 
         return {
           path,
@@ -46,8 +46,8 @@ const makeBundle = (fetchIpld) => {
           pathBoundaries
         }
       } catch (error) {
-        console.log('Failed to resolve path', path, error)
-        return { path, error }
+        console.warn('Failed to resolve path', path, error)
+        return { path, error: error.toString() }
       }
     },
     staleAfter: Infinity,
@@ -112,21 +112,33 @@ function ensureLeadingSlash (str) {
   return `/${str}`
 }
 
-function makeIpldResolver (IpldResolver, ipldFormats, getIpfs) {
-  return ipldGet.bind(null, IpldResolver, ipldFormats, getIpfs)
+function makeIpld (IpldResolver, ipldFormats, getIpfs) {
+  return new IpldResolver({
+    blockService: getIpfs().block,
+    formats: ipldFormats
+  })
 }
 
-export function ipldGet (IpldResolver, ipldFormats, getIpfs, cid, path, options) {
-  return new Promise((resolve, reject) => {
-    const ipld = new IpldResolver({
-      blockService: getIpfs().block,
-      formats: ipldFormats
-    })
-    ipld.get(new Cid(cid), path, options, (err, res) => {
-      if (err) return reject(err)
-      resolve(res)
-    })
-  })
+async function getIpld () {
+  const ipldDeps = await Promise.all([
+    import(/* webpackChunkName: "ipld" */ 'ipld'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-bitcoin'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-dag-cbor'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-dag-pb'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-git'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-raw'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-zcash'),
+    import(/* webpackChunkName: "ipld" */ 'ipld-ethereum')
+  ])
+
+  // CommonJs exports object is .default when imported ESM style
+  const [ipld, ...formats] = ipldDeps.map(mod => mod.default)
+
+  // ipldEthereum is an Object, each key points to a ipld format impl
+  const ipldEthereum = formats.pop()
+  formats.push(...Object.values(ipldEthereum))
+
+  return { ipld, formats }
 }
 
 export default makeBundle
