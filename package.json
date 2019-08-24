@@ -78,7 +78,7 @@
     "react-virtualized": "^9.20.1",
     "redux-bundler": "^25.0.0",
     "redux-bundler-react": "^1.1.1",
-    "standard": "^13.1.0",
+    "standard": "^14.0.2",
     "tachyons": "^4.11.1",
     "webpack": "4.39.1"
   },
