@@ -39,7 +39,7 @@ export function normaliseDagPb (node, cid, type) {
     // it's a unix system?
     const { type, data, blockSizes } = unixfs.unmarshal(node.data)
     node.data = { type, data, blockSizes }
-    format = `unixfs`
+    format = 'unixfs'
   } catch (err) {
     // dag-pb but not a unixfs.
     // console.log(err)

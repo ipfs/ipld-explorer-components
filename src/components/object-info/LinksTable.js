@@ -3,7 +3,7 @@ import { Table, Column, AutoSizer } from 'react-virtualized'
 import './LinksTable.css'
 
 class LinksTable extends React.Component {
-  onRowClick = ({ rowData }) => {
+  handleOnRowClick = ({ rowData }) => {
     const { onLinkClick } = this.props
     onLinkClick(rowData)
   }
@@ -27,7 +27,8 @@ class LinksTable extends React.Component {
               rowHeight={rowHeight}
               rowCount={links.length}
               rowGetter={({ index }) => ({ index, ...links[index] })}
-              onRowClick={this.onRowClick}>
+              onRowClick={this.handleOnRowClick}
+            >
               <Column dataKey='index' width={34} className='pv2 silver monospace tr pr1' />
               <Column label='Path' dataKey='path' width={210} flexGrow={1} className='pv2 navy f6-ns' headerClassName={headerClassName} />
               <Column label='CID' dataKey='target' width={360} className='pv2 mid-gray monospace' headerClassName={headerClassName} />

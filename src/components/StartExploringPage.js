@@ -56,7 +56,8 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
       steps={projectsTour.getSteps({ t })}
       styles={projectsTour.styles}
       callback={joyrideCallback}
-      scrollToFirstStep />
+      scrollToFirstStep
+    />
   </div>
 )
 

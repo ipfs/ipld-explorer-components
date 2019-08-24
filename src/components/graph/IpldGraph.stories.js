@@ -22,12 +22,14 @@ storiesOf('IPLD Graph', module)
       style={{ width: '50%', height: 500 }}
       path={dagNodeB.cid}
       links={dagNodeB.links}
-      onNodeClick={action('node click')} />
+      onNodeClick={action('node click')}
+    />
   ))
   .add('cytoscape 0 links', () => (
     <IpldGraphCytoscape
       style={{ width: '50%', height: 500 }}
       path={dagNodeD.cid}
       links={dagNodeD.links}
-      onNodeClick={action('node click')} />
+      onNodeClick={action('node click')}
+    />
   ))

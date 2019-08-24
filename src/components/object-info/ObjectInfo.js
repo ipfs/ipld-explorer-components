@@ -92,22 +92,22 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
         <div className='dt dt--fixed pt2'>
           <label className='dtc silver tracked ttu f7' style={{ width: 48 }}>Links</label>
           <div className='dtc truncate charcoal'>
-            { links ? (<code>{links.length}</code>) : 'No Links' }
+            {links ? (<code>{links.length}</code>) : 'No Links'}
           </div>
         </div>
         <div className='dt dt--fixed pt2' style={{ height: 26 }}>
           <label className='dtc silver tracked ttu f7 v-mid' style={{ width: 48 }}>Data</label>
           <div className='dtc truncate mid-gray'>
-            { data ? null : 'No data'}
+            {data ? null : 'No data'}
           </div>
         </div>
-        { !data ? null : (
+        {!data ? null : (
           <div className='pa3 mt2 bg-white f5 nl3 nr3 mh0-l'>
             <ObjectInspector showMaxKeys={100} data={data} theme={objectInspectorTheme} expandPaths={toExpandPathsNotation(localPath)} />
           </div>
         )}
       </div>
-      { !links || !links.length ? null : (
+      {!links || !links.length ? null : (
         <div className='mv2 nl3 nr3 mh0-l'>
           <LinksTable links={links} onLinkClick={onLinkClick} />
         </div>

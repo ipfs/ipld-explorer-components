@@ -57,7 +57,8 @@ export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
           </label>
           <a
             href='https://github.com/multiformats/multihash#visual-examples'
-            className='dib tracked ttu f6 fw2 teal-muted hover-aqua link mt4'>
+            className='dib tracked ttu f6 fw2 teal-muted hover-aqua link mt4'
+          >
             {t('multihash')}
           </a>
           <div>

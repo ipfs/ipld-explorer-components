@@ -19,7 +19,7 @@ const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', cl
               <Divider />
               <Path path={first.path} hrefBase={firstHrefBase} sourceCid={cid} />
             </div>
-          ) : null }
+          ) : null}
           {localPath && pathBoundaries.length === 0 ? (
             <div className='dib'>
               <Divider />
@@ -36,7 +36,8 @@ const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', cl
                 <Path
                   path={link.path}
                   sourceCid={link.source}
-                  hrefBase={nextHrefBase} />
+                  hrefBase={nextHrefBase}
+                />
               </NodeUnderline>
             </div>
           )
@@ -48,7 +49,8 @@ const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', cl
               <Path
                 path={localPath}
                 sourceCid={last.target}
-                hrefBase={calculateHrefBase(hrefBase, cid, pathBoundaries, pathBoundaries.length)} />
+                hrefBase={calculateHrefBase(hrefBase, cid, pathBoundaries, pathBoundaries.length)}
+              />
             </NodeUnderline>
           </div>
         ) : null}
@@ -86,7 +88,8 @@ const Path = ({ path, hrefBase, sourceCid }) => {
             <a
               className='dib link dark-gray o-50 glow'
               title={sourceCid + '/' + relPath}
-              href={href}>
+              href={href}
+            >
               {p}
             </a>
           </div>

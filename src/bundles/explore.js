@@ -100,7 +100,7 @@ const makeBundle = () => {
 
   // validate user submitted path and put it in url hash fragment
   bundle.doExploreUserProvidedPath = (path) => ({ store }) => {
-    const hash = path ? `#/explore${ensureLeadingSlash(path)}` : `#/explore`
+    const hash = path ? `#/explore${ensureLeadingSlash(path)}` : '#/explore'
     store.doUpdateHash(hash)
   }
 
