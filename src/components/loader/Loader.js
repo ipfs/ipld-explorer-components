@@ -7,7 +7,8 @@ export const Loader = ({ color = 'light', ...props }) => {
     <div {...props}>
       <div
         className={className}
-        style={{ width: 20, height: 20 }}>
+        style={{ width: 20, height: 20 }}
+      >
         <div />
         <div />
         <div />

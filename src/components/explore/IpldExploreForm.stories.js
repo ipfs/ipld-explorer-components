@@ -15,7 +15,7 @@ storiesOf('Explore form', module)
   .addDecorator(i18n)
   .addDecorator(bundleDecorator(mockExploreBundle))
   .add('default', () => (
-    <div className='bg-navy pa3' style={{ height: '100vh' }} >
+    <div className='bg-navy pa3' style={{ height: '100vh' }}>
       <IpldExploreForm />
     </div>
   ))

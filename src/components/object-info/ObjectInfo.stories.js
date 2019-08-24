@@ -23,7 +23,8 @@ storiesOf('IPLD Node Info', module)
       links={dagNodeA.links}
       data={dagNodeA.data}
       type='dag-pb'
-      onLinkClick={action('link clicked')} />
+      onLinkClick={action('link clicked')}
+    />
   ))
   .add('cid v0 dag-pb 36 links...', () => (
     <ObjectInfo
@@ -33,7 +34,8 @@ storiesOf('IPLD Node Info', module)
       links={dagNodeB.links}
       data={dagNodeB.data}
       type='dag-pb'
-      onLinkClick={action('link clicked')} />
+      onLinkClick={action('link clicked')}
+    />
   ))
   .add('cid v0 dag-pb 1240 links...', () => (
     <ObjectInfo
@@ -43,5 +45,6 @@ storiesOf('IPLD Node Info', module)
       links={dagNodeC.links}
       data={dagNodeC.data}
       type='dag-pb'
-      onLinkClick={action('link clicked')} />
+      onLinkClick={action('link clicked')}
+    />
   ))
