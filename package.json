@@ -37,7 +37,7 @@
     "ipld-raw": "^4.0.0",
     "ipld-zcash": "~0.3.0",
     "milliseconds": "^1.0.3",
-    "multiaddr": "^6.1.0",
+    "multiaddr": "^7.0.0",
     "multibase": "^0.6.0",
     "multicodec": "^0.5.5",
     "multihashes": "^0.4.15",
