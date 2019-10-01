@@ -59,7 +59,7 @@ const DagNodeIcon = ({ type, ...props }) => (
   </svg>
 )
 
-const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, links, format, onLinkClick, ...props }) => {
+const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, links, format, onLinkClick, gatewayUrl, ...props }) => {
   return (
     <section className={`pa4 sans-serif ${className}`} {...props}>
       <h2 className='ma0 lh-title f4 fw4 montserrat pb2' title={type}>
@@ -71,7 +71,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
           <a className='dn di-ns link charcoal ml2' href='https://docs.ipfs.io/guides/concepts/unixfs/'>UnixFS</a>
         ) : null}
         {format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type) ? (
-          <a className='link avenir ml2 pa2 fw5 f6 blue' href={`https://ipfs.io/ipfs/${cid}`} target='_external'>
+          <a className='link avenir ml2 pa2 fw5 f6 blue' href={`${gatewayUrl}/ipfs/${cid}`} target='_external'>
             {t('ObjectInfo.gatewayLink')}
           </a>
         ) : null}
