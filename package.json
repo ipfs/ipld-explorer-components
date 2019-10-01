@@ -80,7 +80,7 @@
     "redux-bundler-react": "^1.2.0",
     "standard": "^14.3.1",
     "tachyons": "^4.11.1",
-    "webpack": "4.40.2"
+    "webpack": "4.41.0"
   },
   "peerDependencies": {
     "i18next": "^17.0.17",
