@@ -43,6 +43,6 @@ storiesOf('Explore page', module)
   .addDecorator(bundleDecorator(mockExploreBundle))
   .add('default', () => (
     <div className='pt4'>
-      <ExplorePage />
+      <ExplorePage gatewayUrl='https://ipfs.io' />
     </div>
   ))

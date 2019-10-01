@@ -13,7 +13,7 @@ import { explorerTour } from '../lib/tours'
 
 export class ExplorePage extends React.Component {
   render () {
-    let { t, explore, exploreIsLoading, explorePathFromHash, doExploreLink, runTour = false, joyrideCallback } = this.props
+    let { t, explore, exploreIsLoading, explorePathFromHash, doExploreLink, runTour = false, joyrideCallback, gatewayUrl } = this.props
 
     if (!explorePathFromHash) {
       // No IPLD path to explore so show the intro page
@@ -69,6 +69,7 @@ export class ExplorePage extends React.Component {
                   type={targetNode.type}
                   format={targetNode.format}
                   onLinkClick={doExploreLink}
+                  gatewayUrl={gatewayUrl}
                 />
               )
               : null}
