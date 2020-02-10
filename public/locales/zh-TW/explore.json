@@ -1,8 +1,8 @@
 {
-  "appName": "IPLD Explorer",
+  "appName": "IPLD 瀏覽器",
   "StartExploringPage": {
-    "title": "Explore - IPLD",
-    "header": "Explore the Merkle Forest",
+    "title": "瀏覽 - IPLD",
+    "header": "瀏覽Merkle森林",
     "leadParagraph": "Paste a CID into the box to fetch the IPLD node it addresses, or choose a featured dataset."
   },
   "AboutIpld": {
@@ -11,22 +11,22 @@
     "paragraph3": "<0>Enter IPLD: a single namespace for all hash-inspired protocols. Through IPLD, links can be traversed across protocols, allowing you to explore data regardless of the underlying protocol.</0>"
   },
   "ExplorePage": {
-    "title": "Exploring - IPLD"
+    "title": "瀏覽 - IPLD"
   },
   "IpldExploreForm": {
-    "explore": "Explore"
+    "explore": "瀏覽"
   },
   "CidInfo": {
-    "header": "CID Info",
-    "hashDigest": "Hash digest"
+    "header": "CID 資訊",
+    "hashDigest": "雜湊摘要"
   },
   "ObjectInfo": {
-    "gatewayLink": "View on IPFS Gateway"
+    "gatewayLink": "瀏覽IPFS閘道器"
   },
-  "base": "base",
-  "version": "version",
-  "codec": "codec",
-  "multihash": "multihash",
+  "base": "基礎",
+  "version": "版本",
+  "codec": "編解碼器",
+  "multihash": "多重雜湊",
   "tour": {
     "projects": {
       "title": "Featured datasets",
@@ -34,11 +34,11 @@
     },
     "explorer": {
       "step1": {
-        "title": "IPLD Explorer",
+        "title": "IPLD 瀏覽器",
         "paragraph1": "Your journey of explorer starts here. Continue to learn more."
       },
       "step2": {
-        "title": "Breadcrumbs",
+        "title": "導覽列",
         "paragraph1": "The path that leads to this node.",
         "paragraph2": "Click on it to traverse to its parents or children."
       },
