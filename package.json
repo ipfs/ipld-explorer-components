@@ -28,7 +28,7 @@
     "cytoscape-dagre": "^2.2.2",
     "filesize": "^6.0.0",
     "ipfs-unixfs": "^0.2.0",
-    "ipld": "^0.24.0",
+    "ipld": "^0.25.4",
     "ipld-bitcoin": "^0.3.0",
     "ipld-dag-cbor": "^0.15.0",
     "ipld-dag-pb": "^0.18.1",
