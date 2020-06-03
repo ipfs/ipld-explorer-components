@@ -1,14 +1,14 @@
 {
-  "appName": "IPLD 瀏覽器",
-  "tabName": "瀏覽",
-  "homeLink": "首頁",
+  "appName": "Explorador d'IPLD",
+  "tabName": "Explora",
+  "homeLink": "Inici",
   "UpdateAvailable": {
     "paragraph1": "A new version of IPLD Explorer is available; <1>please reload</1>."
   },
   "StartExploringPage": {
-    "title": "瀏覽 - IPLD",
-    "header": "瀏覽Merkle森林",
-    "leadParagraph": "Paste a CID into the box to fetch the IPLD node it addresses, or choose a featured dataset."
+    "title": "Explora - IPLD",
+    "header": "Explora el bosc de Merkle",
+    "leadParagraph": "Enganxa un CID al quadre de text per trobar el node IPLD al que es refereix, o tria un conjunt de dades acceptat."
   },
   "AboutIpld": {
     "paragraph1":"<0>IPLD is <1>the data model of the content-addressable web.</1> It allows us to treat all hash-linked data structures as subsets of a unified information space, unifying all data models that link data with hashes as instances of IPLD.</0>",
@@ -16,49 +16,49 @@
     "paragraph3": "<0>Enter IPLD: a single namespace for all hash-inspired protocols. Through IPLD, links can be traversed across protocols, allowing you to explore data regardless of the underlying protocol.</0>"
   },
   "ExplorePage": {
-    "title": "瀏覽 - IPLD"
+    "title": "Explorant - IPLD"
   },
   "IpldExploreForm": {
-    "explore": "瀏覽"
+    "explore": "Explora"
   },
   "CidInfo": {
-    "header": "CID info",
-    "hashDigest": "雜湊摘要"
+    "header": "Info del CID",
+    "hashDigest": "Hash digest"
   },
   "ObjectInfo": {
-    "gatewayLink": "瀏覽IPFS閘道器"
+    "gatewayLink": "Mira-ho al getaway d'IPFS"
   },
-  "base": "基礎",
-  "version": "版本",
-  "codec": "編解碼器",
-  "multihash": "多重雜湊",
+  "base": "base",
+  "version": "versió",
+  "codec": "codec",
+  "multihash": "multihash",
   "tour": {
     "projects": {
-      "title": "Featured datasets",
+      "title": "Conjunt de dades acceptats",
       "paragraph1": "Explore the featured datasets or paste a CID to see how that data is structured and linked across protocols."
     },
     "explorer": {
       "step1": {
-        "title": "IPLD 瀏覽器",
+        "title": "Explorador d'IPLD",
         "paragraph1": "Your journey with IPLD Explorer starts here. Click \"Next\" to learn more."
       },
       "step2": {
-        "title": "導覽列",
+        "title": "Ruta de navegació",
         "paragraph1": "The path that leads to this node.",
         "paragraph2": "Click on it to traverse to its parents or children."
       },
       "step3": {
-        "title": "節點信息",
-        "paragraph1": "Here you have detailed info about the node and you can open it in the IPFS gateway.",
-        "paragraph2": "If the node is a directory you can see its children and navigate to them."
+        "title": "Info del node",
+        "paragraph1": "Aquí tens informació detallada sobre el node i el pots obrir al getaway d'IPFS.",
+        "paragraph2": "Si el node és un directori pots veure i navegar en els seus fills."
       },
       "step4": {
-        "title": "CID info",
-        "paragraph1": "The decomposed CID so you can learn its meaning."
+        "title": "Info del CID",
+        "paragraph1": "El CID descomposat per tal que puguins aprendre el seu significat."
       },
       "step5": {
-        "title": "Visual representation",
-        "paragraph1": "A visual representation of the node and its children."
+        "title": "Representació visual",
+        "paragraph1": "Una representació visual del node i els seus fills."
       }
     }
   }

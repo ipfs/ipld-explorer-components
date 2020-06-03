@@ -1,5 +1,10 @@
 {
   "appName": "IPLD Udforsker",
+  "tabName": "Udforsk",
+  "homeLink": "Hjem",
+  "UpdateAvailable": {
+    "paragraph1": "A new version of IPLD Explorer is available; <1>please reload</1>."
+  },
   "StartExploringPage": {
     "title": "Udforsk - IPLD",
     "header": "Udforsk Merkle-skoven",
@@ -17,7 +22,7 @@
     "explore": "Udforsk"
   },
   "CidInfo": {
-    "header": "CID-info",
+    "header": "CID info",
     "hashDigest": "Hash sum"
   },
   "ObjectInfo": {
@@ -35,7 +40,7 @@
     "explorer": {
       "step1": {
         "title": "IPLD Udforsker",
-        "paragraph1": "Your journey of explorer starts here. Continue to learn more."
+        "paragraph1": "Your journey with IPLD Explorer starts here. Click \"Next\" to learn more."
       },
       "step2": {
         "title": "Sti",
