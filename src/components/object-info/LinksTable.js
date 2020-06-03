@@ -13,7 +13,7 @@ class LinksTable extends React.Component {
     const headerClassName = 'mid-gray fw2 tracked silver'
     const rowHeight = 29
     const headerHeight = 32
-    const tableHeight = Math.min(370, (links.length * rowHeight) + headerHeight)
+    const tableHeight = Math.max(370, (Math.min(window.innerHeight - 500, links.length * rowHeight + headerHeight)))
     return (
       <div>
         <AutoSizer disableHeight>

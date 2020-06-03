@@ -11,7 +11,7 @@
   "main": "dist/index.js",
   "module": "dist/index.js",
   "scripts": {
-    "build": "cross-env NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js'",
+    "build": "cross-env NODE_ENV=production babel --quiet src -d dist --copy-files --ignore '**/*.test.js'",
     "clean": "rm -rf dist",
     "lint": "standard",
     "prepare": "npm run build",
