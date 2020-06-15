@@ -23,7 +23,7 @@
   "dependencies": {
     "@babel/cli": "^7.6.2",
     "@tableflip/react-inspector": "^2.3.0",
-    "cids": "^0.7.1",
+    "cids": "^0.8.2",
     "cytoscape": "^3.10.1",
     "cytoscape-dagre": "^2.2.2",
     "filesize": "^6.0.0",
