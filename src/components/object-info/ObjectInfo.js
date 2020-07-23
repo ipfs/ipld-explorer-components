@@ -7,6 +7,8 @@ const humansize = filesize.partial({ round: 0 })
 
 const objectInspectorTheme = {
   ...chromeLight,
+  BASE_FONT_FAMILY: 'Consolas, Menlo, monospace',
+  TREENODE_FONT_FAMILY: 'Consolas, Menlo, monospace',
   BASE_FONT_SIZE: '13px',
   BASE_LINE_HEIGHT: '19px',
   TREENODE_FONT_SIZE: '13px',
