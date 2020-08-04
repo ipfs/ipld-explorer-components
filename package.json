@@ -34,7 +34,7 @@
     "ipld-dag-pb": "^0.18.1",
     "ipld-ethereum": "^4.0.0",
     "ipld-git": "^0.5.0",
-    "ipld-raw": "^4.0.0",
+    "ipld-raw": "^6.0.0",
     "ipld-zcash": "~0.3.0",
     "milliseconds": "^1.0.3",
     "multiaddr": "^7.1.0",
