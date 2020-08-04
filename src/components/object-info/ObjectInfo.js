@@ -88,7 +88,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
         {!size ? null : (
           <div className='dt dt--fixed pt2'>
             <label className='dtc silver tracked ttu f7' style={{ width: 48 }}>Size</label>
-            <div className='dtc truncate charcoal monospace'>{humansize(size)}</div>
+            <div className='dtc truncate charcoal monospace' title={size}>{humansize(size)}</div>
           </div>
         )}
         <div className='dt dt--fixed pt2'>
