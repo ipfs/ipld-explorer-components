@@ -39,7 +39,7 @@
     "milliseconds": "^1.0.3",
     "multiaddr": "^7.1.0",
     "multibase": "^0.6.0",
-    "multicodec": "^0.5.5",
+    "multicodec": "^2.0.1",
     "multihashes": "^0.4.15",
     "react-joyride": "^2.1.1"
   },
