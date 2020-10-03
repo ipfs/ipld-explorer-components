@@ -3,7 +3,7 @@
   "tabName": "탐색",
   "homeLink": "홈",
   "UpdateAvailable": {
-    "paragraph1": "A new version of IPLD Explorer is available; <1>please reload</1>."
+    "paragraph1": "새로운 버전의 IPLD 탐색기가 사용가능 <1>새로고침<1>"
   },
   "StartExploringPage": {
     "title": "탐색 - IPLD",
@@ -22,7 +22,7 @@
     "explore": "탐색"
   },
   "CidInfo": {
-    "header": "CID info",
+    "header": "CID 정보",
     "hashDigest": "해시 다이제스트"
   },
   "ObjectInfo": {
@@ -35,12 +35,12 @@
   "tour": {
     "projects": {
       "title": "Featured datasets",
-      "paragraph1": "Explore the featured datasets or paste a CID to see how that data is structured and linked across protocols."
+      "paragraph1": "주요 데이터 세트를 탐색하거나 CID를 붙여 넣어 해당 데이터가 프로토콜에서 어떻게 구성되고 연결되는지 확인하십시오."
     },
     "explorer": {
       "step1": {
         "title": "IPLD 탐색기",
-        "paragraph1": "Your journey with IPLD Explorer starts here. Click \"Next\" to learn more."
+        "paragraph1": "IPLD 익스플로러를 통한 여정은 여기에서 시작됩니다. 자세한 내용을 보려면 \"다음\"을 클릭하십시오."
       },
       "step2": {
         "title": "이동경로",
@@ -53,7 +53,7 @@
         "paragraph2": "If the node is a directory you can see its children and navigate to them."
       },
       "step4": {
-        "title": "CID info",
+        "title": "CID 정보",
         "paragraph1": "The decomposed CID so you can learn its meaning."
       },
       "step5": {

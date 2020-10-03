@@ -3,7 +3,7 @@
   "tabName": "Erkunden",
   "homeLink": "Home",
   "UpdateAvailable": {
-    "paragraph1": "A new version of IPLD Explorer is available; <1>please reload</1>."
+    "paragraph1": "Eine neue Version des IPLD Explorer ist verfügbar. <1>Bitte neu laden</1>."
   },
   "StartExploringPage": {
     "title": "Erkunden – IPLD",
@@ -40,7 +40,7 @@
     "explorer": {
       "step1": {
         "title": "IPLD-Explorer",
-        "paragraph1": "Your journey with IPLD Explorer starts here. Click \"Next\" to learn more."
+        "paragraph1": "Deine Reise mit dem IPLD Explorer beginnt hier. Klicke \"Weiter\" um mehr zu erfahren."
       },
       "step2": {
         "title": "Breadcrumbs",
