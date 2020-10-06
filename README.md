@@ -85,7 +85,7 @@ To contribute to IPFS in general, see the [contributing guide](https://github.co
 
 - Run `tx pull -a` to pull the latest translations from Transifex ([i18n#transifex-101)](https://github.com/ipfs-shipyard/i18n#transifex-101))
 - Update the version (`npm version major/minor/patch`)
-- Push the changes (`git push && git push --tags`)
+- Push the changes (`git push && git push --follow-tags`)
 - Update the [changelog](./CHANGELOG.md)
 - Add release notes to https://github.com/ipfs-shipyard/ipld-explorer-components/releases, use the tag and copy changelog changes
 - Publish to npm (`npm publish`)
