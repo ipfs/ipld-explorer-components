@@ -3,6 +3,7 @@ import ICU from 'i18next-icu'
 import StaticHttpBackend from 'i18next-http-backend'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
+import ar from 'i18next-icu/locale-data/ar'
 import ca from 'i18next-icu/locale-data/ca'
 import cs from 'i18next-icu/locale-data/cs'
 import da from 'i18next-icu/locale-data/da'
@@ -17,11 +18,12 @@ import nl from 'i18next-icu/locale-data/nl'
 import no from 'i18next-icu/locale-data/no'
 import pl from 'i18next-icu/locale-data/pl'
 import pt from 'i18next-icu/locale-data/pt'
+import ro from 'i18next-icu/locale-data/ro'
 import ru from 'i18next-icu/locale-data/ru'
 import sv from 'i18next-icu/locale-data/sv'
 import zh from 'i18next-icu/locale-data/zh'
 
-const localeData = [ca, cs, da, de, en, es, fr, it, ja, ko, nl, no, pl, pt, ru, sv, zh]
+const localeData = [ar, ca, cs, da, de, en, es, fr, it, ja, ko, nl, no, pl, pt, ro, ru, sv, zh]
 
 i18n
   .use(new ICU({ localeData }))
