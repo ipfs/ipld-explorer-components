@@ -81,6 +81,15 @@ To contribute to IPFS in general, see the [contributing guide](https://github.co
 
 [![](https://cdn.rawgit.com/jbenet/contribute-ipfs-gif/master/img/contribute.gif)](https://github.com/ipfs/community/blob/master/contributing.md)
 
+## Releasing
+
+- Run `tx pull -a` to pull the latest translations from Transifex ([i18n#transifex-101)](https://github.com/ipfs-shipyard/i18n#transifex-101))
+- Update the version (`npm version major/minor/patch`)
+- Push the changes (`git push && git push --follow-tags`)
+- Update the [changelog](./CHANGELOG.md)
+- Add release notes to https://github.com/ipfs-shipyard/ipld-explorer-components/releases, use the tag and copy changelog changes
+- Publish to npm (`npm publish`)
+
 ## License
 
 [MIT](LICENSE) © Protocol Labs
