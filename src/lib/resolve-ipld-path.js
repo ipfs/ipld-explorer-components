@@ -35,8 +35,8 @@ import Cid from 'cids'
  * @param {Object[]} pathBoundaries accumulated path boundary info
  * @returns {{targetNode: Object, canonicalPath: String, localPath: String, nodes: Object[], pathBoundaries: Object[]}} resolved path info
  */
-export default async function resolveIpldPath (ipld, sourceCid, path, nodes = [], pathBoundaries = []) {
-  const { value, remainderPath } = await ipldGetNodeAndRemainder(ipld, sourceCid, path)
+export default async function resolveIpldPath (ipfs, sourceCid, path, nodes = [], pathBoundaries = []) {
+  const { value, remainderPath } = await ipldGetNodeAndRemainder(ipfs, sourceCid, path)
   const sourceCidStr = sourceCid.toString()
 
   const node = normaliseDagNode(value, sourceCidStr)
@@ -47,7 +47,7 @@ export default async function resolveIpldPath (ipld, sourceCid, path, nodes = []
   if (link) {
     pathBoundaries.push(link)
     // Go again, using the link.target as the sourceCid, and the remainderPath as the path.
-    return resolveIpldPath(ipld, new Cid(link.target), remainderPath, nodes, pathBoundaries)
+    return resolveIpldPath(ipfs, new Cid(link.target), remainderPath, nodes, pathBoundaries)
   }
   // we made it to the containing node. Hand back the info
   const canonicalPath = path ? `${sourceCidStr}${path}` : sourceCidStr
@@ -55,20 +55,9 @@ export default async function resolveIpldPath (ipld, sourceCid, path, nodes = []
   return { targetNode, canonicalPath, localPath: path, nodes, pathBoundaries }
 }
 
-export async function ipldGetNodeAndRemainder (ipld, sourceCid, path) {
-  // TODO: find out why ipfs.dag.get with localResolve never resolves.
-  // const {value, remainderPath} = await getIpfs().dag.get(sourceCid, path, {localResolve: true})
-
-  // TODO: use ipfs.dag.get when it gets ipld super powers
-  // SEE: https://github.com/ipfs/js-ipfs-api/pull/755
-  // const {value} = await getIpfs().dag.get(sourceCid)
-
-  // TODO: handle indexing into dag-pb links without using Links prefix as per go-ipfs dag.get does.
-  // Current js-ipld-dag-pb resolver will throw with a path not available error if Links prefix is missing.
-  return {
-    value: await ipld.get(sourceCid),
-    remainderPath: (await ipld.resolve(sourceCid, path || '').first()).remainderPath
-  }
+export async function ipldGetNodeAndRemainder (ipfs, sourceCid, path) {
+  const { value, remainderPath } = await ipfs.dag.get(sourceCid, path, { localResolve: true })
+  return { value, remainderPath }
 }
 
 /**
