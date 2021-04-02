@@ -31,7 +31,7 @@
     "ipfs-unixfs": "^4.0.1",
     "milliseconds": "^1.0.3",
     "multiaddr": "^8.0.0",
-    "multibase": "^3.0.0",
+    "multibase": "^4.0.2",
     "multicodec": "^3.0.1",
     "multihashes": "^4.0.2",
     "react-joyride": "^2.3.0"

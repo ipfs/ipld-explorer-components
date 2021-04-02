@@ -1,6 +1,6 @@
 import CID from 'cids'
 import multihash from 'multihashes'
-import multibaseConstants from 'multibase/src/constants'
+import multibase from 'multibase'
 import { getCodeFromName } from 'multicodec'
 
 export function decodeCid (value) {
@@ -36,7 +36,7 @@ export function decodeCidV0 (value, cid) {
 export function decodeCidV1 (value, cid) {
   return {
     cid,
-    multibase: multibaseConstants.codes[value.substring(0, 1)],
+    multibase: multibase.codes[value.substring(0, 1)],
     multicodec: {
       name: cid.codec,
       code: '0x' + getCodeFromName(cid.codec)
