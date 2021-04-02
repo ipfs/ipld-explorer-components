@@ -1,8 +1,12 @@
-version: 2
+version: 2.1
+orbs:
+  browser-tools: circleci/browser-tools@1.1.0
 jobs:
   build:
     docker:
-      - image: circleci/node:10.15.1
+      - image: cimg/node:14.15.4-browsers
+        environment:
+          NO_SANDBOX: true
     steps:
       - checkout
       - run:
@@ -33,7 +37,7 @@ jobs:
           command: |
             pin_name="ipld-explorer-components build $CIRCLE_BUILD_NUMBER"
             hash=$(pin-to-cluster.sh "$pin_name" /tmp/workspace/$BUILD_DIR)
-            echo "Website added to IPFS: https://cluster.ipfs.io/ipfs/$hash"
+            echo "Website added to IPFS: https://dweb.link/ipfs/$hash"
 
 workflows:
   version: 2
