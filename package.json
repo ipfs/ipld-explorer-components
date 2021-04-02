@@ -28,7 +28,7 @@
     "cytoscape": "^3.18.1",
     "cytoscape-dagre": "^2.3.2",
     "filesize": "^6.1.0",
-    "ipfs-unixfs": "^2.0.4",
+    "ipfs-unixfs": "^4.0.1",
     "milliseconds": "^1.0.3",
     "multiaddr": "^8.0.0",
     "multibase": "^3.0.0",
