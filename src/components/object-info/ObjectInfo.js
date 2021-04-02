@@ -19,7 +19,8 @@ const objectInspectorTheme = {
 const nodeStyles = {
   'dag-cbor': { shortName: 'CBOR', name: 'CBOR', color: '#28CA9F' },
   'dag-pb': { shortName: 'PB', name: 'Protobuf', color: '#244e66' },
-  'git-raw': { shortName: 'GIT', name: 'Git', color: '#f14e32' },
+  'git-raw': { shortName: 'GIT', name: 'Git', color: '#378085' },
+  'raw': { shortName: 'RAW', name: 'Raw Block', color: '#f14e32' }, // eslint-disable-line quote-props
   'eth-block': { shortName: 'ETH', name: 'Ethereum Block', color: '#383838' },
   'eth-block-list': { shortName: 'ETH', name: 'Ethereum Block List', color: '#383838' },
   'eth-tx-trie': { shortName: 'ETH', name: 'Ethereum Tx Trie', color: '#383838' },
@@ -70,7 +71,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
           {nameForNode(type)}
         </span>
         {format === 'unixfs' ? (
-          <a className='dn di-ns link charcoal ml2' href='https://docs.ipfs.io/guides/concepts/unixfs/'>UnixFS</a>
+          <a className='dn di-ns link charcoal ml2' href='https://docs.ipfs.io/concepts/file-systems/#unix-file-system-unixfs'>UnixFS</a>
         ) : null}
         {format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type) ? (
           <a className='link avenir ml2 pa2 fw5 f6 blue' href={`${gatewayUrl}/ipfs/${cid}`} target='_external'>

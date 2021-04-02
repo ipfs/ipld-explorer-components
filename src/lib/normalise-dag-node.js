@@ -1,4 +1,4 @@
-import unixfs from 'ipfs-unixfs'
+import { UnixFS } from 'ipfs-unixfs'
 import CID from 'cids'
 import { toCidOrNull, getCodecOrNull } from './cid'
 
@@ -37,7 +37,7 @@ export function normaliseDagPb (node, cid, type) {
   let format
   try {
     // it's a unix system?
-    const { type, data, blockSizes } = unixfs.unmarshal(node.data)
+    const { type, data, blockSizes } = UnixFS.unmarshal(node.data)
     node.data = { type, data, blockSizes }
     format = 'unixfs'
   } catch (err) {

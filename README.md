@@ -46,6 +46,7 @@ export {
 There are `peerDependencies` so that the parent app can pick the versions of common deps. You'll need to add the following deps to your project.
 
 ```js
+"@loadable/component": "^5.14.1",
 "i18next": "^17.0.11",
 "i18next-browser-languagedetector": "^3.0.3",
 "i18next-icu": "^1.1.2",
@@ -56,7 +57,6 @@ There are `peerDependencies` so that the parent app can pick the versions of com
 "react-dom": "^16.9.0",
 "react-helmet": "^5.2.1",
 "react-i18next": "^10.12.1",
-"react-loadable": "^5.5.0",
 "react-virtualized": "^9.21.1",
 "redux-bundler": "^25.0.0",
 "redux-bundler-react": "^1.1.1",
