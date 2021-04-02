@@ -36,10 +36,10 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
             <ExploreSuggestion name='Project Apollo Archives' cid='QmSnuWmxptJZdLJpKRarxBMS2Ju2oANVrgbr2xWbie9b2D' type='dag-pb' />
           </li>
           <li>
-            <ExploreSuggestion name='IGIS git repo' cid='z8mWaJHXieAVxxLagBpdaNWFEBKVWmMiE' type='git-raw' />
+            <ExploreSuggestion name='IGIS git repo' cid='baf4bcfg4ep767tjp5lxyanx5urpjjgx5q2volvy' type='git-raw' />
           </li>
           <li>
-            <ExploreSuggestion name='An Ethereum Block' cid='z43AaGEvwdfzjrCZ3Sq7DKxdDHrwoaPQDtqF4jfdkNEVTiqGVFW' type='eth-block' />
+            <ExploreSuggestion name='An Ethereum Block' cid='bagiacgzah24drzou2jlkixpblbgbg6nxfrasoklzttzoht5hixhxz3rlncyq' type='eth-block' />
           </li>
           <li>
             <ExploreSuggestion name='XKCD' cid='QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm' type='dag-pb' />
@@ -60,5 +60,14 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
     />
   </div>
 )
+
+/* TODO: add dag-cbor and raw block examples
+          <li>
+            <ExploreSuggestion name='DAG-CBOR Block' cid='bafkreibm6jg3ux5qumhcn2b3flc3tyu6dmlb4xa7u5bf44yegnrjhc4yeq' type='dag-cbor' />
+          </li>
+          <li>
+            <ExploreSuggestion name='Plain text as raw bytes' cid='bafkreibm6jg3ux5qumhcn2b3flc3tyu6dmlb4xa7u5bf44yegnrjhc4yeq' type='raw' />
+          </li>
+*/
 
 export default withTranslation('explore')(StartExploringPage)
