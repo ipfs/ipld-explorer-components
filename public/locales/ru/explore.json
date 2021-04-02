@@ -6,59 +6,59 @@
     "paragraph1": "Новая версия IPLD Explorer доступна; <1>пожалуйста, перезагрузите</1>."
   },
   "StartExploringPage": {
-    "title": "Explore - IPLD",
+    "title": "Обзор - IPLD",
     "header": "Обзор Merkle Forest",
-    "leadParagraph": "Paste a CID into the box to fetch the IPLD node it addresses, or choose a featured dataset."
+    "leadParagraph": "Вставьте CID в поле, чтобы получить узел IPLD, на который он ссылается, или выберите отдельный набор данных."
   },
   "AboutIpld": {
-    "paragraph1":"<0>IPLD is <1>the data model of the content-addressable web.</1> It allows us to treat all hash-linked data structures as subsets of a unified information space, unifying all data models that link data with hashes as instances of IPLD.</0>",
-    "paragraph2": "<0>Content addressing through hashes has become a widely-used means of connecting data in distributed systems, from the blockchains that run your favorite cryptocurrencies, to the commits that back your code, to the web’s content at large. Yet, whilst all of these tools rely on some common primitives, their specific underlying data structures are not interoperable.</0>",
-    "paragraph3": "<0>Enter IPLD: a single namespace for all hash-inspired protocols. Through IPLD, links can be traversed across protocols, allowing you to explore data regardless of the underlying protocol.</0>"
+    "paragraph1":"<0>IPLD это <1>модель данных веб с адресацией по содержимому.</1> Она предоставляет возможность обрабатывать все структуры данных с хеш-ссылками как предметы единого иформационного пространства, объединяя все модели данных, которые ссылаются на данные через хеш как экземпляры IPLD.</0>",
+    "paragraph2": "<0>Адресация по содержимому посредством хешей стала широко используемым инструментом соединения данных в распределенных системах, начиная блокчейнами, оперирующими вашими любимыми криптовалютами, заканчивая фиксацией, обеспечивающей ваш код работоспособностю и веб-контентом вообще. Тем не менее, поскольку все эти инструменты полагаются на некоторые общие базовые элементы, специфические структуры данных, лежащие в их основе, не являются интероперабильными.</0>",
+    "paragraph3": "<0>Входите в IPLD: единое пространство имен для всех протоколов, движимых хешами. Посредством IPLD ссылки могут быть проведены по протоколам, давая вам возможность изучать данные, независимо от протокола, лежащего в их основе.</0>"
   },
   "ExplorePage": {
-    "title": "Exploring - IPLD"
+    "title": "Обзор - IPLD"
   },
   "IpldExploreForm": {
     "explore": "Обзор"
   },
   "CidInfo": {
     "header": "Инфо о CID",
-    "hashDigest": "Hash digest"
+    "hashDigest": "Справочник хешей"
   },
   "ObjectInfo": {
-    "gatewayLink": "View on IPFS Gateway"
+    "gatewayLink": "Просмотреть в шлюзе IPFS"
   },
-  "base": "base",
+  "base": "база",
   "version": "версия",
   "codec": "кодек",
-  "multihash": "multihash",
+  "multihash": "мультихеш",
   "tour": {
     "projects": {
-      "title": "Featured datasets",
-      "paragraph1": "Explore the featured datasets or paste a CID to see how that data is structured and linked across protocols."
+      "title": "Отдельные наботы данных",
+      "paragraph1": "Изучайте отдельные наборы данных или вставьте CID, чтобы увидеть, как эти данные структурированы и ссылаемы через протоколы."
     },
     "explorer": {
       "step1": {
         "title": "IPLD Explorer",
-        "paragraph1": "Your journey with IPLD Explorer starts here. Click \"Next\" to learn more."
+        "paragraph1": "Ваше путешествие с проводником IPLD начинается здесь. Нажмите \"Далее\" чтобы узнать больше."
       },
       "step2": {
-        "title": "Breadcrumbs",
+        "title": "Хлебные крошки",
         "paragraph1": "Путь, ведущий к этой ноде.",
-        "paragraph2": "Click on it to traverse to its parents or children."
+        "paragraph2": "Нажмите на него, чтобы пройтись по его родителям или детям."
       },
       "step3": {
         "title": "Информация о ноде",
-        "paragraph1": "Here you have detailed info about the node and you can open it in the IPFS gateway.",
-        "paragraph2": "If the node is a directory you can see its children and navigate to them."
+        "paragraph1": "Здесь находится подробная информация об узле и вы можете открыть его в шлюзе IPFS.",
+        "paragraph2": "Если узел это директория, вы можете увидеть его детей и переходить на них."
       },
       "step4": {
         "title": "Инфо о CID",
-        "paragraph1": "The decomposed CID so you can learn its meaning."
+        "paragraph1": "Разложенный CID, чтобы вы могли узнать его значение."
       },
       "step5": {
-        "title": "Visual representation",
-        "paragraph1": "A visual representation of the node and its children."
+        "title": "Визуальное представление",
+        "paragraph1": "Визуальное представление узла и его детей"
       }
     }
   }

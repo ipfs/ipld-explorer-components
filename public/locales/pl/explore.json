@@ -3,7 +3,7 @@
   "tabName": "Eksploruj",
   "homeLink": "Strona główna",
   "UpdateAvailable": {
-    "paragraph1": "A new version of IPLD Explorer is available; <1>please reload</1>."
+    "paragraph1": "Nowa wersja przeglądarki IPLD jest dostępna; <1>Proszę przeładuj</1>."
   },
   "StartExploringPage": {
     "title": "Przeglądarka - IPLD",
@@ -22,7 +22,7 @@
     "explore": "Przeglądaj"
   },
   "CidInfo": {
-    "header": "CID info",
+    "header": "Informacje CID",
     "hashDigest": "wynik funkcji haszującej"
   },
   "ObjectInfo": {
@@ -48,17 +48,17 @@
         "paragraph2": "Click on it to traverse to its parents or children."
       },
       "step3": {
-        "title": "Node info",
+        "title": "Informacje węzła",
         "paragraph1": "Here you have detailed info about the node and you can open it in the IPFS gateway.",
         "paragraph2": "If the node is a directory you can see its children and navigate to them."
       },
       "step4": {
-        "title": "CID info",
+        "title": "Informacje CID",
         "paragraph1": "The decomposed CID so you can learn its meaning."
       },
       "step5": {
-        "title": "Visual representation",
-        "paragraph1": "A visual representation of the node and its children."
+        "title": "Reprezentacja graficzna",
+        "paragraph1": "Graficzna reprezentacja węzłów i ich zależności."
       }
     }
   }
