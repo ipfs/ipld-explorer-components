@@ -1,8 +1,6 @@
 # IPLD Explorer Components
 
-> React components for https://explore.ipld.io
-
-See: https://github.com/ipfs-shipyard/ipld-explorer
+> React components for https://explore.ipld.io and ipfs-webui
 
 ![Screenshot of the IPLD explorer](https://user-images.githubusercontent.com/58871/43152632-f310763c-8f66-11e8-9449-2e362a9f3047.png)
 
@@ -10,7 +8,7 @@ See: https://github.com/ipfs-shipyard/ipld-explorer
 
 ## Background
 
-This module was extracted from the [IPLD Explorer](https://github.com/ipfs-shipyard/ipld-explorer) so it could be reused from the [IPFS Web UI](https://github.com/ipfs-shipyard/ipfs-webui).
+This module was extracted from the [explore.ipld.io](https://github.com/ipfs-shipyard/ipld-explorer) so it could be reused from the [IPFS Web UI](https://github.com/ipfs/ipfs-webui).
 
 ## Usage
 
@@ -43,25 +41,8 @@ export {
 }
 ```
 
-There are `peerDependencies` so that the parent app can pick the versions of common deps. You'll need to add the following deps to your project.
+There are `peerDependencies` so that the parent app can pick the versions of common deps. You'll need to add relevant deps to your project.
 
-```js
-"@loadable/component": "^5.14.1",
-"i18next": "^17.0.11",
-"i18next-browser-languagedetector": "^3.0.3",
-"i18next-icu": "^1.1.2",
-"i18next-xhr-backend": "^3.1.1",
-"ipfs-css": "^0.13.1",
-"prop-types": "^15.7.2",
-"react": "^16.9.0",
-"react-dom": "^16.9.0",
-"react-helmet": "^5.2.1",
-"react-i18next": "^10.12.1",
-"react-virtualized": "^9.21.1",
-"redux-bundler": "^25.0.0",
-"redux-bundler-react": "^1.1.1",
-"tachyons": "^4.11.1"
-```
 
 And, assuming you are using `create-react-app` or a similar webpack set up, you'll need the following CSS imports:
 
