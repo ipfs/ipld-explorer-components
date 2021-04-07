@@ -30,7 +30,7 @@
     "filesize": "^6.1.0",
     "ipfs-unixfs": "^4.0.1",
     "milliseconds": "^1.0.3",
-    "multibase": "^4.0.2",
+    "multibase": "^4.0.4",
     "multicodec": "^3.0.1",
     "multihashes": "^4.0.2",
     "react-joyride": "^2.3.0"
