@@ -17,5 +17,5 @@ export function getCodecOrNull (value) {
 
 export function toCidStrOrNull (value) {
   const cid = toCidOrNull(value)
-  return cid ? cid.toBaseEncodedString() : null
+  return cid ? cid.toString() : null
 }

@@ -4,33 +4,37 @@ import { DAGNode } from 'ipld-dag-pb'
 import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
 
 it('resolves all nodes traversed along a path', async () => {
-  const ipfsMock = {
-    dag: { get: jest.fn() }
+  const ipldMock = {
+    get: jest.fn(),
+    resolve: jest.fn()
   }
   const cid = 'zdpuAs8sJjcmsPUfB1bUViftCZ8usnvs2cXrPH6MDyT4zrvSs'
   const path = '/a/b/a'
   const linkCid = 'zdpuAyzU5ahAKr5YV24J5TqrDX8PhzHLMkxx69oVzkBDWHnjq'
   const dagGetRes1 = {
-    value: {
-      a: {
-        b: new CID(linkCid)
-      }
-    },
-    remainderPath: '/a'
+    a: {
+      b: new CID(linkCid)
+    }
   }
   const dagGetRes2 = {
-    value: {
-      a: 'hello world'
-    },
-    remainderPath: '/a'
+    first: () => Promise.resolve({ remainderPath: '/a' })
+  }
+  const dagGetRes3 = {
+    a: 'hello world'
+  }
+  const dagGetRes4 = {
+    first: () => Promise.resolve({ remainderPath: '/a' })
   }
 
-  ipfsMock.dag.get.mockReturnValueOnce(Promise.resolve(dagGetRes1))
-  ipfsMock.dag.get.mockReturnValueOnce(Promise.resolve(dagGetRes2))
+  ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes1))
+  ipldMock.resolve.mockReturnValueOnce(dagGetRes2)
+  ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes3))
+  ipldMock.resolve.mockReturnValueOnce(dagGetRes4)
 
-  const res = await resolveIpldPath(ipfsMock, new CID(cid), path)
+  const res = await resolveIpldPath(ipldMock, new CID(cid), path)
 
-  expect(ipfsMock.dag.get.mock.calls.length).toBe(2)
+  expect(ipldMock.get.mock.calls.length).toBe(2)
+  expect(ipldMock.resolve.mock.calls.length).toBe(2)
   expect(res.canonicalPath).toBe(`${linkCid}/a`)
   expect(res.nodes.length).toBe(2)
   expect(res.nodes[0].type).toBe('dag-cbor')
@@ -45,20 +49,19 @@ it('resolves all nodes traversed along a path', async () => {
   })
 })
 
-it('resolves thru dag-cbor to dag-pb', async () => {
-  const ipfsMock = {
-    dag: {
-      get: jest.fn()
-    }
+it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
+  const ipldMock = {
+    get: jest.fn(),
+    resolve: jest.fn()
   }
 
   const cid = 'zdpuAs8sJjcmsPUfB1bUViftCZ8usnvs2cXrPH6MDyT4zrvSs'
   const path = '/a/b/pb1'
 
-  const dagNode3 = await createDagPbNode(new Uint8Array(Buffer.from('the second pb node')), [])
+  const dagNode3 = await createDagPbNode('the second pb node', [])
   const dagNode3CID = 'QmRLacjo71FTzKFELa7Yf5YqMwdftKNDNFq7EiE13uohar'
 
-  const dagNode2 = await createDagPbNode(new Uint8Array(Buffer.from('the first pb node')), [{
+  const dagNode2 = await createDagPbNode('the first pb node', [{
     name: 'pb1',
     cid: dagNode3CID,
     size: 101
@@ -71,28 +74,35 @@ it('resolves thru dag-cbor to dag-pb', async () => {
     }
   }
 
-  const dagGetRes1 = {
-    value: dagNode1,
-    remainderPath: 'pb1'
-  }
+  const dagGetRes1 = dagNode1
 
   const dagGetRes2 = {
-    value: dagNode2,
-    remainderPath: ''
+    first: () => Promise.resolve({ remainderPath: 'pb1' })
   }
 
-  const dagGetRes3 = {
-    value: dagNode3,
-    remainderPath: ''
+  const dagGetRes3 = dagNode2
+
+  const dagGetRes4 = {
+    first: () => Promise.resolve({ remainderPath: '' })
   }
 
-  ipfsMock.dag.get.mockReturnValueOnce(Promise.resolve(dagGetRes1))
-  ipfsMock.dag.get.mockReturnValueOnce(Promise.resolve(dagGetRes2))
-  ipfsMock.dag.get.mockReturnValueOnce(Promise.resolve(dagGetRes3))
+  const dagGetRes5 = dagNode3
 
-  const res = await resolveIpldPath(ipfsMock, new CID(cid), path)
+  const dagGetRes6 = {
+    first: () => Promise.resolve({ remainderPath: '' })
+  }
 
-  expect(ipfsMock.dag.get.mock.calls.length).toBe(3)
+  ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes1))
+  ipldMock.resolve.mockReturnValueOnce(dagGetRes2)
+  ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes3))
+  ipldMock.resolve.mockReturnValueOnce(dagGetRes4)
+  ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes5))
+  ipldMock.resolve.mockReturnValueOnce(dagGetRes6)
+
+  const res = await resolveIpldPath(ipldMock, new CID(cid), path)
+
+  expect(ipldMock.get.mock.calls.length).toBe(3)
+  expect(ipldMock.resolve.mock.calls.length).toBe(3)
   expect(res.targetNode.cid).toEqual(dagNode3CID)
   expect(res.canonicalPath).toBe(dagNode3CID)
   expect(res.nodes.length).toBe(3)
@@ -121,13 +131,10 @@ it('resolves thru dag-cbor to dag-pb', async () => {
 })
 
 function createDagPbNode (data, links) {
-  const node = new DAGNode(data)
-
-  for (const link of links) {
-    node.addLink(link)
+  if (typeof data === 'string') {
+    data = new Uint8Array(Buffer.from(data))
   }
-
-  return node
+  return new DAGNode(data, links)
 }
 
 it('finds the linkPath from a fullPath and a remainderPath', () => {
