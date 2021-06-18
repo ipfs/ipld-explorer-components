@@ -1,6 +1,6 @@
 # IPLD Explorer Components
 
-> React components for https://explore.ipld.io and ipfs-webui
+> React components for https://explore.ipld.io (https://github.com/ipfs/explore.ipld.io) and ipfs-webui
 
 ![Screenshot of the IPLD explorer](https://user-images.githubusercontent.com/58871/43152632-f310763c-8f66-11e8-9449-2e362a9f3047.png)
 
@@ -8,7 +8,7 @@
 
 ## Background
 
-This module was extracted from the [explore.ipld.io](https://github.com/ipfs-shipyard/ipld-explorer) so it could be reused from the [IPFS Web UI](https://github.com/ipfs/ipfs-webui).
+This module was extracted from the [explore.ipld.io](https://github.com/ipfs/explore.ipld.io) so it could be reused from the [IPFS Web UI](https://github.com/ipfs/ipfs-webui).
 
 ## Usage
 
