@@ -89,6 +89,10 @@ const makeBundle = () => {
     const pathParts = pathBoundaries.map(p => p.path)
     // add the extra path step from the link to the end
     if (link && link.path) {
+      if (pathParts.length) {
+        // DagPb data model format is /Links/0/Hash/Links/0/Hash
+        pathParts.push('Hash')
+      }
       pathParts.push(link.path)
     }
     // add the root cid to the start
