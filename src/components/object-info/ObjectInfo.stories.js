@@ -24,6 +24,7 @@ storiesOf('IPLD Node Info', module)
       data={dagNodeA.data}
       type='dag-pb'
       gatewayUrl='https://ipfs.io'
+      publicGatewayUrl='https://dweb.link'
       onLinkClick={action('link clicked')}
     />
   ))
@@ -36,6 +37,7 @@ storiesOf('IPLD Node Info', module)
       data={dagNodeB.data}
       type='dag-pb'
       gatewayUrl='https://ipfs.io'
+      publicGatewayUrl='https://dweb.link'
       onLinkClick={action('link clicked')}
     />
   ))
@@ -48,6 +50,7 @@ storiesOf('IPLD Node Info', module)
       data={dagNodeC.data}
       type='dag-pb'
       gatewayUrl='https://ipfs.io'
+      publicGatewayUrl='https://dweb.link'
       onLinkClick={action('link clicked')}
     />
   ))
