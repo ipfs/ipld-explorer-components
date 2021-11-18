@@ -11,6 +11,9 @@ class LinksTable extends React.Component {
   render () {
     const { links } = this.props
     const headerClassName = 'mid-gray fw2 tracked silver'
+    const cidRowStyle = {
+      overflow: 'auto'
+    }
     const rowHeight = 29
     const headerHeight = 32
     const tableHeight = Math.max(370, (Math.min(window.innerHeight - 500, links.length * rowHeight + headerHeight)))
@@ -31,7 +34,7 @@ class LinksTable extends React.Component {
             >
               <Column dataKey='index' width={34} className='pv2 silver monospace tr pr1' />
               <Column label='Path' dataKey='path' width={210} flexGrow={1} className='pv2 navy f6-ns' headerClassName={headerClassName} />
-              <Column label='CID' dataKey='target' width={360} className='pv2 mid-gray monospace' headerClassName={headerClassName} />
+              <Column label='CID' dataKey='target' width={360} className='pv2 mid-gray monospace no-ellipsis' headerClassName={headerClassName} style={cidRowStyle} />
             </Table>
           )}
         </AutoSizer>
