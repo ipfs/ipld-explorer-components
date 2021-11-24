@@ -3,7 +3,7 @@
   "tabName": "Prozkoumat",
   "homeLink": "Hlavní stránka",
   "UpdateAvailable": {
-    "paragraph1": "A new version of IPLD Explorer is available; <1>please reload</1>."
+    "paragraph1": "K dispozici je nová verze aplikace IPLD Explorer; <1>prosím obnovte</1>."
   },
   "StartExploringPage": {
     "title": "Průzkumník - IPLD",
@@ -40,7 +40,7 @@
     "explorer": {
       "step1": {
         "title": "IPLD Průzkumník",
-        "paragraph1": "Your journey with IPLD Explorer starts here. Click \"Next\" to learn more."
+        "paragraph1": "Vaše cesta s IPLD Explorer začíná zde. Klikněte na \"Další\" a dozvíte se více."
       },
       "step2": {
         "title": "Cesta",
