@@ -127,7 +127,7 @@ function makeIpld (IpldResolver, ipldFormats, getIpfs) {
 // but thanks to it using only ipfs.block.get, making it extra compatible
 // is not very expensive. This buys us some time, but this technical debt needs
 // to be paid eventually.
-function painfullyCompatibleBlockService(ipfs) {
+function painfullyCompatibleBlockService (ipfs) {
   const blockService = new Proxy(ipfs.block, {
     get: function (obj, prop) {
       if (prop === 'get') { // augument ipfs.block.get()

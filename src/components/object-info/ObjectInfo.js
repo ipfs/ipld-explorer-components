@@ -71,10 +71,10 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
           {nameForNode(type)}
         </span>
         {format === 'unixfs' ? (
-          <a className='dn di-ns link charcoal ml2' href='https://docs.ipfs.io/concepts/file-systems/#unix-file-system-unixfs' target='_external'>UnixFS</a>
+          <a className='dn di-ns no-underline charcoal ml2' href='https://docs.ipfs.io/concepts/glossary/#unixfs' rel='external' target='_external'>UnixFS</a>
         ) : null}
         {format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type) ? (
-          <a className='link avenir ml2 pa2 fw5 f6 blue' href={`${gatewayUrl}/ipfs/${cid}`} target='_external'>
+          <a className='no-underline avenir ml2 pa2 fw5 f6 blue' href={`${gatewayUrl}/ipfs/${cid}`} rel='external nofollow' target='_external'>
             {t('ObjectInfo.gatewayLink')}
           </a>
         ) : null}

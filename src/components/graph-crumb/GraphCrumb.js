@@ -11,7 +11,7 @@ const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', cl
     <div {...props}>
       <div className={`sans-serif ${className}`}>
         <NodeUnderline cid={cid}>
-          <a href={firstHrefBase} className='monospace link dark-gray o-50 glow'>
+          <a href={firstHrefBase} className='monospace no-underline dark-gray o-50 glow'>
             <Cid value={cid} />
           </a>
           {first ? (
@@ -86,7 +86,7 @@ const Path = ({ path, hrefBase, sourceCid }) => {
           <div className='dib' key={href}>
             {i !== 0 && <Divider />}
             <a
-              className='dib link dark-gray o-50 glow'
+              className='dib no-underline dark-gray o-50 glow'
               title={sourceCid + '/' + relPath}
               href={href}
             >

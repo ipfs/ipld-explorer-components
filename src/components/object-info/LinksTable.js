@@ -10,7 +10,7 @@ class LinksTable extends React.Component {
 
   render () {
     const { links } = this.props
-    const headerClassName = 'mid-gray fw2 tracked silver'
+    const headerClassName = 'mid-gray fw2 tracked'
     const cidRowStyle = {
       overflow: 'auto'
     }
@@ -32,7 +32,7 @@ class LinksTable extends React.Component {
               rowGetter={({ index }) => ({ index, ...links[index] })}
               onRowClick={this.handleOnRowClick}
             >
-              <Column dataKey='index' width={34} className='pv2 silver monospace tr pr1' />
+              <Column dataKey='index' width={34} className='pv2 mid-gray monospace tr pr1' />
               <Column label='Path' dataKey='path' width={150} flexGrow={1} className='pv2 navy f6-ns' headerClassName={headerClassName} />
               <Column label='CID' dataKey='target' width={420} className='pv2 mid-gray monospace no-ellipsis' headerClassName={headerClassName} style={cidRowStyle} />
             </Table>

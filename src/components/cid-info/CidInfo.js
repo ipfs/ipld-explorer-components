@@ -42,23 +42,23 @@ export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
   return !cid ? null : (
     <section className={`ph3 pv4 sans-serif ${className}`} {...props}>
       <label className='db pb2'>
-        <a className='tracked ttu f5 fw2 teal-muted hover-aqua link' href='https://docs.ipfs.io/guides/concepts/cid/'>
+        <a className='tracked ttu f5 fw2 teal-muted hover-aqua link' href='https://docs.ipfs.io/concepts/glossary/#cid' rel='external' target='_external'>
           {t('CidInfo.header')}
         </a>
       </label>
       {!cidInfo ? null : (
         <div>
-          <div className='f7 monospace fw4 ma0 pb2 truncate gray'>
+          <div className='f7 monospace fw4 ma0 pb2 truncate mid-gray force-select' title={cid}>
             {cid}
           </div>
           <div className='f6 sans-serif fw4 ma0 pb2 truncate' id='CidInfo-human-readable-cid'>
             {cidInfo.humanReadable}
           </div>
-          <label htmlFor='CidInfo-human-readable-cid' className='db fw2 ma0 gray ttu f7 tracked'>
+          <label htmlFor='CidInfo-human-readable-cid' className='db fw2 ma0 mid-gray ttu f7 tracked'>
             {t('base')} - {t('version')} - {t('codec')} - {t('multihash')}
           </label>
           <a
-            href='https://github.com/multiformats/multihash#visual-examples'
+            href='https://docs.ipfs.io/concepts/glossary/#multihash' rel='external' target='_external'
             className='dib tracked ttu f6 fw2 teal-muted hover-aqua link mt4'
           >
             {t('multihash')}
@@ -66,18 +66,18 @@ export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
           <div>
             <div className='dib monospace f6 pt2 tr dark-gray lh-title ph2'>
               <code className='gray'>0x</code>
-              <span className='orange'>{cidInfo.hashFnCode}</span>
-              <span className='green'>{cidInfo.hashLengthCode}</span>
-              <span id='CidInfo-multihash'>
+              <span className='orange force-select'>{cidInfo.hashFnCode}</span>
+              <span className='green force-select'>{cidInfo.hashLengthCode}</span>
+              <span id='CidInfo-multihash' className='force-select'>
                 {cidInfo.hashValueIn32CharChunks.map(chunk => (
                   <span key={chunk.join('')}>{chunk.join('')}<br /></span>
                 ))}
               </span>
-              <label htmlFor='CidInfo-multihash' className='sans-serif fw2 ma0 gray ttu f7 tracked'>
+              <label htmlFor='CidInfo-multihash' className='sans-serif fw2 ma0 mid-gray ttu f7 tracked'>
                 {t('CidInfo.hashDigest')}
               </label>
               <div className='tl lh-copy'>
-                <a className='db link orange pt2' href='https://github.com/multiformats/multicodec/blob/master/table.csv'>
+                <a className='db orange no-underline pt2' href='https://docs.ipfs.io/concepts/glossary/#multicodec' rel='external' target='_external' title="Multicodec">
                   <code className='gray'>0x</code>
                   <code>{cidInfo.hashFnCode}</code> = {cidInfo.hashFn}
                 </a>
