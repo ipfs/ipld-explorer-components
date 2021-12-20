@@ -33,8 +33,8 @@ class LinksTable extends React.Component {
               onRowClick={this.handleOnRowClick}
             >
               <Column dataKey='index' width={34} className='pv2 silver monospace tr pr1' />
-              <Column label='Path' dataKey='path' width={210} flexGrow={1} className='pv2 navy f6-ns' headerClassName={headerClassName} />
-              <Column label='CID' dataKey='target' width={360} className='pv2 mid-gray monospace no-ellipsis' headerClassName={headerClassName} style={cidRowStyle} />
+              <Column label='Path' dataKey='path' width={150} flexGrow={1} className='pv2 navy f6-ns' headerClassName={headerClassName} />
+              <Column label='CID' dataKey='target' width={420} className='pv2 mid-gray monospace no-ellipsis' headerClassName={headerClassName} style={cidRowStyle} />
             </Table>
           )}
         </AutoSizer>
