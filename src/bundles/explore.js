@@ -1,4 +1,5 @@
 import Cid from 'cids'
+import { CID } from 'multiformats/cid'
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import resolveIpldPath from '../lib/resolve-ipld-path'
 import parseIpldPath from '../lib/parse-ipld-path'
@@ -114,9 +115,47 @@ function ensureLeadingSlash (str) {
 
 function makeIpld (IpldResolver, ipldFormats, getIpfs) {
   return new IpldResolver({
-    blockService: getIpfs().block,
+    blockService: painfullyCompatibleBlockService(getIpfs()),
     formats: ipldFormats
   })
+}
+
+// This wrapper ensures the new block service from js-ipfs AND js-ipfs-http-client
+// works with the legacy code present in ipld-explorer-components
+//
+// (ir)rationale: we have no bandwidth to rewrite entire IPLD Explorer
+// but thanks to it using only ipfs.block.get, making it extra compatible
+// is not very expensive. This buys us some time, but this technical debt needs
+// to be paid eventually.
+function painfullyCompatibleBlockService(ipfs) {
+  const blockService = new Proxy(ipfs.block, {
+    get: function (obj, prop) {
+      if (prop === 'get') { // augument ipfs.block.get()
+        return async (cid, options) => {
+          let block
+          try {
+            block = await ipfs.block.get(cid, options)
+          } catch (e) {
+            // recover when two different CID libraries are used,
+            // and below error is produced by the modern ipfs-code
+            if (e.toString().includes('Unknown type, must be binary type')) {
+              block = await ipfs.block.get(CID.parse(cid.toString()), options)
+            } else {
+              throw e
+            }
+          }
+          // recover from new return type in modern JS APIs
+          // https://github.com/ipfs/js-ipfs/pull/3990
+          if (typeof block.cid === 'undefined') {
+            return { cid, data: block }
+          }
+          return block
+        }
+      }
+      return obj[prop]
+    }
+  })
+  return blockService
 }
 
 async function getIpld () {
