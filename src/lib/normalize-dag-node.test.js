@@ -1,5 +1,5 @@
 /* global it expect */
-import CID from 'cids'
+import CID from 'multiformats/cid'
 import normaliseDagCbor from './normalise-dag-node'
 
 const cid1 = 'zdpuAwkGh9cLskW5z7pH8V2uC5nwtSXd76L7ZTEXs5f8V89db'

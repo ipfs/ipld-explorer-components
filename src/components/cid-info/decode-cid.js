@@ -1,7 +1,7 @@
-import CID from 'cids'
-import multihash from 'multihashes'
-import multibase from 'multibase'
-import { getCodeFromName } from 'multicodec'
+import CID from 'multiformats/cid'
+import multihash from 'multiformats/hashes/hasher'
+import multibase from 'multiformats/bases/base64'
+import { getCodeFromName } from 'multiformats/codecs/json'
 
 export function decodeCid (value) {
   const cid = new CID(value).toJSON()

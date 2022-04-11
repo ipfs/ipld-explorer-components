@@ -16,15 +16,15 @@
     "lint": "eslint src/",
     "prepare": "npm run build",
     "start": "cross-env NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js' --watch",
-    "storybook": "start-storybook -p 9009 --static-dir public",
+    "storybook": "start-storybook -p 9009 -h localhost --static-dir public",
     "storybook:build": "build-storybook -c .storybook --static-dir public --output-dir build",
     "test": "react-scripts test --env=jsdom"
   },
   "dependencies": {
     "@babel/cli": "^7.13.14",
+    "@ipld/car": "^4.1.0",
     "@loadable/component": "^5.14.1",
     "@tableflip/react-inspector": "^2.3.0",
-    "cids": "^1.1.6",
     "cytoscape": "^3.18.1",
     "cytoscape-dagre": "^2.3.2",
     "filesize": "^6.1.0",
@@ -35,9 +35,7 @@
     "ipld-git": "0.6.4",
     "ipld-raw": "7.0.0",
     "milliseconds": "^1.0.3",
-    "multibase": "^4.0.4",
-    "multicodec": "^3.0.1",
-    "multihashes": "^4.0.2",
+    "multiformats": "^9.6.4",
     "react-joyride": "^2.3.0"
   },
   "devDependencies": {
@@ -73,7 +71,7 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-helmet": "^5.2.1",
-    "react-i18next": "^11.8.10",
+    "react-i18next": "^11.16.2",
     "react-scripts": "^4.0.3",
     "react-virtualized": "^9.22.3",
     "redux-bundler": "^26.1.0",
