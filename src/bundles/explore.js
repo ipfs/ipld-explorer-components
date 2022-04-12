@@ -107,7 +107,6 @@ const makeBundle = () => {
 
   bundle.doUploadUserProvidedCar = (file) => (args) => {
     const { store, getIpfs } = args
-    console.log(getIpfs())
     importCar(file, getIpfs()).then(result => {
       const cid = result.root.cid
       const hash = cid.toString() ? `#/explore${ensureLeadingSlash(cid.toString())}` : '#/explore'
