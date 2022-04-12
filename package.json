@@ -16,7 +16,7 @@
     "lint": "eslint src/",
     "prepare": "npm run build",
     "start": "cross-env NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js' --watch",
-    "storybook": "start-storybook -p 9009 -h localhost --static-dir public",
+    "storybook": "start-storybook -p 9009 --static-dir public",
     "storybook:build": "build-storybook -c .storybook --static-dir public --output-dir build",
     "test": "react-scripts test --env=jsdom"
   },
