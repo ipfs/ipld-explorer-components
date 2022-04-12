@@ -21,9 +21,6 @@
   "IpldExploreForm": {
     "explore": "Explore"
   },
-  "IpldCarExploreForm": {
-    "explore": "Explore"
-  },
   "CidInfo": {
     "header": "CID info",
     "hashDigest": "Hash digest"

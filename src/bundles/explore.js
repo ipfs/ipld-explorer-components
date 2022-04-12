@@ -3,7 +3,6 @@ import resolveIpldPath from '../lib/resolve-ipld-path'
 import parseIpldPath from '../lib/parse-ipld-path'
 import { CID } from 'multiformats/cid'
 import Cid from 'cids'
-import * as fs from 'fs'
 
 // Find all the nodes and path boundaries traversed along a given path
 const makeBundle = () => {
@@ -109,7 +108,8 @@ const makeBundle = () => {
   bundle.doUploadUserProvidedCar = (file) => (args) => {
     const { store, getIpfs } = args
     console.log(getIpfs())
-    importCar(file, getIpfs()).then(cid => {
+    importCar(file, getIpfs()).then(result => {
+      const cid = result.root.cid
       const hash = cid.toString() ? `#/explore${ensureLeadingSlash(cid.toString())}` : '#/explore'
       store.doUpdateHash(hash)
     })
@@ -118,17 +118,9 @@ const makeBundle = () => {
 }
 
 async function importCar (file, ipfs) {
-  console.log('importing car', file)
-  // eslint-disable-next-line no-undef
-  const reader = new FileReader()
-  reader.readAsArrayBuffer(file)
-  reader.onload = async () => {
-    try {
-      const cid = await ipfs.dag.import(reader.result)
-      console.log('imported car CID', cid.result)
-    } catch (e) {
-      console.error(e)
-    }
+  const inStream = file.stream()
+  for await (const result of ipfs.dag.import(inStream)) {
+    return result
   }
 }
 

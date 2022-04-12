@@ -25,7 +25,6 @@
     "@ipld/car": "^4.1.0",
     "@loadable/component": "^5.14.1",
     "@tableflip/react-inspector": "^2.3.0",
-    "build": "^0.1.4",
     "cytoscape": "^3.18.1",
     "cytoscape-dagre": "^2.3.2",
     "filesize": "^6.1.0",
