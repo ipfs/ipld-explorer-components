@@ -1,5 +1,5 @@
 /* global it expect jest */
-import CID from 'multiformats/cid'
+import CID from 'cids'
 import { DAGNode } from 'ipld-dag-pb'
 import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
 

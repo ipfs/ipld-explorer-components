@@ -34,7 +34,7 @@ export {
   StartExploringPage,
   ExplorePage,
   IpldExploreForm,
-  IpldCarExplorForm,
+  IpldCarExploreForm,
   CidInfo,
   IpldGraph
   ObjectInfo,

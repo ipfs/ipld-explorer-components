@@ -1,5 +1,5 @@
 import { UnixFS } from 'ipfs-unixfs'
-import CID from 'multiformats/cid'
+import CID from 'cids'
 import { toCidOrNull, getCodecOrNull } from './cid'
 
 /**

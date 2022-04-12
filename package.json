@@ -35,6 +35,7 @@
     "ipld-git": "0.6.4",
     "ipld-raw": "7.0.0",
     "milliseconds": "^1.0.3",
+    "multibase": "4.0.2",
     "multiformats": "^9.6.4",
     "multihashes": "^4.0.3",
     "react-joyride": "^2.3.0"

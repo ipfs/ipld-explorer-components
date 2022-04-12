@@ -1,5 +1,5 @@
 import normaliseDagNode from './normalise-dag-node'
-import Cid from 'multiformats/cid'
+import Cid from 'cids'
 
 /**
  * Walk an IPLD path to find all the nodes and path boundaries it traverses.
