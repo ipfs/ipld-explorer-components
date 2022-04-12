@@ -1,10 +1,9 @@
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import resolveIpldPath from '../lib/resolve-ipld-path'
 import parseIpldPath from '../lib/parse-ipld-path'
-import fs from 'fs'
-import { CarReader } from '@ipld/car'
 import { CID } from 'multiformats/cid'
-import Cid from '../components/cid/Cid'
+import Cid from 'cids'
+import * as fs from 'fs'
 
 // Find all the nodes and path boundaries traversed along a given path
 const makeBundle = () => {
@@ -107,11 +106,30 @@ const makeBundle = () => {
     store.doUpdateHash(hash)
   }
 
-  bundle.doExploreUserProvidedCar = (file) => {
-    retrieveCarEntries(file)
+  bundle.doUploadUserProvidedCar = (file) => (args) => {
+    const { store, getIpfs } = args
+    console.log(getIpfs())
+    importCar(file, getIpfs()).then(cid => {
+      const hash = cid.toString() ? `#/explore${ensureLeadingSlash(cid.toString())}` : '#/explore'
+      store.doUpdateHash(hash)
+    })
   }
-
   return bundle
+}
+
+async function importCar (file, ipfs) {
+  console.log('importing car', file)
+  // eslint-disable-next-line no-undef
+  const reader = new FileReader()
+  reader.readAsArrayBuffer(file)
+  reader.onload = async () => {
+    try {
+      const cid = await ipfs.dag.import(reader.result)
+      console.log('imported car CID', cid.result)
+    } catch (e) {
+      console.error(e)
+    }
+  }
 }
 
 function ensureLeadingSlash (str) {
@@ -181,22 +199,6 @@ async function getIpld () {
   const ipldEthereum = formats.pop()
   formats.push(...Object.values(ipldEthereum))
   return { ipld, formats }
-}
-
-async function retrieveCarEntries (file) {
-  const inStream = fs.createReadStream(file)
-  // read and parse the entire stream in one go, this will cache the contents of
-  // the car in memory so is not suitable for large files.
-  const reader = await CarReader.fromIterable(inStream)
-
-  // read the list of roots from the header
-  const roots = await reader.getRoots()
-  // retrieve a block, as a { cid:CID, bytes:UInt8Array } pair from the archive
-  const got = await reader.get(roots[0])
-  // also possible: for await (const { cid, bytes } of CarIterator.fromIterable(inStream)) { ... }
-  console.log('Retrieved [%s] from example.car with CID [%s]',
-    new TextDecoder().decode(got.bytes),
-    roots[0].toString())
 }
 
 export default makeBundle

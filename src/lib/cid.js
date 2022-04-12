@@ -1,4 +1,4 @@
-import CID from 'multiformats/cid'
+import CID from 'cids'
 
 export function toCidOrNull (value) {
   if (!value) return null

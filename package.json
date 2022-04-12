@@ -25,6 +25,7 @@
     "@ipld/car": "^4.1.0",
     "@loadable/component": "^5.14.1",
     "@tableflip/react-inspector": "^2.3.0",
+    "build": "^0.1.4",
     "cytoscape": "^3.18.1",
     "cytoscape-dagre": "^2.3.2",
     "filesize": "^6.1.0",
@@ -36,6 +37,7 @@
     "ipld-raw": "7.0.0",
     "milliseconds": "^1.0.3",
     "multiformats": "^9.6.4",
+    "multihashes": "^4.0.3",
     "react-joyride": "^2.3.0"
   },
   "devDependencies": {
@@ -71,7 +73,7 @@
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
     "react-helmet": "^5.2.1",
-    "react-i18next": "^11.16.2",
+    "react-i18next": "^11.16.5 ",
     "react-scripts": "^4.0.3",
     "react-virtualized": "^9.22.3",
     "redux-bundler": "^26.1.0",

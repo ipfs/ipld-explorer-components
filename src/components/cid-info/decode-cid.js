@@ -1,5 +1,5 @@
-import CID from 'multiformats/cid'
-import multihash from 'multiformats/hashes/hasher'
+import CID from 'cids'
+import multihash from 'multihashes'
 import multibase from 'multiformats/bases/base64'
 import { getCodeFromName } from 'multiformats/codecs/json'
 
