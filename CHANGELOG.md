@@ -1,3 +1,17 @@
+## [2.1.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.0.4...v2.1.0) (2022-04-13)
+
+
+### Features
+
+* introduce ipld car explorer form ([#313](https://github.com/ipfs/ipld-explorer-components/issues/313)) ([c89e6ca](https://github.com/ipfs/ipld-explorer-components/commit/c89e6ca72238f33901bd796b24835f1c4a20fa3b))
+
+
+### Trivial Changes
+
+* add auto-release ([#314](https://github.com/ipfs/ipld-explorer-components/issues/314)) ([0c5551a](https://github.com/ipfs/ipld-explorer-components/commit/0c5551a1858fc00e6a09964a91e9461810633fd2))
+* fix community CONTRIBUTING.md links ([#305](https://github.com/ipfs/ipld-explorer-components/issues/305)) ([37cdc9d](https://github.com/ipfs/ipld-explorer-components/commit/37cdc9d1e4eca8b6c11c5fd8fcd7ae111ecabf61))
+* **release:** add missing dep ([e58faaa](https://github.com/ipfs/ipld-explorer-components/commit/e58faaa0a14372ff0a95e577a523478f5ff67cb6))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
@@ -31,4 +45,4 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - fix(i18): correctly load all translations (#245) 
 - fix: show as many node links as height allows (#238)
-- chore: dependency bumps & aligning with ipfs-webui 
+- chore: dependency bumps & aligning with ipfs-webui
