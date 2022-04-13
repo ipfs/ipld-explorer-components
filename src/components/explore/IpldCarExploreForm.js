@@ -1,7 +1,6 @@
 import React from 'react'
 import { connect } from 'redux-bundler-react'
 import { withTranslation } from 'react-i18next'
-import StrokeIpld from '../../icons/StrokeIpld'
 
 class IpldCarExploreForm extends React.Component {
   constructor (props) {
