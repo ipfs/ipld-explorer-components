@@ -3,13 +3,13 @@
   "version": "2.0.4",
   "description": "React components for https://explore.ipld.io",
   "license": "Apache-2.0 OR MIT",
-  "homepage": "https://github.com/ipfs-shipyard/ipld-explorer-components#readme",
+  "homepage": "https://github.com/ipfs/ipld-explorer-components#readme",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ipfs-shipyard/ipld-explorer-components.git"
+    "url": "git+https://github.com/ipfs/ipld-explorer-components.git"
   },
   "bugs": {
-    "url": "https://github.com/ipfs-shipyard/ipld-explorer-components/issues"
+    "url": "https://github.com/ipfs/ipld-explorer-components/issues"
   },
   "engines": {
     "node": ">=16.0.0",
@@ -138,6 +138,8 @@
     "@babel/plugin-proposal-class-properties": "^7.13.0",
     "@babel/preset-env": "^7.13.15",
     "@babel/preset-react": "^7.13.13",
+    "@commitlint/cli": "^16.2.3",
+    "@commitlint/config-conventional": "^16.2.1",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/commit-analyzer": "^9.0.2",
     "@semantic-release/git": "^10.0.1",
