@@ -1,8 +1,8 @@
-import Cid from 'cids'
-import { CID } from 'multiformats/cid'
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import resolveIpldPath from '../lib/resolve-ipld-path'
 import parseIpldPath from '../lib/parse-ipld-path'
+import { CID } from 'multiformats/cid'
+import Cid from 'cids'
 
 // Find all the nodes and path boundaries traversed along a given path
 const makeBundle = () => {
@@ -105,7 +105,22 @@ const makeBundle = () => {
     store.doUpdateHash(hash)
   }
 
+  bundle.doUploadUserProvidedCar = (file) => (args) => {
+    const { store, getIpfs } = args
+    importCar(file, getIpfs()).then(result => {
+      const cid = result.root.cid
+      const hash = cid.toString() ? `#/explore${ensureLeadingSlash(cid.toString())}` : '#/explore'
+      store.doUpdateHash(hash)
+    })
+  }
   return bundle
+}
+
+async function importCar (file, ipfs) {
+  const inStream = file.stream()
+  for await (const result of ipfs.dag.import(inStream)) {
+    return result
+  }
 }
 
 function ensureLeadingSlash (str) {
@@ -174,7 +189,6 @@ async function getIpld () {
   // ipldEthereum is an Object, each key points to a ipld format impl
   const ipldEthereum = formats.pop()
   formats.push(...Object.values(ipldEthereum))
-
   return { ipld, formats }
 }
 
