@@ -118,7 +118,8 @@ const makeBundle = () => {
 
 async function importCar (file, ipfs) {
   const inStream = file.stream()
-  for await (const result of ipfs.dag.import(inStream)) {
+  const toIterable = require('stream-to-it')
+  for await (const result of ipfs.dag.import(toIterable.source(inStream))) {
     return result
   }
 }

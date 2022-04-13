@@ -131,7 +131,8 @@
     "multibase": "4.0.2",
     "multiformats": "^9.6.4",
     "multihashes": "^4.0.3",
-    "react-joyride": "^2.3.0"
+    "react-joyride": "^2.3.0",
+    "stream-to-it": "^0.2.4"
   },
   "devDependencies": {
     "@babel/core": "^7.13.15",
