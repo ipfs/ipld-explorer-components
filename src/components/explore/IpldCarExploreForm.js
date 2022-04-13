@@ -41,7 +41,7 @@ class IpldCarExploreForm extends React.Component {
             style={{ borderRadius: '0 3px 3px 0' }}
           >
             <StrokeIpld style={{ height: 24 }} className='dib fill-current-color v-mid' />
-            <span className='ml2'>{t('IpldCarExploreForm.explore')}</span>
+            <span className='ml2'>{t('IpldExploreForm.explore')}</span>
           </button>
         </div>
       </form>
