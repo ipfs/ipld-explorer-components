@@ -1,5 +1,4 @@
 import React from 'react'
-import * as ReactDOM from 'react-dom';
 import { connect } from 'redux-bundler-react'
 import { withTranslation } from 'react-i18next'
 
