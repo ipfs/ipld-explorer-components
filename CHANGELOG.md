@@ -1,3 +1,10 @@
+### [2.1.1](https://github.com/ipfs/ipld-explorer-components/compare/v2.1.0...v2.1.1) (2022-04-13)
+
+
+### Bug Fixes
+
+* convert car stream to iterable ([#317](https://github.com/ipfs/ipld-explorer-components/issues/317)) ([87a83d0](https://github.com/ipfs/ipld-explorer-components/commit/87a83d05c318c42b60276d2d7ebf59e8ecf5a39b))
+
 ## [2.1.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.0.4...v2.1.0) (2022-04-13)
 
 
