@@ -21,6 +21,9 @@ class IpldCarExploreForm extends React.Component {
     var spinnerImage = require('./spinner.svg').default
     var uploadImage = require('./upload.svg').default
 
+    const selectedFile = document.getElementById('car-file').files[0]
+    this.setState({ file: selectedFile })
+    this.props.doUploadUserProvidedCar(selectedFile)
     this.setState({ uploadIcon: spinnerImage }, () => {
       //  Change the state.
       const imageFileLoader = document.getElementById('car-loader-image')
