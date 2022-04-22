@@ -7,7 +7,6 @@ class IpldCarExploreForm extends React.Component {
     super(props)
     this.state = {
       file: { },
-      uploadIcon: require('./upload.svg').default
     }
     this.handleOnChange = this.handleOnChange.bind(this)
     this.handleOnSubmit = this.handleOnSubmit.bind(this)
@@ -18,21 +17,17 @@ class IpldCarExploreForm extends React.Component {
   }
 
   handleOnChange () {
+
     var spinnerImage = require('./spinner.svg').default
     var uploadImage = require('./upload.svg').default
 
-    const selectedFile = document.getElementById('car-file').files[0]
-    this.setState({ file: selectedFile })
-    this.props.doUploadUserProvidedCar(selectedFile)
-    this.setState({ uploadIcon: spinnerImage }, () => {
-      //  Change the state.
-      const imageFileLoader = document.getElementById('car-loader-image')
-      imageFileLoader.src = spinnerImage
+    //  Change the state.
+    const imageFileLoader = document.getElementById('car-loader-image')
+    imageFileLoader.src = spinnerImage
 
-      const selectedFile = document.getElementById('car-file').files[0]
-      this.setState({ file: selectedFile })
-      this.props.doUploadUserProvidedCar(selectedFile, uploadImage)
-    })
+    //  Get the file, upload car.
+    const selectedFile = document.getElementById('car-file').files[0]
+    this.props.doUploadUserProvidedCar(selectedFile, uploadImage)
   }
 
   render () {
