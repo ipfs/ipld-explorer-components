@@ -39,8 +39,8 @@ class IpldExploreForm extends React.Component {
             className='button-reset dib lh-copy pv1 pl2 pr3 ba f7 fw4 focus-outline white bg-aqua bn'
             style={{ borderRadius: '0 3px 3px 0' }}
           >
-            <StrokeIpld style={{ height: 24 }} className='dib fill-current-color v-mid' />
-            <span className='ml2'>{t('IpldExploreForm.explore')}</span>
+            <StrokeIpld style={{ height: 24 }} className='dib fill-current-color v-mid navy 0-100' />
+            <span className='ml2 navy 0-100'>{t('IpldExploreForm.explore')}</span>
           </button>
         </div>
       </form>
