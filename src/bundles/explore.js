@@ -105,7 +105,7 @@ const makeBundle = () => {
     store.doUpdateHash(hash)
   }
 
-  bundle.doUploadUserProvidedCar = (file, uploadIcon) => (args) => {
+  bundle.doUploadUserProvidedCar = (file, uploadImage) => (args) => {
     const { store, getIpfs } = args
     importCar(file, getIpfs()).then(result => {
       const cid = result.root.cid
@@ -114,7 +114,7 @@ const makeBundle = () => {
 
       //  Grab the car loader image so we can change it's state
       const imageFileLoader = document.getElementById('car-loader-image')
-      imageFileLoader.src = uploadIcon
+      imageFileLoader.src = uploadImage
     })
   }
   return bundle
