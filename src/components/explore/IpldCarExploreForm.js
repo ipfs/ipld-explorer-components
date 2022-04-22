@@ -6,7 +6,7 @@ class IpldCarExploreForm extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      file: { },
+      file: { }
     }
     this.handleOnChange = this.handleOnChange.bind(this)
     this.handleOnSubmit = this.handleOnSubmit.bind(this)
@@ -17,7 +17,6 @@ class IpldCarExploreForm extends React.Component {
   }
 
   handleOnChange () {
-
     var spinnerImage = require('./spinner.svg').default
     var uploadImage = require('./upload.svg').default
 
