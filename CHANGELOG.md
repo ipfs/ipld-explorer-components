@@ -1,3 +1,10 @@
+## [2.2.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.1.1...v2.2.0) (2022-04-25)
+
+
+### Features
+
+* CAR Upload loader  ([#318](https://github.com/ipfs/ipld-explorer-components/issues/318)) ([cf30c14](https://github.com/ipfs/ipld-explorer-components/commit/cf30c14827ded41bb6e2a40c8ff809537fbbca7f))
+
 ### [2.1.1](https://github.com/ipfs/ipld-explorer-components/compare/v2.1.0...v2.1.1) (2022-04-13)
 
 
