@@ -21,6 +21,10 @@
   "IpldExploreForm": {
     "explore": "Keşfet"
   },
+  "IpldCarExploreForm": {
+    "imports": "İçe aktar",
+    "uploadCarFile": "Upload CAR File"
+  },
   "CidInfo": {
     "header": "CID bilgisi",
     "hashDigest": "Özüt özeti"

@@ -21,6 +21,10 @@
   "IpldExploreForm": {
     "explore": "Explorează"
   },
+  "IpldCarExploreForm": {
+    "imports": "Importă",
+    "uploadCarFile": "Încarcă un fișier CAR"
+  },
   "CidInfo": {
     "header": "Informații CID",
     "hashDigest": "Hash digest"

@@ -21,6 +21,10 @@
   "IpldExploreForm": {
     "explore": "استكشف"
   },
+  "IpldCarExploreForm": {
+    "imports": " استيراد",
+    "uploadCarFile": "Upload CAR File"
+  },
   "CidInfo": {
     "header": "معلومات CID",
     "hashDigest": "استوعب تجزئة"

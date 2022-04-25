@@ -21,6 +21,10 @@
   "IpldExploreForm": {
     "explore": "Jelajah"
   },
+  "IpldCarExploreForm": {
+    "imports": "Impor",
+    "uploadCarFile": "Upload CAR File"
+  },
   "CidInfo": {
     "header": "Info CID",
     "hashDigest": "Intisari Hash"

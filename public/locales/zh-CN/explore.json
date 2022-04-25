@@ -21,6 +21,10 @@
   "IpldExploreForm": {
     "explore": "浏览"
   },
+  "IpldCarExploreForm": {
+    "imports": "导入",
+    "uploadCarFile": "Upload CAR File"
+  },
   "CidInfo": {
     "header": "CID 信息",
     "hashDigest": "哈希摘要"

@@ -21,6 +21,10 @@
   "IpldExploreForm": {
     "explore": "Обзор"
   },
+  "IpldCarExploreForm": {
+    "imports": "Импорт",
+    "uploadCarFile": "Upload CAR File"
+  },
   "CidInfo": {
     "header": "Инфо о CID",
     "hashDigest": "Справочник хешей"

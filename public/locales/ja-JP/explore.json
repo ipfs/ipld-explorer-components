@@ -21,6 +21,10 @@
   "IpldExploreForm": {
     "explore": "探索"
   },
+  "IpldCarExploreForm": {
+    "imports": "インポート",
+    "uploadCarFile": "Upload CAR File"
+  },
   "CidInfo": {
     "header": "CID情報",
     "hashDigest": "ハッシュダイジェスト"

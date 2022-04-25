@@ -21,6 +21,10 @@
   "IpldExploreForm": {
     "explore": "Erkunden"
   },
+  "IpldCarExploreForm": {
+    "imports": "Importieren",
+    "uploadCarFile": "Upload CAR File"
+  },
   "CidInfo": {
     "header": "CID Informationen",
     "hashDigest": "Hash-Extrakt"
