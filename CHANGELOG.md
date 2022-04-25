@@ -1,3 +1,10 @@
+### [2.2.1](https://github.com/ipfs/ipld-explorer-components/compare/v2.2.0...v2.2.1) (2022-04-25)
+
+
+### Trivial Changes
+
+* **i18n:** sync locales ([f18b151](https://github.com/ipfs/ipld-explorer-components/commit/f18b1518dd891f783dfd9e37e50b58d3a0c67913))
+
 ## [2.2.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.1.1...v2.2.0) (2022-04-25)
 
 
