@@ -197,7 +197,7 @@ async function getIpld () {
   formats.push(...Object.values(ipldEthereum))
 
   // ipldJson uses the new format, use the conversion tool
-  const ipldJson = await import('@ipld/dag-json')
+  const ipldJson = await import(/* webpackChunkName: "ipld" */ '@ipld/dag-json')
   formats.push(convert(ipldJson))
 
   return { ipld, formats }
