@@ -21,7 +21,6 @@ const makeBundle = () => {
       const pathParts = parseIpldPath(path)
       if (!pathParts) return null
       const { cidOrFqdn, rest } = pathParts
-
       try {
         if (!IpldResolver) {
           const { ipld, formats } = await getIpld()
@@ -29,7 +28,6 @@ const makeBundle = () => {
           IpldResolver = ipld
           ipldFormats = formats
         }
-
         const ipld = makeIpld(IpldResolver, ipldFormats, getIpfs)
         // TODO: handle ipns, which would give us a fqdn in the cid position.
         const cid = new Cid(cidOrFqdn)
