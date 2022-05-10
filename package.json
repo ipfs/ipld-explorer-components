@@ -116,8 +116,10 @@
   "dependencies": {
     "@babel/cli": "^7.13.14",
     "@ipld/car": "^4.1.0",
+    "@ipld/dag-json": "^8.0.9",
     "@loadable/component": "^5.14.1",
     "@tableflip/react-inspector": "^2.3.0",
+    "blockcodec-to-ipld-format": "^2.0.0",
     "cytoscape": "^3.18.1",
     "cytoscape-dagre": "^2.3.2",
     "filesize": "^6.1.0",
