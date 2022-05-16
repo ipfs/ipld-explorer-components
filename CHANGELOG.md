@@ -1,3 +1,10 @@
+## [2.3.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.2.1...v2.3.0) (2022-05-16)
+
+
+### Features
+
+* support dag-json ([#319](https://github.com/ipfs/ipld-explorer-components/issues/319)) ([b39886b](https://github.com/ipfs/ipld-explorer-components/commit/b39886be78a1536afbca27e6beab52bd2d7d86cd))
+
 ### [2.2.1](https://github.com/ipfs/ipld-explorer-components/compare/v2.2.0...v2.2.1) (2022-04-25)
 
 
