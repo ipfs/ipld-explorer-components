@@ -3,6 +3,7 @@ import resolveIpldPath from '../lib/resolve-ipld-path'
 import parseIpldPath from '../lib/parse-ipld-path'
 import { CID } from 'multiformats/cid'
 import Cid from 'cids'
+import { convert } from 'blockcodec-to-ipld-format'
 
 // Find all the nodes and path boundaries traversed along a given path
 const makeBundle = () => {
@@ -194,6 +195,11 @@ async function getIpld () {
   // ipldEthereum is an Object, each key points to a ipld format impl
   const ipldEthereum = formats.pop()
   formats.push(...Object.values(ipldEthereum))
+
+  // ipldJson uses the new format, use the conversion tool
+  const ipldJson = await import(/* webpackChunkName: "ipld" */ '@ipld/dag-json')
+  formats.push(convert(ipldJson))
+
   return { ipld, formats }
 }
 
