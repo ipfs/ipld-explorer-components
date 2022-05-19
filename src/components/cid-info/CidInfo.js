@@ -17,7 +17,7 @@ function extractInfo (cid) {
     resultArray[chunkIndex].push(item)
     return resultArray
   }, [])
-  const humanReadable = `${cidInfo.multibase.name} - cidv${cidInfo.cid.version} - ${cidInfo.cid.codec} - ${hashFn}~${hashLengthInBits}~${hashValue})`
+  const humanReadable = `${cidInfo.multibase.name} - cidv${cidInfo.cid.version} - ${cidInfo.cid.codec} - ${hashFn}~${hashLengthInBits}~${hashValue}`
   return {
     hashFn,
     hashFnCode,
