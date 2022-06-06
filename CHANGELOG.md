@@ -1,3 +1,10 @@
+## [2.4.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.3.0...v2.4.0) (2022-06-06)
+
+
+### Features
+
+* private and public gateways ([#300](https://github.com/ipfs/ipld-explorer-components/issues/300)) ([7a15812](https://github.com/ipfs/ipld-explorer-components/commit/7a1581281305e3205d127eea8b26eea89f1c2f16))
+
 ## [2.3.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.2.1...v2.3.0) (2022-05-16)
 
 
