@@ -1,3 +1,10 @@
+### [2.4.1](https://github.com/ipfs/ipld-explorer-components/compare/v2.4.0...v2.4.1) (2022-06-06)
+
+
+### Bug Fixes
+
+* **css:** make gateway links responsive ([#325](https://github.com/ipfs/ipld-explorer-components/issues/325)) ([4ff9c3e](https://github.com/ipfs/ipld-explorer-components/commit/4ff9c3ef2a8921646ea77f50431405aa41366f66))
+
 ## [2.4.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.3.0...v2.4.0) (2022-06-06)
 
 
