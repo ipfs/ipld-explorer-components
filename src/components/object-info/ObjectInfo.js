@@ -74,16 +74,16 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
           <a className='dn di-ns no-underline charcoal ml2' href='https://docs.ipfs.io/concepts/glossary/#unixfs' rel='external' target='_external'>UnixFS</a>
         ) : null}
         {format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type) ? (
-          <>
+          <span className='dib'>
             {gatewayUrl && gatewayUrl !== publicGatewayUrl && (
-              <a className='no-underline avenir ml2 pa2 fw5 f6 blue' href={`${gatewayUrl}/ipfs/${cid}`} rel='external nofollow' target='_external'>
+              <a className='no-underline avenir ml2 pa2 fw5 f6 navy dib' href={`${gatewayUrl}/ipfs/${cid}`} rel='external nofollow' target='_external'>
                 {t('ObjectInfo.privateGateway')}
               </a>)}
             {publicGatewayUrl && (
-              <a className='no-underline avenir ml2 pa2 fw5 f6 blue' href={`${publicGatewayUrl}/ipfs/${cid}`} rel='external nofollow' target='_external'>
+              <a className='no-underline avenir ml2 pa2 fw5 f6 navy dib' href={`${publicGatewayUrl}/ipfs/${cid}`} rel='external nofollow' target='_external'>
                 {t('ObjectInfo.publicGateway')}
               </a>)}
-          </>
+          </span>
         ) : null}
       </h2>
       <div className='f6'>
