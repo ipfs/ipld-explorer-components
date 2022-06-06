@@ -62,7 +62,7 @@ const DagNodeIcon = ({ type, ...props }) => (
   </svg>
 )
 
-const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, links, format, onLinkClick, gatewayUrl, ...props }) => {
+const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, links, format, onLinkClick, gatewayUrl, publicGatewayUrl, ...props }) => {
   return (
     <section className={`pa4 sans-serif ${className}`} {...props}>
       <h2 className='ma0 lh-title f4 fw4 montserrat pb2' title={type}>
@@ -74,9 +74,16 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
           <a className='dn di-ns no-underline charcoal ml2' href='https://docs.ipfs.io/concepts/glossary/#unixfs' rel='external' target='_external'>UnixFS</a>
         ) : null}
         {format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type) ? (
-          <a className='no-underline avenir ml2 pa2 fw5 f6 blue' href={`${gatewayUrl}/ipfs/${cid}`} rel='external nofollow' target='_external'>
-            {t('ObjectInfo.gatewayLink')}
-          </a>
+          <>
+            {gatewayUrl && gatewayUrl !== publicGatewayUrl && (
+              <a className='no-underline avenir ml2 pa2 fw5 f6 blue' href={`${gatewayUrl}/ipfs/${cid}`} rel='external nofollow' target='_external'>
+                {t('ObjectInfo.privateGateway')}
+              </a>)}
+            {publicGatewayUrl && (
+              <a className='no-underline avenir ml2 pa2 fw5 f6 blue' href={`${publicGatewayUrl}/ipfs/${cid}`} rel='external nofollow' target='_external'>
+                {t('ObjectInfo.publicGateway')}
+              </a>)}
+          </>
         ) : null}
       </h2>
       <div className='f6'>

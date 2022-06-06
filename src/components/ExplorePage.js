@@ -13,7 +13,7 @@ import { explorerTour } from '../lib/tours'
 
 export class ExplorePage extends React.Component {
   render () {
-    let { t, explore, exploreIsLoading, explorePathFromHash, doExploreLink, runTour = false, joyrideCallback, gatewayUrl = 'https://ipfs.io' } = this.props
+    let { t, explore, exploreIsLoading, explorePathFromHash, doExploreLink, runTour = false, joyrideCallback, gatewayUrl, publicGatewayUrl = 'https://dweb.link' } = this.props
 
     if (!explorePathFromHash) {
       // No IPLD path to explore so show the intro page
@@ -70,6 +70,7 @@ export class ExplorePage extends React.Component {
                   format={targetNode.format}
                   onLinkClick={doExploreLink}
                   gatewayUrl={gatewayUrl}
+                  publicGatewayUrl={publicGatewayUrl}
                 />
               )
               : null}
