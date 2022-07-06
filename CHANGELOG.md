@@ -1,3 +1,16 @@
+## [2.5.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.4.1...v2.5.0) (2022-07-06)
+
+
+### Features
+
+* automatic translation updates ([#327](https://github.com/ipfs/ipld-explorer-components/issues/327)) ([4e17872](https://github.com/ipfs/ipld-explorer-components/commit/4e178723df51d1d6bcc53054b1de93308d65fb56))
+
+
+### Trivial Changes
+
+* fix tx-pull.yml ([006c50d](https://github.com/ipfs/ipld-explorer-components/commit/006c50d5db48ff243c8b443eab8fc7be0013885b))
+* pull new translations ([#328](https://github.com/ipfs/ipld-explorer-components/issues/328)) ([2763f08](https://github.com/ipfs/ipld-explorer-components/commit/2763f08fa1685a7cda66737f57ec66f5eac6e316))
+
 ### [2.4.1](https://github.com/ipfs/ipld-explorer-components/compare/v2.4.0...v2.4.1) (2022-06-06)
 
 
