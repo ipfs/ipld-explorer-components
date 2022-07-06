@@ -30,7 +30,8 @@
     "hashDigest": "Hash digest"
   },
   "ObjectInfo": {
-    "gatewayLink": "Zobrazit na IPFS bráně"
+    "publicGateway": "Zobrazení na veřejné bráně",
+    "privateGateway": "Zobrazení na místní bráně"
   },
   "base": "základ",
   "version": "verze",

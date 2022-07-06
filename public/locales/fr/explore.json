@@ -30,7 +30,8 @@
     "hashDigest": "Hash"
   },
   "ObjectInfo": {
-    "gatewayLink": "Visualiser sur la passerelle IPFS"
+    "publicGateway": "Voir sur la passerelle publique",
+    "privateGateway": "Voir sur la passerelle locale"
   },
   "base": "base",
   "version": "version",

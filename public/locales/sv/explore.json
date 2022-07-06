@@ -30,7 +30,8 @@
     "hashDigest": "Hash digest"
   },
   "ObjectInfo": {
-    "gatewayLink": "Se på IPFS-gateway"
+    "publicGateway": "View on Public Gateway",
+    "privateGateway": "View on Local Gateway"
   },
   "base": "bas",
   "version": "version",

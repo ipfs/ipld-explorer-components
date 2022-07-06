@@ -23,14 +23,15 @@
   },
   "IpldCarExploreForm": {
     "imports": "Importieren",
-    "uploadCarFile": "Upload CAR File"
+    "uploadCarFile": "CAR Datei hochladen"
   },
   "CidInfo": {
     "header": "CID Informationen",
     "hashDigest": "Hash-Extrakt"
   },
   "ObjectInfo": {
-    "gatewayLink": "Auf IPFS-Gateway ansehen"
+    "publicGateway": "Auf öffentlichem Gateway ansehen",
+    "privateGateway": "Auf lokalem Gateway ansehen"
   },
   "base": "Base",
   "version": "Version",
