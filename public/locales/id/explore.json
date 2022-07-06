@@ -30,7 +30,8 @@
     "hashDigest": "Intisari Hash"
   },
   "ObjectInfo": {
-    "gatewayLink": "Lihat di Gerbang IPFS"
+    "publicGateway": "View on Public Gateway",
+    "privateGateway": "View on Local Gateway"
   },
   "base": "basis",
   "version": "versi",

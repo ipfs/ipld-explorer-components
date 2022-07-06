@@ -30,7 +30,8 @@
     "hashDigest": "wynik funkcji haszującej"
   },
   "ObjectInfo": {
-    "gatewayLink": "Wyświetl przy użyciu bramy IPFS"
+    "publicGateway": "View on Public Gateway",
+    "privateGateway": "View on Local Gateway"
   },
   "base": "baza",
   "version": "wersja",

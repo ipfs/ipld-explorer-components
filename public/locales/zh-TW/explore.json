@@ -30,7 +30,8 @@
     "hashDigest": "雜湊摘要"
   },
   "ObjectInfo": {
-    "gatewayLink": "瀏覽IPFS閘道器"
+    "publicGateway": "View on Public Gateway",
+    "privateGateway": "View on Local Gateway"
   },
   "base": "基礎",
   "version": "版本",

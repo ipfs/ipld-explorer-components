@@ -30,7 +30,8 @@
     "hashDigest": "ハッシュダイジェスト"
   },
   "ObjectInfo": {
-    "gatewayLink": "IPFSゲートウェイで表示"
+    "publicGateway": "View on Public Gateway",
+    "privateGateway": "View on Local Gateway"
   },
   "base": "ベース",
   "version": "バージョン",

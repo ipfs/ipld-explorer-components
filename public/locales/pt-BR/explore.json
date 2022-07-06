@@ -30,7 +30,8 @@
     "hashDigest": "Resumo do hash"
   },
   "ObjectInfo": {
-    "gatewayLink": "Visualizar no Gateway do IPFS"
+    "publicGateway": "View on Public Gateway",
+    "privateGateway": "View on Local Gateway"
   },
   "base": "base",
   "version": "versão",

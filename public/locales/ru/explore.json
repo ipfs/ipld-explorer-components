@@ -30,7 +30,8 @@
     "hashDigest": "Справочник хешей"
   },
   "ObjectInfo": {
-    "gatewayLink": "Просмотреть в шлюзе IPFS"
+    "publicGateway": "View on Public Gateway",
+    "privateGateway": "View on Local Gateway"
   },
   "base": "база",
   "version": "версия",

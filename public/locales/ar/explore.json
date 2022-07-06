@@ -23,14 +23,15 @@
   },
   "IpldCarExploreForm": {
     "imports": " استيراد",
-    "uploadCarFile": "Upload CAR File"
+    "uploadCarFile": "تحميل ملف CAR"
   },
   "CidInfo": {
     "header": "معلومات CID",
     "hashDigest": "استوعب تجزئة"
   },
   "ObjectInfo": {
-    "gatewayLink": "عرض على بوابة IPFS"
+    "publicGateway": "View on Public Gateway",
+    "privateGateway": "View on Local Gateway"
   },
   "base": "أساس",
   "version": "الاصدار",

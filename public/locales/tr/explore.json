@@ -30,7 +30,8 @@
     "hashDigest": "Özüt özeti"
   },
   "ObjectInfo": {
-    "gatewayLink": "IPFS Ağ Geçidinde Görüntüle"
+    "publicGateway": "View on Public Gateway",
+    "privateGateway": "View on Local Gateway"
   },
   "base": "temel",
   "version": "sürüm",
