@@ -69,7 +69,7 @@ jobs:
       uses: repo-sync/pull-request@65785d95a5a466e46a9d0708933a3bd51bbf9dde
       with:
         source_branch: "i18n-sync"
-        destination_branch: "main"
+        destination_branch: "master"
         pr_title: "chore: pull new translations"
         pr_body: "Automated PR created by .github/workflows/tx-pull.yml"
         pr_label: "area/i18n/translations"
