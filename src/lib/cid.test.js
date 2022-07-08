@@ -2,7 +2,6 @@
 // @ts-check
 import { toCidOrNull, getCodecOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
 import * as multiformats from 'multiformats'
-// import * as multiformatHashes from 'multiformats/hashes/sha2'
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
 import crypto from 'crypto'
@@ -33,7 +32,9 @@ const createCID = async (value, codec, hasher) => {
 }
 
 // base58btc - cidv1 - dag-cbor - sha2-256~256~63C300F377227B01B45396434D0AB912F2511A09BDFFFD61CB06E9765F76BFE8)
-const cidStr = 'zdpuAs8sJjcmsPUfB1bUViftCZ8usnvs2cXrPH6MDyT4zrvSs'
+// const cidStrOld = 'zdpuAs8sJjcmsPUfB1bUViftCZ8usnvs2cXrPH6MDyT4zrvSs'
+// base32 - cidv1 - dag-cbor - sha2-256~256~63C300F377227B01B45396434D0AB912F2511A09BDFFFD61CB06E9765F76BFE8)
+const cidStr = 'bafyreiddymapg5zcpma3iu4wingqvois6jirucn5776wdsyg5f3f65v75a'
 
 describe('cid.js', () => {
   describe('toCidOrNull', () => {
@@ -46,7 +47,7 @@ describe('cid.js', () => {
       expect(cid?.code).toBe(dagCbor.code)
     })
 
-    it('Returns null instance for invalid CID string', () => {
+    it('Returns null for invalid CID string', () => {
       // arrange
       const cidStr = 'abc123'
       // act
@@ -146,11 +147,20 @@ describe('cid.js', () => {
   })
 
   describe('toCidStrOrNull', () => {
-    it('test', () => {
+    it('Returns correct string for valid CID', () => {
       // arrange
       // act
+      const tempCidStr = toCidStrOrNull(toCidOrNull(cidStr))
       // assert
-      expect(true).toBe(false)
+      expect(tempCidStr).toBe(cidStr)
+    })
+
+    it('Returns null for invalid CID string', () => {
+      // arrange
+      // act
+      const tempCidStr = toCidStrOrNull('abc123')
+      // assert
+      expect(tempCidStr).toBe(null)
     })
   })
 })
