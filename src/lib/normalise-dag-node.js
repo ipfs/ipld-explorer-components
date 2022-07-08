@@ -1,6 +1,10 @@
+// @ts-check
 import { UnixFS } from 'ipfs-unixfs'
-import CID from 'cids'
-import { toCidOrNull, getCodecOrNull } from './cid'
+// import CID from 'cids'
+import { CID } from 'multiformats'
+import { toCidOrNull, getCodeOrNull } from './cid'
+import * as dagPb from '@ipld/dag-pb'
+import * as dagCbor from '@ipld/dag-cbor'
 
 /**
  * Provide a uniform shape for all^ node types.
@@ -10,20 +14,26 @@ import { toCidOrNull, getCodecOrNull } from './cid'
  *
  * ^: currently dag-cbor and dag-pb are supported.
  *
+ * @function normaliseDagNode
  * @param {Object} node the `value` prop from `ipfs.dag.get` response.
- * @param {String} cid the cid string passed to `ipfs.dag.get`
+ * @param {String} cidStr the cid string passed to `ipfs.dag.get`
  */
 export default function normaliseDagNode (node, cidStr) {
-  const type = getCodecOrNull(cidStr)
-  if (type === 'dag-pb') {
-    return normaliseDagPb(node, cidStr, type)
+  const code = getCodeOrNull(cidStr)
+  if (code === dagPb.code) {
+    return normaliseDagPb(node, cidStr, code)
   }
   // try cbor style if we don't know any better
-  return normaliseDagCbor(node, cidStr, type)
+  return normaliseDagCbor(node, cidStr, code ?? dagCbor.code)
 }
 
 /*
  * Normalize links and add type info. Add unixfs info where available
+ *
+ * @param {*} node
+ * @param {*} cid
+ * @param {*} type
+ * @returns
  */
 export function normaliseDagPb (node, cid, type) {
   // NOTE: Use the requested cid rather than the internal one.
@@ -58,6 +68,10 @@ export function normaliseDagPb (node, cid, type) {
 /*
  * Convert DagLink shape into normalized form that can be used interchangeably
  * with links found in dag-cbor
+ *
+ * @param {*} node
+ * @param {*} sourceCid
+ * @returns
  */
 export function normaliseDagPbLinks (node, sourceCid) {
   return node.links.map(({ name, size, cid }, index) => ({
@@ -71,12 +85,18 @@ export function normaliseDagPbLinks (node, sourceCid) {
 
 /*
  * Find links and add type and cid info
+ *
+ * @function normaliseDagCbor
+ * @param {unknown} obj - The data object
+ * @param {string} cid - The string representation of the CID
+ * @param {number} code - multicodec code, see https://github.com/multiformats/multicodec/blob/master/table.csv
+ * @returns
  */
-export function normaliseDagCbor (obj, cid, type) {
+export function normaliseDagCbor (obj, cid, code) {
   const links = findAndReplaceDagCborLinks(obj, cid)
   return {
     cid,
-    type,
+    type: code,
     data: obj,
     links: links
   }
@@ -84,14 +104,20 @@ export function normaliseDagCbor (obj, cid, type) {
 
 /**
  * A valid IPLD link in a dag-cbor node is an object with single "/" property.
+ *
+ * @param {*} obj
+ * @param {*} sourceCid
+ * @param {*} path
+ * @returns
  */
 export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
   if (!obj || !typeof obj === 'object' || Buffer.isBuffer(obj) || typeof obj === 'string') {
     return []
   }
 
-  if (CID.isCID(obj)) {
-    return [{ path, source: sourceCid, target: obj.toString() }]
+  const cid = CID.asCID(obj)
+  if (cid) {
+    return [{ path, source: sourceCid, target: cid.toString() }]
   }
 
   if (Array.isArray(obj)) {

@@ -1,19 +1,32 @@
-/* global it expect jest */
-import CID from 'cids'
-import { DAGNode } from 'ipld-dag-pb'
-import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
 
+/* global it expect jest */
+import { CID } from 'multiformats'
+import * as dagPb from '@ipld/dag-pb'
+import * as dagCbor from '@ipld/dag-cbor'
+
+import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
+// console.log('cid: ', cid)
+// cid
+
+// base58btc - cidv1 - dag-cbor - sha2-256~256~63C300F377227B01B45396434D0AB912F2511A09BDFFFD61CB06E9765F76BFE8)
+// const testCidString = 'zdpuAs8sJjcmsPUfB1bUViftCZ8usnvs2cXrPH6MDyT4zrvSs'
+// base32 - cidv1 - dag-cbor - sha2-256~256~63C300F377227B01B45396434D0AB912F2511A09BDFFFD61CB06E9765F76BFE8)
+const testCidString = 'bafyreiddymapg5zcpma3iu4wingqvois6jirucn5776wdsyg5f3f65v75a'
+
+const testCID = CID.asCID(testCidString)
+
+// const { createLink, createNode, code } = codec
 it('resolves all nodes traversed along a path', async () => {
   const ipldMock = {
     get: jest.fn(),
     resolve: jest.fn()
   }
-  const cid = 'zdpuAs8sJjcmsPUfB1bUViftCZ8usnvs2cXrPH6MDyT4zrvSs'
   const path = '/a/b/a'
+  // base58btc - cidv1 - dag-cbor - sha2-256~256~C99DE73243D54ECD30FCD93D94C6BE23D017D627139BE62653A27ECD5CB014D8)
   const linkCid = 'zdpuAyzU5ahAKr5YV24J5TqrDX8PhzHLMkxx69oVzkBDWHnjq'
   const dagGetRes1 = {
     a: {
-      b: new CID(linkCid)
+      b: CID.asCID(linkCid)
     }
   }
   const dagGetRes2 = {
@@ -31,7 +44,7 @@ it('resolves all nodes traversed along a path', async () => {
   ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes3))
   ipldMock.resolve.mockReturnValueOnce(dagGetRes4)
 
-  const res = await resolveIpldPath(ipldMock, new CID(cid), path)
+  const res = await resolveIpldPath(ipldMock, testCID, path)
 
   expect(ipldMock.get.mock.calls.length).toBe(2)
   expect(ipldMock.resolve.mock.calls.length).toBe(2)
@@ -44,7 +57,7 @@ it('resolves all nodes traversed along a path', async () => {
   expect(res.pathBoundaries.length).toBe(1)
   expect(res.pathBoundaries[0]).toEqual({
     path: 'a/b',
-    source: cid,
+    source: testCidString,
     target: linkCid
   })
 })
@@ -55,7 +68,6 @@ it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
     resolve: jest.fn()
   }
 
-  const cid = 'zdpuAs8sJjcmsPUfB1bUViftCZ8usnvs2cXrPH6MDyT4zrvSs'
   const path = '/a/b/pb1'
 
   const dagNode3 = await createDagPbNode('the second pb node', [])
@@ -70,7 +82,7 @@ it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
 
   const dagNode1 = {
     a: {
-      b: new CID(dagNode2CID)
+      b: CID.asCID(dagNode2CID)
     }
   }
 
@@ -99,7 +111,7 @@ it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
   ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes5))
   ipldMock.resolve.mockReturnValueOnce(dagGetRes6)
 
-  const res = await resolveIpldPath(ipldMock, new CID(cid), path)
+  const res = await resolveIpldPath(ipldMock, testCID, path)
 
   expect(ipldMock.get.mock.calls.length).toBe(3)
   expect(ipldMock.resolve.mock.calls.length).toBe(3)
@@ -107,7 +119,7 @@ it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
   expect(res.canonicalPath).toBe(dagNode3CID)
   expect(res.nodes.length).toBe(3)
   expect(res.nodes[0].type).toBe('dag-cbor')
-  expect(res.nodes[0].cid).toBe(cid)
+  expect(res.nodes[0].cid).toBe(testCidString)
   expect(res.nodes[0].links.length).toBe(1)
   expect(res.nodes[1].type).toBe('dag-pb')
   expect(res.nodes[1].cid).toBe(dagNode2CID)
@@ -118,7 +130,7 @@ it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
   expect(res.pathBoundaries.length).toBe(2)
   expect(res.pathBoundaries[0]).toEqual({
     path: 'a/b',
-    source: cid,
+    source: testCidString,
     target: dagNode2CID
   })
   expect(res.pathBoundaries[1]).toEqual({
@@ -130,11 +142,31 @@ it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
   })
 })
 
+/**
+ *
+ * @typedef {object} OldDagPbLinkLiteral
+ * @property {string} name
+ * @property {string} cid
+ * @property {number} size
+ */
+/**
+ *
+ * @param {*} data
+ * @param {OldDagPbLinkLiteral[]} links
+ * @returns
+ */
 function createDagPbNode (data, links) {
   if (typeof data === 'string') {
     data = new Uint8Array(Buffer.from(data))
   }
-  return new DAGNode(data, links)
+
+  const newLinks = links.map(({ name, cid, size }) => {
+    const cidInstance = CID.asCID(cid)
+    console.log('cidInstance: ', cidInstance)
+    return dagPb.createLink(name, size, cidInstance)
+  })
+
+  return dagPb.createNode(data, newLinks)
 }
 
 it('finds the linkPath from a fullPath and a remainderPath', () => {
