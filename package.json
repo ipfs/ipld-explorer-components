@@ -1,6 +1,6 @@
 {
   "name": "ipld-explorer-components",
-  "version": "2.4.1",
+  "version": "2.5.0",
   "description": "React components for https://explore.ipld.io",
   "license": "Apache-2.0 OR MIT",
   "homepage": "https://github.com/ipfs/ipld-explorer-components#readme",
@@ -118,6 +118,7 @@
     "@babel/cli": "^7.13.14",
     "@ipld/car": "^4.1.0",
     "@ipld/dag-cbor": "^7.0.2",
+    "@ipld/dag-json": "^8.0.10",
     "@loadable/component": "^5.14.1",
     "@tableflip/react-inspector": "^2.3.0",
     "blockcodec-to-ipld-format": "^2.0.0",
@@ -143,7 +144,6 @@
     "@babel/preset-react": "^7.13.13",
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
-    "@ipld/dag-json": "^8.0.10",
     "@ipld/dag-pb": "^2.1.17",
     "@semantic-release/changelog": "^6.0.1",
     "@semantic-release/commit-analyzer": "^9.0.2",
