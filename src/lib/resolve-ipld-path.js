@@ -1,6 +1,11 @@
 import normaliseDagNode from './normalise-dag-node'
 // import Cid from 'cids'
-import { CID } from 'multiformats'
+// import { CID } from 'multiformats'
+import { toCidOrNull } from './cid'
+
+/**
+ * @typedef {({targetNode: Object, canonicalPath: String, localPath: String, nodes: Object[], pathBoundaries: Object[]})} ResolvedIpldPathInfo
+ */
 
 /**
  * Walk an IPLD path to find all the nodes and path boundaries it traverses.
@@ -34,27 +39,27 @@ import { CID } from 'multiformats'
  * @param {string} path everything after the hash
  * @param {Object[]} nodes accumulated node info
  * @param {Object[]} pathBoundaries accumulated path boundary info
- * @returns {{targetNode: Object, canonicalPath: String, localPath: String, nodes: Object[], pathBoundaries: Object[]}} resolved path info
+ * @returns {ResolvedIpldPathInfo} resolved path info
  */
 export default async function resolveIpldPath (ipld, sourceCid, path, nodes = [], pathBoundaries = []) {
   const { value, remainderPath } = await ipldGetNodeAndRemainder(ipld, sourceCid, path)
-  console.log('sourceCid: ', sourceCid)
+  if (sourceCid == null) {
+    throw new Error('sourceCid is null')
+  }
   const sourceCidStr = sourceCid.toString()
-  console.log('sourceCidStr: ', sourceCidStr)
 
   const node = normaliseDagNode(value, sourceCidStr)
   nodes.push(node)
 
   const linkPath = findLinkPath(path, remainderPath)
-  console.log('linkPath: ', linkPath)
-  console.log('node: ', node)
   const link = findLink(node, linkPath)
-  console.log('link: ', link)
+
   if (link) {
     pathBoundaries.push(link)
+    console.log('link: ', link)
     // Go again, using the link.target as the sourceCid, and the remainderPath as the path.
-    console.log('link.target: ', link.target)
-    return resolveIpldPath(ipld, CID.asCID(link.target), remainderPath, nodes, pathBoundaries)
+    // console.log('link.target: ', link.target)
+    return resolveIpldPath(ipld, toCidOrNull(link.target), remainderPath, nodes, pathBoundaries)
   }
   // we made it to the containing node. Hand back the info
   const canonicalPath = path ? `${sourceCidStr}${path}` : sourceCidStr
@@ -63,6 +68,9 @@ export default async function resolveIpldPath (ipld, sourceCid, path, nodes = []
 }
 
 export async function ipldGetNodeAndRemainder (ipld, sourceCid, path) {
+  if (sourceCid == null) {
+    throw new Error('sourceCid is null')
+  }
   // TODO: find out why ipfs.dag.get with localResolve never resolves.
   // const {value, remainderPath} = await getIpfs().dag.get(sourceCid, path, {localResolve: true})
 
@@ -86,7 +94,7 @@ export async function ipldGetNodeAndRemainder (ipld, sourceCid, path) {
  * @returns {Object} the link object for `linkPath`
  */
 export function findLink (node, linkPath) {
-  console.log('node, linkPath: ', node, linkPath)
+  // console.log('node, linkPath: ', node, linkPath)
   if (!linkPath) return null
   if (!node) return null
   const { links } = node
