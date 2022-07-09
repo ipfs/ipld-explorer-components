@@ -20,7 +20,7 @@ index 7984be6..0f62f8e 100644
  Object.defineProperty(exports, '__esModule', { value: true });
  
 diff --git a/node_modules/@ipld/dag-pb/cjs/src/util.js b/node_modules/@ipld/dag-pb/cjs/src/util.js
-index 881e94f..5101e50 100644
+index 881e94f..01e6c89 100644
 --- a/node_modules/@ipld/dag-pb/cjs/src/util.js
 +++ b/node_modules/@ipld/dag-pb/cjs/src/util.js
 @@ -1,8 +1,9 @@
@@ -34,13 +34,3 @@ index 881e94f..5101e50 100644
  
  const pbNodeProperties = [
    'Data',
-@@ -46,6 +47,9 @@ function asLink(link) {
-     throw new TypeError('Invalid DAG-PB form');
-   }
-   const pbl = {};
-+  console.log(`link: `, link);
-+    console.log(`cid: `, cid);
-+    console.log(`cid.CID: `, cid.CID);
-   if (link.Hash) {
-     let cid$1 = cid.CID.asCID(link.Hash);
-     try {
