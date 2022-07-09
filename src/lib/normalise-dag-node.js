@@ -12,8 +12,20 @@ import * as dagCbor from '@ipld/dag-cbor'
  * @typedef {string | object} NodeData
  * @typedef {({ type, data, blockSizes })} UnixFsNodeData
  * @typedef {'unixfs' | 'unknown'} NormalizedDagPbNodeFormat
+ * @typedef {NormalizedDagPbLink} IpldLinkObject
+ *
+ * @typedef {'raw' | 'directory' | 'file' | 'metadata' | 'symlink' | 'hamt-sharded-directory'} NodeTypes - From ipfs-unixfs
  */
 
+/**
+ * @typedef {object} NormalizedDagNode
+ * @property {string} cid
+ * @property {CodecType} type
+ * @property {UnixFsNodeData | NodeData} data
+ * @property {NormalizedDagLink[]} links
+ * @property {number} size
+ * @property {NormalizedDagPbNodeFormat} format
+ */
 /**
  * @typedef {object} NormalizedDagPbNode
  * @property {string} cid
@@ -24,12 +36,32 @@ import * as dagCbor from '@ipld/dag-cbor'
  * @property {NormalizedDagPbNodeFormat} format
  */
 /**
- * @typedef {object} NormalizedDagPbLink
+ * @typedef {object} NormalizedDagLink
  * @property {string} path
- * @property {CID} source
- * @property {CID} target
+ * @property {string} source
+ * @property {string} target
  * @property {number} size
  * @property {number} index
+ */
+
+/**
+ *
+ * @typedef {object} DagPbNodeAsJson
+ * @property {NodeTypes} type
+ * @property {number} size
+ * @property {NodeData} data
+ * @property {import('@ipld/dag-pb').PBLink[]} links
+ * @returns
+ */
+
+/**
+ *
+ * @typedef {object} NormalizedDagNodeAsJson
+ * @property {NodeTypes} type
+ * @property {number} size
+ * @property {NodeData} data
+ * @property {NormalizedDagLink[]} links
+ * @returns
  */
 
 /**
@@ -54,30 +86,13 @@ export default function normaliseDagNode (node, cidStr) {
 }
 
 /**
- * From ipfs-unixfs
- * @typedef {'raw' | 'directory' | 'file' | 'metadata' | 'symlink' | 'hamt-sharded-directory'} NodeTypes
- *
-*/
-/**
- *
- * @typedef {object} DagPbNodeAsJson
- * @property {NodeTypes} type
- * @property {number} size
- * @property {NodeData} data
- * @property {import('@ipld/dag-pb').PBLink[]} links
- * @returns
- */
-
-/**
  *
  * @param {import('@ipld/dag-pb').PBNode} node
  * @returns {DagPbNodeAsJson}
  */
 export function convertDagPbNodeToJson (node) {
-  // console.log('convertDagPbNodeToJson: node: ', node)
-  const pbData = /** @type{Uint8Array} */(node.Data)
+  const pbData = /** @type {Uint8Array} */(node.Data)
   let data = String.fromCharCode(...pbData)
-  // const size = data.length
   try {
     data = JSON.parse(data)
   } catch {
@@ -110,7 +125,6 @@ export function normaliseDagPb (node, cid, type) {
   // }
 
   const nodeAsJson = convertDagPbNodeToJson(node)
-  console.log('nodeAsJson: ', nodeAsJson)
   /**
    * @type {NormalizedDagPbNodeFormat}
    */
@@ -144,9 +158,9 @@ export function normaliseDagPb (node, cid, type) {
  * Convert DagLink shape into normalized form that can be used interchangeably
  * with links found in dag-cbor
  *
- * @param {*} node
- * @param {*} sourceCid
- * @returns {NormalizedDagPbLink[]}
+ * @param {DagPbNodeAsJson} node
+ * @param {string} sourceCid
+ * @returns {NormalizedDagLink[]}
  */
 export function normaliseDagPbLinks (node, sourceCid) {
   return node.links.map((link, index) => {
@@ -155,8 +169,8 @@ export function normaliseDagPbLinks (node, sourceCid) {
     return ({
       path: name || `Links/${index}`,
       source: sourceCid,
-      target: cid,
-      size,
+      target: cid.toString(),
+      size: size ?? 0,
       index
     })
   })
@@ -169,7 +183,7 @@ export function normaliseDagPbLinks (node, sourceCid) {
  * @param {unknown} obj - The data object
  * @param {string} cid - The string representation of the CID
  * @param {number} code - multicodec code, see https://github.com/multiformats/multicodec/blob/master/table.csv
- * @returns
+ * @returns {NormalizedDagNode}
  */
 export function normaliseDagCbor (obj, cid, code) {
   const links = findAndReplaceDagCborLinks(obj, cid)
@@ -177,7 +191,9 @@ export function normaliseDagCbor (obj, cid, code) {
     cid,
     type: code,
     data: obj,
-    links: links
+    links,
+    size: links.reduce((acc, { size }) => acc + size, 0),
+    format: 'unknown'
   }
 }
 
@@ -187,7 +203,7 @@ export function normaliseDagCbor (obj, cid, code) {
  * @param {*} obj
  * @param {*} sourceCid
  * @param {*} path
- * @returns
+ * @returns {NormalizedDagLink[]}
  */
 export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
   if (!obj || typeof obj !== 'object' || Buffer.isBuffer(obj) || typeof obj === 'string') {
@@ -196,7 +212,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
 
   const cid = toCidOrNull(obj)
   if (cid) {
-    return [{ path, source: sourceCid, target: cid.toString() }]
+    return [{ path, source: sourceCid, target: cid.toString(), size: 0, index: 0 }]
   }
 
   if (Array.isArray(obj)) {
@@ -219,7 +235,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
     const target = targetCid.toString()
     obj['/'] = target
 
-    return [{ path, source: sourceCid, target }]
+    return [{ path, source: sourceCid, target, size: 0, index: 0 }]
   }
 
   if (keys.length > 0) {

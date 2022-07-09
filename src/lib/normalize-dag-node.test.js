@@ -15,24 +15,24 @@ it('normalizes a simple cbor node', () => {
   const obj = { foo: 'bar' }
   const res = normaliseDagNode(obj, cid1, dagCbor.code)
 
-  expect(res).toEqual({
+  expect(res).toEqual(expect.objectContaining({
     cid: cid1,
     data: obj,
     type: dagCbor.code,
     links: []
-  })
+  }))
 })
 
 it('normalizes a cbor node with an empty array', () => {
   const obj = { foo: [] }
   const res = normaliseDagNode(obj, cid1, dagCbor.code)
 
-  expect(res).toEqual({
+  expect(res).toEqual(expect.objectContaining({
     cid: cid1,
     data: obj,
     type: dagCbor.code,
     links: []
-  })
+  }))
 })
 
 it('normalizes a cbor node with links', () => {
@@ -47,21 +47,29 @@ it('normalizes a cbor node with links', () => {
     cid: cid1,
     data: obj,
     type: dagCbor.code,
+    format: 'unknown',
+    size: 0,
     links: [
       {
         path: 'foo',
         source: cid1,
-        target: cid2
+        target: cid2,
+        index: 0,
+        size: 0
       },
       {
         path: 'bar/0',
         source: cid1,
-        target: cid2
+        target: cid2,
+        index: 0,
+        size: 0
       },
       {
         path: 'bar/1',
         source: cid1,
-        target: cid3
+        target: cid3,
+        index: 0,
+        size: 0
       }
     ]
   })

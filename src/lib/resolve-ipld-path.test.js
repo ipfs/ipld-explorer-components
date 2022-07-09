@@ -17,15 +17,12 @@ import { convertDagPbNodeToJson } from './normalise-dag-node'
 const testCidString = 'bafyreiddymapg5zcpma3iu4wingqvois6jirucn5776wdsyg5f3f65v75a'
 
 const testCID = /** @type {import('multiformats').CID} */(toCidOrNull(testCidString))
-console.log('testCID: ', testCID)
-// console.log('testCID: ', testCID)
 
 describe('resolveIpldPath', () => {
   it('resolves all nodes traversed along a path', async () => {
     const testCidString = 'bafyreiddymapg5zcpma3iu4wingqvois6jirucn5776wdsyg5f3f65v75a'
 
     const testCID = /** @type {import('multiformats').CID} */(toCidOrNull(testCidString))
-    console.log('testCID: ', testCID)
     const ipldMock = {
       get: jest.fn(),
       resolve: jest.fn()
@@ -41,7 +38,6 @@ describe('resolveIpldPath', () => {
         b: toCidOrNull(linkCid)
       }
     }
-    console.log('toCidOrNull(linkCid): ', toCidOrNull(linkCid))
     const dagGetRes2 = {
       first: () => Promise.resolve({ remainderPath: '/a' })
     }
@@ -57,7 +53,6 @@ describe('resolveIpldPath', () => {
     ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes3))
     ipldMock.resolve.mockReturnValueOnce(dagGetRes4)
 
-    console.log('testCID: ', testCID)
     const res = await resolveIpldPath(ipldMock, testCID.toString(), path)
 
     expect(ipldMock.get.mock.calls.length).toBe(2)
@@ -69,11 +64,11 @@ describe('resolveIpldPath', () => {
     expect(res.nodes[1].type).toBe(dagCbor.code)
     expect(res.nodes[1].cid).toBe(linkCid)
     expect(res.pathBoundaries.length).toBe(1)
-    expect(res.pathBoundaries[0]).toEqual({
+    expect(res.pathBoundaries[0]).toEqual(expect.objectContaining({
       path: 'a/b',
       source: testCidString,
       target: linkCid
-    })
+    }))
   })
 
   it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
@@ -131,10 +126,7 @@ describe('resolveIpldPath', () => {
     ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes5))
     ipldMock.resolve.mockReturnValueOnce(dagGetRes6)
 
-    console.log('testCID.toString(): ', testCID.toString())
-    const foo = testCID.toString()
-    console.log('foo: ', foo)
-    const res = await resolveIpldPath(ipldMock, foo, path)
+    const res = await resolveIpldPath(ipldMock, testCidString, path)
 
     expect(ipldMock.get.mock.calls.length).toBe(3)
     expect(ipldMock.resolve.mock.calls.length).toBe(3)
@@ -151,11 +143,11 @@ describe('resolveIpldPath', () => {
     expect(res.nodes[2].cid).toBe(dagNode3CID)
     expect(res.nodes[2].links.length).toBe(0)
     expect(res.pathBoundaries.length).toBe(2)
-    expect(res.pathBoundaries[0]).toEqual({
+    expect(res.pathBoundaries[0]).toEqual(expect.objectContaining({
       path: 'a/b',
       source: testCidString,
       target: dagNode2CID
-    })
+    }))
     expect(res.pathBoundaries[1]).toEqual({
       index: 0,
       path: 'pb1',

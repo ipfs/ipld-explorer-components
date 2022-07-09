@@ -1,10 +1,17 @@
 import normaliseDagNode from './normalise-dag-node'
-// import Cid from 'cids'
-// import { CID } from 'multiformats'
-import { toCidOrNull } from './cid'
 
 /**
- * @typedef {({targetNode: Object, canonicalPath: String, localPath: String, nodes: Object[], pathBoundaries: Object[]})} ResolvedIpldPathInfo
+ * @typedef {object} ResolvedIpldPathInfo
+ * @property {object} targetNode
+ * @property {string} canonicalPath
+ * @property {string} localPath
+ * @property {object[]} nodes
+ * @property {object[]} pathBoundaries
+ */
+/**
+ * @typedef {object} IpldInterface
+ * @property {() => Promise<unknown>} get
+ * @property {() => Promise<unknown>} resolve
  */
 
 /**
@@ -34,11 +41,11 @@ import { toCidOrNull } from './cid'
  * - `nodes` is the array of nodes that the path traverses.
  * - `pathBoundaries` is the array of links that the path traverses.
  *
- * @param {function()} ipldGet fn that returns a promise of the ipld data for a (cid, path, options)
+ * @param {IpldInterface} ipldGet fn that returns a promise of the ipld data for a (cid, path, options)
  * @param {string} sourceCid the root hash
  * @param {string} path everything after the hash
- * @param {Object[]} nodes accumulated node info
- * @param {Object[]} pathBoundaries accumulated path boundary info
+ * @param {object[]} nodes accumulated node info
+ * @param {object[]} pathBoundaries accumulated path boundary info
  * @returns {ResolvedIpldPathInfo} resolved path info
  */
 export default async function resolveIpldPath (ipld, sourceCid, path, nodes = [], pathBoundaries = []) {
@@ -56,10 +63,9 @@ export default async function resolveIpldPath (ipld, sourceCid, path, nodes = []
 
   if (link) {
     pathBoundaries.push(link)
-    console.log('link: ', link)
     // Go again, using the link.target as the sourceCid, and the remainderPath as the path.
     // console.log('link.target: ', link.target)
-    return resolveIpldPath(ipld, toCidOrNull(link.target), remainderPath, nodes, pathBoundaries)
+    return resolveIpldPath(ipld, link.target, remainderPath, nodes, pathBoundaries)
   }
   // we made it to the containing node. Hand back the info
   const canonicalPath = path ? `${sourceCidStr}${path}` : sourceCidStr
@@ -67,6 +73,13 @@ export default async function resolveIpldPath (ipld, sourceCid, path, nodes = []
   return { targetNode, canonicalPath, localPath: path, nodes, pathBoundaries }
 }
 
+/**
+ * @function ipldGetNodeAndRemainder
+ * @param {IpldInterface} ipld
+ * @param {string} sourceCid
+ * @param {string} path
+ * @returns
+ */
 export async function ipldGetNodeAndRemainder (ipld, sourceCid, path) {
   if (sourceCid == null) {
     throw new Error('sourceCid is null')
@@ -89,9 +102,9 @@ export async function ipldGetNodeAndRemainder (ipld, sourceCid, path) {
 /**
  * Find the link object that matches linkPath
  *
- * @param {Object} node a `normalisedDagNode`
- * @param {Object} linkPath an IPLD path string
- * @returns {Object} the link object for `linkPath`
+ * @param {import('./normalise-dag-node').NormalizedDagPbNode} node a `normalisedDagNode`
+ * @param {string} linkPath an IPLD path string
+ * @returns {IpldLinkObject} the link object for `linkPath`
  */
 export function findLink (node, linkPath) {
   // console.log('node, linkPath: ', node, linkPath)
