@@ -1,0 +1,11 @@
+diff --git a/node_modules/cborg/cjs/lib/byte-utils.js b/node_modules/cborg/cjs/lib/byte-utils.js
+index 71b3764..9c118c2 100644
+--- a/node_modules/cborg/cjs/lib/byte-utils.js
++++ b/node_modules/cborg/cjs/lib/byte-utils.js
+@@ -1,5 +1,6 @@
+ 'use strict';
+ 
++const {TextDecoder, TextEncoder} = require('util')
+ Object.defineProperty(exports, '__esModule', { value: true });
+ 
+ const useBuffer = globalThis.process && !globalThis.process.browser && globalThis.Buffer && typeof globalThis.Buffer.isBuffer === 'function';
