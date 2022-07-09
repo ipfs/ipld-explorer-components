@@ -1,10 +1,9 @@
 // @ts-check
 import { UnixFS } from 'ipfs-unixfs'
-// import CID from 'cids'
-// import { CID } from 'multiformats'
-import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
 import * as dagPb from '@ipld/dag-pb'
 import * as dagCbor from '@ipld/dag-cbor'
+
+import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
 
 /**
  * @typedef {import('multiformats').CID} CID
@@ -12,7 +11,6 @@ import * as dagCbor from '@ipld/dag-cbor'
  * @typedef {string | object} NodeData
  * @typedef {({ type, data, blockSizes })} UnixFsNodeData
  * @typedef {'unixfs' | 'unknown'} NormalizedDagPbNodeFormat
- * @typedef {NormalizedDagPbLink} IpldLinkObject
  *
  * @typedef {'raw' | 'directory' | 'file' | 'metadata' | 'symlink' | 'hamt-sharded-directory'} NodeTypes - From ipfs-unixfs
  */
@@ -31,7 +29,7 @@ import * as dagCbor from '@ipld/dag-cbor'
  * @property {string} cid
  * @property {CodecType} type
  * @property {UnixFsNodeData | NodeData} data
- * @property {NormalizedDagPbLink[]} links
+ * @property {NormalizedDagLink[]} links
  * @property {number} size
  * @property {NormalizedDagPbNodeFormat} format
  */
@@ -200,9 +198,9 @@ export function normaliseDagCbor (obj, cid, code) {
 /**
  * A valid IPLD link in a dag-cbor node is an object with single "/" property.
  *
- * @param {*} obj
- * @param {*} sourceCid
- * @param {*} path
+ * @param {unknown} obj
+ * @param {string} sourceCid
+ * @param {string} path
  * @returns {NormalizedDagLink[]}
  */
 export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {

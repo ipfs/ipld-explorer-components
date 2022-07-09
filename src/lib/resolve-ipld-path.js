@@ -64,7 +64,6 @@ export default async function resolveIpldPath (ipld, sourceCid, path, nodes = []
   if (link) {
     pathBoundaries.push(link)
     // Go again, using the link.target as the sourceCid, and the remainderPath as the path.
-    // console.log('link.target: ', link.target)
     return resolveIpldPath(ipld, link.target, remainderPath, nodes, pathBoundaries)
   }
   // we made it to the containing node. Hand back the info
@@ -102,12 +101,11 @@ export async function ipldGetNodeAndRemainder (ipld, sourceCid, path) {
 /**
  * Find the link object that matches linkPath
  *
- * @param {import('./normalise-dag-node').NormalizedDagPbNode} node a `normalisedDagNode`
+ * @param {import('./normalise-dag-node').NormalizedDagNode} node a `normalisedDagNode`
  * @param {string} linkPath an IPLD path string
- * @returns {IpldLinkObject} the link object for `linkPath`
+ * @returns {import('./normalise-dag-node').NormalizedDagLink} the link object for `linkPath`
  */
 export function findLink (node, linkPath) {
-  // console.log('node, linkPath: ', node, linkPath)
   if (!linkPath) return null
   if (!node) return null
   const { links } = node

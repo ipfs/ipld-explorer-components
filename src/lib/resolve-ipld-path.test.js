@@ -1,22 +1,17 @@
 
 /* global describe it expect jest */
 // @ts-check
-// import { CID } from 'multiformats'
 import * as dagPb from '@ipld/dag-pb'
 import * as dagCbor from '@ipld/dag-cbor'
 
 import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
 import { toCidOrNull } from './cid'
 import { convertDagPbNodeToJson } from './normalise-dag-node'
-// console.log('cid: ', cid)
-// cid
 
 // base58btc - cidv1 - dag-cbor - sha2-256~256~63C300F377227B01B45396434D0AB912F2511A09BDFFFD61CB06E9765F76BFE8)
 // const testCidString = 'zdpuAs8sJjcmsPUfB1bUViftCZ8usnvs2cXrPH6MDyT4zrvSs'
 // base32 - cidv1 - dag-cbor - sha2-256~256~63C300F377227B01B45396434D0AB912F2511A09BDFFFD61CB06E9765F76BFE8)
 const testCidString = 'bafyreiddymapg5zcpma3iu4wingqvois6jirucn5776wdsyg5f3f65v75a'
-
-const testCID = /** @type {import('multiformats').CID} */(toCidOrNull(testCidString))
 
 describe('resolveIpldPath', () => {
   it('resolves all nodes traversed along a path', async () => {
@@ -172,11 +167,9 @@ describe('resolveIpldPath', () => {
  * @returns {import('@ipld/dag-pb').PBNode}
  */
 function createDagPbNode (data, links) {
-  // console.log('data: ', data)
   return dagPb.prepare({
     Data: data,
     Links: links.map(({ cid, name, size }) => {
-      // console.log('dagPb.prepare, Links cid: ', cid)
       return {
         Hash: cid,
         Name: name,
@@ -184,8 +177,6 @@ function createDagPbNode (data, links) {
       }
     })
   })
-
-  // return dagPb.createNode(data, newLinks)
 }
 
 describe('findLinkPath', () => {
