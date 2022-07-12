@@ -1,3 +1,10 @@
+### [2.5.1](https://github.com/ipfs/ipld-explorer-components/compare/v2.5.0...v2.5.1) (2022-07-12)
+
+
+### Bug Fixes
+
+* remove unmatched parenthesis ([#320](https://github.com/ipfs/ipld-explorer-components/issues/320)) ([00b9005](https://github.com/ipfs/ipld-explorer-components/commit/00b90058d3001deab10b9a3c208145de779eb9a3))
+
 ## [2.5.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.4.1...v2.5.0) (2022-07-06)
 
 
