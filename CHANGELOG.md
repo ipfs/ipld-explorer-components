@@ -1,3 +1,15 @@
+## [2.6.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.5.1...v2.6.0) (2022-09-12)
+
+
+### Features
+
+* Create CODEOWNERS ([#334](https://github.com/ipfs/ipld-explorer-components/issues/334)) ([bfebc26](https://github.com/ipfs/ipld-explorer-components/commit/bfebc26d5acfef19c11c2228ee28efccf069bcd1))
+
+
+### Trivial Changes
+
+* Update .github/workflows/stale.yml [skip ci] ([9a24598](https://github.com/ipfs/ipld-explorer-components/commit/9a24598acecb937dc7757f32c4e9468ed7a48876))
+
 ### [2.5.1](https://github.com/ipfs/ipld-explorer-components/compare/v2.5.0...v2.5.1) (2022-07-12)
 
 
