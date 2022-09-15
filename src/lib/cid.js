@@ -30,10 +30,13 @@ export function getCodecOrNull (value) {
   const cid = toCidOrNull(value)
 
   if (cid == null) return null
-  if (cid.code === dagCbor.code) {
-    return dagCbor.name
-  } else if (cid.code === dagPb.code) {
-    return dagPb.name
+  switch (cid.code) {
+    case dagCbor.code:
+      return dagCbor.name
+    case dagJson.code:
+      return dagJson.name
+    case dagPb.code:
+      return dagPb.code
   }
 
   return null
