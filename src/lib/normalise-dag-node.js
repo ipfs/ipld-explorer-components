@@ -130,7 +130,6 @@ export function normaliseDagPb (node, cid, type) {
   try {
     // it's a unix system?
     const { type, data, blockSizes } = UnixFS.unmarshal(nodeAsJson.data)
-    console.log('type, data, blockSizes: ', type, data, blockSizes)
     nodeAsJson.data = { type, data, blockSizes }
     format = 'unixfs'
   } catch (err) {
