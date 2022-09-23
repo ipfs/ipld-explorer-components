@@ -1,6 +1,7 @@
 import { CID } from 'multiformats'
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
+import * as dagJson from '@ipld/dag-json'
 
 /**
  * @template {string} Prefix
@@ -36,10 +37,10 @@ export function getCodecOrNull (value) {
     case dagJson.code:
       return dagJson.name
     case dagPb.code:
-      return dagPb.code
+      return dagPb.name
+    default:
+      return null
   }
-
-  return null
 }
 
 export function getCodeOrNull (value) {
