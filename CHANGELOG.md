@@ -1,3 +1,29 @@
+### [2.6.1](https://github.com/ipfs/ipld-explorer-components/compare/v2.6.0...v2.6.1) (2022-09-19)
+
+
+### Trivial Changes
+
+* pull new translations ([#332](https://github.com/ipfs/ipld-explorer-components/issues/332)) ([57d6aee](https://github.com/ipfs/ipld-explorer-components/commit/57d6aee9c53f2e1498894af97ceab62c17b28231))
+
+## [2.6.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.5.1...v2.6.0) (2022-09-12)
+
+
+### Features
+
+* Create CODEOWNERS ([#334](https://github.com/ipfs/ipld-explorer-components/issues/334)) ([bfebc26](https://github.com/ipfs/ipld-explorer-components/commit/bfebc26d5acfef19c11c2228ee28efccf069bcd1))
+
+
+### Trivial Changes
+
+* Update .github/workflows/stale.yml [skip ci] ([9a24598](https://github.com/ipfs/ipld-explorer-components/commit/9a24598acecb937dc7757f32c4e9468ed7a48876))
+
+### [2.5.1](https://github.com/ipfs/ipld-explorer-components/compare/v2.5.0...v2.5.1) (2022-07-12)
+
+
+### Bug Fixes
+
+* remove unmatched parenthesis ([#320](https://github.com/ipfs/ipld-explorer-components/issues/320)) ([00b9005](https://github.com/ipfs/ipld-explorer-components/commit/00b90058d3001deab10b9a3c208145de779eb9a3))
+
 ## [2.5.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.4.1...v2.5.0) (2022-07-06)
 
 
