@@ -4,12 +4,9 @@ import * as dagCbor from '@ipld/dag-cbor'
 import normaliseDagNode from './normalise-dag-node'
 import { toCidStrOrNull } from './cid'
 
-const cid1Old = 'zdpuAwkGh9cLskW5z7pH8V2uC5nwtSXd76L7ZTEXs5f8V89db'
-const cid1 = toCidStrOrNull(cid1Old)
-const cid2Old = 'zdpuAydka8ZEXd9UgWF1s4pVFcF4U1GEgtdNQFxKNt9tyKQxR'
-const cid2 = toCidStrOrNull(cid2Old)
-const cid3Old = 'zdpuAtYsbfdkVazNyWcS97cWKVzR99huDzNxMmoRb349jyUTD'
-const cid3 = toCidStrOrNull(cid3Old)
+const cid1 = 'bafyreifiioc5v7xh3xbqjkdvgcz5ywo2vnhzd2gdnybfogxajjnchzzhei'
+const cid2 = 'bafyreigej5njyhiye4rlhntifea6uwzkuwhkxvm2nxyyufnedzqqhhokpi'
+const cid3 = 'bafyreidyyt24wtr7q5plglwroysqzn3ph42nvna4iswllnha7xrwogme3q'
 
 it('normalizes a simple cbor node', () => {
   const obj = { foo: 'bar' }

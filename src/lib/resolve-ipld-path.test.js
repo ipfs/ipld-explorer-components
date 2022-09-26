@@ -8,9 +8,6 @@ import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
 import { toCidOrNull } from './cid'
 import { convertDagPbNodeToJson } from './normalise-dag-node'
 
-// base58btc - cidv1 - dag-cbor - sha2-256~256~63C300F377227B01B45396434D0AB912F2511A09BDFFFD61CB06E9765F76BFE8)
-// const testCidString = 'zdpuAs8sJjcmsPUfB1bUViftCZ8usnvs2cXrPH6MDyT4zrvSs'
-// base32 - cidv1 - dag-cbor - sha2-256~256~63C300F377227B01B45396434D0AB912F2511A09BDFFFD61CB06E9765F76BFE8)
 const testCidString = 'bafyreiddymapg5zcpma3iu4wingqvois6jirucn5776wdsyg5f3f65v75a'
 
 describe('resolveIpldPath', () => {
@@ -23,9 +20,6 @@ describe('resolveIpldPath', () => {
       resolve: jest.fn()
     }
     const path = '/a/b/a'
-    // base58btc - cidv1 - dag-cbor - sha2-256~256~C99DE73243D54ECD30FCD93D94C6BE23D017D627139BE62653A27ECD5CB014D8)
-    // const linkCidOld = 'zdpuAyzU5ahAKr5YV24J5TqrDX8PhzHLMkxx69oVzkBDWHnjq'
-    // base32 - cidv1 - dag-cbor - sha2-256~256~C99DE73243D54ECD30FCD93D94C6BE23D017D627139BE62653A27ECD5CB014D8)
     const linkCid = 'bafyreigjtxtteq6vj3gtb7gzhwkmnprd2al5mjyttptcmu5cp3gvzmau3a'
 
     const dagGetRes1 = {
@@ -75,9 +69,6 @@ describe('resolveIpldPath', () => {
     const path = '/a/b/pb1'
 
     const dagNode3 = await createDagPbNode('the second pb node', [])
-    // base58btc - cidv0 - dag-pb - (sha2-256 : 256 : 2C8E6EEDD3847C08AF5D4AD5549CB788503B17F39CE9C6A32347DBAB2579167B)
-    // const dagNode3CID = 'QmRLacjo71FTzKFELa7Yf5YqMwdftKNDNFq7EiE13uohar'
-    // base32 - cidv1 - dag-pb - (sha2-256 : 256 : 2C8E6EEDD3847C08AF5D4AD5549CB788503B17F39CE9C6A32347DBAB2579167B)
     const dagNode3CID = 'bafybeibmrzxo3u4epqek6xkk2vkjzn4ika5rp4445hdkgi2h3ovsk6iwpm'
 
     const dagNode2 = await createDagPbNode('the first pb node', [{
@@ -85,9 +76,6 @@ describe('resolveIpldPath', () => {
       cid: dagNode3CID,
       size: 101
     }])
-    // base58btc - cidv0 - dag-pb - (sha2-256 : 256 : 72D281425A0F911B708093E023D9064018C7AE3F5857C1C0EAA3B622D9113CE9)
-    // const dagNode2CID = 'QmW4sMkvHnTnVPkBJYToRW4burdMk9DHP5qGE4CYGUtHiQ'
-    // base32 - cidv1 - dag-pb - (sha2-256 : 256 : 72D281425A0F911B708093E023D9064018C7AE3F5857C1C0EAA3B622D9113CE9)
     const dagNode2CID = 'bafybeids2kauewqpsenxbaet4ar5sbsaddd24p2yk7a4b2vdwyrnsej45e'
 
     const dagNode1 = {

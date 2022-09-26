@@ -29,6 +29,8 @@ export default function normaliseDagNode (node, cidStr) {
 }
 
 /**
+ * `ipld-dag-pb` used to support a toJSON function, see https://github.com/ipld/js-ipld-dag-pb/blob/v0.22.2/src/dag-node/dagNode.js#L57-L65
+ * `@ipld/dag-pb` does not support toJSON, so we need to fake it for now.
  *
  * @param {import('@ipld/dag-pb').PBNode} node
  * @returns {import('../types').DagPbNodeAsJson}
