@@ -2,7 +2,6 @@
 import { CID } from 'multiformats'
 import * as dagCbor from '@ipld/dag-cbor'
 import normaliseDagNode from './normalise-dag-node'
-import { toCidStrOrNull } from './cid'
 
 const cid1 = 'bafyreifiioc5v7xh3xbqjkdvgcz5ywo2vnhzd2gdnybfogxajjnchzzhei'
 const cid2 = 'bafyreigej5njyhiye4rlhntifea6uwzkuwhkxvm2nxyyufnedzqqhhokpi'

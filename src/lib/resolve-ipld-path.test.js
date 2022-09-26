@@ -6,7 +6,6 @@ import * as dagCbor from '@ipld/dag-cbor'
 
 import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
 import { toCidOrNull } from './cid'
-import { convertDagPbNodeToJson } from './normalise-dag-node'
 
 const testCidString = 'bafyreiddymapg5zcpma3iu4wingqvois6jirucn5776wdsyg5f3f65v75a'
 
@@ -131,13 +130,12 @@ describe('resolveIpldPath', () => {
       source: testCidString,
       target: dagNode2CID
     }))
-    expect(res.pathBoundaries[1]).toEqual({
+    expect(res.pathBoundaries[1]).toEqual(expect.objectContaining({
       index: 0,
       path: 'pb1',
-      size: convertDagPbNodeToJson(dagNode2).links[0].Tsize,
       source: dagNode2CID,
       target: dagNode3CID
-    })
+    }))
   })
 })
 

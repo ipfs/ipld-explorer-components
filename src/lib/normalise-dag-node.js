@@ -5,8 +5,6 @@ import * as dagCbor from '@ipld/dag-cbor'
 
 import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
 
-const utf8Decoder = new TextDecoder()
-
 /**
  * Provide a uniform shape for all^ node types.
  *
@@ -29,36 +27,12 @@ export default function normaliseDagNode (node, cidStr) {
 }
 
 /**
- * `ipld-dag-pb` used to support a toJSON function, see https://github.com/ipld/js-ipld-dag-pb/blob/v0.22.2/src/dag-node/dagNode.js#L57-L65
- * `@ipld/dag-pb` does not support toJSON, so we need to fake it for now.
- *
- * @param {import('@ipld/dag-pb').PBNode} node
- * @returns {import('../types').DagPbNodeAsJson}
- */
-export function convertDagPbNodeToJson (node) {
-  const pbData = /** @type {Uint8Array} */(node.Data)
-  let data = String.fromCharCode(...pbData)
-  try {
-    data = JSON.parse(data)
-  } catch {
-    // ignore
-  }
-
-  return {
-    type: node.Links.length > 0 ? 'directory' : 'file',
-    data,
-    size: node.Links.reduce((acc, { Tsize }) => acc + (Tsize ?? 0), 0),
-    links: node.Links
-  }
-}
-
-/**
  * Normalize links and add type info. Add unixfs info where available
  *
  * @param {import('@ipld/dag-pb').PBNode} node
  * @param {string} cid
  * @param {import('../types').CodecType} type
- * @returns {import('../types').NormalizedDagPbNode}
+ * @returns {import('../types').NormalizedDagNode}
  */
 export function normaliseDagPb (node, cid, type) {
   // NOTE: Use the requested cid rather than the internal one.
@@ -69,31 +43,43 @@ export function normaliseDagPb (node, cid, type) {
   //   throw new Error('dag-pb multihash should match provided cid')
   // }
 
-  const nodeAsJson = convertDagPbNodeToJson(node)
-  /**
-   * @type {import('../types').NormalizedDagPbNodeFormat}
-   */
-  let format = 'unknown'
-  try {
-    // it's a unix system?
-    const { type, data, blockSizes } = UnixFS.unmarshal(nodeAsJson.data)
-    nodeAsJson.data = { type, data, blockSizes }
-    format = 'unixfs'
-  } catch (err) {
-    // dag-pb but not a unixfs.
-    // console.log(err)
-  }
   const cidStr = toCidStrOrNull(cid)
   if (cidStr == null) {
     throw new Error(`cidStr is null for cid: ${cid}`)
   }
+  /**
+   * @type {import('../types').NormalizedDagPbNodeFormat}
+   */
+  let format = 'non-unixfs'
+  const data = node.Data
+
+  if (data != null) {
+    try {
+    // it's a unix system?
+      const unixFsObj = UnixFS.unmarshal(data)
+      const { type, data: unixFsData, blockSizes } = unixFsObj
+      format = 'unixfs'
+
+      return {
+        cid: cidStr,
+        type,
+        data: { type: /** @type {import('../types').UnixFsNodeTypes} */(type), data: unixFsData, blockSizes },
+        links: normaliseDagPbLinks(node.Links, cid),
+        size: unixFsObj.fileSize(),
+        format
+      }
+    } catch (err) {
+    // dag-pb but not a unixfs.
+      // console.error(err)
+    }
+  }
+  // const cidStr = toCidStrOrNull(cid)
 
   return {
     cid: cidStr,
     type,
-    data: nodeAsJson.data,
-    links: normaliseDagPbLinks(nodeAsJson, cid),
-    size: nodeAsJson.size,
+    data,
+    links: normaliseDagPbLinks(node.Links, cid),
     format
   }
 }
@@ -102,39 +88,35 @@ export function normaliseDagPb (node, cid, type) {
  * Convert DagLink shape into normalized form that can be used interchangeably
  * with links found in dag-cbor
  *
- * @param {import('../types').DagPbNodeAsJson} node
+ * @param {import('@ipld/dag-pb').PBLink[]} links
  * @param {string} sourceCid
  * @returns {import('../types').NormalizedDagLink[]}
  */
-export function normaliseDagPbLinks (node, sourceCid) {
-  return node.links.map((link, index) => {
-    const { Name: name, Tsize: size, Hash: cid } = link
-
-    return ({
-      path: name || `Links/${index}`,
-      source: sourceCid,
-      target: cid.toString(),
-      size: size ?? 0,
-      index
-    })
-  })
+export function normaliseDagPbLinks (links, sourceCid) {
+  return links.map((link, index) => ({
+    path: link.Name || `Links/${index}`,
+    source: sourceCid,
+    target: toCidStrOrNull(link.Hash) ?? '',
+    size: link.Tsize ?? 0,
+    index
+  }))
 }
 
 /**
  * Find links and add type and cid info
  *
  * @function normaliseDagCbor
- * @param {unknown} obj - The data object
+ * @param {import('../types').NormalizedDagNode['data']} data - The data object
  * @param {string} cid - The string representation of the CID
  * @param {number} code - multicodec code, see https://github.com/multiformats/multicodec/blob/master/table.csv
  * @returns {import('../types').NormalizedDagNode}
  */
-export function normaliseDagCbor (obj, cid, code) {
-  const links = findAndReplaceDagCborLinks(obj, cid)
+export function normaliseDagCbor (data, cid, code) {
+  const links = findAndReplaceDagCborLinks(data, cid)
   return {
     cid,
     type: code,
-    data: obj,
+    data,
     links,
     size: links.reduce((acc, { size }) => acc + size, 0),
     format: 'unknown'
