@@ -5,62 +5,7 @@ import * as dagCbor from '@ipld/dag-cbor'
 
 import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
 
-/**
- * @typedef {import('multiformats').CID} CID
- * @typedef {number} CodecType
- * @typedef {string | object} NodeData
- * @typedef {({ type, data, blockSizes })} UnixFsNodeData
- * @typedef {'unixfs' | 'unknown'} NormalizedDagPbNodeFormat
- *
- * @typedef {'raw' | 'directory' | 'file' | 'metadata' | 'symlink' | 'hamt-sharded-directory'} NodeTypes - From ipfs-unixfs
- */
-
-/**
- * @typedef {object} NormalizedDagNode
- * @property {string} cid
- * @property {CodecType} type
- * @property {UnixFsNodeData | NodeData} data
- * @property {NormalizedDagLink[]} links
- * @property {number} size
- * @property {NormalizedDagPbNodeFormat} format
- */
-/**
- * @typedef {object} NormalizedDagPbNode
- * @property {string} cid
- * @property {CodecType} type
- * @property {UnixFsNodeData | NodeData} data
- * @property {NormalizedDagLink[]} links
- * @property {number} size
- * @property {NormalizedDagPbNodeFormat} format
- */
-/**
- * @typedef {object} NormalizedDagLink
- * @property {string} path
- * @property {string} source
- * @property {string} target
- * @property {number} size
- * @property {number} index
- */
-
-/**
- *
- * @typedef {object} DagPbNodeAsJson
- * @property {NodeTypes} type
- * @property {number} size
- * @property {NodeData} data
- * @property {import('@ipld/dag-pb').PBLink[]} links
- * @returns
- */
-
-/**
- *
- * @typedef {object} NormalizedDagNodeAsJson
- * @property {NodeTypes} type
- * @property {number} size
- * @property {NodeData} data
- * @property {NormalizedDagLink[]} links
- * @returns
- */
+const utf8Decoder = new TextDecoder()
 
 /**
  * Provide a uniform shape for all^ node types.
@@ -86,7 +31,7 @@ export default function normaliseDagNode (node, cidStr) {
 /**
  *
  * @param {import('@ipld/dag-pb').PBNode} node
- * @returns {DagPbNodeAsJson}
+ * @returns {import('../types').DagPbNodeAsJson}
  */
 export function convertDagPbNodeToJson (node) {
   const pbData = /** @type {Uint8Array} */(node.Data)
@@ -110,8 +55,8 @@ export function convertDagPbNodeToJson (node) {
  *
  * @param {import('@ipld/dag-pb').PBNode} node
  * @param {string} cid
- * @param {CodecType} type
- * @returns {NormalizedDagPbNode}
+ * @param {import('../types').CodecType} type
+ * @returns {import('../types').NormalizedDagPbNode}
  */
 export function normaliseDagPb (node, cid, type) {
   // NOTE: Use the requested cid rather than the internal one.
@@ -124,7 +69,7 @@ export function normaliseDagPb (node, cid, type) {
 
   const nodeAsJson = convertDagPbNodeToJson(node)
   /**
-   * @type {NormalizedDagPbNodeFormat}
+   * @type {import('../types').NormalizedDagPbNodeFormat}
    */
   let format = 'unknown'
   try {
@@ -155,9 +100,9 @@ export function normaliseDagPb (node, cid, type) {
  * Convert DagLink shape into normalized form that can be used interchangeably
  * with links found in dag-cbor
  *
- * @param {DagPbNodeAsJson} node
+ * @param {import('../types').DagPbNodeAsJson} node
  * @param {string} sourceCid
- * @returns {NormalizedDagLink[]}
+ * @returns {import('../types').NormalizedDagLink[]}
  */
 export function normaliseDagPbLinks (node, sourceCid) {
   return node.links.map((link, index) => {
@@ -180,7 +125,7 @@ export function normaliseDagPbLinks (node, sourceCid) {
  * @param {unknown} obj - The data object
  * @param {string} cid - The string representation of the CID
  * @param {number} code - multicodec code, see https://github.com/multiformats/multicodec/blob/master/table.csv
- * @returns {NormalizedDagNode}
+ * @returns {import('../types').NormalizedDagNode}
  */
 export function normaliseDagCbor (obj, cid, code) {
   const links = findAndReplaceDagCborLinks(obj, cid)
@@ -200,7 +145,7 @@ export function normaliseDagCbor (obj, cid, code) {
  * @param {unknown} obj
  * @param {string} sourceCid
  * @param {string} path
- * @returns {NormalizedDagLink[]}
+ * @returns {import('../types').NormalizedDagLink[]}
  */
 export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
   if (!obj || typeof obj !== 'object' || Buffer.isBuffer(obj) || typeof obj === 'string') {
