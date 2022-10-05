@@ -1,62 +1,71 @@
 /* global it expect */
-import CID from 'cids'
-import normaliseDagCbor from './normalise-dag-node'
+import { CID } from 'multiformats'
+import * as dagCbor from '@ipld/dag-cbor'
+import normaliseDagNode from './normalise-dag-node'
 
-const cid1 = 'zdpuAwkGh9cLskW5z7pH8V2uC5nwtSXd76L7ZTEXs5f8V89db'
-const cid2 = 'zdpuAydka8ZEXd9UgWF1s4pVFcF4U1GEgtdNQFxKNt9tyKQxR'
-const cid3 = 'zdpuAtYsbfdkVazNyWcS97cWKVzR99huDzNxMmoRb349jyUTD'
+const cid1 = 'bafyreifiioc5v7xh3xbqjkdvgcz5ywo2vnhzd2gdnybfogxajjnchzzhei'
+const cid2 = 'bafyreigej5njyhiye4rlhntifea6uwzkuwhkxvm2nxyyufnedzqqhhokpi'
+const cid3 = 'bafyreidyyt24wtr7q5plglwroysqzn3ph42nvna4iswllnha7xrwogme3q'
 
 it('normalizes a simple cbor node', () => {
   const obj = { foo: 'bar' }
-  const res = normaliseDagCbor(obj, cid1, 'dag-cbor')
+  const res = normaliseDagNode(obj, cid1, dagCbor.code)
 
-  expect(res).toEqual({
+  expect(res).toEqual(expect.objectContaining({
     cid: cid1,
     data: obj,
-    type: 'dag-cbor',
+    type: dagCbor.code,
     links: []
-  })
+  }))
 })
 
 it('normalizes a cbor node with an empty array', () => {
   const obj = { foo: [] }
-  const res = normaliseDagCbor(obj, cid1, 'dag-cbor')
+  const res = normaliseDagNode(obj, cid1, dagCbor.code)
 
-  expect(res).toEqual({
+  expect(res).toEqual(expect.objectContaining({
     cid: cid1,
     data: obj,
-    type: 'dag-cbor',
+    type: dagCbor.code,
     links: []
-  })
+  }))
 })
 
 it('normalizes a cbor node with links', () => {
   const obj = {
-    foo: new CID(cid2),
-    bar: [new CID(cid2), new CID(cid3)]
+    foo: CID.parse(cid2),
+    bar: [CID.parse(cid2), CID.parse(cid3)]
   }
 
-  const res = normaliseDagCbor(obj, cid1, 'dag-cbor')
+  const res = normaliseDagNode(obj, cid1, dagCbor.code)
 
   expect(res).toEqual({
     cid: cid1,
     data: obj,
-    type: 'dag-cbor',
+    type: dagCbor.code,
+    format: 'unknown',
+    size: 0,
     links: [
       {
         path: 'foo',
         source: cid1,
-        target: cid2
+        target: cid2,
+        index: 0,
+        size: 0
       },
       {
         path: 'bar/0',
         source: cid1,
-        target: cid2
+        target: cid2,
+        index: 0,
+        size: 0
       },
       {
         path: 'bar/1',
         source: cid1,
-        target: cid3
+        target: cid3,
+        index: 0,
+        size: 0
       }
     ]
   })
