@@ -1,6 +1,6 @@
 {
   "name": "ipld-explorer-components",
-  "version": "2.6.1",
+  "version": "3.0.0",
   "description": "React components for https://explore.ipld.io",
   "license": "Apache-2.0 OR MIT",
   "homepage": "https://github.com/ipfs/ipld-explorer-components#readme",

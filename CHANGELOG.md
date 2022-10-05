@@ -1,3 +1,14 @@
+## [3.0.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.6.1...v3.0.0) (2022-10-05)
+
+
+### ⚠ BREAKING CHANGES
+
+* replace `ipld-dag-pb` with `@ipld/dag-pb` (#330)
+
+### Features
+
+* replace `ipld-dag-pb` with `@ipld/dag-pb` ([#330](https://github.com/ipfs/ipld-explorer-components/issues/330)) ([8cd0b23](https://github.com/ipfs/ipld-explorer-components/commit/8cd0b23641dc201b421af856069c18b4d9b0c41e))
+
 ### [2.6.1](https://github.com/ipfs/ipld-explorer-components/compare/v2.6.0...v2.6.1) (2022-09-19)
 
 
