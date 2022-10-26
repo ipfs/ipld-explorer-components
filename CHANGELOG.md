@@ -1,3 +1,10 @@
+### [3.0.1](https://github.com/ipfs/ipld-explorer-components/compare/v3.0.0...v3.0.1) (2022-10-26)
+
+
+### Trivial Changes
+
+* pull new translations ([#339](https://github.com/ipfs/ipld-explorer-components/issues/339)) ([0a7ef0b](https://github.com/ipfs/ipld-explorer-components/commit/0a7ef0be3ef70606c75321a420e5e2553553e232))
+
 ## [3.0.0](https://github.com/ipfs/ipld-explorer-components/compare/v2.6.1...v3.0.0) (2022-10-05)
 
 
