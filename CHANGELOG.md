@@ -1,3 +1,15 @@
+### [3.0.2](https://github.com/ipfs/ipld-explorer-components/compare/v3.0.1...v3.0.2) (2022-11-10)
+
+
+### Bug Fixes
+
+* use nodejs-16 in CI ([#345](https://github.com/ipfs/ipld-explorer-components/issues/345)) ([8b989d0](https://github.com/ipfs/ipld-explorer-components/commit/8b989d0ccf4560f08669d36d70b7d74bf86e390b))
+
+
+### Trivial Changes
+
+* bump async from 2.6.3 to 2.6.4 ([#340](https://github.com/ipfs/ipld-explorer-components/issues/340)) ([f3a4858](https://github.com/ipfs/ipld-explorer-components/commit/f3a485884a10a69aa2b470f6b81e23df1c54b677))
+
 ### [3.0.1](https://github.com/ipfs/ipld-explorer-components/compare/v3.0.0...v3.0.1) (2022-10-26)
 
 
