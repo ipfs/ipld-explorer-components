@@ -127,7 +127,6 @@
     "ipfs-unixfs": "^4.0.1",
     "ipld": "0.29.0",
     "ipld-ethereum": "6.0.0",
-    "ipld-git": "0.6.4",
     "ipld-raw": "7.0.0",
     "milliseconds": "^1.0.3",
     "multibase": "4.0.2",
