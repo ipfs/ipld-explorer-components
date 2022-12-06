@@ -1,3 +1,10 @@
+### [3.0.3](https://github.com/ipfs/ipld-explorer-components/compare/v3.0.2...v3.0.3) (2022-12-06)
+
+
+### Trivial Changes
+
+* fix wrong style referencing paths in cra example ([#344](https://github.com/ipfs/ipld-explorer-components/issues/344)) ([ef39560](https://github.com/ipfs/ipld-explorer-components/commit/ef395602135e2685adb06b4e771ee3de66dff430))
+
 ### [3.0.2](https://github.com/ipfs/ipld-explorer-components/compare/v3.0.1...v3.0.2) (2022-11-10)
 
 
