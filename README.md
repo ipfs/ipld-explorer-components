@@ -51,8 +51,8 @@ And, assuming you are using `create-react-app` or a similar webpack set up, you'
 import 'tachyons'
 import 'ipfs-css'
 import 'react-virtualized/styles.css'
-import 'ipld-explorer-lib/dist/components/object-info/LinksTable.css'
-import 'ipld-explorer-lib/dist/components/loader/Loader.css'
+import 'ipld-explorer-components/dist/components/object-info/LinksTable.css'
+import 'ipld-explorer-components/dist/components/loader/Loader.css'
 ```
 
 ## Contribute
