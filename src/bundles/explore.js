@@ -184,7 +184,6 @@ async function getIpld () {
     import(/* webpackChunkName: "ipld" */ 'ipld'),
     import(/* webpackChunkName: "ipld" */ '@ipld/dag-cbor'),
     import(/* webpackChunkName: "ipld" */ '@ipld/dag-pb'),
-    import(/* webpackChunkName: "ipld" */ 'ipld-git'),
     import(/* webpackChunkName: "ipld" */ 'ipld-raw'),
     import(/* webpackChunkName: "ipld" */ 'ipld-ethereum')
   ])
