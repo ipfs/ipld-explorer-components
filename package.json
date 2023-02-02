@@ -111,7 +111,8 @@
     "start": "cross-env NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js' --watch",
     "storybook": "start-storybook -p 9009 --static-dir public",
     "storybook:build": "build-storybook -c .storybook --static-dir public --output-dir build",
-    "test": "react-scripts test --env=jsdom"
+    "test": "react-scripts test --env=jsdom",
+    "test:storybook": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"build-storybook --quiet && http-server storybook-static --port 6006 --silent\" \"wait-on tcp:6006 && test-storybook --coverage\""
   },
   "dependencies": {
     "@babel/cli": "^7.13.14",
@@ -156,6 +157,7 @@
     "@storybook/addons": "^5.3.21",
     "@storybook/react": "^5.3.21",
     "babel-eslint": "10.0.3",
+    "concurrently": "^7.4.0",
     "cross-env": "^6.0.0",
     "eslint": "^6.5.1",
     "eslint-config-standard": "^14.1.1",
@@ -165,6 +167,7 @@
     "eslint-plugin-promise": "^4.3.1",
     "eslint-plugin-react": "^7.23.0",
     "eslint-plugin-standard": "^4.1.0",
+    "http-server": "^14.1.1",
     "i18next": "^21.6.16",
     "i18next-browser-languagedetector": "6.1.4",
     "i18next-chained-backend": "3.0.2",
@@ -185,6 +188,7 @@
     "semantic-release": "^19.0.2",
     "standard": "^14.3.4",
     "tachyons": "^4.12.0",
+    "wait-on": "^6.0.1",
     "webpack": "^4.46.0"
   },
   "peerDependencies": {
