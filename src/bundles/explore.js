@@ -185,16 +185,22 @@ async function getIpld () {
     import(/* webpackChunkName: "ipld" */ '@ipld/dag-cbor'),
     import(/* webpackChunkName: "ipld" */ '@ipld/dag-pb'),
     import(/* webpackChunkName: "ipld" */ 'ipld-git'),
-    import(/* webpackChunkName: "ipld" */ 'ipld-raw'),
-    import(/* webpackChunkName: "ipld" */ 'ipld-ethereum')
+    import(/* webpackChunkName: "ipld" */ 'ipld-raw')
   ])
 
   // CommonJs exports object is .default when imported ESM style
-  const [ipld, ...formats] = ipldDeps.map(mod => mod.default)
+  const [ipld, ...formats] = ipldDeps.map(mod => {
+    const actualModule = mod.default ?? mod
+    if (actualModule.name != null && actualModule.code != null && actualModule.codec == null) {
+      // fix throw new Error(`Resolver already exists for codec "${codecName}"`) from ipld when `codecName` is undefined
+      actualModule.codec = actualModule.code
+    }
+    return actualModule
+  })
 
   // ipldEthereum is an Object, each key points to a ipld format impl
-  const ipldEthereum = formats.pop()
-  formats.push(...Object.values(ipldEthereum))
+  const ipldEthereum = await import(/* webpackChunkName: "ipld" */ 'ipld-ethereum')
+  formats.push(...Object.values(ipldEthereum.default ?? ipldEthereum))
 
   // ipldJson uses the new format, use the conversion tool
   const ipldJson = await import(/* webpackChunkName: "ipld" */ '@ipld/dag-json')

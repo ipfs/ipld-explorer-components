@@ -3,6 +3,7 @@ import { withTranslation } from 'react-i18next'
 import { ObjectInspector, chromeLight } from '@tableflip/react-inspector'
 import filesize from 'filesize'
 import LinksTable from './LinksTable'
+import multicodec from 'multicodec'
 const humansize = filesize.partial({ round: 0 })
 
 const objectInspectorTheme = {
@@ -28,18 +29,31 @@ const nodeStyles = {
   'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: '#383838' }
 }
 
+/**
+ * Support getting the style object for a node type using the codec number by redirecting the number to the name
+ */
+const nodeStylesProxy = new Proxy(nodeStyles, {
+  get (target, prop) {
+    if (isNaN(prop)) {
+      return target[prop]
+    }
+    console.log(`getting codec name from code number for ${prop}: `, multicodec.getNameFromCode(prop))
+    return target[multicodec.getNameFromCode(prop)]
+  }
+})
+
 export function shortNameForNode (type) {
-  const style = nodeStyles[type]
+  const style = nodeStylesProxy[type]
   return (style && style.shortName) || 'DAG'
 }
 
 export function nameForNode (type) {
-  const style = nodeStyles[type]
+  const style = nodeStylesProxy[type]
   return (style && style.name) || 'DAG Node'
 }
 
 export function colorForNode (type) {
-  const style = nodeStyles[type]
+  const style = nodeStylesProxy[type]
   return (style && style.color) || '#ea5037'
 }
 
