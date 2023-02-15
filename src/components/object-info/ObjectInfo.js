@@ -34,6 +34,7 @@ const nodeStyles = {
  */
 const nodeStylesProxy = new Proxy(nodeStyles, {
   get (target, prop) {
+    console.log('nodeStylesProxy for prop: ', prop)
     if (isNaN(prop)) {
       return target[prop]
     }
@@ -43,16 +44,19 @@ const nodeStylesProxy = new Proxy(nodeStyles, {
 })
 
 export function shortNameForNode (type) {
+  console.log('shortNameForNode type: ', type)
   const style = nodeStylesProxy[type]
   return (style && style.shortName) || 'DAG'
 }
 
 export function nameForNode (type) {
+  console.log('nameForNode type: ', type)
   const style = nodeStylesProxy[type]
   return (style && style.name) || 'DAG Node'
 }
 
 export function colorForNode (type) {
+  console.log('colorForNode type: ', type)
   const style = nodeStylesProxy[type]
   return (style && style.color) || '#ea5037'
 }
@@ -77,8 +81,12 @@ const DagNodeIcon = ({ type, ...props }) => (
 )
 
 const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, links, format, onLinkClick, gatewayUrl, publicGatewayUrl, ...props }) => {
+  console.log('type, cid, localPath, size, data, links, format,: ', type, cid, localPath, size, data, links, format)
+  // console.log('type: ', type)
+  const unixFsFileOrDirectory = format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type)
+  console.log('unixFsFileOrDirectory: ', unixFsFileOrDirectory)
   return (
-    <section className={`pa4 sans-serif ${className}`} {...props}>
+    <section key={type} className={`pa4 sans-serif ${className}`} {...props}>
       <h2 className='ma0 lh-title f4 fw4 montserrat pb2' title={type}>
         <DagNodeIcon type={type} className='mr3' style={{ verticalAlign: -8 }} />
         <span className='v-mid'>
@@ -87,7 +95,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
         {format === 'unixfs' ? (
           <a className='dn di-ns no-underline charcoal ml2' href='https://docs.ipfs.io/concepts/glossary/#unixfs' rel='external' target='_external'>UnixFS</a>
         ) : null}
-        {format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type) ? (
+        {unixFsFileOrDirectory ? (
           <span className='dib'>
             {gatewayUrl && gatewayUrl !== publicGatewayUrl && (
               <a className='no-underline avenir ml2 pa2 fw5 f6 navy dib' href={`${gatewayUrl}/ipfs/${cid}`} rel='external nofollow' target='_external'>

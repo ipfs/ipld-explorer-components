@@ -28,7 +28,11 @@ const makeBundle = () => {
           IpldResolver = ipld
           ipldFormats = formats
         }
+        console.log('IpldResolver: ', IpldResolver)
+        console.log('ipldFormats: ', ipldFormats)
+        console.log('getIpfs: ', getIpfs)
         const ipld = makeIpld(IpldResolver, ipldFormats, getIpfs)
+        console.log('ipld: ', ipld)
         // TODO: handle ipns, which would give us a fqdn in the cid position.
         const cid = new Cid(cidOrFqdn)
         const {
@@ -187,13 +191,21 @@ async function getIpld () {
     import(/* webpackChunkName: "ipld" */ 'ipld-git'),
     import(/* webpackChunkName: "ipld" */ 'ipld-raw')
   ])
-
-  // CommonJs exports object is .default when imported ESM style
-  const [ipld, ...formats] = ipldDeps.map(mod => {
+  const [ipld, ...formatImports] = ipldDeps.map(mod => {
+    // CommonJs exports object is .default when imported ESM style
     const actualModule = mod.default ?? mod
-    if (actualModule.name != null && actualModule.code != null && actualModule.codec == null) {
-      // fix throw new Error(`Resolver already exists for codec "${codecName}"`) from ipld when `codecName` is undefined
-      actualModule.codec = actualModule.code
+    return actualModule
+  })
+  const formats = formatImports.map((actualModule) => {
+    // if (actualModule.name != null && actualModule.code != null && actualModule.codec == null) {
+    //   // fix throw new Error(`Resolver already exists for codec "${codecName}"`) from ipld when `codecName` is undefined
+    //   actualModule.codec = actualModule.code
+    // }
+    if (actualModule.util == null) {
+      // actualModule has no util. using blockcodec-to-ipld-format
+      const convertedModule = convert(actualModule)
+      console.log('convertedModule: ', convertedModule)
+      return convertedModule
     }
     return actualModule
   })
@@ -205,6 +217,7 @@ async function getIpld () {
   // ipldJson uses the new format, use the conversion tool
   const ipldJson = await import(/* webpackChunkName: "ipld" */ '@ipld/dag-json')
   formats.push(convert(ipldJson))
+  console.log('formats: ', formats)
 
   return { ipld, formats }
 }
