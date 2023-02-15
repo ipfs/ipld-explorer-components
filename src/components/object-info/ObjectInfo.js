@@ -3,7 +3,7 @@ import { withTranslation } from 'react-i18next'
 import { ObjectInspector, chromeLight } from '@tableflip/react-inspector'
 import filesize from 'filesize'
 import LinksTable from './LinksTable'
-import multicodec from 'multicodec'
+import { decodeCid } from '../cid-info/decode-cid'
 const humansize = filesize.partial({ round: 0 })
 
 const objectInspectorTheme = {
@@ -29,35 +29,18 @@ const nodeStyles = {
   'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: '#383838' }
 }
 
-/**
- * Support getting the style object for a node type using the codec number by redirecting the number to the name
- */
-const nodeStylesProxy = new Proxy(nodeStyles, {
-  get (target, prop) {
-    console.log('nodeStylesProxy for prop: ', prop)
-    if (isNaN(prop)) {
-      return target[prop]
-    }
-    console.log(`getting codec name from code number for ${prop}: `, multicodec.getNameFromCode(prop))
-    return target[multicodec.getNameFromCode(prop)]
-  }
-})
-
 export function shortNameForNode (type) {
-  console.log('shortNameForNode type: ', type)
-  const style = nodeStylesProxy[type]
+  const style = nodeStyles[type]
   return (style && style.shortName) || 'DAG'
 }
 
 export function nameForNode (type) {
-  console.log('nameForNode type: ', type)
-  const style = nodeStylesProxy[type]
+  const style = nodeStyles[type]
   return (style && style.name) || 'DAG Node'
 }
 
 export function colorForNode (type) {
-  console.log('colorForNode type: ', type)
-  const style = nodeStylesProxy[type]
+  const style = nodeStyles[type]
   return (style && style.color) || '#ea5037'
 }
 
@@ -81,12 +64,10 @@ const DagNodeIcon = ({ type, ...props }) => (
 )
 
 const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, links, format, onLinkClick, gatewayUrl, publicGatewayUrl, ...props }) => {
-  console.log('type, cid, localPath, size, data, links, format,: ', type, cid, localPath, size, data, links, format)
-  // console.log('type: ', type)
-  const unixFsFileOrDirectory = format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type)
-  console.log('unixFsFileOrDirectory: ', unixFsFileOrDirectory)
+  const cidInfo = decodeCid(cid)
+  type = cidInfo.cid.codec ?? type
   return (
-    <section key={type} className={`pa4 sans-serif ${className}`} {...props}>
+    <section className={`pa4 sans-serif ${className}`} {...props}>
       <h2 className='ma0 lh-title f4 fw4 montserrat pb2' title={type}>
         <DagNodeIcon type={type} className='mr3' style={{ verticalAlign: -8 }} />
         <span className='v-mid'>
@@ -95,7 +76,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
         {format === 'unixfs' ? (
           <a className='dn di-ns no-underline charcoal ml2' href='https://docs.ipfs.io/concepts/glossary/#unixfs' rel='external' target='_external'>UnixFS</a>
         ) : null}
-        {unixFsFileOrDirectory ? (
+        {format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type) ? (
           <span className='dib'>
             {gatewayUrl && gatewayUrl !== publicGatewayUrl && (
               <a className='no-underline avenir ml2 pa2 fw5 f6 navy dib' href={`${gatewayUrl}/ipfs/${cid}`} rel='external nofollow' target='_external'>
