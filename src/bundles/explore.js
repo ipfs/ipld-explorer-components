@@ -195,8 +195,7 @@ async function getIpld () {
   const formats = formatImports.map((actualModule) => {
     if (actualModule.util == null) {
       // actualModule has no util. using blockcodec-to-ipld-format
-      const convertedModule = convert(actualModule)
-      return convertedModule
+      return convert(actualModule)
     }
     return actualModule
   })
