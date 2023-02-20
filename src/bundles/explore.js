@@ -195,6 +195,7 @@ async function getIpld () {
   const formats = formatImports.map((actualModule) => {
     if (actualModule.util == null) {
       // actualModule has no util. using blockcodec-to-ipld-format
+      console.log('actualModule: ', actualModule)
       return convert(actualModule)
     }
     return actualModule
@@ -207,6 +208,7 @@ async function getIpld () {
   // ipldJson uses the new format, use the conversion tool
   const ipldJson = await import(/* webpackChunkName: "ipld" */ '@ipld/dag-json')
   formats.push(convert(ipldJson))
+  console.log('formats: ', formats)
 
   return { ipld, formats }
 }
