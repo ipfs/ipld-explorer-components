@@ -137,7 +137,15 @@ function ensureLeadingSlash (str) {
 function makeIpld (IpldResolver, ipldFormats, getIpfs) {
   return new IpldResolver({
     blockService: painfullyCompatibleBlockService(getIpfs()),
-    formats: ipldFormats
+    formats: ipldFormats,
+    async loadFormat (codec) {
+      const format = ipldFormats.find(f => f.codec === codec)
+      if (format == null) {
+        throw new Error('No format found for codec: ' + codec)
+      }
+      return format
+    }
+
   })
 }
 
@@ -168,6 +176,9 @@ function painfullyCompatibleBlockService (ipfs) {
           // recover from new return type in modern JS APIs
           // https://github.com/ipfs/js-ipfs/pull/3990
           if (typeof block.cid === 'undefined') {
+            if (typeof cid === 'string') {
+              return { cid: CID.parse(cid), data: block }
+            }
             return { cid, data: block }
           }
           return block
@@ -195,8 +206,30 @@ async function getIpld () {
   const formats = formatImports.map((actualModule) => {
     if (actualModule.util == null) {
       // actualModule has no util. using blockcodec-to-ipld-format
-      console.log('actualModule: ', actualModule)
-      return convert(actualModule)
+      const options = {}
+      if (actualModule.code === 112) {
+        /**
+         * based off of
+         * * https://github.com/ipld/js-ipld-dag-cbor/blob/b1112f00b605661f6766cd420f48f730ac77a6e0/src/resolver.js#L15-L38
+         * * https://github.com/ipld/js-blockcodec-to-ipld-format/blob/master/src/index.js#L38-L55
+         */
+        options.resolve = (buf, path = '') => {
+          let value = actualModule.decode(buf)
+          const entries = path.split('/').filter(x => x)
+
+          if (entries.length > 0) {
+            const entry = entries.shift()
+            value = value.Links.find((link) => link.Name === entry)
+            if (typeof value === 'undefined') {
+              throw new Error(`Could not find link with name '${entry}'`)
+            }
+          }
+
+          return { value, remainderPath: entries.join('/') }
+        }
+      }
+
+      return convert(actualModule, options)
     }
     return actualModule
   })
@@ -208,7 +241,6 @@ async function getIpld () {
   // ipldJson uses the new format, use the conversion tool
   const ipldJson = await import(/* webpackChunkName: "ipld" */ '@ipld/dag-json')
   formats.push(convert(ipldJson))
-  console.log('formats: ', formats)
 
   return { ipld, formats }
 }

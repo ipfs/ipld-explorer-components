@@ -1,3 +1,5 @@
+import { CID } from 'multiformats/cid'
+
 import normaliseDagNode from './normalise-dag-node'
 
 /**
@@ -92,6 +94,13 @@ export async function ipldGetNodeAndRemainder (ipld, sourceCid, path) {
 
   // TODO: handle indexing into dag-pb links without using Links prefix as per go-ipfs dag.get does.
   // Current js-ipld-dag-pb resolver will throw with a path not available error if Links prefix is missing.
+
+  // ensure we're using CID instances
+  const cidInstance = CID.asCID(sourceCid)
+  if (typeof sourceCid === 'string' && cidInstance == null) {
+    sourceCid = CID.parse(sourceCid)
+  }
+
   return {
     value: await ipld.get(sourceCid),
     remainderPath: (await ipld.resolve(sourceCid, path || '/').first()).remainderPath
