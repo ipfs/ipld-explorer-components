@@ -64,8 +64,12 @@ const DagNodeIcon = ({ type, ...props }) => (
 )
 
 const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, links, format, onLinkClick, gatewayUrl, publicGatewayUrl, ...props }) => {
-  const cidInfo = decodeCid(cid)
-  type = cidInfo.cid.codec ?? type
+  try {
+    const cidInfo = decodeCid(cid)
+    type = cidInfo.cid.codec
+  } catch {
+    // ignore the error and stick with existing type value.
+  }
   return (
     <section className={`pa4 sans-serif ${className}`} {...props}>
       <h2 className='ma0 lh-title f4 fw4 montserrat pb2' title={type}>

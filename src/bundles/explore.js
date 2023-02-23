@@ -198,11 +198,8 @@ async function getIpld () {
     import(/* webpackChunkName: "ipld" */ 'ipld-git'),
     import(/* webpackChunkName: "ipld" */ 'ipld-raw')
   ])
-  const [ipld, ...formatImports] = ipldDeps.map(mod => {
-    // CommonJs exports object is .default when imported ESM style
-    const actualModule = mod.default ?? mod
-    return actualModule
-  })
+  // CommonJs exports object is .default when imported ESM style
+  const [ipld, ...formatImports] = ipldDeps.map(mod => mod.default ?? mod)
   const formats = formatImports.map((actualModule) => {
     if (actualModule.util == null) {
       // actualModule has no util. using blockcodec-to-ipld-format
