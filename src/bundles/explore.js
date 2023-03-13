@@ -216,7 +216,7 @@ async function getIpld () {
 
           if (entries.length > 0) {
             const entry = entries.shift()
-            value = value.Links.find((link) => link.Name === entry)
+            value = value.Links.find(({ Name }) => Name === entry)
             if (typeof value === 'undefined') {
               throw new Error(`Could not find link with name '${entry}'`)
             }
