@@ -23,12 +23,16 @@ const makeBundle = () => {
       const { cidOrFqdn, rest } = pathParts
       try {
         if (!IpldResolver) {
+          console.log('no ipld resolver, loading')
           const { ipld, formats } = await getIpld()
+          console.log(`ipld formats: `, formats);
+          console.log(`ipld ipld: `, ipld);
 
           IpldResolver = ipld
           ipldFormats = formats
         }
         const ipld = makeIpld(IpldResolver, ipldFormats, getIpfs)
+        console.log(`ipld: `, ipld);
         // TODO: handle ipns, which would give us a fqdn in the cid position.
         const cid = new Cid(cidOrFqdn)
         const {
@@ -73,6 +77,7 @@ const makeBundle = () => {
     'selectExplorePathFromHash',
     'selectExplore',
     (ipfsReady, isLoading, isWaitingToRetry, explorePathFromHash, obj) => {
+      console.log('reactExploreFetch', ipfsReady, isLoading, isWaitingToRetry, explorePathFromHash, obj)
       // Wait for ipfs or the pending request to complete
       if (!ipfsReady || isLoading || isWaitingToRetry) return false
       // Theres no url path and no data so nothing to do.
@@ -149,18 +154,18 @@ function makeIpld (IpldResolver, ipldFormats, getIpfs) {
 // is not very expensive. This buys us some time, but this technical debt needs
 // to be paid eventually.
 function painfullyCompatibleBlockService (ipfs) {
-  const blockService = new Proxy(ipfs.block, {
+  const blockService = new Proxy(ipfs.blockstore, {
     get: function (obj, prop) {
       if (prop === 'get') { // augument ipfs.block.get()
         return async (cid, options) => {
           let block
           try {
-            block = await ipfs.block.get(cid, options)
+            block = await ipfs.blockstore.get(cid, options)
           } catch (e) {
             // recover when two different CID libraries are used,
             // and below error is produced by the modern ipfs-code
             if (e.toString().includes('Unknown type, must be binary type')) {
-              block = await ipfs.block.get(CID.parse(cid.toString()), options)
+              block = await ipfs.blockstore.get(CID.parse(cid.toString()), options)
             } else {
               throw e
             }

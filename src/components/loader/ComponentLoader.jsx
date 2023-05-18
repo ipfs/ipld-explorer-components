@@ -1,5 +1,5 @@
 import React from 'react'
-import Box from '../box/Box.js'
+import Box from '../box/Box.jsx'
 import { Loader } from './Loader'
 
 const ComponentLoader = () => (
