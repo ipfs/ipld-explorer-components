@@ -140,9 +140,14 @@ function ensureLeadingSlash (str) {
 }
 
 function makeIpld (IpldResolver, ipldFormats, getIpfs) {
+  console.group('makeIpld')
+  console.log(`IpldResolver: `, IpldResolver);
+  console.log(`ipldFormats: `, ipldFormats);
+  console.log(`getIpfs: `, getIpfs);
+  console.groupEnd()
   return new IpldResolver({
     blockService: painfullyCompatibleBlockService(getIpfs()),
-    formats: ipldFormats
+    formats: ipldFormats.filter(Boolean)
   })
 }
 
@@ -185,7 +190,9 @@ function painfullyCompatibleBlockService (ipfs) {
 }
 
 async function getIpld () {
-  const ipldDeps = await Promise.all([
+  console.group('getIpld')
+
+  const ipldDepsImport = await Promise.allSettled([
     import(/* webpackChunkName: "ipld" */ 'ipld'),
     import(/* webpackChunkName: "ipld" */ '@ipld/dag-cbor'),
     import(/* webpackChunkName: "ipld" */ '@ipld/dag-pb'),
@@ -193,17 +200,31 @@ async function getIpld () {
     import(/* webpackChunkName: "ipld" */ 'ipld-raw'),
     import(/* webpackChunkName: "ipld" */ 'ipld-ethereum')
   ])
+  const ipldDeps = ipldDepsImport.map((pkg) => {
+    if (pkg.status === 'rejected') {
+      console.error(`Failed to load ipld dependency`, pkg.reason)
+      return null
+    }
+    return pkg.value
+  }).filter(Boolean)
+  console.log(`ipldDeps: `, ipldDeps);
 
   // CommonJs exports object is .default when imported ESM style
-  const [ipld, ...formats] = ipldDeps.map(mod => mod.default)
+  const [ipld, ...formats] = ipldDeps.map(mod => mod.default ?? mod)
 
   // ipldEthereum is an Object, each key points to a ipld format impl
   const ipldEthereum = formats.pop()
+  console.log(`ipldEthereum: `, ipldEthereum);
   formats.push(...Object.values(ipldEthereum))
+  console.log(`Object.values(ipldEthereum): `, Object.values(ipldEthereum));
 
   // ipldJson uses the new format, use the conversion tool
   const ipldJson = await import(/* webpackChunkName: "ipld" */ '@ipld/dag-json')
   formats.push(convert(ipldJson))
+  console.log(`convert(ipldJson): `, convert(ipldJson));
+
+  console.log(`formats: `, formats);
+  console.groupEnd()
 
   return { ipld, formats }
 }

@@ -6,6 +6,8 @@ import react from '@vitejs/plugin-react';
 import svgrPlugin from 'vite-plugin-svgr';
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
+import nodePolyfills from "rollup-plugin-node-polyfills";
+
 
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -66,22 +68,43 @@ export default defineConfig(({mode}) => {
     loader: "jsx", // OR "tsx"
     include: /\.(tsx?|jsx?)$/,
   }
+  const viteBuild: UserConfig['build'] = {
+    outDir: 'dist',
+    target: "es2020",
+  }
 
   if (isDev) {
     // We only want to provide polyfills if we're in dev mode.
     viteResolve = {
       alias: [
         { find: '@', replacement: resolve(__dirname, '/src') },
-        { find: /^buffer$/, replacement: 'rollup-plugin-node-polyfills/polyfills/buffer-es6' },
+
+      // stream: "rollup-plugin-node-polyfills/polyfills/stream",
+      // events: "rollup-plugin-node-polyfills/polyfills/events",
+        // { find: /^buffer$/, replacement: 'rollup-plugin-node-polyfills/polyfills/buffer-es6' },
+        { find: /^stream$/, replacement: 'rollup-plugin-node-polyfills/polyfills/stream' },
         { find: /^_stream_duplex$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/duplex' },
         { find: /^_stream_transform$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/transform' },
       ],
     }
     vitePlugins.push(
-      NodeGlobalsPolyfillPlugin({
-        buffer: true,
-      })
+      // NodeGlobalsPolyfillPlugin({
+      //   buffer: true,
+      // }),
+      // NodeModulesPolyfillPlugin(),
     )
+    viteOptimizeDeps.include = [
+      'ipld-ethereum'
+    ]
+    viteOptimizeDeps.esbuildOptions = {
+      ...viteOptimizeDeps.esbuildOptions,
+      plugins: [
+        NodeGlobalsPolyfillPlugin({ buffer: true, process: true}),
+      ],
+    }
+    viteBuild.rollupOptions = {
+      // plugins: [nodePolyfills()],
+    };
   }
 
   const finalConfig: UserConfigExport = {
@@ -90,6 +113,7 @@ export default defineConfig(({mode}) => {
     define: viteDefine,
     optimizeDeps: viteOptimizeDeps,
     esbuild: viteEsBuild,
+    build: viteBuild,
     server: {
       open: true,
     },
