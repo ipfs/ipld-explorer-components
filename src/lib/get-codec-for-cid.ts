@@ -1,41 +1,16 @@
-
-// exports.ethAccountSnapshot = require('../eth-account-snapshot')
-// exports.ethBlock = require('../eth-block')
-// exports.ethBlockList = require('../eth-block-list')
-// exports.ethStateTrie = require('../eth-state-trie')
-// exports.ethStorageTrie = require('../eth-storage-trie')
-// exports.ethTx = require('../eth-tx')
-// exports.ethTxTrie = require('../eth-tx-trie')
-
-import {code as dagCborCode} from '@ipld/dag-cbor'
-import {code as dagPbCode} from '@ipld/dag-pb'
-// @ts-expect-error - no ipld-git types
-import {codec as ipldGitCode} from 'ipld-git'
-import {code as rawCode} from 'multiformats/codecs/raw'
-// @ts-expect-error - no ipld-ethereum types
-import ipldEth from 'ipld-ethereum'
-// @ts-expect-error - no ipld-ethereum types
-import {code as ipldEthAccountSnapshotCode} from 'ipld-ethereum/eth-account-snapshot'
-// @ts-expect-error - no ipld-ethereum types
-import {code as ethBlockCode} from 'ipld-ethereum/eth-block'
-// @ts-expect-error - no ipld-ethereum types
-import {code as ethBlockListCode} from 'ipld-ethereum/eth-block-list'
-// @ts-expect-error - no ipld-ethereum types
-import {code as ethStateTrieCode} from 'ipld-ethereum/eth-state-trie'
-// @ts-expect-error - no ipld-ethereum types
-import {code as ethStorageTrieCode} from 'ipld-ethereum/eth-storage-trie'
-// @ts-expect-error - no ipld-ethereum types
-import {code as ethTxCode} from 'ipld-ethereum/eth-tx'
-// @ts-expect-error - no ipld-ethereum types
-import {code as ethTxTrieCode} from 'ipld-ethereum/eth-tx-trie'
-console.log(`ipldEth: `, ipldEth);
 import { CID } from 'multiformats'
-
+import multicodecs from 'multicodec'
 import { convert } from 'blockcodec-to-ipld-format'
+import type { CodecCode } from 'ipld'
+
+interface ResolveType<DecodedType = any> {
+  value: DecodedType,
+  remainderPath: string
+}
 
 interface CodecWrapper<DecodedType = any> {
-  decode: (bytes: Uint8Array) => T,
-  resolve: (path: string) => Promise<{ value: DecodedType, remainderPath: string }>,
+  decode: (bytes: Uint8Array) => DecodedType,
+  resolve: (path: string) => Promise<ResolveType<DecodedType>>,
 }
 
 export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
@@ -47,58 +22,61 @@ export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
   }
 
   let codec: any;
+  const codecName: string = multicodecs.codeToName[codecCode as CodecCode]
+  console.log(`codecName: `, codecName);
 
   // match the codecCode to the codec
   switch (codecCode) {
-    case dagCborCode:
+    case multicodecs.DAG_CBOR:
       codec = await import('@ipld/dag-cbor')
       break;
-    case dagPbCode:
+    case multicodecs.DAG_PB:
       codec = await import('@ipld/dag-pb')
       break;
-    case ipldGitCode:
+    case multicodecs.GIT_RAW:
       // @ts-expect-error - no ipld-git types
-      codec = await import('ipld-git')
+      codec = (await import('ipld-git')).default
       break;
-    case rawCode:
+    case multicodecs.RAW:
       codec = await import('multiformats/codecs/raw')
       break;
-    case ipldEthAccountSnapshotCode:
+    case multicodecs.JSON:
+      codec = await import('multiformats/codecs/json')
+      break;
+    case multicodecs.ETH_ACCOUNT_SNAPSHOT:
       // @ts-expect-error - no ipld-ethereum types
       codec = await import('ipld-ethereum/eth-account-snapshot')
       break;
-    case ethBlockCode:
+    case multicodecs.ETH_BLOCK:
       // @ts-expect-error - no ipld-ethereum types
       codec = await import('ipld-ethereum/eth-block')
       break;
-    case ethBlockListCode:
+    case multicodecs.ETH_BLOCK_LIST:
       // @ts-expect-error - no ipld-ethereum types
       codec = await import('ipld-ethereum/eth-block-list')
       break;
-    case ethStateTrieCode:
+    case multicodecs.ETH_STATE_TRIE:
       // @ts-expect-error - no ipld-ethereum types
       codec = await import('ipld-ethereum/eth-state-trie')
       break;
-    case ethStorageTrieCode:
+    case multicodecs.ETH_STORAGE_TRIE:
       // @ts-expect-error - no ipld-ethereum types
       codec = await import('ipld-ethereum/eth-storage-trie')
       break;
-    case ethTxCode:
+    case multicodecs.ETH_TX:
       // @ts-expect-error - no ipld-ethereum types
       codec = await import('ipld-ethereum/eth-tx')
       break;
-    case ethTxTrieCode:
+    case multicodecs.ETH_TX_TRIE:
       // @ts-expect-error - no ipld-ethereum types
       codec = await import('ipld-ethereum/eth-tx-trie')
       break;
-    // case ipldEth.code:
-    //   throw new Error('ipld-ethereum is not supported yet')
     default:
-      throw new Error(`unsupported codec: ${codecCode}`)
+      throw new Error(`unsupported codec: ${codecName} = ${codecCode}`)
   }
   console.log('codec: ', codec)
 
-  const convertedCodec = convert(codec)
+  const convertedCodec = convert({...codec, code: codecCode, name: codec.name ?? codecName})
   console.log(`convertedCodec: `, convertedCodec);
 
   return {
@@ -106,22 +84,33 @@ export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
       if (codec.decode != null) {
         return codec.decode(bytes)
       }
+      if (codec.util?.deserialize != null) {
+        return codec.util.deserialize(bytes)
+      }
       if (convertedCodec.util.deserialize != null) {
         return convertedCodec.util.deserialize(bytes)
       }
       throw new Error('codec does not have a decode function')
     },
     resolve: async (path: string) => {
+      console.group('codecWrapper.resolve')
+      let result: ResolveType | undefined
       // if the codec has util.resolve, use that
       if (codec.util?.resolve) {
         console.log('using codec util resolve')
-        return codec.util.resolve(cid, path)
+        const result = codec.util.resolve(cid, path)
       }
       if (convertedCodec.resolver?.resolve) {
-        console.log('using converted codec resolver')
-        return convertedCodec.resolver?.resolve(cid.multihash.bytes, path)
+        console.log('using converted codec resolver for codec', codec)
+        console.log('cid', cid)
+        result = convertedCodec.resolver?.resolve(cid.bytes, path)
       }
-      throw new Error('codec does not have a resolve function')
+      console.log(`result: `, result)
+      console.groupEnd()
+      if (result == null) {
+        throw new Error('codec does not have a resolve function')
+      }
+      return result
     }
   }
 }

@@ -111,11 +111,15 @@ export async function ipldGetNodeAndRemainder (helia, sourceCid, path) {
   const value = codecWrapper.decode(encodedValue)
   console.log(`value: `, value);
 
+  const remainderPath = codecWrapper.resolve(path || '/').remainderPath
+  console.log(`remainderPath: `, remainderPath);
+  // console.groupEnd()
+
   // return await resolverFn(encodedValue, path || '/')
   return {
     value,
     // remainderPath: (await ipld.resolve(sourceCid, path || '/').first()).remainderPath
-    remainderPath: codecWrapper.resolve(path || '/').remainderPath
+    remainderPath
   }
 }
 
