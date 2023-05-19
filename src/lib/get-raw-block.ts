@@ -25,6 +25,17 @@ async function getRawBlockFromGateway(url: string|URL, cid: HeliaCID) {
 
 }
 
+const verifyBlock = async (helia: Helia, providedCid: HeliaCID, block: Uint8Array): Promise<void> => {
+  console.group('verifyBlock')
+  console.log(`providedCid: `, providedCid.toString());
+  const cid = await helia.blockstore.put(providedCid, block)
+  console.log(`generated cid: `, cid.toString());
+  console.groupEnd()
+  if (cid.toString() !== providedCid.toString()) {
+    throw new Error(`CID mismatch, expected ${providedCid.toString()} but got ${cid.toString()}`)
+  }
+}
+
 const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
 /**
  * Method for getting a raw block either with helia or https://docs.ipfs.tech/reference/http/gateway/#trusted-vs-trustless
@@ -35,27 +46,45 @@ const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
  * @returns {Promise}
  */
 export async function getRawBlock (helia: Helia, cid: HeliaCID): Promise<Uint8Array> {
-  console.log(`cid: `, cid);
+  let rawBlock: Uint8Array | undefined
   // attempt to get the raw block from helia, timeout after 5 seconds
   try {
     const abortController = new AbortController()
-    const timeout = setTimeout(() => abortController.abort(), 5000)
+    const timeout = setTimeout(() => abortController.abort(), 2000)
     const block = await helia.blockstore.get(cid, { signal: abortController.signal })
     clearTimeout(timeout)
-    return block
+    rawBlock = block
+    console.log('retrieved raw block from helia')
   } catch (err) {
-    // ignore the error
-  }
-
-
-  // attempt to get the raw block from a gateway
-  for (const url of defaultGateways) { // eslint-disable-line no-unreachable-loop
-
-    try {
-      return await getRawBlockFromGateway(url, cid)
-    } catch (err) {
-      // ignore the error
+    const isAbortError = (err as Error).name === 'AbortError'
+    if (!isAbortError) {
+      console.warn('unable to get raw block from helia', err)
     }
   }
-  throw new Error('unable to get raw block from helia or any gateway')
+
+  if (rawBlock == null) {
+    // attempt to get the raw block from a gateway
+    for (const url of defaultGateways) { // eslint-disable-line no-unreachable-loop
+
+      try {
+        rawBlock = await getRawBlockFromGateway(url, cid)
+        try {
+          await verifyBlock(helia, cid, rawBlock)
+        } catch (err) {
+          console.log('unable to verify block from gateway', url)
+          continue
+        }
+        console.log('retrieved raw block from gateway', url)
+        break;
+      } catch (err) {
+        // ignore the error
+      }
+    }
+  }
+
+  if (typeof rawBlock === 'undefined') {
+    throw new Error('unable to get raw block from helia or any gateway')
+  }
+
+  return rawBlock
 }
