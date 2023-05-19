@@ -65,7 +65,7 @@ export default defineConfig(({mode}) => {
     },
   };
   const viteEsBuild: UserConfig['esbuild'] = {
-    loader: "jsx", // OR "tsx"
+    loader: "tsx", // OR "tsx"
     include: /\.(tsx?|jsx?)$/,
   }
   const viteBuild: UserConfig['build'] = {
@@ -87,12 +87,6 @@ export default defineConfig(({mode}) => {
         { find: /^_stream_transform$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/transform' },
       ],
     }
-    vitePlugins.push(
-      // NodeGlobalsPolyfillPlugin({
-      //   buffer: true,
-      // }),
-      // NodeModulesPolyfillPlugin(),
-    )
     viteOptimizeDeps.include = [
       'ipld-ethereum'
     ]

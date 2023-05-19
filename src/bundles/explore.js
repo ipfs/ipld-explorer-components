@@ -5,6 +5,19 @@ import { CID } from 'multiformats/cid'
 import Cid from 'cids'
 import { convert } from 'blockcodec-to-ipld-format'
 
+const getCidFromCidOrFqdn = (cidOrFqdn) => {
+    console.log(`cidOrFqdn: `, cidOrFqdn);
+  if (cidOrFqdn.startsWith('/ipfs/')) {
+    return cidOrFqdn.slice('/ipfs/'.length)
+  } else if (cidOrFqdn.startsWith('/ipns/')) {
+    // TODO: handle ipns
+    throw new Error('ipns not supported yet')
+  } else if (cidOrFqdn.startsWith('/')) {
+    return cidOrFqdn.slice(1)
+  }
+  return cidOrFqdn
+}
+
 // Find all the nodes and path boundaries traversed along a given path
 const makeBundle = () => {
   // Lazy load ipld because it is a large dependency
@@ -22,26 +35,28 @@ const makeBundle = () => {
       if (!pathParts) return null
       const { cidOrFqdn, rest } = pathParts
       try {
-        if (!IpldResolver) {
-          console.log('no ipld resolver, loading')
-          const { ipld, formats } = await getIpld()
-          console.log(`ipld formats: `, formats);
-          console.log(`ipld ipld: `, ipld);
+        // if (!IpldResolver) {
+        //   console.log('no ipld resolver, loading')
+        //   const { ipld, formats } = await getIpld()
+        //   console.log(`ipld formats: `, formats);
+        //   console.log(`ipld ipld: `, ipld);
 
-          IpldResolver = ipld
-          ipldFormats = formats
-        }
-        const ipld = makeIpld(IpldResolver, ipldFormats, getIpfs)
-        console.log(`ipld: `, ipld);
+        //   IpldResolver = ipld
+        //   ipldFormats = formats
+        // }
+        // const ipld = makeIpld(IpldResolver, ipldFormats, getIpfs)
+        // console.log(`ipld: `, ipld);
         // TODO: handle ipns, which would give us a fqdn in the cid position.
-        const cid = new Cid(cidOrFqdn)
+        console.log(`getCidFromCidOrFqdn(cidOrFqdn): `, getCidFromCidOrFqdn(cidOrFqdn));
+        const cid = CID.parse(getCidFromCidOrFqdn(cidOrFqdn))
+        console.log(`cid: `, cid);
         const {
           targetNode,
           canonicalPath,
           localPath,
           nodes,
           pathBoundaries
-        } = await resolveIpldPath(ipld, cid, rest)
+        } = await resolveIpldPath(await getIpfs(), cid, rest)
 
         return {
           path,
@@ -145,10 +160,16 @@ function makeIpld (IpldResolver, ipldFormats, getIpfs) {
   console.log(`ipldFormats: `, ipldFormats);
   console.log(`getIpfs: `, getIpfs);
   console.groupEnd()
-  return new IpldResolver({
-    blockService: painfullyCompatibleBlockService(getIpfs()),
-    formats: ipldFormats.filter(Boolean)
-  })
+  try {
+
+    return new IpldResolver({
+      blockService: painfullyCompatibleBlockService(getIpfs()),
+      formats: ipldFormats.filter(Boolean)
+    })
+  } catch (e) {
+    console.log(e.trace)
+    console.trace(e)
+  }
 }
 
 // This wrapper ensures the new block service from js-ipfs AND js-ipfs-http-client
