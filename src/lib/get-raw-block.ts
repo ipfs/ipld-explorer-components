@@ -1,20 +1,18 @@
 import { CID } from 'multiformats'
 import type { Helia } from '@helia/interface'
 
-import codecImporter from './codec-importer'
 import getHasherForCode from './hash-importer'
+import type { CIDVersion } from 'multiformats/cid'
+import {unixfs} from '@helia/unixfs'
 
 type HeliaCID = Parameters<Helia['blockstore']['get']>[0]
 
-async function getCidFromBytes<T extends Uint8Array = Uint8Array>(bytes: Uint8Array): Promise<CID> {
-  const bytesInfo = CID.inspectBytes(bytes)
-
-  const codec = await codecImporter(bytesInfo.codec)
-  const hasher = await getHasherForCode(bytesInfo.multihashCode)
+async function getCidFromBytes<T extends Uint8Array = Uint8Array>(bytes: Uint8Array, cidVersion: CIDVersion, codecCode: number, multihashCode: number): Promise<CID> {
+  const hasher = await getHasherForCode(multihashCode)
 
   try {
     const hash = await Promise.resolve(hasher.digest(bytes))
-    return CID.create(bytesInfo.version, codec.code, hash)
+    return CID.create(cidVersion, codecCode, hash)
   } catch (err) {
     console.error('could not create cid from bytes', err)
   }
@@ -38,6 +36,7 @@ async function getRawBlockFromGateway(url: string|URL, cid: HeliaCID) {
     if (!res.ok) throw res
     return new Uint8Array(await res.arrayBuffer())
   } catch (cause) {
+    console.error('cause', cause)
     throw new Error(`unable to fetch raw block for CID ${cid}`, { cause: cause as unknown as Error })
   }
 }
@@ -50,7 +49,9 @@ async function getRawBlockFromGateway(url: string|URL, cid: HeliaCID) {
  */
 const verifyBytes = async (helia: Helia, providedCid: HeliaCID, bytes: Uint8Array): Promise<void> => {
   try {
-    const cid = await getCidFromBytes(bytes)
+    console.log(`bytes: `, bytes);
+    console.log(`providedCid: `, providedCid);
+    const cid = await getCidFromBytes(bytes, providedCid.version, providedCid.code, providedCid.multihash.code)
 
     if (cid.toString() !== providedCid.toString()) {
       throw new Error(`CID mismatch, expected '${providedCid.toString()}' but got '${cid.toString()}'`)
@@ -63,7 +64,9 @@ const verifyBytes = async (helia: Helia, providedCid: HeliaCID, bytes: Uint8Arra
   }
 }
 
+// const defaultGateways = ['http://localhost:8080', 'https://ipfs.io', 'https://dweb.link']
 const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
+
 /**
  * Method for getting a raw block either with helia or https://docs.ipfs.tech/reference/http/gateway/#trusted-vs-trustless
  * inspiration from https://github.com/ipfs-shipyard/ipfs-geoip/blob/466cd9d6454098c0fcf998b2217225099a654695/src/lookup.js#L18
@@ -74,22 +77,27 @@ const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
  */
 export async function getRawBlock (helia: Helia, cid: HeliaCID): Promise<Uint8Array> {
   let rawBlock: Uint8Array | undefined
-  /**
-   * Attempt to get the raw block from helia, timeout after 200ms
-   * This will usually fail on the first attempt, but will succeed on the second attempt once helia has stored the block
-   * in the blockstore. This prevents us from having to query the gateway for the same CID more than once.
-   */
-  try {
-    const abortController = new AbortController()
-    const timeout = setTimeout(() => abortController.abort(), 200)
-    const block = await helia.blockstore.get(cid, { signal: abortController.signal })
-    clearTimeout(timeout)
-    rawBlock = block
-    console.log('retrieved raw block from helia')
-  } catch (err) {
-    const isAbortError = (err as Error).name === 'AbortError'
-    if (!isAbortError) {
-      console.warn('unable to get raw block from helia', err)
+
+  if (await helia.blockstore.has(cid)) {
+    /**
+     * Attempt to get the raw block from helia, timeout after 200ms
+     * This will usually fail on the first attempt, but will succeed on the second attempt once helia has stored the block
+     * in the blockstore. This prevents us from having to query the gateway for the same CID more than once.
+     */
+    try {
+      const abortController = new AbortController()
+      const timeout = setTimeout(() => abortController.abort(), 200)
+
+      // const block = await helia.blockstore.get(cid, { signal: abortController.signal })
+      const block = await helia.blockstore.get(cid)
+      clearTimeout(timeout)
+      rawBlock = block
+      console.log('retrieved raw block from helia')
+    } catch (err) {
+      const isAbortError = (err as Error).name === 'AbortError'
+      if (!isAbortError) {
+        console.warn('unable to get raw block from helia', err)
+      }
     }
   }
 
@@ -108,6 +116,7 @@ export async function getRawBlock (helia: Helia, cid: HeliaCID): Promise<Uint8Ar
         console.log('retrieved raw block from gateway', url)
         break;
       } catch (err) {
+        console.error('unable to get block from gateway', err)
         // ignore the error
       }
     }

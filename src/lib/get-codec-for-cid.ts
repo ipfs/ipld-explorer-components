@@ -2,11 +2,7 @@ import { CID } from 'multiformats'
 import multicodecs from 'multicodec'
 import { convert } from 'blockcodec-to-ipld-format'
 import type { CodecCode } from 'ipld'
-import * as mh from 'multiformats/hashes/digest'
 import codecImporter from './codec-importer'
-import { UnixFS } from 'ipfs-unixfs'
-import type { PBLink } from '@ipld/dag-pb'
-import { getRawBlock } from './get-raw-block'
 
 
 interface ResolveType<DecodedType = any> {
@@ -19,31 +15,51 @@ interface CodecWrapper<DecodedType = any> {
   resolve: (path: string) => Promise<ResolveType<DecodedType>>,
 }
 
-const pbLinkToPbNode = async (link: PBLink, codec: typeof import('@ipld/dag-pb')) => {
-  try {
-    // first, we need to fetch the content of the link via link.Hash
-    // then, we need to decode the content of the link
-    const linkCid = link.Hash
-    const linkBytes = await getRawBlock
+interface DecodeFn<T = any> {
+  (bytes: Uint8Array): T
+}
 
-    // console.log(`UnixFS.unmarshal(link.Hash['/']): `, UnixFS.unmarshal(link.Hash['/']));
-    // console.log('link value', codec.decode(link.Hash['/']))
-  } catch (err) {
-    console.error('error decoding link', err)
+
+/**
+ * Resolve a path in a decoded object
+ *
+ * @see https://github.com/ipld/js-blockcodec-to-ipld-format/blob/13ad9bc518e232527078e27f0807ad3392b33698/src/index.js#L38-L55
+ * @param decodeFn
+ * @returns
+ */
+const resolveFn = (decodeFn: DecodeFn) => (buf: Uint8Array, path: string): ResolveType => {
+  let value = decodeFn(buf)
+  const entries = path.split('/').filter(x => x)
+
+  while (entries.length) {
+    // @ts-ignore
+    value = value[/** @type {string} */(entries.shift())]
+    if (typeof value === 'undefined') {
+      throw new Error('Not found')
+    }
+
+    if (CID.asCID(value)) {
+      return { value, remainderPath: entries.join('/') }
+    }
   }
+
+  return { value, remainderPath: '' }
 }
 
 const codecResolverMap: Record<string, any> = {
-  // [multicodecs.DAG_CBOR]: (cid: CID, path: string, codec: typeof import('@ipld/dag-cbor')) => {
-
-  // },
-  [multicodecs.DAG_PB]: async (cid: CID, node: any, path: string, codec: typeof import('@ipld/dag-pb'), decodeFn: any) => {
+  [multicodecs.DAG_PB]: async (node: any, path: string, codec: typeof import('@ipld/dag-pb')) => {
     const pathSegments = path.split('/')
-    const firstPathSegment = pathSegments.splice(1, 1)[0]
+    let firstPathSegment = pathSegments.splice(1, 1)[0]
+    if (firstPathSegment === 'Links') {
+      firstPathSegment = `${firstPathSegment}/${pathSegments.splice(1, 1)[0]}`
+    }
     let remainderPath = pathSegments.join('/')
-    // sha256.sha256.digest(cid.multihash.digest)
-    // console.log('decodeFn(cid.multihash.digest): ', mh.decode(cid.multihash.bytes));
-    const link = node.Links.find((link: any) => link.Name === firstPathSegment)
+
+    let link = node.Links.find((link: any) => link.Name === firstPathSegment)
+    if (!link && firstPathSegment.includes('Links')) {
+      const linkIndex = Number(firstPathSegment.split('/')[1])
+      link = node.Links[linkIndex]
+    }
 
     let value = node
     if (link) {
@@ -52,6 +68,7 @@ const codecResolverMap: Record<string, any> = {
       // we didn't find a link, add the firstPathSegment back to remainderPath.
       remainderPath = [firstPathSegment, ...pathSegments].join('/').replace('//', '/')
     }
+    console.log(`remainderPath: `, remainderPath);
 
     return {
       value,
@@ -85,9 +102,9 @@ export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
     if (codec.decode != null) {
       return codec.decode(bytes)
     }
-    // if (codec.util?.deserialize != null) {
-    //   return codec.util.deserialize(bytes)
-    // }
+    if (codec.util?.deserialize != null) {
+      return codec.util.deserialize(bytes)
+    }
     if (convertedCodec.util.deserialize != null) {
       return convertedCodec.util.deserialize(bytes)
     }
@@ -107,24 +124,34 @@ export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
       }
       if (codecResolverMap[codecCode]) {
         console.log('using codecResolverMap')
-        result = await codecResolverMap[codecCode](cid, decode(bytes), path, codec, decode)
+        result = await codecResolverMap[codecCode](decode(bytes), path)
         console.log(`codecResolverMap result: `, result);
         return result as ResolveType
       }
-      if (convertedCodec.resolver?.resolve) {
-        console.log('using converted codec resolver for codec', codec)
-        console.log('cid', cid)
-        try {
-          console.log(`codec: `, codec);
-          const resolveBytes = bytes ? convertedCodec.util.serialize(bytes) : cid.multihash.digest
-
-          result = convertedCodec.resolver?.resolve(resolveBytes, path)
-          return result as ResolveType
-        } catch (err) {
-          console.error('error resolving path for cid', cid, path)
-          throw err
-        }
+      try {
+        const resolverFn = resolveFn(decode)
+        return resolverFn(bytes, path)
+      } catch (err) {
+        console.error('error resolving path for cid with resolveFn', cid, path)
+        // throw err
       }
+      // if (convertedCodec.resolver?.resolve) {
+      //   console.log('using converted codec resolver for codec', codec)
+      //   console.log('cid', cid)
+      //   try {
+      //     console.log(`codec: `, codec);
+      //     const value = decode(bytes)
+      //     console.log(`value: `, value);
+      //     console.log(`path: `, path);
+      //     // const resolveBytes = bytes ? convertedCodec.util.serialize(bytes) : cid.multihash.digest
+      //     debugger;
+      //     result = convertedCodec.resolver?.resolve(bytes, path ?? '/')
+      //     return result as ResolveType
+      //   } catch (err) {
+      //     console.error('error resolving path for cid', cid, path)
+      //     throw err
+      //   }
+      // }
       console.log(`result: `, result)
       // console.groupEnd()
       if (result == null) {

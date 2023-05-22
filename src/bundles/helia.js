@@ -1,7 +1,6 @@
 
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
-// import { unixfs } from '@helia/unixfs'
 import { bootstrap } from '@libp2p/bootstrap'
 import { webSockets } from '@libp2p/websockets'
 import { MemoryBlockstore } from 'blockstore-core'
@@ -10,7 +9,6 @@ import { createHelia } from 'helia'
 import { createLibp2p } from 'libp2p'
 import { identifyService } from 'libp2p/identify'
 import { create } from 'kubo-rpc-client'
-
 
 const defaultState = {
   apiOpts: {
@@ -105,7 +103,7 @@ const bundle = {
     }
 
     const ipfsOpts = getUserOpts('ipfsOpts')
-    // TRY js-ipfs!
+    // TRY helia!
     try {
       console.time('HELIA_INIT')
       console.log('Trying to start in-page helia', ipfsOpts)

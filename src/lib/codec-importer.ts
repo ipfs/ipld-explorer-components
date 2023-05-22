@@ -1,6 +1,7 @@
 import multicodecs from 'multicodec'
 import { BlockCodec } from 'multiformats/codecs/interface'
 import type { PBNode } from '@ipld/dag-pb'
+import type { IPLDFormat } from 'blockcodec-to-ipld-format'
 
 export default async function codecImporter<T extends any = unknown>(codecCode: number) {
   // const codecName: string = multicodecs.codeToName[codecCode as CodecCode]
