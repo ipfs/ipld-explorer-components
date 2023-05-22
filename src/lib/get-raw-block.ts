@@ -14,9 +14,7 @@ async function getCidFromBytes<T extends Uint8Array = Uint8Array>(bytes: Uint8Ar
 
   try {
     const hash = await Promise.resolve(hasher.digest(bytes))
-    const cid = CID.create(bytesInfo.version, codec.code, hash)
-    console.log(`cid: `, cid.toString());
-    return cid
+    return CID.create(bytesInfo.version, codec.code, hash)
   } catch (err) {
     console.error('could not create cid from bytes', err)
   }
@@ -77,13 +75,13 @@ const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
 export async function getRawBlock (helia: Helia, cid: HeliaCID): Promise<Uint8Array> {
   let rawBlock: Uint8Array | undefined
   /**
-   * Attempt to get the raw block from helia, timeout after 2 seconds
+   * Attempt to get the raw block from helia, timeout after 200ms
    * This will usually fail on the first attempt, but will succeed on the second attempt once helia has stored the block
-   * in the blockstore
+   * in the blockstore. This prevents us from having to query the gateway for the same CID more than once.
    */
   try {
     const abortController = new AbortController()
-    const timeout = setTimeout(() => abortController.abort(), 2000)
+    const timeout = setTimeout(() => abortController.abort(), 200)
     const block = await helia.blockstore.get(cid, { signal: abortController.signal })
     clearTimeout(timeout)
     rawBlock = block

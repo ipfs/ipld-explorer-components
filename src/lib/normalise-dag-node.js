@@ -6,6 +6,24 @@ import * as dagCbor from '@ipld/dag-cbor'
 import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
 
 /**
+ * @typedef dagNodeLink
+ * @property {string} cid
+ * @property {string} name
+ * @property {number} size
+ */
+/**
+ * @typedef dagNodeData
+ * @property {unknown[]} blockSizes
+ * @property {unknown} data
+ * @property {string} type
+ */
+/**
+ * @typedef dagNode
+ * @property {dagNodeData} data
+ * @property {dagNodeLink[]} links
+ * @property {number} size
+ */
+/**
  * Provide a uniform shape for all^ node types.
  *
  * Spare the rest of the codebase from having to cope with all possible node
@@ -14,7 +32,7 @@ import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
  * ^: currently dag-cbor and dag-pb are supported.
  *
  * @function normaliseDagNode
- * @param {Object} node the `value` prop from `ipfs.dag.get` response.
+ * @param {dagNode} node the `value` prop from `ipfs.dag.get` response.
  * @param {string} cidStr the cid string passed to `ipfs.dag.get`
  */
 export default function normaliseDagNode (node, cidStr) {

@@ -52,7 +52,6 @@ import { CID } from 'multiformats'
  * @returns {ResolvedIpldPathInfo} resolved path info
  */
 export default async function resolveIpldPath (ipfs, sourceCid, path, nodes = [], pathBoundaries = []) {
-  console.log('resolveIpldPath', sourceCid, path, ipfs)
   const { value, remainderPath } = await ipldGetNodeAndRemainder(ipfs, sourceCid, path)
   if (sourceCid == null) {
     throw new Error('sourceCid is null')
@@ -73,6 +72,7 @@ export default async function resolveIpldPath (ipfs, sourceCid, path, nodes = []
   // we made it to the containing node. Hand back the info
   const canonicalPath = path ? `${sourceCidStr}${path}` : sourceCidStr
   const targetNode = node
+
   return { targetNode, canonicalPath, localPath: path, nodes, pathBoundaries }
 }
 
@@ -84,41 +84,27 @@ export default async function resolveIpldPath (ipfs, sourceCid, path, nodes = []
  * @returns
  */
 export async function ipldGetNodeAndRemainder (helia, sourceCid, path) {
-  console.log(`sourceCid, path: `, sourceCid.toString(), path);
   if (sourceCid == null) {
     throw new Error('sourceCid is null')
   }
-  // TODO: find out why ipfs.dag.get with localResolve never resolves.
-  // const {value, remainderPath} = await getIpfs().dag.get(sourceCid, path, {localResolve: true})
-
-  // TODO: use ipfs.dag.get when it gets ipld super powers
-  // SEE: https://github.com/ipfs/js-ipfs-api/pull/755
-  // const {value} = await getIpfs().dag.get(sourceCid)
-
-  // TODO: handle indexing into dag-pb links without using Links prefix as per go-ipfs dag.get does.
-  // Current js-ipld-dag-pb resolver will throw with a path not available error if Links prefix is missing.
   let cidInstance = CID.asCID(sourceCid)
   if (cidInstance === null) {
     cidInstance = CID.parse(sourceCid)
   }
   const codecWrapper = await getCodecForCid(cidInstance)
-  console.log(`codecWrapper: `, codecWrapper);
-  // console.log('convert(codec): ', convert(codec))
-  // const resolverFn = convert(codec).resolver.resolve
   const encodedValue = await getRawBlock(helia, cidInstance)
-  console.log(`encodedValue: `, encodedValue);
-  // todo we need to figure out what the encoding is and decode it
   const value = codecWrapper.decode(encodedValue)
-  console.log(`value: `, value);
 
-  const remainderPath = codecWrapper.resolve(path || '/').remainderPath
-  console.log(`remainderPath: `, remainderPath);
-  // console.groupEnd()
+  const codecWrapperResolveResult = await codecWrapper.resolve(path || '/', encodedValue)
+  const {remainderPath, resolve: resolveValue} = codecWrapperResolveResult
 
-  // return await resolverFn(encodedValue, path || '/')
+  if (resolveValue?.Hash != null) {
+    // This is a PBLink, and we should resolve that link so we're returning PBNodes not PBLinks
+    return await ipldGetNodeAndRemainder(helia, value.Hash, remainderPath)
+  }
+
   return {
     value,
-    // remainderPath: (await ipld.resolve(sourceCid, path || '/').first()).remainderPath
     remainderPath
   }
 }
@@ -131,7 +117,6 @@ export async function ipldGetNodeAndRemainder (helia, sourceCid, path) {
  * @returns {import('./normalise-dag-node').NormalizedDagLink} the link object for `linkPath`
  */
 export function findLink (node, linkPath) {
-  console.log(`findLink: `, node, linkPath);
   if (!linkPath) return null
   if (!node) return null
   const { links } = node
