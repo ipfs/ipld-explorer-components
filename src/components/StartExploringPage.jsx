@@ -44,6 +44,15 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
           <li>
             <ExploreSuggestion name='XKCD Archives' cid='QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm' type='dag-pb' />
           </li>
+          <li>
+            <ExploreSuggestion name='Distributed Wikipedia mirror' cid='bafybeiaysi4s6lnjev27ln5icwm6tueaw2vdykrtjkwiphwekaywqhcjze' type='hamt-sharded-directory' />
+          </li>
+          <li>
+            <ExploreSuggestion name='DAG-CBOR Block' cid='bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq' type='dag-cbor' />
+          </li>
+          <li>
+            <ExploreSuggestion name='Raw Block for "hello"' cid='bafkreibm6jg3ux5qumhcn2b3flc3tyu6dmlb4xa7u5bf44yegnrjhc4yeq' type='raw' />
+          </li>
         </ul>
       </div>
       <div className='pt2-l'>
@@ -60,14 +69,5 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
     />
   </div>
 )
-
-/* TODO: add dag-cbor and raw block examples
-          <li>
-            <ExploreSuggestion name='DAG-CBOR Block' cid='bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq' type='dag-cbor' />
-          </li>
-          <li>
-            <ExploreSuggestion name='Raw Block for "hello"' cid='bafkreibm6jg3ux5qumhcn2b3flc3tyu6dmlb4xa7u5bf44yegnrjhc4yeq' type='raw' />
-          </li>
-*/
 
 export default withTranslation('explore')(StartExploringPage)

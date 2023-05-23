@@ -16,6 +16,17 @@ const objectInspectorTheme = {
 }
 
 // TODO: Use https://github.com/multiformats/multicodec/blob/master/table.csv to get full name.
+/**
+ * Note that existing colors were added into the "Mass Editor" at colordesigner.io:
+ *
+ * * #28CA9F
+ * * #244e66
+ * * #378085
+ * * #f14e32
+ * * #383838
+ *
+ * And then hamt-sharded-directory was set to #9f28ca which was listed under "Color Harmonies - Triad" on 2023-05-22
+ */
 const nodeStyles = {
   'dag-cbor': { shortName: 'CBOR', name: 'dag-cbor', color: '#28CA9F' },
   'dag-pb': { shortName: 'PB', name: 'dag-pb', color: '#244e66' },
@@ -25,7 +36,8 @@ const nodeStyles = {
   'eth-block-list': { shortName: 'ETH', name: 'Ethereum Block List', color: '#383838' },
   'eth-tx-trie': { shortName: 'ETH', name: 'Ethereum Tx Trie', color: '#383838' },
   'eth-tx': { shortName: 'ETH', name: 'Ethereum Tx', color: '#383838' },
-  'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: '#383838' }
+  'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: '#383838' },
+  'hamt-sharded-directory': { shortName: 'HAMT', name: 'HAMT Sharded Directory', color: '#9f28ca'}
 }
 
 export function shortNameForNode (type) {
