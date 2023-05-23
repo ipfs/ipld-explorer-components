@@ -25,8 +25,9 @@
     "outDir": "dist",
     "declaration": true,
     "declarationDir": "dist",
-    "jsx": "react-jsx",
+    "jsx": "preserve",
     "rootDir": "src",
+    // "jsxImportSource": "react"
 
   },
   // "include": [
@@ -42,5 +43,6 @@
     "dist",
     "custom-jest-env.js",
     "vite.config.ts",
+    "src/**/*.stories.*"
   ]
 }

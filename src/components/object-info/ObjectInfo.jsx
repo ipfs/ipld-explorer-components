@@ -2,7 +2,7 @@ import React from 'react'
 import { withTranslation } from 'react-i18next'
 import { ObjectInspector, chromeLight } from '@tableflip/react-inspector'
 import filesize from 'filesize'
-import LinksTable from './LinksTable'
+import LinksTable from './LinksTable.jsx'
 const humansize = filesize.partial({ round: 0 })
 
 const objectInspectorTheme = {

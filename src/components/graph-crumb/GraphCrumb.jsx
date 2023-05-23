@@ -1,7 +1,7 @@
 import React from 'react'
-import Cid from '../cid/Cid'
-import { colorForNode } from '../object-info/ObjectInfo'
-import { getCodecOrNull } from '../../lib/cid'
+import Cid from '../cid/Cid.jsx'
+import { colorForNode } from '../object-info/ObjectInfo.jsx'
+import { getCodecOrNull } from '../../lib/cid.js'
 
 const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', className = '', ...props }) => {
   const [first, ...rest] = pathBoundaries

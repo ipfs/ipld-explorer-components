@@ -1,6 +1,6 @@
 import React from 'react'
-import Box from '../box/Box'
-import { Loader } from './Loader'
+import Box from '../box/Box.jsx'
+import { Loader } from './Loader.jsx'
 
 const ComponentLoader = () => (
   <Box style={{ height: '100%' }}>
