@@ -1,12 +1,14 @@
+// @ts-expect-error - borked types
 import { CID } from 'multiformats'
 import type { Helia } from '@helia/interface'
-
-import getHasherForCode from './hash-importer'
+// @ts-expect-error - borked types
 import type { CIDVersion } from 'multiformats/cid'
+
+import getHasherForCode from './hash-importer.js'
 
 type HeliaCID = Parameters<Helia['blockstore']['get']>[0]
 
-async function getCidFromBytes<T extends Uint8Array = Uint8Array>(bytes: Uint8Array, cidVersion: CIDVersion, codecCode: number, multihashCode: number): Promise<CID> {
+async function getCidFromBytes(bytes: Uint8Array, cidVersion: CIDVersion, codecCode: number, multihashCode: number): Promise<CID> {
   const hasher = await getHasherForCode(multihashCode)
 
   try {

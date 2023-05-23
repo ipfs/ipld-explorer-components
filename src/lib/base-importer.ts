@@ -1,9 +1,9 @@
+// @ts-expect-error - borked types
 import { bases } from 'multiformats/basics'
 
 export default async function baseImporter<T extends string> (prefix: T) {
   console.log(`bases: `, bases);
   for (const base in bases) {
-    // @ts-expect-error - cannot index bases with base... wut
     const multibase = bases[base];
     if (multibase.prefix === prefix) {
       return multibase;

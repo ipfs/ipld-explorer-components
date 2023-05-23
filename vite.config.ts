@@ -7,7 +7,7 @@ import svgrPlugin from 'vite-plugin-svgr';
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 import nodePolyfills from 'rollup-plugin-node-polyfills';
-
+import resolve from '@rollup/plugin-node-resolve'
 
 import fs from 'node:fs/promises'
 import path from 'node:path'
@@ -49,6 +49,9 @@ export default defineConfig(({mode}) => {
       react(),
       svgrPlugin(),
       reactVirtualized(),
+      resolve({
+        extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
+      })
   ]
   let viteResolve: UserConfig['resolve'] = {
     alias: [{ find: '@', replacement: resolve(__dirname, '/src') }]
@@ -112,6 +115,10 @@ export default defineConfig(({mode}) => {
     // We only want to provide polyfills if we're in dev mode.
     viteResolve = {
       alias: [
+        // {
+        //   find: /^(.*)\.js$/,
+        //   replacement: '$1'
+        // },
         // { find: '@', replacement: resolve(__dirname, '/src') },
         // stream: "rollup-plugin-node-polyfills/polyfills/stream",
         // events: "rollup-plugin-node-polyfills/polyfills/events",

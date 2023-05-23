@@ -35,8 +35,10 @@ async function extractInfo (cid) {
 const toHex = (bytes) => Array.prototype.map.call(bytes, x => x.toString(16).padStart(2, '0')).join('').toUpperCase()
 
 export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
+  console.log(`CidInfo: `);
   const [cidErr, setCidErr] = useState(null)
   const [cidInfo, setCidInfo] = useState(null)
+  console.log('before useEffect in cidInfo')
   useEffect(() => {
     const asyncFn = async () => {
       try {

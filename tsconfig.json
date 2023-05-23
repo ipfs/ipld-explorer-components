@@ -12,25 +12,35 @@
     ],
     "allowJs": true,
     "skipLibCheck": true,
-    "esModuleInterop": false,
+    "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
     "strict": true,
     "forceConsistentCasingInFileNames": true,
     "noFallthroughCasesInSwitch": true,
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": true,
+    "noEmit": false,
     "outDir": "dist",
-    "jsx": "react-jsx"
+    "declaration": true,
+    "declarationDir": "dist",
+    "jsx": "react-jsx",
+    "rootDir": "src",
+
   },
-  "include": [
-    "src"
-  ],
+  // "include": [
+  //   "**/*.js",
+
+  // ],
   "exclude": [
     "src/*/*.test.*",
     "node_modules",
-    "src/devPage.jsx"
+    "src/devPage.jsx",
+    "storybook-static",
+    "build",
+    "dist",
+    "custom-jest-env.js",
+    "vite.config.ts",
   ]
 }

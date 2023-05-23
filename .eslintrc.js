@@ -3,4 +3,3 @@ module.exports = {
     extends: ['react-app', 'standard'],
     plugins: ['jsx-a11y'],
 }
-  
