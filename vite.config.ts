@@ -6,7 +6,7 @@ import react from '@vitejs/plugin-react';
 import svgrPlugin from 'vite-plugin-svgr';
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
-import nodePolyfills from "rollup-plugin-node-polyfills";
+import nodePolyfills from 'rollup-plugin-node-polyfills';
 
 
 import fs from 'node:fs/promises'
@@ -69,18 +69,52 @@ export default defineConfig(({mode}) => {
     include: /\.(tsx?|jsx?)$/,
   }
   const viteBuild: UserConfig['build'] = {
+    lib: {
+      entry: [
+        resolve(__dirname, 'src/index.js'),
+        // resolve(__dirname, 'src/bundles/explore.js'),
+        // resolve(__dirname, 'src/components/object-info/LinksTable.css'),
+      ],
+      // name: 'ipld-explorer-components',
+      fileName: (format, entryName) => `${format}/${entryName}.js`,
+      // formats: ['es', 'cjs']
+      formats: ['es'],
+    },
     outDir: 'dist',
-    target: "es2020",
+    target: 'esnext',
+    minify: false,
+    cssCodeSplit: false,
+    rollupOptions: {
+      external: [
+        /node_modules/
+      ],
+      preserveEntrySignatures: 'strict',
+      input: {
+        index: resolve(__dirname, 'src/index.js'),
+        // 'bundles/explore': resolve(__dirname, 'src/bundles/explore.js'),
+        // 'components/object-info/LinksTable.css': resolve(__dirname, 'src/components/object-info/LinksTable.css'),
+        // 'components/loader/Loader.css': resolve(__dirname, 'src/components/loader/Loader.css'),
+
+      },
+      output: {
+        // manualChunks: {},
+        preserveModules: true,
+        preserveModulesRoot: 'src',
+        entryFileNames: '[name].js',
+      },
+      plugins: [
+        nodePolyfills()
+      ]
+    },
   }
 
-  if (isDev) {
+  // if (isDev) {
     // We only want to provide polyfills if we're in dev mode.
     viteResolve = {
       alias: [
-        { find: '@', replacement: resolve(__dirname, '/src') },
-
-      // stream: "rollup-plugin-node-polyfills/polyfills/stream",
-      // events: "rollup-plugin-node-polyfills/polyfills/events",
+        // { find: '@', replacement: resolve(__dirname, '/src') },
+        // stream: "rollup-plugin-node-polyfills/polyfills/stream",
+        // events: "rollup-plugin-node-polyfills/polyfills/events",
         // { find: /^buffer$/, replacement: 'rollup-plugin-node-polyfills/polyfills/buffer-es6' },
         { find: /^stream$/, replacement: 'rollup-plugin-node-polyfills/polyfills/stream' },
         { find: /^_stream_duplex$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/duplex' },
@@ -93,13 +127,13 @@ export default defineConfig(({mode}) => {
     viteOptimizeDeps.esbuildOptions = {
       ...viteOptimizeDeps.esbuildOptions,
       plugins: [
-        NodeGlobalsPolyfillPlugin({ buffer: true, process: true}),
+        NodeGlobalsPolyfillPlugin({ buffer: true, process: true }),
       ],
     }
-    viteBuild.rollupOptions = {
-      // plugins: [nodePolyfills()],
-    };
-  }
+    // viteBuild.rollupOptions = {
+    //   // plugins: [nodePolyfills()],
+    // };
+  // }
 
   const finalConfig: UserConfigExport = {
     plugins: vitePlugins,

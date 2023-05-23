@@ -70,8 +70,7 @@ const bundle = {
     let ipfs = null
     let identity = null
 
-    // TODO: refactor to use https://github.com/ipfs-shipyard/ipfs-provider
-
+    // TODO: use delegatedContent&Peer routing via helia instead of kubo-rpc-client directly.
     // TRY kubo-rpc-client (kubo-rpc-client)
     const apiOpts = Object.assign(
       {},

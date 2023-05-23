@@ -1,13 +1,14 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { decodeCid } from './decode-cid'
 import { withTranslation } from 'react-i18next'
+import multicodecs from 'multicodec'
 
-function extractInfo (cid) {
-  const cidInfo = decodeCid(cid)
+async function extractInfo (cid) {
+  const cidInfo = await decodeCid(cid)
   const hashFn = cidInfo.multihash.name
   const hashFnCode = cidInfo.multihash.code.toString('16')
-  const hashLengthCode = cidInfo.multihash.length.toString('16')
-  const hashLengthInBits = cidInfo.multihash.length * 8
+  const hashLengthCode = cidInfo.multihash.size
+  const hashLengthInBits = cidInfo.multihash.size * 8
   const hashValue = toHex(cidInfo.multihash.digest)
   const hashValueIn32CharChunks = hashValue.split('').reduce((resultArray, item, index) => {
     const chunkIndex = Math.floor(index / 32)
@@ -17,7 +18,9 @@ function extractInfo (cid) {
     resultArray[chunkIndex].push(item)
     return resultArray
   }, [])
-  const humanReadable = `${cidInfo.multibase.name} - cidv${cidInfo.cid.version} - ${cidInfo.cid.codec} - ${hashFn}~${hashLengthInBits}~${hashValue}`
+  const codecName = multicodecs.codeToName[cidInfo.cid.code]
+
+  const humanReadable = `${cidInfo.multibase.name} - cidv${cidInfo.cid.version} - ${codecName} - ${hashFn}~${hashLengthInBits}~${hashValue}`
   return {
     hashFn,
     hashFnCode,
@@ -32,13 +35,22 @@ function extractInfo (cid) {
 const toHex = (bytes) => Array.prototype.map.call(bytes, x => x.toString(16).padStart(2, '0')).join('').toUpperCase()
 
 export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
-  let cidErr = null
-  let cidInfo = null
-  try {
-    cidInfo = cid ? extractInfo(cid) : null
-  } catch (err) {
-    cidErr = err
-  }
+  const [cidErr, setCidErr] = useState(null)
+  const [cidInfo, setCidInfo] = useState(null)
+  useEffect(() => {
+    const asyncFn = async () => {
+      try {
+        if (cid) {
+          setCidInfo(await extractInfo(cid))
+        }
+      } catch (err) {
+        console.error(err)
+        setCidErr(err)
+      }
+    }
+    asyncFn()
+  }, [cid])
+
   return !cid ? null : (
     <section className={`ph3 pv4 sans-serif ${className}`} {...props}>
       <label className='db pb2'>

@@ -32,15 +32,17 @@ import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
  * ^: currently dag-cbor and dag-pb are supported.
  *
  * @function normaliseDagNode
- * @param {dagNode} node the `value` prop from `ipfs.dag.get` response.
+ * @param {dagNode|import('@ipld/dag-pb').PBNode} node the `value` prop from `ipfs.dag.get` response.
  * @param {string} cidStr the cid string passed to `ipfs.dag.get`
+ * @returns {import('../types').NormalizedDagNode}
  */
 export default function normaliseDagNode (node, cidStr) {
   const code = getCodeOrNull(cidStr)
   if (code === dagPb.code) {
-    return normaliseDagPb(node, cidStr, code)
+    return normaliseDagPb(/** @type {import('@ipld/dag-pb').PBNode} */(node), cidStr, code)
   }
   // try cbor style if we don't know any better
+  // @ts-expect-error - todo: resolve this type error
   return normaliseDagCbor(node, cidStr, code ?? dagCbor.code)
 }
 
@@ -172,11 +174,13 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
 
   // Support older `{ "/": Buffer } style links until all the IPLD formats are updated.
   if (keys.length === 1 && keys[0] === '/') {
+    // @ts-expect-error - todo: resolve this type error
     const targetCid = toCidOrNull(obj['/'])
 
     if (!targetCid) return []
 
     const target = targetCid.toString()
+    // @ts-expect-error - todo: resolve this type error
     obj['/'] = target
 
     return [{ path, source: sourceCid, target, size: 0, index: 0 }]
@@ -184,6 +188,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
 
   if (keys.length > 0) {
     return keys
+      // @ts-expect-error - todo: resolve this type error
       .map(key => findAndReplaceDagCborLinks(obj[key], sourceCid, path ? `${path}/${key}` : `${key}`))
       .reduce((a, b) => a.concat(b))
       .filter(a => !!a)

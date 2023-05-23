@@ -3,7 +3,6 @@ import type { Helia } from '@helia/interface'
 
 import getHasherForCode from './hash-importer'
 import type { CIDVersion } from 'multiformats/cid'
-import {unixfs} from '@helia/unixfs'
 
 type HeliaCID = Parameters<Helia['blockstore']['get']>[0]
 
@@ -11,7 +10,8 @@ async function getCidFromBytes<T extends Uint8Array = Uint8Array>(bytes: Uint8Ar
   const hasher = await getHasherForCode(multihashCode)
 
   try {
-    const hash = await Promise.resolve(hasher.digest(bytes))
+    // const hash = await Promise.resolve(hasher.digest(bytes))
+    const hash = await hasher.digest(bytes)
     return CID.create(cidVersion, codecCode, hash)
   } catch (err) {
     console.error('could not create cid from bytes', err)
@@ -49,8 +49,8 @@ async function getRawBlockFromGateway(url: string|URL, cid: HeliaCID) {
  */
 const verifyBytes = async (helia: Helia, providedCid: HeliaCID, bytes: Uint8Array): Promise<void> => {
   try {
-    console.log(`bytes: `, bytes);
-    console.log(`providedCid: `, providedCid);
+    // console.log(`bytes: `, bytes);
+    // console.log(`providedCid: `, providedCid);
     const cid = await getCidFromBytes(bytes, providedCid.version, providedCid.code, providedCid.multihash.code)
 
     if (cid.toString() !== providedCid.toString()) {
@@ -78,6 +78,8 @@ const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
 export async function getRawBlock (helia: Helia, cid: HeliaCID): Promise<Uint8Array> {
   let rawBlock: Uint8Array | undefined
 
+  // TODO: check helia and gateways in parallel, check gateways in serial.
+
   if (await helia.blockstore.has(cid)) {
     /**
      * Attempt to get the raw block from helia, timeout after 200ms
@@ -85,12 +87,8 @@ export async function getRawBlock (helia: Helia, cid: HeliaCID): Promise<Uint8Ar
      * in the blockstore. This prevents us from having to query the gateway for the same CID more than once.
      */
     try {
-      const abortController = new AbortController()
-      const timeout = setTimeout(() => abortController.abort(), 200)
-
-      // const block = await helia.blockstore.get(cid, { signal: abortController.signal })
-      const block = await helia.blockstore.get(cid)
-      clearTimeout(timeout)
+      const timeoutSignal = AbortSignal.timeout(200)
+      const block = await helia.blockstore.get(cid, {signal: timeoutSignal})
       rawBlock = block
       console.log('retrieved raw block from helia')
     } catch (err) {
@@ -123,7 +121,7 @@ export async function getRawBlock (helia: Helia, cid: HeliaCID): Promise<Uint8Ar
   }
 
   if (typeof rawBlock === 'undefined') {
-    throw new Error('unable to get raw block from helia or any gateway')
+    throw new Error(`unable to get raw block from gateways: ${defaultGateways.join(', ')}`)
   }
 
   return rawBlock
