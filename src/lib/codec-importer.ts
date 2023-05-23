@@ -35,11 +35,13 @@ export default async function codecImporter<T extends any = unknown>(codecCode: 
       return await import('ipld-ethereum/eth-storage-trie') as BlockCodec<typeof multicodecs.ETH_STORAGE_TRIE, T>
     case multicodecs.ETH_TX:
       // @ts-expect-error - no ipld-ethereum types
-      return await import('ipld-ethereum/eth-tx') as BlockCodec<typeof multicodecs.ETH_TX, T>
+      return await import('ipld-ethereum/eth-tx') as IPLDFormat<T>
     case multicodecs.ETH_TX_TRIE:
       // @ts-expect-error - no ipld-ethereum types
       return await import('ipld-ethereum/eth-tx-trie') as BlockCodec<typeof multicodecs.ETH_TX_TRIE, T>
     default:
-      throw new Error(`unsupported codec: ${codecCode}`)
+      // @ts-expect-error - CodecCode & multicodecs.codeToName typings are borked.
+      const codecName: string = multicodecs.codeToName[codecCode as CodecCode]
+      throw new Error(`unsupported codec: ${codecCode}=${codecName}`)
   }
 }

@@ -1,8 +1,9 @@
 import { CID } from 'multiformats'
 import multicodecs from 'multicodec'
 import { convert } from 'blockcodec-to-ipld-format'
-import type { CodecCode } from 'ipld'
+import type { CodecCode, IPLDFormat } from 'ipld'
 import codecImporter from './codec-importer'
+import { BlockCodec } from 'multiformats/codecs/interface'
 
 
 interface ResolveType<DecodedType = any> {
@@ -81,51 +82,45 @@ const codecResolverMap: Record<string, any> = {
 export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
   // determine the codec code for the CID
   const codecCode = cid.code
-  console.log(`cid.code: `, cid.code);
   if (codecCode === undefined) {
-    // console.warn('codec code for cid is undefined', cid)
-    console.warn('codec code for cid is undefined', cid)
-    throw new Error('codec code for cid is undefined')
+    throw new Error(`CID codec code is undefined for CID '${cid.toString()}'`)
   }
 
   const codecName: string = multicodecs.codeToName[codecCode as CodecCode]
   const codec = await codecImporter(codecCode);
-  console.log(`codecName: `, codecName);
+  const blockCodec = codec as BlockCodec<CodecCode, unknown>
+  const ipldFormat = codec as IPLDFormat
+  const convertedCodec = convert({...blockCodec, code: codecCode, name: blockCodec.name ?? codecName})
 
-  // match the codecCode to the codec
-
-  console.log('codec: ', codec)
-
-  const convertedCodec = convert({...codec, code: codecCode, name: codec.name ?? codecName})
-  console.log(`convertedCodec: `, convertedCodec);
   const decode = (bytes: Uint8Array) => {
-    if (codec.decode != null) {
-      return codec.decode(bytes)
+    if (blockCodec.decode != null) {
+      return blockCodec.decode(bytes)
     }
-    if (codec.util?.deserialize != null) {
-      return codec.util.deserialize(bytes)
+    if (ipldFormat.util?.deserialize != null) {
+      return ipldFormat.util.deserialize(bytes)
     }
     if (convertedCodec.util.deserialize != null) {
       return convertedCodec.util.deserialize(bytes)
     }
     throw new Error('codec does not have a decode function')
   }
+
   return {
     decode,
     resolve: async (path: string, bytes?: any) => {
       console.log('codecWrapper.resolving for %s at path %s', cid.toString(), path)
       // debugger;
       let result: ResolveType | undefined
-      // if the codec has util.resolve, use that
-      if (codec.util?.resolve) {
-        console.log('using codec util resolve')
-        result = codec.util.resolve(cid, path)
-        return result as ResolveType
-      }
       if (codecResolverMap[codecCode]) {
         console.log('using codecResolverMap')
         result = await codecResolverMap[codecCode](decode(bytes), path)
         console.log(`codecResolverMap result: `, result);
+        return result as ResolveType
+      }
+      // if the codec has resolver.resolve, use that
+      if (ipldFormat.resolver?.resolve) {
+        console.log('using codec util resolve')
+        result = ipldFormat.resolver.resolve(bytes, path)
         return result as ResolveType
       }
       try {
