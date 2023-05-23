@@ -103,7 +103,7 @@ export default defineConfig(({mode}) => {
         entryFileNames: '[name].js',
       },
       plugins: [
-        nodePolyfills()
+        // nodePolyfills({'buffer': true, 'process': true)
       ]
     },
   }
@@ -116,6 +116,7 @@ export default defineConfig(({mode}) => {
         // stream: "rollup-plugin-node-polyfills/polyfills/stream",
         // events: "rollup-plugin-node-polyfills/polyfills/events",
         // { find: /^buffer$/, replacement: 'rollup-plugin-node-polyfills/polyfills/buffer-es6' },
+        { find: /^process$/, replacement: 'rollup-plugin-node-polyfills/polyfills/process-es6' },
         { find: /^stream$/, replacement: 'rollup-plugin-node-polyfills/polyfills/stream' },
         { find: /^_stream_duplex$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/duplex' },
         { find: /^_stream_transform$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/transform' },

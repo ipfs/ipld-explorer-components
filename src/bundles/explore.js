@@ -2,8 +2,7 @@ import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import resolveIpldPath from '../lib/resolve-ipld-path'
 import parseIpldPath from '../lib/parse-ipld-path'
 import { CID } from 'multiformats/cid'
-import Cid from 'cids'
-import { convert } from 'blockcodec-to-ipld-format'
+// import { convert } from 'blockcodec-to-ipld-format'
 
 const getCidFromCidOrFqdn = (cidOrFqdn) => {
     console.log(`cidOrFqdn: `, cidOrFqdn);
@@ -210,44 +209,44 @@ function painfullyCompatibleBlockService (ipfs) {
   return blockService
 }
 
-async function getIpld () {
-  console.group('getIpld')
+// async function getIpld () {
+//   console.group('getIpld')
 
-  const ipldDepsImport = await Promise.allSettled([
-    import(/* webpackChunkName: "ipld" */ 'ipld'),
-    import(/* webpackChunkName: "ipld" */ '@ipld/dag-cbor'),
-    import(/* webpackChunkName: "ipld" */ '@ipld/dag-pb'),
-    import(/* webpackChunkName: "ipld" */ 'ipld-git'),
-    import(/* webpackChunkName: "ipld" */ 'ipld-raw'),
-    import(/* webpackChunkName: "ipld" */ 'ipld-ethereum')
-  ])
-  const ipldDeps = ipldDepsImport.map((pkg) => {
-    if (pkg.status === 'rejected') {
-      console.error(`Failed to load ipld dependency`, pkg.reason)
-      return null
-    }
-    return pkg.value
-  }).filter(Boolean)
-  console.log(`ipldDeps: `, ipldDeps);
+//   const ipldDepsImport = await Promise.allSettled([
+//     import(/* webpackChunkName: "ipld" */ 'ipld'),
+//     import(/* webpackChunkName: "ipld" */ '@ipld/dag-cbor'),
+//     import(/* webpackChunkName: "ipld" */ '@ipld/dag-pb'),
+//     import(/* webpackChunkName: "ipld" */ 'ipld-git'),
+//     import(/* webpackChunkName: "ipld" */ 'ipld-raw'),
+//     import(/* webpackChunkName: "ipld" */ 'ipld-ethereum')
+//   ])
+//   const ipldDeps = ipldDepsImport.map((pkg) => {
+//     if (pkg.status === 'rejected') {
+//       console.error(`Failed to load ipld dependency`, pkg.reason)
+//       return null
+//     }
+//     return pkg.value
+//   }).filter(Boolean)
+//   console.log(`ipldDeps: `, ipldDeps);
 
-  // CommonJs exports object is .default when imported ESM style
-  const [ipld, ...formats] = ipldDeps.map(mod => mod.default ?? mod)
+//   // CommonJs exports object is .default when imported ESM style
+//   const [ipld, ...formats] = ipldDeps.map(mod => mod.default ?? mod)
 
-  // ipldEthereum is an Object, each key points to a ipld format impl
-  const ipldEthereum = formats.pop()
-  console.log(`ipldEthereum: `, ipldEthereum);
-  formats.push(...Object.values(ipldEthereum))
-  console.log(`Object.values(ipldEthereum): `, Object.values(ipldEthereum));
+//   // ipldEthereum is an Object, each key points to a ipld format impl
+//   const ipldEthereum = formats.pop()
+//   console.log(`ipldEthereum: `, ipldEthereum);
+//   formats.push(...Object.values(ipldEthereum))
+//   console.log(`Object.values(ipldEthereum): `, Object.values(ipldEthereum));
 
-  // ipldJson uses the new format, use the conversion tool
-  const ipldJson = await import(/* webpackChunkName: "ipld" */ '@ipld/dag-json')
-  formats.push(convert(ipldJson))
-  console.log(`convert(ipldJson): `, convert(ipldJson));
+//   // ipldJson uses the new format, use the conversion tool
+//   const ipldJson = await import(/* webpackChunkName: "ipld" */ '@ipld/dag-json')
+//   formats.push(convert(ipldJson))
+//   console.log(`convert(ipldJson): `, convert(ipldJson));
 
-  console.log(`formats: `, formats);
-  console.groupEnd()
+//   console.log(`formats: `, formats);
+//   console.groupEnd()
 
-  return { ipld, formats }
-}
+//   return { ipld, formats }
+// }
 
 export default makeBundle
