@@ -76,7 +76,8 @@ const NodeUnderline = ({ cid, children }) => {
 }
 
 const Path = ({ path, hrefBase, sourceCid }) => {
-  const parts = path.split('/').filter(p => !!p)
+  const parts = [path]
+
   return (
     <div className='dib'>
       {parts.map((p, i) => {
