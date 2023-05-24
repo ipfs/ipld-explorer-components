@@ -71,7 +71,7 @@ function extensions ({extensions}) {
 
 export default [
   {
-    input: 'src/index.js',
+    input: 'dist/index.js',
     // dir: 'dist',
     output: [
       {
@@ -84,6 +84,14 @@ export default [
     // acornInjectPlugins: [jsx()],
 
     plugins: [
+      postcss({
+        include: "dist/components/object-info/LinksTable.css",
+        extract: resolve('dist/cjs/components/object-info/LinksTable.css')
+      }),
+      postcss({
+        include: "dist/components/loader/Loader.css",
+        extract: resolve('dist/cjs/components/loader/Loader.css')
+      }),
       resolve({extensions: ['.js', '.jsx', '.ts', '.tsx']}),
       babel({ babelHelpers: 'bundled', extensions: [".js", ".jsx"] }),
       // extensions({
@@ -92,27 +100,19 @@ export default [
 
         // 'src/components/object-info/LinksTable.css',
         // 'src/components/loader/Loader.css'
-      // postcss({
-      //   include: "src/components/object-info/LinksTable.css",
-      //   extract: resolve('dist/cjs/components/object-info/LinksTable.css')
-      // }),
-      // postcss({
-      //   include: "src/components/loader/Loader.css",
-      //   extract: resolve('dist/cjs/components/loader/Loader.css')
-      // }),
 
-      // peerDepsExternal(),
-      // json(),
-      // svg(),
-      // commonjs(),
-      // typescript({ tsconfig: './tsconfig.rollup.json' }),
+      peerDepsExternal(),
+      json(),
+      svg(),
+      commonjs(),
+      typescript({ tsconfig: './tsconfig.rollup.json' }),
       // terser(),
     ],
     external: ['react', 'react-dom', 'styled-components']
   },
-  {
-    input: 'src/index.ts',
-    output: [{ file: 'dist/cjs/types.d.ts', format: 'es' }],
-    plugins: [dts.default()]
-  }
+  // {
+  //   input: 'src/index.ts',
+  //   output: [{ file: 'dist/cjs/types.d.ts', format: 'es' }],
+  //   plugins: [dts.default()]
+  // }
 ]

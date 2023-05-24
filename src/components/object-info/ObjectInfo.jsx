@@ -1,9 +1,10 @@
 import React from 'react'
 import { withTranslation } from 'react-i18next'
-import { ObjectInspector, chromeLight } from '@tableflip/react-inspector'
-import filesize from 'filesize'
+import * as reactInspector from '@tableflip/react-inspector'
+import * as filesize from 'filesize'
 import LinksTable from './LinksTable.js'
 const humansize = filesize.partial({ round: 0 })
+const { ObjectInspector, chromeLight } = reactInspector
 
 const objectInspectorTheme = {
   ...chromeLight,
