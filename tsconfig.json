@@ -25,9 +25,9 @@
     "outDir": "dist",
     "declaration": true,
     "declarationDir": "dist",
-    "jsx": "preserve",
+    "jsx": "react",
     "rootDir": "src",
-    // "emitDeclarationOnly": true,
+    "emitDeclarationOnly": false,
     // "allowImportingTsExtensions": true,
     // "jsxImportSource": "react"
 

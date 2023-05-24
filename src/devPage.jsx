@@ -11,7 +11,7 @@ import heliaBundle from './bundles/helia'
 import {Buffer} from 'buffer'
 globalThis.Buffer = Buffer
 
-// import i18nDecorator from './i18n-decorator.jsx'
+// import i18nDecorator from './i18n-decorator.js'
 
 import 'tachyons'
 import 'ipfs-css'

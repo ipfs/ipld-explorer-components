@@ -1,6 +1,6 @@
 import normaliseDagNode from './normalise-dag-node.js'
-import { getRawBlock } from './get-raw-block.ts'
-import getCodecForCid from './get-codec-for-cid.ts'
+import { getRawBlock } from './get-raw-block.js'
+import getCodecForCid from './get-codec-for-cid.js'
 import { CID } from 'multiformats'
 
 /**

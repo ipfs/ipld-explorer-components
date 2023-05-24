@@ -1,5 +1,5 @@
 import React from 'react'
-import ErrorIcon from '../../icons/GlyphSmallCancel.jsx'
+import ErrorIcon from '../../icons/GlyphSmallCancel.js'
 
 class ErrorBoundary extends React.Component {
   state = {

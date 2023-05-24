@@ -1,7 +1,7 @@
 import React from 'react'
 import { connect } from 'redux-bundler-react'
 import { withTranslation } from 'react-i18next'
-import StrokeIpld from '../../icons/StrokeIpld.jsx'
+import StrokeIpld from '../../icons/StrokeIpld.js'
 
 class IpldExploreForm extends React.Component {
   constructor (props) {
