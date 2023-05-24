@@ -1,7 +1,8 @@
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
-import resolveIpldPath from '../lib/resolve-ipld-path'
-import parseIpldPath from '../lib/parse-ipld-path'
 import { CID } from 'multiformats/cid'
+
+import resolveIpldPath from '../lib/resolve-ipld-path.js'
+import parseIpldPath from '../lib/parse-ipld-path.js'
 // import { convert } from 'blockcodec-to-ipld-format'
 
 const getCidFromCidOrFqdn = (cidOrFqdn) => {

@@ -3,7 +3,7 @@ import { UnixFS } from 'ipfs-unixfs'
 import * as dagPb from '@ipld/dag-pb'
 import * as dagCbor from '@ipld/dag-cbor'
 
-import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
+import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid.js'
 
 /**
  * @typedef dagNodeLink
