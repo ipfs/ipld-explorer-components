@@ -19,6 +19,8 @@ coverage
 # production
 build
 dist
+dist-cjs
+dist-esm
 
 # misc
 .DS_Store
