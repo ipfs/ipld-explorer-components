@@ -48,7 +48,7 @@
     "vite.config.ts",
     "src/**/*.stories.*",
     "jest.config.js",
-    "rollup.config.js",
+    "rollup.config.mjs",
     "webpack.config.js",
     "package.json",
     "dev"

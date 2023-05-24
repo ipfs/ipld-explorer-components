@@ -19,8 +19,8 @@
   "files": [
     "dist"
   ],
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
   "release": {
     "branches": [
       "master"
@@ -103,7 +103,9 @@
     ]
   },
   "scripts": {
-    "build": "cross-env NODE_ENV=production babel --quiet src -d dist --copy-files --ignore '**/*.test.js' && tsc",
+    "build": "npm run build:esm && npm run build:cjs",
+    "build:cjs": "cross-env NODE_ENV=production rollup -c",
+    "build:esm": "cross-env NODE_ENV=production babel --quiet src -d dist --copy-files --ignore '**/*.test.js' && tsc",
     "release": "semantic-release",
     "clean": "rm -rf dist",
     "lint": "eslint src/",
