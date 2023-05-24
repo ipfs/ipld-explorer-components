@@ -1,4 +1,4 @@
-
+/* globals globalThis */
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { bootstrap } from '@libp2p/bootstrap'
@@ -8,7 +8,17 @@ import { MemoryDatastore } from 'datastore-core'
 import { createHelia } from 'helia'
 import { createLibp2p } from 'libp2p'
 import { identifyService } from 'libp2p/identify'
-import { create } from 'kubo-rpc-client'
+import { create as kuboClient } from 'kubo-rpc-client'
+import { delegatedPeerRouting } from '@libp2p/delegated-peer-routing'
+import { delegatedContentRouting } from '@libp2p/delegated-content-routing'
+import { gossipsub } from '@chainsafe/libp2p-gossipsub'
+import { ipniContentRouting } from '@libp2p/ipni-content-routing'
+import { kadDHT } from '@libp2p/kad-dht'
+import { mplex } from '@libp2p/mplex'
+import { webRTC, webRTCDirect } from '@libp2p/webrtc'
+import { webTransport } from '@libp2p/webtransport'
+import { autoNATService } from 'libp2p/autonat'
+import { circuitRelayTransport, circuitRelayServer } from 'libp2p/circuit-relay'
 
 const defaultState = {
   apiOpts: {
@@ -20,7 +30,7 @@ const defaultState = {
   ipfsReady: false
 }
 
-function getUserOpts(key) {
+function getUserOpts (key) {
   let userOpts = {}
   if (globalThis.localStorage) {
     try {
@@ -36,7 +46,7 @@ function getUserOpts(key) {
 const bundle = {
   name: 'ipfs',
 
-  reducer(state, { type, payload, error }) {
+  reducer (state, { type, payload, error }) {
     state = state || defaultState
     if (type === 'IPFS_INIT_FINISHED') {
       return Object.assign({}, state, {
@@ -54,7 +64,7 @@ const bundle = {
     return state
   },
 
-  getExtraArgs() {
+  getExtraArgs () {
     return { getIpfs: () => globalThis._ipfs }
   },
 
@@ -77,39 +87,14 @@ const bundle = {
       getState().ipfs.apiOpts,
       getUserOpts('ipfsApi')
     )
-    try {
-      console.time('IPFS_INIT_API')
-      console.log('Trying kubo-rpc-client', apiOpts)
-      console.info(
-        "🎛️ Customise your kubo-rpc-client opts by setting an `ipfsApi` value in localStorage. e.g. localStorage.setItem('ipfsApi', JSON.stringify({port: '1337'}))"
-      )
-      ipfs = create()
-      identity = await ipfs.id()
-      console.log('kubo-rpc-client ready!', identity)
-      globalThis._ipfs = ipfs
-      console.timeEnd('IPFS_INIT_API')
-      console.timeEnd('IPFS_INIT')
-      return dispatch({
-        type: 'IPFS_INIT_FINISHED',
-        payload: {
-          identity,
-          provider: 'kubo-rpc-client',
-          apiOpts
-        }
-      })
-    } catch (error) {
-      console.log('No ipfs-api found', error)
-    }
-
-    const ipfsOpts = getUserOpts('ipfsOpts')
     // TRY helia!
     try {
       console.time('HELIA_INIT')
-      console.log('Trying to start in-page helia', ipfsOpts)
+      console.log('Trying to start in-page helia')
       console.info(
-        "🎛️ Customise your helia opts by setting an `ipfsOpts` value in localStorage. e.g. localStorage.setItem('ipfsOpts', JSON.stringify({relay: {enabled: true}}))"
+        "🎛️ Customise your kubo-rpc-client opts by setting an `ipfsApi` value in localStorage. e.g. localStorage.setItem('ipfsApi', JSON.stringify({port: '1337'}))"
       )
-      const ipfs = await initHelia()
+      ipfs = await initHelia(apiOpts)
       console.log('got ipfs')
       // identity = await ipfs.libp2p.identify()
       identity = 'helia-TBD'
@@ -146,47 +131,83 @@ const bundle = {
 }
 export default bundle
 
-async function initHelia() {
-        const blockstore = new MemoryBlockstore()
+async function initHelia (ipfsApi) {
 
-        // application-specific data lives in the datastore
-        const datastore = new MemoryDatastore()
+  const delegatedClient1 = kuboClient(ipfsApi)
+  const delegatedClient2 = kuboClient({
+    protocol: 'https',
+    port: 443,
+    host: 'node3.delegate.ipfs.io'
+  })
+  const blockstore = new MemoryBlockstore()
+  const datastore = new MemoryDatastore()
 
-        // libp2p is the networking layer that underpins Helia
-        // Make sure to stick libp2p here when running react in strict mode
-        const libp2p = await createLibp2p({
-          datastore,
-          transports: [
-            webSockets()
-          ],
-          connectionEncryption: [
-            noise()
-          ],
-          streamMuxers: [
-            yamux()
-          ],
-          peerDiscovery: [
-            bootstrap({
-              list: [
-                '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
-                '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
-                '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
-                '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt'
-              ]
-            })
-          ],
-          services: {
-            identify: identifyService()
-          }
-        })
-        console.info('Starting Helia')
-        const helia = await createHelia({
-          datastore,
-          blockstore,
-          libp2p
-        })
+  /**
+   * based on https://github.com/ipfs/helia/blob/ed4985677b62021f76541354ad06b70bd53e929a/packages/helia/src/utils/libp2p.browser.ts#L20
+   */
+  const libp2p = await createLibp2p({
+    addresses: {
+      listen: [
+        '/webrtc'
+      ]
+    },
+    peerRouters: [
+      delegatedPeerRouting(delegatedClient1),
+      delegatedPeerRouting(delegatedClient2)
+    ],
+    contentRouters: [
+      ipniContentRouting('https://cid.contact'),
+      delegatedContentRouting(delegatedClient1),
+      delegatedContentRouting(delegatedClient2)
+    ],
+    datastore,
+    transports: [
+      webRTC(),
+      webRTCDirect(),
+      webTransport(),
+      webSockets(),
+      circuitRelayTransport({
+        discoverRelays: 1
+      })
+    ],
+    connectionEncryption: [
+      noise()
+    ],
+    streamMuxers: [
+      yamux(),
+      mplex()
+    ],
+    peerDiscovery: [
+      bootstrap({
+        list: [
+          '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
+          '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
+          '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
+          '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
+          '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ'
+        ]
+      })
+    ],
+    services: {
+      identify: identifyService(),
+      autoNAT: autoNATService(),
+      pubsub: gossipsub(),
+      dht: kadDHT({
+        clientMode: true
+      }),
+      relay: circuitRelayServer({
+        advertise: true
+      })
+    }
+  })
+  console.info('Starting Helia')
+  const helia = await createHelia({
+    datastore,
+    blockstore,
+    libp2p
+  })
 
-        console.log('helia', helia)
+  console.log('helia', helia)
 
-        return helia
+  return helia
 }

@@ -96,7 +96,7 @@ export async function ipldGetNodeAndRemainder (helia, sourceCid, path) {
   const value = codecWrapper.decode(encodedValue)
 
   const codecWrapperResolveResult = await codecWrapper.resolve(path || '/', encodedValue)
-  const {remainderPath, resolve: resolveValue} = codecWrapperResolveResult
+  const { remainderPath, resolve: resolveValue } = codecWrapperResolveResult
 
   if (resolveValue?.Hash != null) {
     // This is a PBLink, and we should resolve that link so we're returning PBNodes not PBLinks

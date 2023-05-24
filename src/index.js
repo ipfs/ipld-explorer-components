@@ -6,6 +6,7 @@ import CidInfo from './components/cid-info/CidInfo.js'
 import IpldGraph from './components/graph/LoadableIpldGraph.js'
 import ObjectInfo from './components/object-info/ObjectInfo.js'
 import exploreBundle from './bundles/explore.js'
+// import heliaBundle from './bundles/helia.js'
 
 export {
   StartExploringPage,
@@ -15,5 +16,6 @@ export {
   CidInfo,
   IpldGraph,
   ObjectInfo,
-  exploreBundle
+  exploreBundle,
+  // heliaBundle
 }
