@@ -74,7 +74,7 @@ export default defineConfig(({mode}) => {
   const viteBuild: UserConfig['build'] = {
     lib: {
       entry: [
-        resolve(__dirname, 'src/index.js'),
+        resolve(__dirname, 'dist/index.js'),
         // resolve(__dirname, 'src/bundles/explore.js'),
         // resolve(__dirname, 'src/components/object-info/LinksTable.css'),
       ],
@@ -83,7 +83,7 @@ export default defineConfig(({mode}) => {
       // formats: ['es', 'cjs']
       formats: ['es'],
     },
-    outDir: 'dist',
+    outDir: 'dist-vite',
     target: 'esnext',
     minify: false,
     cssCodeSplit: false,
@@ -93,7 +93,7 @@ export default defineConfig(({mode}) => {
       ],
       preserveEntrySignatures: 'strict',
       input: {
-        index: resolve(__dirname, 'src/index.js'),
+        index: resolve(__dirname, 'dist/index.js'),
         // 'bundles/explore': resolve(__dirname, 'src/bundles/explore.js'),
         // 'components/object-info/LinksTable.css': resolve(__dirname, 'src/components/object-info/LinksTable.css'),
         // 'components/loader/Loader.css': resolve(__dirname, 'src/components/loader/Loader.css'),

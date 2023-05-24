@@ -49,6 +49,7 @@
     "jest.config.js",
     "rollup.config.js",
     "webpack.config.js",
-    "package.json"
+    "package.json",
+    "dev"
   ]
 }
