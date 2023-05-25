@@ -1,8 +1,6 @@
-// @ts-expect-error - borked types
 import { CID } from 'multiformats'
 import type { Helia } from '@helia/interface'
-// @ts-expect-error - borked types
-import type { CIDVersion } from 'multiformats/cid'
+import type { Version as CIDVersion } from 'multiformats/cid'
 
 import getHasherForCode from './hash-importer.js'
 

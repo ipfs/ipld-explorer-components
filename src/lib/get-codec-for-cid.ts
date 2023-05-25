@@ -1,9 +1,7 @@
-// @ts-expect-error - borked types
 import { CID } from 'multiformats'
 import multicodecs from 'multicodec'
 import { convert } from 'blockcodec-to-ipld-format'
 import type { CodecCode, IPLDFormat } from 'ipld'
-// @ts-expect-error - borked types
 import { BlockCodec } from 'multiformats/codecs/interface'
 
 import codecImporter from './codec-importer.js'

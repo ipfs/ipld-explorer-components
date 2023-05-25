@@ -1,7 +1,5 @@
 /* global globalThis */
-// @ts-expect-error - borked types
 import * as sha2 from 'multiformats/hashes/sha2'
-// @ts-expect-error - borked types
 import { from } from 'multiformats/hashes/hasher'
 import { keccak256 } from 'js-sha3'
 
