@@ -11,6 +11,7 @@ import svg from 'rollup-plugin-svg'
 import { babel } from '@rollup/plugin-babel';
 import copy from 'rollup-plugin-copy'
 import autoExternal from 'rollup-plugin-auto-external';
+import nodePolyfills from 'rollup-plugin-polyfill-node';
 
 import packageJson from './package.json' assert { type: 'json' }
 
@@ -32,11 +33,11 @@ export default [
     // acornInjectPlugins: [jsx()],
 
     plugins: [
-      // autoExternal({
-      //   builtins: true,
-      //   dependencies: false,
-      //   peerDependencies: true,
-      // }),
+      autoExternal({
+        builtins: true,
+        dependencies: false,
+        peerDependencies: true,
+      }),
       copy({
         targets: [
           // { src: 'dist-esm/**/*.css', dest: 'dist-cjs' },
@@ -46,7 +47,9 @@ export default [
           }
         ]
       }),
-      resolve(),
+      resolve({
+        preferBuiltins: true
+      }),
       postcss({
         include: "dist-esm/components/object-info/LinksTable.css",
         extract: resolve('dist-cjs/components/object-info/LinksTable.css')
@@ -55,6 +58,13 @@ export default [
         include: "dist-esm/components/loader/Loader.css",
         extract: resolve('dist-cjs/components/loader/Loader.css')
       }),
+
+      // nodePolyfills({
+      //   include: [/cluster/]
+      // }),
+      commonjs(),
+      // babel({ babelHelpers: 'runtime', extensions: [".js", ".jsx"] }),
+
       // babel({ babelHelpers: 'bundled', extensions: [".js", ".jsx"] }),
       // extensions({
       //   extensions: [ '.jsx', '.js'],
@@ -63,14 +73,14 @@ export default [
         // 'src/components/object-info/LinksTable.css',
         // 'src/components/loader/Loader.css'
 
-      peerDepsExternal(),
+      // peerDepsExternal(),
       json(),
       svg(),
-      commonjs(),
+
       // typescript({ tsconfig: './tsconfig.rollup.json' }),
       // terser(),
     ],
-    external: ['react', 'react-dom']
+    external: ['react', 'react-dom', '@babel/runtime', 'log', 'cluster']
     // external: Object.keys(packageJson.dependencies || {}).concat(Object.keys(packageJson.peerDependencies || {})).concat(Object.keys(packageJson.devDependencies || {}))
   },
   {
