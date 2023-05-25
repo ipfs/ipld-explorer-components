@@ -22,23 +22,23 @@ export default async function codecImporter<T extends any = unknown>(codecCode: 
       // @ts-expect-error - no ipld-ethereum types
       return await import('ipld-ethereum/eth-account-snapshot') as BlockCodec<typeof multicodecs.ETH_ACCOUNT_SNAPSHOT, T>
     case multicodecs.ETH_BLOCK:
-      // @ts-expect-error - no ipld-ethereum types
-      return await import('ipld-ethereum/eth-block') as BlockCodec<typeof multicodecs.ETH_BLOCK, T>
+      // @ts-ignore - no ipld-ethereum types
+      return (await import('ipld-ethereum/eth-block')).default as IPLDFormat<T>
     case multicodecs.ETH_BLOCK_LIST:
-      // @ts-expect-error - no ipld-ethereum types
-      return await import('ipld-ethereum/eth-block-list') as BlockCodec<typeof multicodecs.ETH_BLOCK_LIST, T>
+      // @ts-ignore - no ipld-ethereum types
+      return (await import('ipld-ethereum/eth-block-list')).default as IPLDFormat<T>
     case multicodecs.ETH_STATE_TRIE:
-      // @ts-expect-error - no ipld-ethereum types
-      return await import('ipld-ethereum/eth-state-trie') as BlockCodec<typeof multicodecs.ETH_STATE_TRIE, T>
+      // @ts-ignore - no ipld-ethereum types
+      return (await import('ipld-ethereum/eth-state-trie')).default as IPLDFormat<T>
     case multicodecs.ETH_STORAGE_TRIE:
-      // @ts-expect-error - no ipld-ethereum types
-      return await import('ipld-ethereum/eth-storage-trie') as BlockCodec<typeof multicodecs.ETH_STORAGE_TRIE, T>
+      // @ts-ignore - no ipld-ethereum types
+      return (await import('ipld-ethereum/eth-storage-trie')).default as IPLDFormat<T>
     case multicodecs.ETH_TX:
       // @ts-ignore - no ipld-ethereum types
-      return await import('ipld-ethereum/eth-tx') as IPLDFormat<T>
+      return (await import('ipld-ethereum/eth-tx')).default as IPLDFormat<T>
     case multicodecs.ETH_TX_TRIE:
-      // @ts-expect-error - no ipld-ethereum types
-      return await import('ipld-ethereum/eth-tx-trie') as BlockCodec<typeof multicodecs.ETH_TX_TRIE, T>
+      // @ts-ignore - no ipld-ethereum types
+      return (await import('ipld-ethereum/eth-tx-trie')).default as IPLDFormat<T>
     default:
       // @ts-expect-error - CodecCode & multicodecs.codeToName typings are borked.
       const codecName: string = multicodecs.codeToName[codecCode as CodecCode]
