@@ -37,7 +37,7 @@ const nodeStyles = {
   'eth-tx-trie': { shortName: 'ETH', name: 'Ethereum Tx Trie', color: '#383838' },
   'eth-tx': { shortName: 'ETH', name: 'Ethereum Tx', color: '#383838' },
   'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: '#383838' },
-  'hamt-sharded-directory': { shortName: 'HAMT', name: 'HAMT Sharded Directory', color: '#9f28ca'}
+  'hamt-sharded-directory': { shortName: 'PB+H', name: 'HAMT-Sharded dag-pb Directory', color: '#244e66'}
 }
 
 export function shortNameForNode (type) {
