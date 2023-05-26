@@ -1,6 +1,7 @@
 import { CID } from 'multiformats'
-import hashImporter from '../../lib/hash-importer.js'
+
 import baseImporter from '../../lib/base-importer.js'
+import hashImporter from '../../lib/hash-importer.js'
 
 export async function decodeCid (value) {
   const cid = CID.parse(value)
@@ -40,7 +41,7 @@ export async function decodeCidV1 (value, cid) {
   const multihasher = await hashImporter(cid.multihash.code)
   const multibase = await baseImporter(value.substring(0, 1))
 
-    console.log(`cid.code.toString(16): `, cid.code.toString(16));
+  console.log('cid.code.toString(16): ', cid.code.toString(16))
   return {
     cid,
     multibase,

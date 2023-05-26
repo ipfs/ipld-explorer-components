@@ -1,10 +1,11 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { withTranslation } from 'react-i18next'
-import { colorForNode, nameForNode, shortNameForNode } from './object-info/ObjectInfo.js'
-import IpldExploreForm from './explore/IpldExploreForm.js'
-import AboutIpld from './about/AboutIpld.js'
 import ReactJoyride from 'react-joyride'
+
+import AboutIpld from './about/AboutIpld.js'
+import IpldExploreForm from './explore/IpldExploreForm.js'
+import { colorForNode, nameForNode, shortNameForNode } from './object-info/ObjectInfo.js'
 import { projectsTour } from '../lib/tours.js'
 
 const ExploreSuggestion = ({ cid, name, type }) => (

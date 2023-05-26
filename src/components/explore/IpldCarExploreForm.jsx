@@ -1,6 +1,9 @@
 import React from 'react'
-import { connect } from 'redux-bundler-react'
 import { withTranslation } from 'react-i18next'
+import { connect } from 'redux-bundler-react'
+
+import spinnerImage from './spinner.svg'
+import uploadImage from './upload.svg'
 
 class IpldCarExploreForm extends React.Component {
   constructor (props) {
@@ -17,9 +20,6 @@ class IpldCarExploreForm extends React.Component {
   }
 
   handleOnChange () {
-    var spinnerImage = require('./spinner.svg').default
-    var uploadImage = require('./upload.svg').default
-
     //  Change the state.
     const imageFileLoader = document.getElementById('car-loader-image')
     imageFileLoader.src = spinnerImage
@@ -37,7 +37,7 @@ class IpldCarExploreForm extends React.Component {
           <div className='relative'>
             <input id='car-file' type='file' accept='.car' className='input-reset bn pa2 mb2 db w-100 f6 br-0 placeholder-light focus-outline' style={{ borderRadius: '3px 0 0 3px', backgroundColor: 'white', padding: '5px 0px 5px 5px', width: '99%' }} aria-describedby='name-desc' onChange={this.handleOnChange} />
             <small id='car-file-desc' className='o-0 absolute f6 black-60 db mb2'>{t('IpldCarExploreForm.uploadCarFile')}</small>
-            <img id='car-loader-image' alt='placeholder for upload and loader' src={require('./upload.svg').default} className='absolute' style={{ top: '0px', right: '0px', height: '30px', width: '30px', paddingRight: '10px' }} />
+            <img id='car-loader-image' alt='placeholder for upload and loader' src={uploadImage} className='absolute' style={{ top: '0px', right: '0px', height: '30px', width: '30px', paddingRight: '10px' }} />
           </div>
         </div>
       </form>

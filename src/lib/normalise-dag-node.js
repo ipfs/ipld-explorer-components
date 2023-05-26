@@ -1,7 +1,7 @@
 // @ts-check
-import { UnixFS } from 'ipfs-unixfs'
-import * as dagPb from '@ipld/dag-pb'
 import * as dagCbor from '@ipld/dag-cbor'
+import * as dagPb from '@ipld/dag-pb'
+import { UnixFS } from 'ipfs-unixfs'
 
 import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid.js'
 
@@ -32,8 +32,8 @@ import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid.js'
  * ^: currently dag-cbor and dag-pb are supported.
  *
  * @function normaliseDagNode
- * @param {dagNode|import('@ipld/dag-pb').PBNode} node the `value` prop from `ipfs.dag.get` response.
- * @param {string} cidStr the cid string passed to `ipfs.dag.get`
+ * @param {dagNode|import('@ipld/dag-pb').PBNode} node - the `value` prop from `ipfs.dag.get` response.
+ * @param {string} cidStr - the cid string passed to `ipfs.dag.get`
  * @returns {import('../types').NormalizedDagNode}
  */
 export default function normaliseDagNode (node, cidStr) {
@@ -83,7 +83,7 @@ export function normaliseDagPb (node, cid, type) {
       return {
         cid: cidStr,
         type,
-        data: { type: /** @type {import('../types').UnixFsNodeTypes} */(type), data: unixFsData, blockSizes },
+        data: { type, data: unixFsData, blockSizes },
         links: normaliseDagPbLinks(node.Links, cid),
         size: unixFsObj.fileSize(),
         format
@@ -167,7 +167,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
     return obj
       .map((val, i) => findAndReplaceDagCborLinks(val, sourceCid, path ? `${path}/${i}` : `${i}`))
       .reduce((a, b) => a.concat(b))
-      .filter(a => !!a)
+      .filter(a => Boolean(a))
   }
 
   const keys = Object.keys(obj)
@@ -191,7 +191,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
       // @ts-expect-error - todo: resolve this type error
       .map(key => findAndReplaceDagCborLinks(obj[key], sourceCid, path ? `${path}/${key}` : `${key}`))
       .reduce((a, b) => a.concat(b))
-      .filter(a => !!a)
+      .filter(a => Boolean(a))
   } else {
     return []
   }

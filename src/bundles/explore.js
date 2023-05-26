@@ -1,8 +1,9 @@
-import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import { CID } from 'multiformats/cid'
+import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
+import toIterable from 'stream-to-it'
 
-import resolveIpldPath from '../lib/resolve-ipld-path.js'
 import parseIpldPath from '../lib/parse-ipld-path.js'
+import resolveIpldPath from '../lib/resolve-ipld-path.js'
 // import { convert } from 'blockcodec-to-ipld-format'
 
 const getCidFromCidOrFqdn = (cidOrFqdn) => {
@@ -75,7 +76,6 @@ const makeBundle = () => {
     'selectExplorePathFromHash',
     'selectExplore',
     (ipfsReady, isLoading, isWaitingToRetry, explorePathFromHash, obj) => {
-      console.log('reactExploreFetch', ipfsReady, isLoading, isWaitingToRetry, explorePathFromHash, obj)
       // Wait for ipfs or the pending request to complete
       if (!ipfsReady || isLoading || isWaitingToRetry) return false
       // Theres no url path and no data so nothing to do.
@@ -126,7 +126,6 @@ const makeBundle = () => {
 
 async function importCar (file, ipfs) {
   const inStream = file.stream()
-  const toIterable = require('stream-to-it')
   for await (const result of ipfs.dag.import(toIterable.source(inStream))) {
     return result
   }

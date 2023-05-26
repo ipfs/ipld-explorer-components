@@ -1,17 +1,17 @@
 import { bases } from 'multiformats/basics'
 
 export default async function baseImporter<T extends string> (prefix: T) {
-  console.log(`bases: `, bases);
+  console.log('bases: ', bases)
   for (const base in bases) {
-    // @ts-ignore
-    const multibase = bases[base];
+    // @ts-expect-error
+    const multibase = bases[base]
     if (multibase.prefix === prefix) {
-      return multibase;
+      return multibase
     }
   }
   // handle for CIDv0
   if (prefix === 'Q') {
-    return bases.base58btc;
+    return bases.base58btc
   }
 
   throw new Error(`unknown multibase prefix '${prefix}'`)

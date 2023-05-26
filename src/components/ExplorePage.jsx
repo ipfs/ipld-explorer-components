@@ -1,14 +1,15 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { withTranslation } from 'react-i18next'
+import ReactJoyride from 'react-joyride'
 import { connect } from 'redux-bundler-react'
-import ErrorBoundary from './error/ErrorBoundary.js'
+
 import CidInfo from './cid-info/CidInfo.js'
-import ObjectInfo from './object-info/ObjectInfo.js'
+import ErrorBoundary from './error/ErrorBoundary.js'
 import IpldGraph from './graph/LoadableIpldGraph.js'
 import GraphCrumb from './graph-crumb/GraphCrumb.js'
 import ComponentLoader from './loader/ComponentLoader.js'
-import ReactJoyride from 'react-joyride'
+import ObjectInfo from './object-info/ObjectInfo.js'
 import { explorerTour } from '../lib/tours.js'
 
 export class ExplorePage extends React.Component {
@@ -45,16 +46,18 @@ export class ExplorePage extends React.Component {
               pathBoundaries={pathBoundaries}
               localPath={localPath}
             />
-          )
+            )
           : <div style={{ height: 54 }} />}
 
         <div className='dt-l dt--fixed'>
           <div className='dtc-l w-100 w-two-thirds-l pr3-l v-top'>
-            {error ? (
+            {error
+              ? (
               <div className='bg-red white pa3 lh-copy'>
                 {error}
               </div>
-            ) : null}
+                )
+              : null}
 
             {targetNode
               ? (
@@ -72,7 +75,7 @@ export class ExplorePage extends React.Component {
                   gatewayUrl={gatewayUrl}
                   publicGatewayUrl={publicGatewayUrl}
                 />
-              )
+                )
               : null}
 
             {!error && !targetNode
@@ -88,7 +91,7 @@ export class ExplorePage extends React.Component {
                   style={{ background: '#FBFBFB', overflow: 'hidden' }}
                   cid={targetNode.cid}
                 />
-              )
+                )
               : null}
 
             {targetNode
@@ -102,7 +105,7 @@ export class ExplorePage extends React.Component {
                     onNodeClick={doExploreLink}
                   />
                 </ErrorBoundary>
-              )
+                )
               : null}
           </div>
         </div>

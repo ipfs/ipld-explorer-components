@@ -1,7 +1,7 @@
 /* global globalThis */
-import * as sha2 from 'multiformats/hashes/sha2'
-import { from } from 'multiformats/hashes/hasher'
 import { keccak256 } from 'js-sha3'
+import { from } from 'multiformats/hashes/hasher'
+import * as sha2 from 'multiformats/hashes/sha2'
 
 export default async function getHasherForCode (code: number) {
   switch (code) {

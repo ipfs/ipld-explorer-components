@@ -1,12 +1,12 @@
-import React from 'react'
-import { storiesOf } from '@storybook/react'
 import { action } from '@storybook/addon-actions'
-import IpldGraphCytoscape from './IpldGraphCytoscape'
+import { storiesOf } from '@storybook/react'
+import React from 'react'
 
-import dagNodeA from '../object-info/fixtures/object-info-8-links.json'
-import dagNodeB from '../object-info/fixtures/object-info-36-links.json'
-// import dagNodeC from '../object-info/fixtures/object-info-1240-links.json'
+import IpldGraphCytoscape from './IpldGraphCytoscape'
 import dagNodeD from '../object-info/fixtures/object-info-0-links.json'
+import dagNodeB from '../object-info/fixtures/object-info-36-links.json'
+import dagNodeA from '../object-info/fixtures/object-info-8-links.json'
+// import dagNodeC from '../object-info/fixtures/object-info-1240-links.json'
 
 storiesOf('IPLD Graph', module)
   .add('cytoscape 8 links', () => (

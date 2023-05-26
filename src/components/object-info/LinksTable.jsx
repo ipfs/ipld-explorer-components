@@ -1,5 +1,6 @@
 import React from 'react'
 import { Table, Column, AutoSizer } from 'react-virtualized'
+
 import './LinksTable.css'
 
 class LinksTable extends React.Component {

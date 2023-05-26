@@ -1,7 +1,8 @@
-import React from 'react'
-import { storiesOf } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
 import { checkA11y } from '@storybook/addon-a11y'
+import { action } from '@storybook/addon-actions'
+import { storiesOf } from '@storybook/react'
+import React from 'react'
+
 import Cid from './Cid'
 
 storiesOf('CID', module)

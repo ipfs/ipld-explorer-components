@@ -1,7 +1,8 @@
-import React from 'react'
-import { withTranslation } from 'react-i18next'
 import { ObjectInspector, chromeLight } from '@tableflip/react-inspector'
 import filesize from 'filesize'
+import React from 'react'
+import { withTranslation } from 'react-i18next'
+
 import LinksTable from './LinksTable.js'
 const humansize = filesize.partial({ round: 0 })
 
@@ -37,7 +38,7 @@ const nodeStyles = {
   'eth-tx-trie': { shortName: 'ETH', name: 'Ethereum Tx Trie', color: '#383838' },
   'eth-tx': { shortName: 'ETH', name: 'Ethereum Tx', color: '#383838' },
   'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: '#383838' },
-  'hamt-sharded-directory': { shortName: 'PB+H', name: 'HAMT-Sharded dag-pb Directory', color: '#244e66'}
+  'hamt-sharded-directory': { shortName: 'PB+H', name: 'HAMT-Sharded dag-pb Directory', color: '#244e66' }
 }
 
 export function shortNameForNode (type) {
@@ -83,10 +84,13 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
         <span className='v-mid'>
           {nameForNode(type)}
         </span>
-        {format === 'unixfs' ? (
+        {format === 'unixfs'
+          ? (
           <a className='dn di-ns no-underline charcoal ml2' href='https://docs.ipfs.io/concepts/glossary/#unixfs' rel='external' target='_external'>UnixFS</a>
-        ) : null}
-        {format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type) ? (
+            )
+          : null}
+        {format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type)
+          ? (
           <span className='dib'>
             {gatewayUrl && gatewayUrl !== publicGatewayUrl && (
               <a className='no-underline avenir ml2 pa2 fw5 f6 navy dib' href={`${gatewayUrl}/ipfs/${cid}`} rel='external nofollow' target='_external'>
@@ -97,21 +101,26 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
                 {t('ObjectInfo.publicGateway')}
               </a>)}
           </span>
-        ) : null}
+            )
+          : null}
       </h2>
       <div className='f6'>
-        {!cid ? null : (
+        {!cid
+          ? null
+          : (
           <div className='dt dt--fixed pt2'>
             <label className='dtc silver tracked ttu f7' style={{ width: 48 }}>CID</label>
             <div className='dtc truncate charcoal monospace' data-id='ObjectInfo-cid'>{cid}</div>
           </div>
-        )}
-        {!size ? null : (
+            )}
+        {!size
+          ? null
+          : (
           <div className='dt dt--fixed pt2'>
             <label className='dtc silver tracked ttu f7' style={{ width: 48 }}>Size</label>
             <div className='dtc truncate charcoal monospace'>{humansize(size)}</div>
           </div>
-        )}
+            )}
         <div className='dt dt--fixed pt2'>
           <label className='dtc silver tracked ttu f7' style={{ width: 48 }}>Links</label>
           <div className='dtc truncate charcoal'>
@@ -124,17 +133,21 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
             {data ? null : 'No data'}
           </div>
         </div>
-        {!data ? null : (
+        {!data
+          ? null
+          : (
           <div className='pa3 mt2 bg-white f5 nl3 nr3 mh0-l'>
             <ObjectInspector showMaxKeys={100} data={data} theme={objectInspectorTheme} expandPaths={toExpandPathsNotation(localPath)} />
           </div>
-        )}
+            )}
       </div>
-      {!links || !links.length ? null : (
+      {!links || !links.length
+        ? null
+        : (
         <div className='mv2 nl3 nr3 mh0-l'>
           <LinksTable links={links} onLinkClick={onLinkClick} />
         </div>
-      )}
+          )}
     </section>
   )
 }

@@ -1,7 +1,8 @@
-import React, { useEffect, useState } from 'react'
-import { decodeCid } from './decode-cid'
-import { withTranslation } from 'react-i18next'
 import multicodecs from 'multicodec'
+import React, { useEffect, useState } from 'react'
+import { withTranslation } from 'react-i18next'
+
+import { decodeCid } from './decode-cid'
 
 async function extractInfo (cid) {
   const cidInfo = await decodeCid(cid)
@@ -35,7 +36,7 @@ async function extractInfo (cid) {
 const toHex = (bytes) => Array.prototype.map.call(bytes, x => x.toString(16).padStart(2, '0')).join('').toUpperCase()
 
 export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
-  console.log(`CidInfo: `);
+  console.log('CidInfo: ')
   const [cidErr, setCidErr] = useState(null)
   const [cidInfo, setCidInfo] = useState(null)
   console.log('before useEffect in cidInfo')
@@ -53,14 +54,18 @@ export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
     asyncFn()
   }, [cid])
 
-  return !cid ? null : (
+  return !cid
+    ? null
+    : (
     <section className={`ph3 pv4 sans-serif ${className}`} {...props}>
       <label className='db pb2'>
         <a className='tracked ttu f5 fw2 teal-muted hover-aqua link' href='https://docs.ipfs.io/concepts/glossary/#cid' rel='external' target='_external'>
           {t('CidInfo.header')}
         </a>
       </label>
-      {!cidInfo ? null : (
+      {!cidInfo
+        ? null
+        : (
         <div>
           <div className='f7 monospace fw4 ma0 pb2 truncate mid-gray force-select' title={cid}>
             {cid}
@@ -103,17 +108,19 @@ export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
             </div>
           </div>
         </div>
-      )}
-      {!cidErr ? null : (
+          )}
+      {!cidErr
+        ? null
+        : (
         <div>
           <div className='f5 sans-serif fw5 ma0 pv2 truncate navy'>
             {cid}
           </div>
           <div className='red fw2 ma0 f7'>{cidErr.message}</div>
         </div>
-      )}
+          )}
     </section>
-  )
+      )
 }
 
 export default withTranslation('explore')(CidInfo)

@@ -1,11 +1,11 @@
 
 /* global describe it expect jest */
 // @ts-check
-import * as dagPb from '@ipld/dag-pb'
 import * as dagCbor from '@ipld/dag-cbor'
+import * as dagPb from '@ipld/dag-pb'
 
-import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
 import { toCidOrNull } from './cid'
+import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
 
 const testCidString = 'bafyreiddymapg5zcpma3iu4wingqvois6jirucn5776wdsyg5f3f65v75a'
 

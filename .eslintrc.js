@@ -1,14 +1,15 @@
 module.exports = {
     parser: '@typescript-eslint/parser',
-    extends: [
-      'react-app',
-      'standard',
-      'ipfs',
-    ],
     plugins: [
       'import',
-      '@typescript-eslint',
-      'jsx-a11y',
+    ],
+    extends: [
+      'react-app',
+      'plugin:jsx-a11y/recommended',
+      'plugin:@typescript-eslint/recommended',
+      'plugin:react-hooks/recommended',
+      'plugin:import/typescript',
+      'ipfs',
     ],
     rules: {
       'import/order': ['error', {
@@ -24,5 +25,8 @@ module.exports = {
         },
         warnOnUnassignedImports: true
       }],
+      'no-console': ['error', { allow: ['error', 'time', 'timeEnd', 'warn'] }],
+      'no-warning-comments': ['off'],
+      'strict': ['error', 'never'],
   },
 }

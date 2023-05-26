@@ -1,24 +1,24 @@
 /* globals globalThis */
+import { gossipsub } from '@chainsafe/libp2p-gossipsub'
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { bootstrap } from '@libp2p/bootstrap'
-import { webSockets } from '@libp2p/websockets'
-import { MemoryBlockstore } from 'blockstore-core'
-import { MemoryDatastore } from 'datastore-core'
-import { createHelia } from 'helia'
-import { createLibp2p } from 'libp2p'
-import { identifyService } from 'libp2p/identify'
-import { create as kuboClient } from 'kubo-rpc-client'
-import { delegatedPeerRouting } from '@libp2p/delegated-peer-routing'
 import { delegatedContentRouting } from '@libp2p/delegated-content-routing'
-import { gossipsub } from '@chainsafe/libp2p-gossipsub'
+import { delegatedPeerRouting } from '@libp2p/delegated-peer-routing'
 import { ipniContentRouting } from '@libp2p/ipni-content-routing'
 import { kadDHT } from '@libp2p/kad-dht'
 import { mplex } from '@libp2p/mplex'
 import { webRTC, webRTCDirect } from '@libp2p/webrtc'
+import { webSockets } from '@libp2p/websockets'
 import { webTransport } from '@libp2p/webtransport'
+import { MemoryBlockstore } from 'blockstore-core'
+import { MemoryDatastore } from 'datastore-core'
+import { createHelia } from 'helia'
+import { create as kuboClient } from 'kubo-rpc-client'
+import { createLibp2p } from 'libp2p'
 import { autoNATService } from 'libp2p/autonat'
 import { circuitRelayTransport, circuitRelayServer } from 'libp2p/circuit-relay'
+import { identifyService } from 'libp2p/identify'
 
 const defaultState = {
   apiOpts: {
@@ -58,7 +58,7 @@ const bundle = {
     }
 
     if (type === 'IPFS_INIT_FAILED') {
-      return Object.assign({}, state, { ipfsReady: false, error: error })
+      return Object.assign({}, state, { ipfsReady: false, error })
     }
 
     return state
@@ -73,7 +73,6 @@ const bundle = {
   selectIpfsIdentity: state => state.ipfs.identity,
 
   doInitIpfs: () => async ({ dispatch, getState }) => {
-    console.log('Looking for IPFS')
     console.time('IPFS_INIT')
     dispatch({ type: 'IPFS_INIT_STARTED' })
 
@@ -90,15 +89,12 @@ const bundle = {
     // TRY helia!
     try {
       console.time('HELIA_INIT')
-      console.log('Trying to start in-page helia')
       console.info(
         "🎛️ Customise your kubo-rpc-client opts by setting an `ipfsApi` value in localStorage. e.g. localStorage.setItem('ipfsApi', JSON.stringify({port: '1337'}))"
       )
       ipfs = await initHelia(apiOpts)
-      console.log('got ipfs')
       // identity = await ipfs.libp2p.identify()
       identity = 'helia-TBD'
-      console.log('in-page helia instance ready!', identity)
       globalThis._ipfs = ipfs
       console.timeEnd('HELIA_INIT')
       console.timeEnd('IPFS_INIT')
@@ -110,21 +106,6 @@ const bundle = {
         }
       })
     } catch (error) {
-      if (error.message && error.message.includes('subtle is undefined')) {
-        console.warn('IPLD Explorer requires access to window.crypto, redirecting to canonical URL that is known to provide it in all browsers')
-        // This error means js-ipfs was loaded in a context that is not marked
-        // as Secure Context by the browser vendor.  (example: *.localhost in
-        // Firefox until https://bugzilla.mozilla.org/show_bug.cgi?id=1220810
-        // is addresssed)
-        // This is difficult to debug for regular user, as Explorer simply fails to load anything from IPFS.
-        // For now, we detect this failure and redirect to canonical version with TLS, so it always works.
-        const url = new URL('https://explore.ipld.io/?x-ipfs-companion-no-redirect')
-        // url.hash = window.location.hash
-        // window.location.replace(url.toString())
-        return
-      }
-      console.log('Failed to initialise helia', error)
-      console.timeEnd('IPFS_INIT')
       return dispatch({ type: 'IPFS_INIT_FAILED', error })
     }
   }
@@ -132,7 +113,6 @@ const bundle = {
 export default bundle
 
 async function initHelia (ipfsApi) {
-
   const delegatedClient1 = kuboClient(ipfsApi)
   const delegatedClient2 = kuboClient({
     protocol: 'https',
@@ -200,14 +180,12 @@ async function initHelia (ipfsApi) {
       })
     }
   })
-  console.info('Starting Helia')
+
   const helia = await createHelia({
     datastore,
     blockstore,
     libp2p
   })
-
-  console.log('helia', helia)
 
   return helia
 }

@@ -1,7 +1,8 @@
 import React from 'react'
+
+import { getCodecOrNull } from '../../lib/cid.js'
 import Cid from '../cid/Cid.js'
 import { colorForNode } from '../object-info/ObjectInfo.js'
-import { getCodecOrNull } from '../../lib/cid.js'
 
 const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', className = '', ...props }) => {
   const [first, ...rest] = pathBoundaries
@@ -14,18 +15,22 @@ const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', cl
           <a href={firstHrefBase} className='monospace no-underline dark-gray o-50 glow'>
             <Cid value={cid} />
           </a>
-          {first ? (
+          {first
+            ? (
             <div className='dib'>
               <Divider />
               <Path path={first.path} hrefBase={firstHrefBase} sourceCid={cid} />
             </div>
-          ) : null}
-          {localPath && pathBoundaries.length === 0 ? (
+              )
+            : null}
+          {localPath && pathBoundaries.length === 0
+            ? (
             <div className='dib'>
               <Divider />
               <Path path={localPath} sourceCid={cid} hrefBase={firstHrefBase} />
             </div>
-          ) : null}
+              )
+            : null}
         </NodeUnderline>
         {rest.map((link, i) => {
           const nextHrefBase = calculateHrefBase(hrefBase, cid, pathBoundaries, i + 1)
@@ -42,7 +47,8 @@ const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', cl
             </div>
           )
         })}
-        {localPath && pathBoundaries.length > 0 ? (
+        {localPath && pathBoundaries.length > 0
+          ? (
           <div className='dib'>
             <Divider />
             <NodeUnderline cid={last.target}>
@@ -53,7 +59,8 @@ const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', cl
               />
             </NodeUnderline>
           </div>
-        ) : null}
+            )
+          : null}
       </div>
     </div>
   )

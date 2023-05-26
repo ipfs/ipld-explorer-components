@@ -1,10 +1,12 @@
 /* global describe it expect */
 // @ts-check
-import { toCidOrNull, getCodecOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
-import * as multiformats from 'multiformats'
+import crypto from 'crypto'
+
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
-import crypto from 'crypto'
+import * as multiformats from 'multiformats'
+
+import { toCidOrNull, getCodecOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
 
 const { CID, hasher, bytes } = multiformats
 

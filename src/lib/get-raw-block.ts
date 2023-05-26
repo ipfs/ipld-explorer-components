@@ -1,12 +1,10 @@
-import { CID } from 'multiformats'
 import type { Helia } from '@helia/interface'
+import { CID } from 'multiformats'
 import type { Version as CIDVersion } from 'multiformats/cid'
 
 import getHasherForCode from './hash-importer.js'
 
-type HeliaCID = Parameters<Helia['blockstore']['get']>[0]
-
-async function getCidFromBytes(bytes: Uint8Array, cidVersion: CIDVersion, codecCode: number, multihashCode: number): Promise<CID> {
+async function getCidFromBytes (bytes: Uint8Array, cidVersion: CIDVersion, codecCode: number, multihashCode: number): Promise<CID> {
   const hasher = await getHasherForCode(multihashCode)
 
   try {
@@ -17,10 +15,10 @@ async function getCidFromBytes(bytes: Uint8Array, cidVersion: CIDVersion, codecC
     console.error('could not create cid from bytes', err)
   }
 
-  return '' as any as CID;
+  return '' as any as CID
 }
 
-async function getRawBlockFromGateway(url: string|URL, cid: HeliaCID, signal: AbortSignal): Promise<Uint8Array> {
+async function getRawBlockFromGateway (url: string | URL, cid: CID, signal: AbortSignal): Promise<Uint8Array> {
   const gwUrl = new URL(url)
 
   gwUrl.pathname = `/ipfs/${cid.toString()}`
@@ -38,17 +36,18 @@ async function getRawBlockFromGateway(url: string|URL, cid: HeliaCID, signal: Ab
     return new Uint8Array(await res.arrayBuffer())
   } catch (cause) {
     console.error('cause', cause)
-    throw new Error(`unable to fetch raw block for CID ${cid}`, { cause: cause as unknown as Error })
+    throw new Error(`unable to fetch raw block for CID ${cid}`)
   }
 }
 
 /**
  * This method validates that the block we got from the gateway has the same CID as the one we requested
+ *
  * @param helia
  * @param providedCid
  * @param bytes
  */
-export async function verifyBytes (providedCid: HeliaCID, bytes: Uint8Array): Promise<void> {
+export async function verifyBytes (providedCid: CID, bytes: Uint8Array): Promise<void> {
   try {
     // console.log(`bytes: `, bytes);
     // console.log(`providedCid: `, providedCid);
@@ -86,7 +85,6 @@ export async function getBlockFromAnyGateway (cid: CID, signal: AbortSignal, mor
   throw new Error('Could not get block from any gateway')
 }
 
-
 // const defaultGateways = ['http://localhost:8080', 'https://ipfs.io', 'https://dweb.link']
 const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
 
@@ -98,7 +96,7 @@ const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
  * @param {CID} cid
  * @returns {Promise}
  */
-export async function getRawBlock (helia: Helia, cid: HeliaCID): Promise<Uint8Array> {
+export async function getRawBlock (helia: Helia, cid: CID): Promise<Uint8Array> {
   const abortController = new AbortController()
 
   try {
@@ -117,5 +115,4 @@ export async function getRawBlock (helia: Helia, cid: HeliaCID): Promise<Uint8Ar
     console.error('unable to get raw block', err)
     throw err
   }
-
 }

@@ -1,7 +1,8 @@
-import normaliseDagNode from './normalise-dag-node.js'
-import { getRawBlock } from './get-raw-block.js'
-import getCodecForCid from './get-codec-for-cid.js'
 import { CID } from 'multiformats'
+
+import getCodecForCid from './get-codec-for-cid.js'
+import { getRawBlock } from './get-raw-block.js'
+import normaliseDagNode from './normalise-dag-node.js'
 
 /**
  * @typedef {object} ResolvedIpldPathInfo
@@ -44,11 +45,12 @@ import { CID } from 'multiformats'
  * - `nodes` is the array of nodes that the path traverses.
  * - `pathBoundaries` is the array of links that the path traverses.
  *
- * @param {IpldInterface} ipldGet fn that returns a promise of the ipld data for a (cid, path, options)
- * @param {string} sourceCid the root hash
- * @param {string} path everything after the hash
- * @param {object[]} nodes accumulated node info
- * @param {object[]} pathBoundaries accumulated path boundary info
+ * @param {IpldInterface} ipldGet - fn that returns a promise of the ipld data for a (cid, path, options)
+ * @param ipfs
+ * @param {string} sourceCid - the root hash
+ * @param {string} path - everything after the hash
+ * @param {object[]} nodes - accumulated node info
+ * @param {object[]} pathBoundaries - accumulated path boundary info
  * @returns {ResolvedIpldPathInfo} resolved path info
  */
 export default async function resolveIpldPath (ipfs, sourceCid, path, nodes = [], pathBoundaries = []) {
@@ -112,8 +114,8 @@ export async function ipldGetNodeAndRemainder (helia, sourceCid, path) {
 /**
  * Find the link object that matches linkPath
  *
- * @param {import('./normalise-dag-node').NormalizedDagNode} node a `normalisedDagNode`
- * @param {string} linkPath an IPLD path string
+ * @param {import('./normalise-dag-node').NormalizedDagNode} node - a `normalisedDagNode`
+ * @param {string} linkPath - an IPLD path string
  * @returns {import('./normalise-dag-node').NormalizedDagLink} the link object for `linkPath`
  */
 export function findLink (node, linkPath) {
