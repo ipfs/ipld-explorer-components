@@ -105,18 +105,8 @@ export default defineConfig(({mode}) => {
     },
   }
 
-  // if (isDev) {
-    // We only want to provide polyfills if we're in dev mode.
     viteResolve = {
       alias: [
-        // {
-        //   find: /^(.*)\.js$/,
-        //   replacement: '$1'
-        // },
-        // { find: '@', replacement: resolve(__dirname, '/src') },
-        // stream: "rollup-plugin-node-polyfills/polyfills/stream",
-        // events: "rollup-plugin-node-polyfills/polyfills/events",
-        // { find: /^buffer$/, replacement: 'rollup-plugin-node-polyfills/polyfills/buffer-es6' },
         { find: /^process$/, replacement: 'rollup-plugin-node-polyfills/polyfills/process-es6' },
         { find: /^stream$/, replacement: 'rollup-plugin-node-polyfills/polyfills/stream' },
         { find: /^_stream_duplex$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/duplex' },
