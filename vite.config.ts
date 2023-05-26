@@ -96,7 +96,6 @@ export default defineConfig(({mode}) => {
         index: resolve(__dirname, 'dist/index.js'),
       },
       output: {
-        // manualChunks: {},
         preserveModules: true,
         preserveModulesRoot: 'src',
         entryFileNames: '[name].js',
