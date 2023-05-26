@@ -45,7 +45,7 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
             <ExploreSuggestion name='XKCD Archives' cid='QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm' type='dag-pb' />
           </li>
           <li>
-            <ExploreSuggestion name='Distributed Wikipedia mirror' cid='bafybeiaysi4s6lnjev27ln5icwm6tueaw2vdykrtjkwiphwekaywqhcjze' type='hamt-sharded-directory' />
+            <ExploreSuggestion name='HAMT-sharded Wikipedia mirror (>20M files)' cid='bafybeiaysi4s6lnjev27ln5icwm6tueaw2vdykrtjkwiphwekaywqhcjze' type='hamt-sharded-directory' />
           </li>
           <li>
             <ExploreSuggestion name='ipfs-geoip' cid='bafyreihnpl7ami7esahkfdnemm6idx4r2n6u3apmtcrxlqwuapgjsciihy' type='dag-cbor' />
