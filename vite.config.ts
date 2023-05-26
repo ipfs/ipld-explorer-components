@@ -94,10 +94,6 @@ export default defineConfig(({mode}) => {
       preserveEntrySignatures: 'strict',
       input: {
         index: resolve(__dirname, 'dist/index.js'),
-        // 'bundles/explore': resolve(__dirname, 'src/bundles/explore.js'),
-        // 'components/object-info/LinksTable.css': resolve(__dirname, 'src/components/object-info/LinksTable.css'),
-        // 'components/loader/Loader.css': resolve(__dirname, 'src/components/loader/Loader.css'),
-
       },
       output: {
         // manualChunks: {},
