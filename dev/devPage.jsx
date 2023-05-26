@@ -6,7 +6,6 @@ import { Provider as ReduxStoreProvider, connect } from 'redux-bundler-react'
 import ReactDOM from 'react-dom';
 import i18n from '../dist/i18n'
 import { exploreBundle, ExplorePage, StartExploringPage } from '../dist/index.js'
-// import ipfsBundle from './bundles/ipfs'
 import heliaBundle from '../dist/bundles/helia'
 
 import { Buffer } from 'buffer'
@@ -17,8 +16,6 @@ import '../dist/components/object-info/LinksTable.css'
 import '../dist/components/loader/Loader.css'
 
 globalThis.Buffer = Buffer
-
-// import i18nDecorator from './i18n-decorator.js'
 
 const routesBundle = createRouteBundle(
   {
@@ -33,7 +30,6 @@ const routesBundle = createRouteBundle(
 const getStore = composeBundles(
   exploreBundle(),
   routesBundle,
-  // ipfsBundle,
   heliaBundle,
 )
 
@@ -43,17 +39,13 @@ const PageRenderer = connect(
   'doUpdateUrl',
   'doInitIpfs',
   (props) => {
-    console.log(`props: `, props);
     const Page = props?.route
-    console.log(`Page: `, Page);
     const { embed } = props.queryObject
-    console.log(`embed: `, embed);
     useEffect(() => {
       props.doInitIpfs()
     }, [])
 
     return (
-      // <span>test</span>
       <div style={{margin: '5vh 10vw'}}>
         <Page embed={embed}/>
       </div>
@@ -72,4 +64,3 @@ const App = () => {
 }
 
 ReactDOM.render(<App />, document.getElementById('root'));
-// root.render(<App />);
