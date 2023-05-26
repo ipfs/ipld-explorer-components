@@ -28,7 +28,7 @@ const objectInspectorTheme = {
  * And then hamt-sharded-directory was set to #9f28ca which was listed under "Color Harmonies - Triad" on 2023-05-22
  */
 const nodeStyles = {
-  'dag-cbor': { shortName: 'CBOR', name: 'dag-cbor', color: '#28CA9F' },
+  'dag-cbor': { shortName: 'CBOR', name: 'dag-cbor', color: '#378085' },
   'dag-pb': { shortName: 'PB', name: 'dag-pb', color: '#244e66' },
   'git-raw': { shortName: 'GIT', name: 'Git', color: '#378085' },
   'raw': { shortName: 'RAW', name: 'Raw Block', color: '#f14e32' }, // eslint-disable-line quote-props
