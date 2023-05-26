@@ -101,7 +101,6 @@ export default defineConfig(({mode}) => {
         entryFileNames: '[name].js',
       },
       plugins: [
-        // nodePolyfills({'buffer': true, 'process': true)
       ]
     },
   }
