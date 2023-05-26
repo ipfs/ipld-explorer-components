@@ -32,15 +32,14 @@
     // "allowImportingTsExtensions": true,
     // "jsxImportSource": "react"
 
-  },
-  // "include": [
-  //   "**/*.js",
 
-  // ],
+  },
+  "include": [
+    "src/**/*"
+  ],
   "exclude": [
     "src/*/*.test.*",
     "node_modules",
-    "src/devPage.jsx",
     "storybook-static",
     "build",
     "dist",
