@@ -132,10 +132,6 @@ export default defineConfig(({mode}) => {
         NodeGlobalsPolyfillPlugin({ buffer: true, process: true }),
       ],
     }
-    // viteBuild.rollupOptions = {
-    //   // plugins: [nodePolyfills()],
-    // };
-  // }
 
   const finalConfig: UserConfigExport = {
     plugins: vitePlugins,
