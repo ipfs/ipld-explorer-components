@@ -6,7 +6,7 @@ import { CID } from 'multiformats'
 import { type BlockCodec } from 'multiformats/codecs/interface'
 
 import codecImporter from './codec-importer.js'
-import { isPBLink, isPBNode } from './guards'
+import { isPBNode } from './guards'
 
 interface ResolveType<DecodedType = any> {
   value: DecodedType
@@ -57,8 +57,8 @@ interface CodecResolverFn {
 
 const codecResolverMap: Record<string, CodecResolverFn> = {
   [multicodecs.DAG_PB]: async (node, path) => {
-    if (!isPBNode(node) || !isPBLink(node)) {
-      throw new Error('node is not a PBNode or PBLink')
+    if (!isPBNode(node)) {
+      throw new Error('node is not a PBNode')
     }
     const pathSegments = path.split('/')
     let firstPathSegment = pathSegments.splice(1, 1)[0]
@@ -111,7 +111,7 @@ export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
     if (convertedCodec.util.deserialize != null) {
       return convertedCodec.util.deserialize(bytes)
     }
-    throw new Error('codec does not have a decode function')
+    throw new Error(`codec ${codecCode}=${codecName} does not have a decode function`)
   }
 
   return {
@@ -120,7 +120,8 @@ export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
       if (codecResolverMap[codecCode] != null) {
         try {
           return await codecResolverMap[codecCode](decode(bytes), path)
-        } catch {
+        } catch (err) {
+          console.error(err)
           console.error('error resolving path for cid with codecResolverMap', cid, path)
           // allow the resolver to fail and fall through to the next resolver
         }
@@ -142,7 +143,7 @@ export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
         // throw err
       }
 
-      throw new Error('codec does not have a resolve function')
+      throw new Error(`codec ${codecCode}=${codecName} does not have a resolve function`)
     }
   }
 }

@@ -1,10 +1,10 @@
+import { CarBlockIterator } from '@ipld/car'
 import { CID } from 'multiformats/cid'
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 import toIterable from 'stream-to-it'
 
 import parseIpldPath from '../lib/parse-ipld-path.js'
 import resolveIpldPath from '../lib/resolve-ipld-path.js'
-// import { convert } from 'blockcodec-to-ipld-format'
 
 const getCidFromCidOrFqdn = (cidOrFqdn) => {
   if (cidOrFqdn.startsWith('/ipfs/')) {
@@ -109,26 +109,41 @@ const makeBundle = () => {
     store.doUpdateHash(hash)
   }
 
-  bundle.doUploadUserProvidedCar = (file, uploadImage) => (args) => {
+  bundle.doUploadUserProvidedCar = (file, uploadImage) => async (args) => {
     const { store, getIpfs } = args
-    importCar(file, getIpfs()).then(result => {
-      const cid = result.root.cid
-      const hash = cid.toString() ? `#/explore${ensureLeadingSlash(cid.toString())}` : '#/explore'
+    try {
+      const rootCid = await importCar(file, getIpfs())
+      const hash = rootCid.toString() ? `#/explore${ensureLeadingSlash(rootCid.toString())}` : '#/explore'
       store.doUpdateHash(hash)
 
       //  Grab the car loader image so we can change it's state
       const imageFileLoader = document.getElementById('car-loader-image')
       imageFileLoader.src = uploadImage
-    })
+    } catch (err) {
+      console.error('Could not import car file', err)
+    }
   }
   return bundle
 }
 
-async function importCar (file, ipfs) {
+/**
+ *
+ * @param {File} file
+ * @param {import('@helia/interface').Helia} helia
+ *
+ * @returns {Promise<CID>}
+ */
+async function importCar (file, helia) {
   const inStream = file.stream()
-  for await (const result of ipfs.dag.import(toIterable.source(inStream))) {
-    return result
+  const CarIterator = await CarBlockIterator.fromIterable(toIterable.source(inStream))
+  for await (const { cid, bytes } of CarIterator) {
+    // add blocks to helia to ensure they are available while navigating children
+    await helia.blockstore.put(cid, bytes)
   }
+  const cidRoots = await CarIterator.getRoots()
+
+  // @todo: Handle multiple roots
+  return cidRoots[0]
 }
 
 function ensureLeadingSlash (str) {

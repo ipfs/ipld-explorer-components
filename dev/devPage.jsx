@@ -10,6 +10,9 @@ import { composeBundles, createRouteBundle } from 'redux-bundler'
 import { Provider as ReduxStoreProvider, connect } from 'redux-bundler-react'
 import 'tachyons'
 
+/**
+ * TODO: import from src instead of dist to get hot-reloading
+ */
 import heliaBundle from '../dist/bundles/helia'
 import '../dist/components/loader/Loader.css'
 import '../dist/components/object-info/LinksTable.css'

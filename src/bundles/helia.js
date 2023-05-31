@@ -37,7 +37,7 @@ function getUserOpts (key) {
       const optsStr = globalThis.localStorage.getItem(key) || '{}'
       userOpts = JSON.parse(optsStr)
     } catch (error) {
-      console.log(`Error reading '${key}' value from localStorage`, error)
+      console.error(`Error reading '${key}' value from localStorage`, error)
     }
   }
   return userOpts

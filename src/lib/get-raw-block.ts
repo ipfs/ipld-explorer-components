@@ -100,6 +100,9 @@ export async function getRawBlock (helia: Helia, cid: CID): Promise<Uint8Array> 
   const abortController = new AbortController()
 
   try {
+    if (await helia.blockstore.has(cid)) {
+      return await helia.blockstore.get(cid)
+    }
     const rawBlock = await Promise.any([helia.blockstore.get(cid, { signal: abortController.signal }), getBlockFromAnyGateway(cid, abortController.signal)])
     abortController.abort() // abort any other requests.
     /**
