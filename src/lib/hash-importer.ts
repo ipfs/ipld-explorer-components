@@ -1,9 +1,10 @@
 /* global globalThis */
 import { keccak256 } from 'js-sha3'
-import { from } from 'multiformats/hashes/hasher'
+import { type Hasher, from } from 'multiformats/hashes/hasher'
 import * as sha2 from 'multiformats/hashes/sha2'
 
-export default async function getHasherForCode (code: number) {
+type SupportedHashers = typeof sha2.sha256 | typeof sha2.sha512 | Hasher<'keccak-256', 27> | Hasher<'sha1', 17>
+export default async function getHasherForCode (code: number): Promise<SupportedHashers> {
   switch (code) {
     case sha2.sha256.code:
       return sha2.sha256
@@ -15,7 +16,7 @@ export default async function getHasherForCode (code: number) {
         name: 'sha1',
         code,
         encode: async (data: Uint8Array) => {
-          const crypto = globalThis.crypto || (await import('crypto')).webcrypto
+          const crypto = globalThis.crypto ?? (await import('crypto')).webcrypto
           const hashBuffer = await crypto.subtle.digest('SHA-1', data)
           return new Uint8Array(hashBuffer)
         }

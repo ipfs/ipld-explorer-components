@@ -28,7 +28,7 @@ const createCID = async (value, codec, hasher) => {
     const digest = await hasher.digest(codec.encode(value))
     return CID.create(1, codec.code, digest)
   } catch (err) {
-    console.log('Failed to create CID', value, err)
+    console.error('Failed to create CID', value, err)
     return null
   }
 }

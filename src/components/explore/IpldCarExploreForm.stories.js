@@ -8,6 +8,7 @@ import i18n from '../../i18n-decorator'
 
 const mockExploreBundle = {
   name: 'explore',
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   selectFoo: () => () => {}, // else compose throws. gotta have at least one selector.
   doExploreUserProvidedCar: action('explore')
 }

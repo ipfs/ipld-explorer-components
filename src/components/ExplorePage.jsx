@@ -18,7 +18,7 @@ export class ExplorePage extends React.Component {
 
     if (!explorePathFromHash) {
       // No IPLD path to explore so show the intro page
-      console.log('[IPLD Explorer] ExplorePage loaded without a path to explore')
+      console.warn('[IPLD Explorer] ExplorePage loaded without a path to explore')
       return null
     }
 

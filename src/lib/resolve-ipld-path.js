@@ -45,16 +45,15 @@ import normaliseDagNode from './normalise-dag-node.js'
  * - `nodes` is the array of nodes that the path traverses.
  * - `pathBoundaries` is the array of links that the path traverses.
  *
- * @param {IpldInterface} ipldGet - fn that returns a promise of the ipld data for a (cid, path, options)
- * @param ipfs
+ * @param {import('@helia/interface').Helia} helia
  * @param {string} sourceCid - the root hash
  * @param {string} path - everything after the hash
  * @param {object[]} nodes - accumulated node info
  * @param {object[]} pathBoundaries - accumulated path boundary info
  * @returns {ResolvedIpldPathInfo} resolved path info
  */
-export default async function resolveIpldPath (ipfs, sourceCid, path, nodes = [], pathBoundaries = []) {
-  const { value, remainderPath } = await ipldGetNodeAndRemainder(ipfs, sourceCid, path)
+export default async function resolveIpldPath (helia, sourceCid, path, nodes = [], pathBoundaries = []) {
+  const { value, remainderPath } = await ipldGetNodeAndRemainder(helia, sourceCid, path)
   if (sourceCid == null) {
     throw new Error('sourceCid is null')
   }
@@ -69,7 +68,7 @@ export default async function resolveIpldPath (ipfs, sourceCid, path, nodes = []
   if (link) {
     pathBoundaries.push(link)
     // Go again, using the link.target as the sourceCid, and the remainderPath as the path.
-    return resolveIpldPath(ipfs, link.target, remainderPath, nodes, pathBoundaries)
+    return resolveIpldPath(helia, link.target, remainderPath, nodes, pathBoundaries)
   }
   // we made it to the containing node. Hand back the info
   const canonicalPath = path ? `${sourceCidStr}${path}` : sourceCidStr

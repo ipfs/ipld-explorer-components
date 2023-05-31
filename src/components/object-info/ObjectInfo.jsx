@@ -70,10 +70,9 @@ export function toExpandPathsNotation (localPath) {
 }
 
 const DagNodeIcon = ({ type, ...props }) => (
-  null
-  // <svg {...props} title={nameForNode(type)} width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'>
-  //   <circle cx='15' cy='15' r='15' fillRule='evenodd' fill={colorForNode(type)} />
-  // </svg>
+  <svg {...props} title={nameForNode(type)} width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'>
+    <circle cx='15' cy='15' r='15' fillRule='evenodd' fill={colorForNode(type)} />
+  </svg>
 )
 
 const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, links, format, onLinkClick, gatewayUrl, publicGatewayUrl, ...props }) => {
@@ -109,6 +108,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
           ? null
           : (
           <div className='dt dt--fixed pt2'>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className='dtc silver tracked ttu f7' style={{ width: 48 }}>CID</label>
             <div className='dtc truncate charcoal monospace' data-id='ObjectInfo-cid'>{cid}</div>
           </div>
@@ -117,17 +117,20 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
           ? null
           : (
           <div className='dt dt--fixed pt2'>
+            {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className='dtc silver tracked ttu f7' style={{ width: 48 }}>Size</label>
             <div className='dtc truncate charcoal monospace'>{humansize(size)}</div>
           </div>
             )}
         <div className='dt dt--fixed pt2'>
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label className='dtc silver tracked ttu f7' style={{ width: 48 }}>Links</label>
           <div className='dtc truncate charcoal'>
             {links ? (<code>{links.length}</code>) : 'No Links'}
           </div>
         </div>
         <div className='dt dt--fixed pt2' style={{ height: 26 }}>
+          {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label className='dtc silver tracked ttu f7 v-mid' style={{ width: 48 }}>Data</label>
           <div className='dtc truncate mid-gray'>
             {data ? null : 'No data'}

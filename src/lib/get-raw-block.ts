@@ -32,7 +32,9 @@ async function getRawBlockFromGateway (url: string | URL, cid: CID, signal: Abor
       },
       cache: 'force-cache'
     })
-    if (!res.ok) throw res
+    if (!res.ok) {
+      throw new Error(`unable to fetch raw block for CID ${cid} from gateway ${gwUrl.toString()}`)
+    }
     return new Uint8Array(await res.arrayBuffer())
   } catch (cause) {
     console.error('cause', cause)
@@ -42,15 +44,9 @@ async function getRawBlockFromGateway (url: string | URL, cid: CID, signal: Abor
 
 /**
  * This method validates that the block we got from the gateway has the same CID as the one we requested
- *
- * @param helia
- * @param providedCid
- * @param bytes
  */
 export async function verifyBytes (providedCid: CID, bytes: Uint8Array): Promise<void> {
   try {
-    // console.log(`bytes: `, bytes);
-    // console.log(`providedCid: `, providedCid);
     const cid = await getCidFromBytes(bytes, providedCid.version, providedCid.code, providedCid.multihash.code)
 
     if (cid.toString() !== providedCid.toString()) {
@@ -74,7 +70,7 @@ export async function getBlockFromAnyGateway (cid: CID, signal: AbortSignal, mor
         await verifyBytes(cid, rawBlock)
         return rawBlock
       } catch (err) {
-        console.log('unable to verify block from gateway', url)
+        console.error('unable to verify block from gateway', url)
         continue
       }
     } catch (err) {
@@ -91,10 +87,6 @@ const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
 /**
  * Method for getting a raw block either with helia or https://docs.ipfs.tech/reference/http/gateway/#trusted-vs-trustless
  * inspiration from https://github.com/ipfs-shipyard/ipfs-geoip/blob/466cd9d6454098c0fcf998b2217225099a654695/src/lookup.js#L18
- *
- * @param {typeof import('@helia/interface')['Helia']} ipfs
- * @param {CID} cid
- * @returns {Promise}
  */
 export async function getRawBlock (helia: Helia, cid: CID): Promise<Uint8Array> {
   const abortController = new AbortController()
