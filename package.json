@@ -114,7 +114,7 @@
     "start": "cross-env NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js' --watch",
     "storybook": "start-storybook -p 9009 --static-dir public",
     "storybook:build": "build-storybook -c .storybook --static-dir public --output-dir build",
-    "test": "react-scripts test --env=./custom-jest-env.js --transformIgnorePatterns '/node_modules/(?!(multiformats/cid)/)'"
+    "test": "vitest run --environment=node"
   },
   "dependencies": {
     "@babel/cli": "^7.13.14",
@@ -173,6 +173,8 @@
     "@semantic-release/github": "^8.0.4",
     "@semantic-release/npm": "^9.0.1",
     "@semantic-release/release-notes-generator": "^10.0.3",
+    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/react": "^12.1.5",
     "@types/jest": "^28.1.8",
     "@types/mocha": "^10.0.1",
     "@types/react": "^18.2.6",
@@ -234,6 +236,7 @@
     "vite": "^4.3.7",
     "vite-plugin-svgr": "^3.2.0",
     "vite-react-jsx": "^1.1.2",
+    "vitest": "^0.31.3",
     "webpack": "^5.83.1",
     "webpack-cli": "^5.1.1"
   },

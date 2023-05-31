@@ -1,8 +1,8 @@
 import { CID } from 'multiformats'
 
-import getCodecForCid from './get-codec-for-cid.js'
-import { getRawBlock } from './get-raw-block.js'
-import normaliseDagNode from './normalise-dag-node.js'
+import getCodecForCid from './get-codec-for-cid'
+import { getRawBlock } from './get-raw-block'
+import normaliseDagNode from './normalise-dag-node'
 
 /**
  * @typedef {object} ResolvedIpldPathInfo

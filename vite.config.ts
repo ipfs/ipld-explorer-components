@@ -1,4 +1,4 @@
-import { join, resolve } from 'node:path'
+import { join, resolve as pathResolve } from 'node:path'
 import {readFileSync, writeFileSync} from 'node:fs'
 
 import { defineConfig, DepOptimizationOptions, ESBuildOptions, PluginOption, UserConfig, UserConfigExport } from 'vite';
@@ -54,7 +54,7 @@ export default defineConfig(({mode}) => {
       })
   ]
   let viteResolve: UserConfig['resolve'] = {
-    alias: [{ find: '@', replacement: resolve(__dirname, '/src') }]
+    alias: [{ find: '@', replacement: pathResolve(__dirname, '/src') }]
   }
 
   let viteDefine: UserConfig['define'] =  {
@@ -74,7 +74,7 @@ export default defineConfig(({mode}) => {
   const viteBuild: UserConfig['build'] = {
     lib: {
       entry: [
-        resolve(__dirname, 'dist/index.js'),
+        pathResolve(__dirname, 'dist/index.js'),
         // resolve(__dirname, 'src/bundles/explore.js'),
         // resolve(__dirname, 'src/components/object-info/LinksTable.css'),
       ],
@@ -93,7 +93,7 @@ export default defineConfig(({mode}) => {
       ],
       preserveEntrySignatures: 'strict',
       input: {
-        index: resolve(__dirname, 'dist/index.js'),
+        index: pathResolve(__dirname, 'dist/index.js'),
       },
       output: {
         preserveModules: true,

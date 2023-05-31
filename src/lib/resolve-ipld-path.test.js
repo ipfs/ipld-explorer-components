@@ -1,68 +1,74 @@
-
-/* global describe it expect jest */
+/* global describe it expect */
 // @ts-check
+import { unixfs } from '@helia/unixfs'
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
+import { CID } from 'multiformats'
+import { sha256 } from 'multiformats/hashes/sha2'
+import { vi } from 'vitest'
 
 import { toCidOrNull } from './cid'
 import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
+import { createHeliaMock } from '../../test/unit/heliaMock'
 
 const testCidString = 'bafyreiddymapg5zcpma3iu4wingqvois6jirucn5776wdsyg5f3f65v75a'
 
+/**
+ *
+ * @param {import('@helia/interface').Helia} helia
+ * @param {string | Uint8Array} data
+ * @param {{encode: (n: any) => Uint8Array, code: number }} codec
+ * @param {OldDagPbLinkLiteral[]} links
+ *
+ * @returns {Promise<CID>}
+ */
+async function addDagNodeToHelia (helia, codec, data, links) {
+  const dagPbNode = createDagPbNode(data, links)
+  const encodedDagPbNode = codec.encode(dagPbNode)
+  const hash = await sha256.digest(encodedDagPbNode)
+  const cid = CID.createV1(codec.code, hash)
+
+  return await helia.blockstore.put(cid, encodedDagPbNode)
+}
+
 describe('resolveIpldPath', () => {
   it('resolves all nodes traversed along a path', async () => {
-    const testCidString = 'bafyreiddymapg5zcpma3iu4wingqvois6jirucn5776wdsyg5f3f65v75a'
-
-    const testCID = /** @type {import('multiformats').CID} */(toCidOrNull(testCidString))
-    const ipldMock = {
-      get: jest.fn(),
-      resolve: jest.fn()
-    }
-    const path = '/a/b/a'
-    const linkCid = 'bafyreigjtxtteq6vj3gtb7gzhwkmnprd2al5mjyttptcmu5cp3gvzmau3a'
-
-    const dagGetRes1 = {
-      a: {
-        b: toCidOrNull(linkCid)
-      }
-    }
-    const dagGetRes2 = {
-      first: () => Promise.resolve({ remainderPath: '/a' })
-    }
-    const dagGetRes3 = {
-      a: 'hello world'
-    }
-    const dagGetRes4 = {
-      first: () => Promise.resolve({ remainderPath: '/a' })
-    }
-
-    ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes1))
-    ipldMock.resolve.mockReturnValueOnce(dagGetRes2)
-    ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes3))
-    ipldMock.resolve.mockReturnValueOnce(dagGetRes4)
-
-    const res = await resolveIpldPath(ipldMock, testCID.toString(), path)
-
-    expect(ipldMock.get.mock.calls.length).toBe(2)
-    expect(ipldMock.resolve.mock.calls.length).toBe(2)
-    expect(res.canonicalPath).toBe(`${linkCid}/a`)
-    expect(res.nodes.length).toBe(2)
-    expect(res.nodes[0].type).toBe(dagCbor.code)
-    expect(res.nodes[0].cid).toBe(testCidString)
-    expect(res.nodes[1].type).toBe(dagCbor.code)
-    expect(res.nodes[1].cid).toBe(linkCid)
-    expect(res.pathBoundaries.length).toBe(1)
+    const helia = await createHeliaMock()
+    const node4Cid = await addDagNodeToHelia(helia, dagPb, '4th node', [])
+    const node3Cid = await addDagNodeToHelia(helia, dagPb, '3rd node', [{
+      name: 'a',
+      cid: node4Cid.toString(),
+      size: 101
+    }])
+    const node2Cid = await addDagNodeToHelia(helia, dagPb, '2nd node', [{
+      name: 'b',
+      cid: node3Cid.toString(),
+      size: 101
+    }])
+    const rootNodeCid = await addDagNodeToHelia(helia, dagPb, 'root node', [{
+      name: 'a',
+      cid: node2Cid.toString(),
+      size: 101
+    }])
+    const res = await resolveIpldPath(helia, rootNodeCid.toString(), '/a/b/a')
+    expect(res.canonicalPath).toBe(node4Cid.toString())
+    expect(res.nodes.length).toBe(4)
+    expect(res.nodes[0].cid).toBe(rootNodeCid.toString())
+    expect(res.nodes[1].cid).toBe(node2Cid.toString())
+    expect(res.nodes[2].cid).toBe(node3Cid.toString())
+    expect(res.nodes[3].cid).toBe(node4Cid.toString())
+    expect(res.pathBoundaries.length).toBe(3)
     expect(res.pathBoundaries[0]).toEqual(expect.objectContaining({
-      path: 'a/b',
-      source: testCidString,
-      target: linkCid
+      path: 'a',
+      source: rootNodeCid.toString(),
+      target: node2Cid.toString()
     }))
   })
 
   it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
     const ipldMock = {
-      get: jest.fn(),
-      resolve: jest.fn()
+      get: vi.fn(),
+      resolve: vi.fn()
     }
 
     const path = '/a/b/pb1'
