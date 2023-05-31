@@ -1,30 +1,25 @@
-// @ts-expect-error - no types
 import type { PBNode } from '@ipld/dag-pb'
-// @ts-expect-error - no types
 import type { IPLDFormat } from 'blockcodec-to-ipld-format'
-// @ts-expect-error - no types
 import multicodecs from 'multicodec'
-// @ts-expect-error - no types
 import { type BlockCodec } from 'multiformats/codecs/interface'
 
-export default async function codecImporter<T extends unknown = unknown> (codecCode: number): Promise<BlockCodec<any, any> | IPLDFormat<any>> {
-  // const codecName: string = multicodecs.codeToName[codecCode as CodecCode]
-  // console.log(`codecName: `, codecName);
+type CodecDataTypes = PBNode | Uint8Array
+export default async function codecImporter<T extends CodecDataTypes = CodecDataTypes> (codecCode: number): Promise<BlockCodec<number, T> | IPLDFormat<T>> {
+  // @ts-expect-error - CodecCode & multicodecs.codeToName typings are borked.
+  const codecName: string = multicodecs.codeToName[codecCode as CodecCode]
   switch (codecCode) {
     case multicodecs.DAG_CBOR:
-      // @ts-expect-error - no types
       return await import('@ipld/dag-cbor') as BlockCodec<typeof multicodecs.DAG_CBOR, T>
     case multicodecs.DAG_PB:
-      // @ts-expect-error - no types
+      // @ts-expect-error - return types need normalizing
       return await import('@ipld/dag-pb') as BlockCodec<typeof multicodecs.DAG_PB, PBNode>
     case multicodecs.GIT_RAW:
       // @ts-expect-error - no ipld-git types
       return (await import('ipld-git')).default as BlockCodec<typeof multicodecs.GIT_RAW, T>
     case multicodecs.RAW:
-      // @ts-expect-error - no multiformats types
+      // @ts-expect-error - return types need normalizing
       return await import('multiformats/codecs/raw') as BlockCodec<typeof multicodecs.RAW, Uint8Array>
     case multicodecs.JSON:
-      // @ts-expect-error - no multiformats types
       return await import('multiformats/codecs/json') as BlockCodec<typeof multicodecs.JSON, T>
     case multicodecs.ETH_ACCOUNT_SNAPSHOT:
       // @ts-expect-error - no ipld-ethereum types
@@ -48,8 +43,6 @@ export default async function codecImporter<T extends unknown = unknown> (codecC
       // @ts-expect-error - no ipld-ethereum types
       return (await import('ipld-ethereum/eth-tx-trie')).default as IPLDFormat<T>
     default:
-      // @ts-expect-error - CodecCode & multicodecs.codeToName typings are borked.
-      const codecName: string = multicodecs.codeToName[codecCode as CodecCode]
       throw new Error(`unsupported codec: ${codecCode}=${codecName}`)
   }
 }

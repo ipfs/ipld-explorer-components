@@ -83,6 +83,7 @@ export function normaliseDagPb (node, cid, type) {
       return {
         cid: cidStr,
         type,
+        // @ts-expect-error - type is a string and not assignable to `UnixFsNodeTypes`
         data: { type, data: unixFsData, blockSizes },
         links: normaliseDagPbLinks(node.Links, cid),
         size: unixFsObj.fileSize(),
