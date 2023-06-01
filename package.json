@@ -103,7 +103,7 @@
     ]
   },
   "scripts": {
-    "build": "npm run build:esm",
+    "build": "run-s lint build:esm",
     "build:esm": "cross-env NODE_ENV=production babel --quiet src -d dist --copy-files --ignore '**/*.test.js' && tsc",
     "release": "semantic-release",
     "clean": "rm -rf dist",
@@ -213,6 +213,7 @@
     "ipfs-core": "^0.18.0",
     "ipfs-css": "^1.3.0",
     "jsdom": "^22.1.0",
+    "npm-run-all": "^4.1.5",
     "raw-loader": "^4.0.2",
     "react": "^16.14.0",
     "react-dom": "^16.14.0",
