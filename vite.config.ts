@@ -1,5 +1,9 @@
 import { join, resolve as pathResolve } from 'node:path'
 import {readFileSync, writeFileSync} from 'node:fs'
+import fs from 'node:fs/promises'
+import path from 'node:path'
+import url from 'node:url'
+import { createRequire } from 'node:module'
 
 import { defineConfig, DepOptimizationOptions, ESBuildOptions, PluginOption, UserConfig, UserConfigExport } from 'vite';
 import react from '@vitejs/plugin-react';
@@ -8,11 +12,12 @@ import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfil
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
 import nodePolyfills from 'rollup-plugin-node-polyfills';
 import resolve from '@rollup/plugin-node-resolve'
+import { nodeResolve } from '@rollup/plugin-node-resolve';
+import babel from '@rollup/plugin-babel';
+import commonjs from '@rollup/plugin-commonjs';
+import postcss from 'rollup-plugin-postcss';
+import copy from 'rollup-plugin-copy'
 
-import fs from 'node:fs/promises'
-import path from 'node:path'
-import url from 'node:url'
-import { createRequire } from 'node:module'
 
 // https://github.com/bvaughn/react-virtualized/issues/1632#issuecomment-1483966063
 const WRONG_CODE = `import { bpfrpt_proptype_WindowScroller } from "../WindowScroller.js";`
