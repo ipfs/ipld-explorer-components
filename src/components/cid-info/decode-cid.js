@@ -1,7 +1,7 @@
 import { CID } from 'multiformats'
 
-import baseImporter from '../../lib/base-importer.js'
-import hashImporter from '../../lib/hash-importer.js'
+import baseImporter from '../../lib/base-importer'
+import hashImporter from '../../lib/hash-importer'
 
 export async function decodeCid (value) {
   const cid = CID.parse(value)

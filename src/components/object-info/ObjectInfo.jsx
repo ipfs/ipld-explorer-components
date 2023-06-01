@@ -3,7 +3,7 @@ import filesize from 'filesize'
 import React from 'react'
 import { withTranslation } from 'react-i18next'
 
-import LinksTable from './LinksTable.js'
+import LinksTable from './LinksTable'
 const humansize = filesize.partial({ round: 0 })
 
 const objectInspectorTheme = {

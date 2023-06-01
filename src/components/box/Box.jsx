@@ -1,6 +1,6 @@
 import React from 'react'
 
-import ErrorBoundary from '../error/ErrorBoundary.js'
+import ErrorBoundary from '../error/ErrorBoundary'
 
 export const Box = ({
   className = 'pa4',

@@ -2,7 +2,7 @@ import React from 'react'
 import { Trans, withTranslation } from 'react-i18next'
 
 import ipldLogoSrc from './ipld.svg'
-import Box from '../box/Box.js'
+import Box from '../box/Box'
 
 export const AboutIpld = ({ t }) => {
   return (

@@ -64,6 +64,9 @@ export default defineConfig(({mode}) => {
     esbuildOptions: {
       loader: {
         '.js': 'jsx',
+        '.ts': 'tsx',
+        '.jsx': 'jsx',
+        '.tsx': 'tsx',
       },
     },
   };
@@ -74,7 +77,7 @@ export default defineConfig(({mode}) => {
   const viteBuild: UserConfig['build'] = {
     lib: {
       entry: [
-        pathResolve(__dirname, 'dist/index.js'),
+        pathResolve(__dirname, 'src/index.js'),
         // resolve(__dirname, 'src/bundles/explore.js'),
         // resolve(__dirname, 'src/components/object-info/LinksTable.css'),
       ],
@@ -93,7 +96,7 @@ export default defineConfig(({mode}) => {
       ],
       preserveEntrySignatures: 'strict',
       input: {
-        index: pathResolve(__dirname, 'dist/index.js'),
+        index: pathResolve(__dirname, 'src/index.js'),
       },
       output: {
         preserveModules: true,

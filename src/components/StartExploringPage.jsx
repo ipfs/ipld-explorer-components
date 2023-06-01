@@ -3,10 +3,10 @@ import { Helmet } from 'react-helmet'
 import { withTranslation } from 'react-i18next'
 import ReactJoyride from 'react-joyride'
 
-import AboutIpld from './about/AboutIpld.js'
-import IpldExploreForm from './explore/IpldExploreForm.js'
-import { colorForNode, nameForNode, shortNameForNode } from './object-info/ObjectInfo.js'
-import { projectsTour } from '../lib/tours.js'
+import AboutIpld from './about/AboutIpld'
+import IpldExploreForm from './explore/IpldExploreForm'
+import { colorForNode, nameForNode, shortNameForNode } from './object-info/ObjectInfo'
+import { projectsTour } from '../lib/tours'
 
 const ExploreSuggestion = ({ cid, name, type }) => (
   <a className='flex items-center lh-copy pl3 pl0-l pv3 bb b--black-10 link focus-outline' href={`#/explore/${cid}`}>
