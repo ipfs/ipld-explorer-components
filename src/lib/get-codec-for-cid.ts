@@ -7,6 +7,7 @@ import { type BlockCodec } from 'multiformats/codecs/interface'
 
 import codecImporter from './codec-importer.js'
 import { isPBNode } from './guards'
+import { ensureLeadingSlash } from './helpers'
 
 interface ResolveType<DecodedType = any> {
   value: DecodedType
@@ -44,7 +45,7 @@ const resolveFn = (decodeFn: DecodeFn) => (buf: Uint8Array, path: string): Resol
     }
 
     if (CID.asCID(value) != null) {
-      return { value, remainderPath: entries.join('/') }
+      return { value, remainderPath: ensureLeadingSlash(entries.join('/')) }
     }
   }
 
@@ -68,7 +69,7 @@ const codecResolverMap: Record<string, CodecResolverFn> = {
     let remainderPath = pathSegments.join('/')
 
     let link = node.Links.find((link: PBLink) => link.Name === firstPathSegment)
-    if ((link == null) && firstPathSegment.includes('Links')) {
+    if ((link == null) && firstPathSegment?.includes('Links')) {
       const linkIndex = Number(firstPathSegment.split('/')[1])
       link = node.Links[linkIndex]
     }

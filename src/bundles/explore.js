@@ -1,8 +1,8 @@
-import { CarBlockIterator } from '@ipld/car'
 import { CID } from 'multiformats/cid'
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
-import toIterable from 'stream-to-it'
 
+import { ensureLeadingSlash } from '../lib/helpers'
+import { importCar } from '../lib/import-car'
 import parseIpldPath from '../lib/parse-ipld-path.js'
 import resolveIpldPath from '../lib/resolve-ipld-path.js'
 
@@ -124,31 +124,6 @@ const makeBundle = () => {
     }
   }
   return bundle
-}
-
-/**
- *
- * @param {File} file
- * @param {import('@helia/interface').Helia} helia
- *
- * @returns {Promise<CID>}
- */
-async function importCar (file, helia) {
-  const inStream = file.stream()
-  const CarIterator = await CarBlockIterator.fromIterable(toIterable.source(inStream))
-  for await (const { cid, bytes } of CarIterator) {
-    // add blocks to helia to ensure they are available while navigating children
-    await helia.blockstore.put(cid, bytes)
-  }
-  const cidRoots = await CarIterator.getRoots()
-
-  // @todo: Handle multiple roots
-  return cidRoots[0]
-}
-
-function ensureLeadingSlash (str) {
-  if (str.startsWith('/')) return str
-  return `/${str}`
 }
 
 export default makeBundle
