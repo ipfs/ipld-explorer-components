@@ -40,9 +40,6 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
             <ExploreSuggestion name='IGIS Git Repo' cid='baf4bcfg4ep767tjp5lxyanx5urpjjgx5q2volvy' type='git-raw' />
           </li>
           <li>
-            <ExploreSuggestion name='An Ethereum Block' cid='bagiacgzah24drzou2jlkixpblbgbg6nxfrasoklzttzoht5hixhxz3rlncyq' type='eth-block' />
-          </li>
-          <li>
             <ExploreSuggestion name='XKCD Archives' cid='QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm' type='dag-pb' />
           </li>
           <li>
