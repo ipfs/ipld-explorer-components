@@ -94,7 +94,6 @@ export function normaliseDagPb (node, cid, type) {
       // console.error(err)
     }
   }
-  // const cidStr = toCidStrOrNull(cid)
 
   return {
     cid: cidStr,

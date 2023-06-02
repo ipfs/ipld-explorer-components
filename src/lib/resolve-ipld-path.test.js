@@ -17,7 +17,6 @@ describe('resolveIpldPath', () => {
     helia = await createHeliaMock()
   })
   it('resolves all nodes traversed along a path', async () => {
-    // const helia = await createHeliaMock()
     const node4Cid = await addDagNodeToHelia(helia, dagPb, createDagPbNode('4th node', []))
     const node3Cid = await addDagNodeToHelia(helia, dagPb, createDagPbNode('3rd node', [{
       name: 'a',
@@ -61,7 +60,6 @@ describe('resolveIpldPath', () => {
       size: 101
     }])
     const dagNode2CID = await addDagNodeToHelia(helia, dagPb, dagNode2)
-    // const dagNode1 = dagCbor.encode('dag-cbor node')
 
     const dagNode1 = {
       a: {

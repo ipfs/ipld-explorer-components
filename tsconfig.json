@@ -42,11 +42,7 @@
     "storybook-static",
     "build",
     "dist",
-    "custom-jest-env.js",
     "vite.config.ts",
-    "jest.config.js",
-    "rollup.config.mjs",
-    "webpack.config.js",
     "package.json",
     "dev"
   ]

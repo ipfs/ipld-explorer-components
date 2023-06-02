@@ -1,4 +1,3 @@
-// import { checkA11y } from '@storybook/addon-a11y';
 import { action } from '@storybook/addon-actions'
 import React from 'react'
 
@@ -11,7 +10,6 @@ import i18n from '../../i18n-decorator'
 export default {
   title: 'IPLD Node Info',
   decorators: [
-    // checkA11y,
     i18n
   ]
 }

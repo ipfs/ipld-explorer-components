@@ -1,19 +1,12 @@
-import { readFileSync, writeFileSync } from 'node:fs'
 import fs from 'node:fs/promises'
 import { createRequire } from 'node:module'
-import path, { join, resolve as pathResolve } from 'node:path'
+import path, { resolve as pathResolve } from 'node:path'
 import url from 'node:url'
 
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
-import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
-import babel from '@rollup/plugin-babel'
-import commonjs from '@rollup/plugin-commonjs'
-import resolve, { nodeResolve } from '@rollup/plugin-node-resolve'
+import resolve from '@rollup/plugin-node-resolve'
 import react from '@vitejs/plugin-react'
-import copy from 'rollup-plugin-copy'
-import nodePolyfills from 'rollup-plugin-node-polyfills'
-import postcss from 'rollup-plugin-postcss'
-import { defineConfig, DepOptimizationOptions, ESBuildOptions, type PluginOption, type UserConfig, type UserConfigExport } from 'vite'
+import { defineConfig, type PluginOption, type UserConfig, type UserConfigExport } from 'vite'
 import svgrPlugin from 'vite-plugin-svgr'
 
 // https://github.com/bvaughn/react-virtualized/issues/1632#issuecomment-1483966063
@@ -43,10 +36,7 @@ function reactVirtualized (): PluginOption {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }) => {
-  console.log('mode: ', mode)
-  const isDev = mode === 'development'
-
+export default defineConfig(() => {
   const vitePlugins: UserConfig['plugins'] = [
     react(),
     svgrPlugin(),
@@ -80,12 +70,8 @@ export default defineConfig(({ mode }) => {
     lib: {
       entry: [
         pathResolve(__dirname, 'src/index.js')
-        // resolve(__dirname, 'src/bundles/explore.js'),
-        // resolve(__dirname, 'src/components/object-info/LinksTable.css'),
       ],
-      // name: 'ipld-explorer-components',
       fileName: (format, entryName) => `${format}/${entryName}.js`,
-      // formats: ['es', 'cjs']
       formats: ['es']
     },
     outDir: 'dist-vite',

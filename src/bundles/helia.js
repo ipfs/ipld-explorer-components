@@ -77,8 +77,6 @@ const bundle = {
     let ipfs = null
     let identity = null
 
-    // TODO: use delegatedContent&Peer routing via helia instead of kubo-rpc-client directly.
-    // TRY kubo-rpc-client (kubo-rpc-client)
     const apiOpts = Object.assign(
       {},
       getState().ipfs.apiOpts,
@@ -91,8 +89,7 @@ const bundle = {
         "🎛️ Customise your kubo-rpc-client opts by setting an `ipfsApi` value in localStorage. e.g. localStorage.setItem('ipfsApi', JSON.stringify({port: '1337'}))"
       )
       ipfs = await initHelia(apiOpts)
-      // identity = await ipfs.libp2p.identify()
-      identity = 'helia-TBD'
+      identity = ipfs.libp2p.services.identify.host.agentVersion.split(' ')[0]
       globalThis._ipfs = ipfs
       console.timeEnd('HELIA_INIT')
       console.timeEnd('IPFS_INIT')

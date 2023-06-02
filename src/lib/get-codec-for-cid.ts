@@ -110,6 +110,8 @@ export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
     if (ipldFormat.util?.deserialize != null) {
       return ipldFormat.util.deserialize(bytes)
     }
+    // TODO: Ideally, we want to remove dependency on deprecated and old packages, multicodecs and blockcodec-to-ipld-format, this warning is to help us track down where we are still using them.
+    console.warn('Using lib with old deps: blockcodec-to-ipld-format')
     if (convertedCodec.util.deserialize != null) {
       return convertedCodec.util.deserialize(bytes)
     }

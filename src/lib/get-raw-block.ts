@@ -8,7 +8,6 @@ async function getCidFromBytes (bytes: Uint8Array, cidVersion: CIDVersion, codec
   const hasher = await getHasherForCode(multihashCode)
 
   try {
-    // const hash = await Promise.resolve(hasher.digest(bytes))
     const hash = await hasher.digest(bytes)
     return CID.create(cidVersion, codecCode, hash)
   } catch (err) {
@@ -81,7 +80,6 @@ export async function getBlockFromAnyGateway (cid: CID, signal: AbortSignal, mor
   throw new Error('Could not get block from any gateway')
 }
 
-// const defaultGateways = ['http://localhost:8080', 'https://ipfs.io', 'https://dweb.link']
 const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
 
 /**

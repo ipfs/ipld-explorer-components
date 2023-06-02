@@ -271,11 +271,6 @@
     "redux-bundler-react": "^1.2.0",
     "tachyons": "^4.11.1"
   },
-  "overrides": {
-    "aegir": {
-      "typescript": "^5.0.4"
-    }
-  },
   "browsers": [
     ">1%",
     "last 2 versions",
