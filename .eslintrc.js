@@ -28,6 +28,7 @@ module.exports = {
       },
       warnOnUnassignedImports: true
     }],
+    'import/extensions': ['error', 'never'], // Errors using extensions because ts + vite + babel + storybook needs.
     'no-console': ['error', {
       allow: ['error', 'info', 'time', 'timeEnd', 'warn']
     }],

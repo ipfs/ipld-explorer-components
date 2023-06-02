@@ -12,7 +12,6 @@
   ],
   "plugins": [
     "@babel/plugin-proposal-class-properties",
-    ["babel-plugin-add-import-extension", { extension: "js", replace: true }]
   ],
   "ignore": [
     "**/*.test.js",

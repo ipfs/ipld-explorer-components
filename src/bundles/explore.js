@@ -3,8 +3,8 @@ import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
 
 import { ensureLeadingSlash } from '../lib/helpers'
 import { importCar } from '../lib/import-car'
-import parseIpldPath from '../lib/parse-ipld-path.js'
-import resolveIpldPath from '../lib/resolve-ipld-path.js'
+import parseIpldPath from '../lib/parse-ipld-path'
+import resolveIpldPath from '../lib/resolve-ipld-path'
 
 const getCidFromCidOrFqdn = (cidOrFqdn) => {
   if (cidOrFqdn.startsWith('/ipfs/')) {
