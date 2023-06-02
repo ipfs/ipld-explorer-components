@@ -22,7 +22,7 @@ i18n
         },
         { // HttpBackend
           // ensure a relative path is used to look up the locales, so it works when loaded from /ipfs/<cid>
-          loadPath: './locales/{{lng}}/{{ns}}.json'
+          loadPath: 'locales/{{lng}}/{{ns}}.json'
         }
       ]
     },
