@@ -116,6 +116,16 @@ export default bundle
 
 async function initHelia (ipfsApi) {
   const delegatedClient1 = kuboClient(ipfsApi)
+  const delegatedClient2 = kuboClient({
+    protocol: 'https',
+    port: 443,
+    /**
+     * randomly select node0, node1, node2, or node3 delegate
+     *
+     * @see https://github.com/ipfs/ipld-explorer-components/pull/360#discussion_r1206640407
+     */
+    host: `node${parseInt(Math.random() * 4)}.delegate.ipfs.io`
+  })
   const blockstore = new MemoryBlockstore()
   const datastore = new MemoryDatastore()
 
@@ -130,11 +140,13 @@ async function initHelia (ipfsApi) {
       ]
     },
     peerRouters: [
-      delegatedPeerRouting(delegatedClient1)
+      delegatedPeerRouting(delegatedClient1),
+      delegatedPeerRouting(delegatedClient2)
     ],
     contentRouters: [
       ipniContentRouting('https://cid.contact'),
-      delegatedContentRouting(delegatedClient1)
+      delegatedContentRouting(delegatedClient1),
+      delegatedContentRouting(delegatedClient2)
     ],
     datastore,
     transports: [

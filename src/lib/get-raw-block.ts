@@ -59,7 +59,7 @@ export async function verifyBytes (providedCid: CID, bytes: Uint8Array): Promise
 }
 
 export async function getBlockFromAnyGateway (cid: CID, signal: AbortSignal, moreGateways: string[] = []): Promise<Uint8Array> {
-  const gateways = defaultGateways.concat(moreGateways)
+  const gateways = moreGateways.concat(defaultGateways)
   for (const url of gateways) {
     if (signal.aborted) {
       throw new Error('aborted')
@@ -88,23 +88,33 @@ const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
  * Method for getting a raw block either with helia or https://docs.ipfs.tech/reference/http/gateway/#trusted-vs-trustless
  * inspiration from https://github.com/ipfs-shipyard/ipfs-geoip/blob/466cd9d6454098c0fcf998b2217225099a654695/src/lookup.js#L18
  */
-export async function getRawBlock (helia: Helia, cid: CID): Promise<Uint8Array> {
+export async function getRawBlock (helia: Helia, cid: CID, timeout = 30000): Promise<Uint8Array> {
   const abortController = new AbortController()
-  const timeoutId = setTimeout(() => { abortController.abort('Request timed out after 30s') }, 30000)
+  const heliaDelay = 500
 
   try {
     if (await helia.blockstore.has(cid)) {
+      // If we've gotten the block before, we can just return it.
       return await helia.blockstore.get(cid)
     }
-    try {
-      if (!helia.libp2p.isStarted()) {
-        await helia.libp2p.start()
-      }
-    } catch (err) {
-      console.error('unable to start libp2p', err)
-    }
-    // await helia.libp2p.start()
-    const rawBlock = await Promise.any([helia.blockstore.get(cid, { signal: abortController.signal }), getBlockFromAnyGateway(cid, abortController.signal)])
+
+    const timeoutId = setTimeout(() => { abortController.abort('Request timed out') }, timeout)
+    /**
+     * Try gateway first, and then try getting it from helia after a delay.
+     */
+    const heliaGetPromise = new Promise((resolve, reject) => {
+      // eslint-disable-next-line @typescript-eslint/no-misused-promises
+      setTimeout(async () => {
+        try {
+          const rawBlock = await helia.blockstore.get(cid, { signal: abortController.signal })
+          resolve(rawBlock)
+        } catch (err) {
+          reject(err)
+        }
+      }, heliaDelay)
+    })
+    const rawBlock = await Promise.any([getBlockFromAnyGateway(cid, abortController.signal), heliaGetPromise])
+
     abortController.abort('Content obtained') // abort any other requests.
     clearTimeout(timeoutId)
     /**
@@ -119,9 +129,5 @@ export async function getRawBlock (helia: Helia, cid: CID): Promise<Uint8Array> 
   } catch (err) {
     console.error('unable to get raw block', err)
     throw err
-  } finally {
-    if (helia.libp2p.isStarted()) {
-      await helia.libp2p.stop()
-    }
   }
 }
