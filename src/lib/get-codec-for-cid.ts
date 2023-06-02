@@ -45,7 +45,8 @@ const resolveFn = (decodeFn: DecodeFn) => (buf: Uint8Array, path: string): Resol
     }
 
     if (CID.asCID(value) != null) {
-      return { value, remainderPath: ensureLeadingSlash(entries.join('/')) }
+      const remainderPath = entries.length > 0 ? ensureLeadingSlash(entries.join('/')) : ''
+      return { value, remainderPath }
     }
   }
 

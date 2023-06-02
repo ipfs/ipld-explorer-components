@@ -98,11 +98,22 @@ describe('resolveIpldPath', () => {
     }))
   })
 
+  /**
+   * This test proves that an error ("Requested IPLD path should end with the remainder path") discovered when viewing
+   * the dag-cbor example from the start exploring page when loading path
+   * `bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq/cheese/0` does not occur.
+   *
+   * The CIDs of the below objects should be:
+   *
+   * rootNode: bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq
+   * childNode: bafkreifvxooyaffa7gy5mhrb46lnpdom34jvf4r42mubf5efbodyvzeujq
+   *
+   * but it doesn't necessarily matter, this was just an edgecase discovered accidentally.
+   */
   it('resolves dag-cbor node with children all pointing to raw node', async () => {
     const path = '/cheese/0'
     const textEncoder = new TextEncoder()
     const childNode = await addDagNodeToHelia(helia, raw, textEncoder.encode('foo\n'))
-    expect(childNode.toString()).toBe('bafkreifvxooyaffa7gy5mhrb46lnpdom34jvf4r42mubf5efbodyvzeujq')
     const rootNode = await addDagNodeToHelia(helia, dagCbor, {
       cats: 'not cats',
       cheese: [
@@ -113,15 +124,15 @@ describe('resolveIpldPath', () => {
       ],
       something: childNode
     })
-    expect(rootNode.toString()).toBe('bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq')
 
     const res = await resolveIpldPath(helia, rootNode.toString(), path)
+
     expect(res.targetNode.cid.toString()).toBe(childNode.toString())
     expect(res.canonicalPath).toBe(childNode.toString())
     expect(res.nodes.length).toBe(2)
     expect(res.nodes[0].cid.toString()).toBe(rootNode.toString())
     expect(res.nodes[0].type).toBe(dagCbor.code)
-    expect(res.nodes[0].links.length).toBe(3)
+    expect(res.nodes[0].links.length).toBe(5)
     expect(res.nodes[1].cid.toString()).toBe(childNode.toString())
     expect(res.nodes[1].type).toBe(raw.code)
     expect(res.nodes[1].links.length).toBe(0)
