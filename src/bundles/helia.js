@@ -20,6 +20,8 @@ import { autoNATService } from 'libp2p/autonat'
 import { circuitRelayTransport, circuitRelayServer } from 'libp2p/circuit-relay'
 import { identifyService } from 'libp2p/identify'
 
+import { addDagNodeToHelia } from '../lib/helpers'
+
 const defaultState = {
   apiOpts: {
     host: '127.0.0.1',
@@ -186,6 +188,9 @@ async function initHelia (ipfsApi) {
     blockstore,
     libp2p
   })
+
+  // add helia-only examples
+  await addDagNodeToHelia(helia, await import('@ipld/dag-json'), { hello: 'world' }) // baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea
 
   return helia
 }

@@ -30,6 +30,7 @@ const objectInspectorTheme = {
  */
 const nodeStyles = {
   'dag-cbor': { shortName: 'CBOR', name: 'dag-cbor', color: '#378085' },
+  'dag-json': { shortName: 'JSON', name: 'dag-json', color: '#378065' },
   'dag-pb': { shortName: 'PB', name: 'dag-pb', color: '#244e66' },
   'git-raw': { shortName: 'GIT', name: 'Git', color: '#378085' },
   'raw': { shortName: 'RAW', name: 'Raw Block', color: '#f14e32' }, // eslint-disable-line quote-props

@@ -21,6 +21,8 @@ export default async function codecImporter<T extends CodecDataTypes = CodecData
       return await import('multiformats/codecs/raw') as BlockCodec<typeof multicodecs.RAW, Uint8Array>
     case multicodecs.JSON:
       return await import('multiformats/codecs/json') as BlockCodec<typeof multicodecs.JSON, T>
+    case multicodecs.DAG_JSON:
+      return await import('@ipld/dag-json') as BlockCodec<typeof multicodecs.DAG_JSON, T>
     case multicodecs.ETH_ACCOUNT_SNAPSHOT:
       // @ts-expect-error - no ipld-ethereum types
       return await import('ipld-ethereum/eth-account-snapshot') as BlockCodec<typeof multicodecs.ETH_ACCOUNT_SNAPSHOT, T>

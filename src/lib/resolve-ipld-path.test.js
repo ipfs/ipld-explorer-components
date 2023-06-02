@@ -2,27 +2,10 @@
 // @ts-check
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
-import { CID } from 'multiformats'
-import { sha256 } from 'multiformats/hashes/sha2'
 
+import { addDagNodeToHelia } from './helpers'
 import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
 import { createHeliaMock } from '../../test/unit/heliaMock'
-
-/**
- * @template T
- * @param {import('@helia/interface').Helia} helia
- * @param {{encode: (n: T) => Uint8Array, code: number }} codec
- * @param {T} node
- *
- * @returns {Promise<CID>}
- */
-async function addDagNodeToHelia (helia, codec, node) {
-  const encodedNode = codec.encode(node)
-  const hash = await sha256.digest(encodedNode)
-  const cid = CID.createV1(codec.code, hash)
-
-  return await helia.blockstore.put(cid, encodedNode)
-}
 
 describe('resolveIpldPath', () => {
   /**
