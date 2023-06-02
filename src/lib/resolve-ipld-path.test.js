@@ -2,6 +2,7 @@
 // @ts-check
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
+import * as raw from 'multiformats/codecs/raw'
 
 import { addDagNodeToHelia } from './helpers'
 import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
@@ -94,6 +95,41 @@ describe('resolveIpldPath', () => {
       path: 'pb1',
       source: dagNode2CID.toString(),
       target: dagNode3CID.toString()
+    }))
+  })
+
+  it('resolves dag-cbor node with children all pointing to raw node', async () => {
+    const path = '/cheese/0'
+    const textEncoder = new TextEncoder()
+    const childNode = await addDagNodeToHelia(helia, raw, textEncoder.encode('foo\n'))
+    expect(childNode.toString()).toBe('bafkreifvxooyaffa7gy5mhrb46lnpdom34jvf4r42mubf5efbodyvzeujq')
+    const rootNode = await addDagNodeToHelia(helia, dagCbor, {
+      cats: 'not cats',
+      cheese: [
+        childNode,
+        childNode,
+        childNode,
+        childNode
+      ],
+      something: childNode
+    })
+    expect(rootNode.toString()).toBe('bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq')
+
+    const res = await resolveIpldPath(helia, rootNode.toString(), path)
+    expect(res.targetNode.cid.toString()).toBe(childNode.toString())
+    expect(res.canonicalPath).toBe(childNode.toString())
+    expect(res.nodes.length).toBe(2)
+    expect(res.nodes[0].cid.toString()).toBe(rootNode.toString())
+    expect(res.nodes[0].type).toBe(dagCbor.code)
+    expect(res.nodes[0].links.length).toBe(3)
+    expect(res.nodes[1].cid.toString()).toBe(childNode.toString())
+    expect(res.nodes[1].type).toBe(raw.code)
+    expect(res.nodes[1].links.length).toBe(0)
+    expect(res.pathBoundaries.length).toBe(1)
+    expect(res.pathBoundaries[0]).toEqual(expect.objectContaining({
+      path: 'cheese/0',
+      source: rootNode.toString(),
+      target: childNode.toString()
     }))
   })
 })
