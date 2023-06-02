@@ -3,7 +3,6 @@ import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { delegatedContentRouting } from '@libp2p/delegated-content-routing'
 import { delegatedPeerRouting } from '@libp2p/delegated-peer-routing'
-import { ipniContentRouting } from '@libp2p/ipni-content-routing'
 import { mplex } from '@libp2p/mplex'
 import { webRTC, webRTCDirect } from '@libp2p/webrtc'
 import { webSockets } from '@libp2p/websockets'
@@ -14,7 +13,7 @@ import { createHelia } from 'helia'
 import { create as kuboClient } from 'kubo-rpc-client'
 import { createLibp2p } from 'libp2p'
 import { autoNATService } from 'libp2p/autonat'
-import { circuitRelayTransport, circuitRelayServer } from 'libp2p/circuit-relay'
+import { circuitRelayTransport } from 'libp2p/circuit-relay'
 import { identifyService } from 'libp2p/identify'
 
 import { addDagNodeToHelia } from '../lib/helpers'
@@ -122,11 +121,6 @@ async function initHelia (ipfsApi) {
    */
   const libp2p = await createLibp2p({
     start: true, // TODO: libp2p bug with stop/start - https://github.com/libp2p/js-libp2p/issues/1787
-    addresses: {
-      listen: [
-        '/webrtc'
-      ]
-    },
     peerRouters: [
       delegatedPeerRouting(delegatedKuboClient)
     ],
@@ -152,10 +146,7 @@ async function initHelia (ipfsApi) {
     ],
     services: {
       identify: identifyService(),
-      autoNAT: autoNATService(),
-      relay: circuitRelayServer({
-        advertise: true
-      })
+      autoNAT: autoNATService()
     }
   })
 
