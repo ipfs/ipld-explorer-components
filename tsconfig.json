@@ -1,4 +1,7 @@
 {
+  /**
+   * NOTE: Babel is currently transpiling typescript.
+   */
   "compilerOptions": {
     "target": "ESNext",
     "lib": [
@@ -22,17 +25,12 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": false,
-    "outDir": "dist",
     "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist",
     "declarationDir": "dist",
     "jsx": "react",
     "rootDir": "src",
-    "emitDeclarationOnly": false,
-    // "allowImportingTsExtensions": true,
-    // "jsxImportSource": "react"
-
-
   },
   "include": [
     "src/**/*"

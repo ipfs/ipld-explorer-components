@@ -103,21 +103,21 @@
     ]
   },
   "scripts": {
-    "build": "run-s lint build:esm",
-    "build:esm": "cross-env NODE_ENV=production babel --quiet src -d dist --copy-files --ignore '**/*.test.js' && tsc",
+    "build": "run-s build:types lint build:esm",
+    "build:esm": "cross-env NODE_ENV=production babel --quiet src -d dist --copy-files --no-copy-ignored --extensions '.ts,.tsx,.js,.jsx'",
+    "build:types": "tsc",
     "release": "semantic-release",
     "clean": "rm -rf dist",
     "lint": "eslint src/",
     "lint:fix": "eslint src/ --fix",
     "prepare": "npm run build",
     "dev": "vite",
-    "start": "cross-env NODE_ENV=production babel src -d dist --copy-files --ignore '**/*.test.js' --watch",
+    "start": "cross-env NODE_ENV=production babel src -d dist --copy-files --no-copy-ignored --extensions '.ts,.tsx,.js,.jsx' --watch",
     "test": "vitest run --environment=node",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@babel/cli": "^7.13.14",
     "@chainsafe/libp2p-gossipsub": "^8.0.0",
     "@chainsafe/libp2p-noise": "^12.0.0",
     "@chainsafe/libp2p-yamux": "^4.0.2",
@@ -149,10 +149,11 @@
     "web-encoding": "^1.1.5"
   },
   "devDependencies": {
-    "@babel/core": "^7.13.15",
-    "@babel/plugin-proposal-class-properties": "^7.13.0",
-    "@babel/preset-env": "^7.13.15",
-    "@babel/preset-react": "^7.13.13",
+    "@babel/cli": "^7.21.5",
+    "@babel/core": "^7.22.1",
+    "@babel/plugin-proposal-class-properties": "^7.18.6",
+    "@babel/preset-env": "^7.22.4",
+    "@babel/preset-react": "^7.22.3",
     "@babel/preset-typescript": "^7.21.5",
     "@commitlint/cli": "^16.2.3",
     "@commitlint/config-conventional": "^16.2.1",
