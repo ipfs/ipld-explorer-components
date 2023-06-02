@@ -1,27 +1,24 @@
-import { join, resolve as pathResolve } from 'node:path'
-import {readFileSync, writeFileSync} from 'node:fs'
+import { readFileSync, writeFileSync } from 'node:fs'
 import fs from 'node:fs/promises'
-import path from 'node:path'
-import url from 'node:url'
 import { createRequire } from 'node:module'
+import path, { join, resolve as pathResolve } from 'node:path'
+import url from 'node:url'
 
-import { defineConfig, DepOptimizationOptions, ESBuildOptions, PluginOption, UserConfig, UserConfigExport } from 'vite';
-import react from '@vitejs/plugin-react';
-import svgrPlugin from 'vite-plugin-svgr';
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import { NodeModulesPolyfillPlugin } from '@esbuild-plugins/node-modules-polyfill'
-import nodePolyfills from 'rollup-plugin-node-polyfills';
-import resolve from '@rollup/plugin-node-resolve'
-import { nodeResolve } from '@rollup/plugin-node-resolve';
-import babel from '@rollup/plugin-babel';
-import commonjs from '@rollup/plugin-commonjs';
-import postcss from 'rollup-plugin-postcss';
+import babel from '@rollup/plugin-babel'
+import commonjs from '@rollup/plugin-commonjs'
+import resolve, { nodeResolve } from '@rollup/plugin-node-resolve'
+import react from '@vitejs/plugin-react'
 import copy from 'rollup-plugin-copy'
-
+import nodePolyfills from 'rollup-plugin-node-polyfills'
+import postcss from 'rollup-plugin-postcss'
+import { defineConfig, DepOptimizationOptions, ESBuildOptions, type PluginOption, type UserConfig, type UserConfigExport } from 'vite'
+import svgrPlugin from 'vite-plugin-svgr'
 
 // https://github.com/bvaughn/react-virtualized/issues/1632#issuecomment-1483966063
-const WRONG_CODE = `import { bpfrpt_proptype_WindowScroller } from "../WindowScroller.js";`
-function reactVirtualized(): PluginOption {
+const WRONG_CODE = 'import { bpfrpt_proptype_WindowScroller } from "../WindowScroller.js";'
+function reactVirtualized (): PluginOption {
   return {
     name: 'flat:react-virtualized',
     // Note: we cannot use the `transform` hook here
@@ -36,33 +33,33 @@ function reactVirtualized(): PluginOption {
       const file = reactVirtualizedFilePath
         .replace(
           path.join('dist', 'commonjs', 'index.js'),
-          path.join('dist', 'es', 'WindowScroller', 'utils', 'onScroll.js'),
+          path.join('dist', 'es', 'WindowScroller', 'utils', 'onScroll.js')
         )
       const code = await fs.readFile(file, 'utf-8')
       const modified = code.replace(WRONG_CODE, '')
       await fs.writeFile(file, modified)
-    },
+    }
   }
 }
 
 // https://vitejs.dev/config/
-export default defineConfig(({mode}) => {
-  console.log(`mode: `, mode);
+export default defineConfig(({ mode }) => {
+  console.log('mode: ', mode)
   const isDev = mode === 'development'
 
   const vitePlugins: UserConfig['plugins'] = [
-      react(),
-      svgrPlugin(),
-      reactVirtualized(),
-      resolve({
-        extensions: ['.js', '.jsx', '.ts', '.tsx', '.json'],
-      })
+    react(),
+    svgrPlugin(),
+    reactVirtualized(),
+    resolve({
+      extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
+    })
   ]
   let viteResolve: UserConfig['resolve'] = {
     alias: [{ find: '@', replacement: pathResolve(__dirname, '/src') }]
   }
 
-  let viteDefine: UserConfig['define'] =  {
+  const viteDefine: UserConfig['define'] = {
     global: 'globalThis'
   }
   const viteOptimizeDeps: UserConfig['optimizeDeps'] = {
@@ -71,25 +68,25 @@ export default defineConfig(({mode}) => {
         '.js': 'jsx',
         '.ts': 'tsx',
         '.jsx': 'jsx',
-        '.tsx': 'tsx',
-      },
-    },
-  };
+        '.tsx': 'tsx'
+      }
+    }
+  }
   const viteEsBuild: UserConfig['esbuild'] = {
-    loader: "tsx", // OR "tsx"
-    include: /\.(tsx?|jsx?)$/,
+    loader: 'tsx', // OR "tsx"
+    include: /\.(tsx?|jsx?)$/
   }
   const viteBuild: UserConfig['build'] = {
     lib: {
       entry: [
-        pathResolve(__dirname, 'src/index.js'),
+        pathResolve(__dirname, 'src/index.js')
         // resolve(__dirname, 'src/bundles/explore.js'),
         // resolve(__dirname, 'src/components/object-info/LinksTable.css'),
       ],
       // name: 'ipld-explorer-components',
       fileName: (format, entryName) => `${format}/${entryName}.js`,
       // formats: ['es', 'cjs']
-      formats: ['es'],
+      formats: ['es']
     },
     outDir: 'dist-vite',
     target: 'esnext',
@@ -97,39 +94,40 @@ export default defineConfig(({mode}) => {
     cssCodeSplit: false,
     rollupOptions: {
       external: [
-        /node_modules/
+        /node_modules/,
+        /\.stories\..+$/
       ],
       preserveEntrySignatures: 'strict',
       input: {
-        index: pathResolve(__dirname, 'src/index.js'),
+        index: pathResolve(__dirname, 'src/index.js')
       },
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',
-        entryFileNames: '[name].js',
+        entryFileNames: '[name].js'
       },
       plugins: [
       ]
-    },
+    }
   }
 
-    viteResolve = {
-      alias: [
-        { find: /^process$/, replacement: 'rollup-plugin-node-polyfills/polyfills/process-es6' },
-        { find: /^stream$/, replacement: 'rollup-plugin-node-polyfills/polyfills/stream' },
-        { find: /^_stream_duplex$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/duplex' },
-        { find: /^_stream_transform$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/transform' },
-      ],
-    }
-    viteOptimizeDeps.include = [
-      'ipld-ethereum'
+  viteResolve = {
+    alias: [
+      { find: /^process$/, replacement: 'rollup-plugin-node-polyfills/polyfills/process-es6' },
+      { find: /^stream$/, replacement: 'rollup-plugin-node-polyfills/polyfills/stream' },
+      { find: /^_stream_duplex$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/duplex' },
+      { find: /^_stream_transform$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/transform' }
     ]
-    viteOptimizeDeps.esbuildOptions = {
-      ...viteOptimizeDeps.esbuildOptions,
-      plugins: [
-        NodeGlobalsPolyfillPlugin({ buffer: true, process: true }),
-      ],
-    }
+  }
+  viteOptimizeDeps.include = [
+    'ipld-ethereum'
+  ]
+  viteOptimizeDeps.esbuildOptions = {
+    ...viteOptimizeDeps.esbuildOptions,
+    plugins: [
+      NodeGlobalsPolyfillPlugin({ buffer: true, process: true })
+    ]
+  }
 
   const finalConfig: UserConfigExport = {
     plugins: vitePlugins,
@@ -139,9 +137,9 @@ export default defineConfig(({mode}) => {
     esbuild: viteEsBuild,
     build: viteBuild,
     server: {
-      open: true,
-    },
+      open: true
+    }
   }
 
-  return finalConfig;
+  return finalConfig
 })

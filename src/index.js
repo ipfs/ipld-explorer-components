@@ -1,5 +1,5 @@
-import exploreBundle from './bundles/explore.js'
-import heliaBundle from './bundles/helia.js'
+import exploreBundle from './bundles/explore'
+import heliaBundle from './bundles/helia'
 import CidInfo from './components/cid-info/CidInfo'
 import IpldCarExploreForm from './components/explore/IpldCarExploreForm'
 import IpldExploreForm from './components/explore/IpldExploreForm'

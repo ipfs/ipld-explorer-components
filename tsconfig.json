@@ -1,4 +1,7 @@
 {
+  /**
+   * NOTE: Babel is currently transpiling typescript.
+   */
   "compilerOptions": {
     "target": "ESNext",
     "lib": [
@@ -22,30 +25,25 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "noEmit": false,
-    "outDir": "dist",
     "declaration": true,
+    "emitDeclarationOnly": true,
+    "outDir": "dist",
     "declarationDir": "dist",
     "jsx": "react",
     "rootDir": "src",
-    "emitDeclarationOnly": false,
-    // "allowImportingTsExtensions": true,
-    // "jsxImportSource": "react"
-
-
   },
   "include": [
     "src/**/*"
   ],
   "exclude": [
-    "src/*/*.test.*",
+    "src/**/*.test.*",
+    "src/**/*.stories.*",
     "node_modules",
     "storybook-static",
     "build",
     "dist",
     "custom-jest-env.js",
     "vite.config.ts",
-    "src/**/*.stories.*",
     "jest.config.js",
     "rollup.config.mjs",
     "webpack.config.js",
