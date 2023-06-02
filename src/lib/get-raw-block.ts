@@ -90,7 +90,6 @@ const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
  */
 export async function getRawBlock (helia: Helia, cid: CID, timeout = 30000): Promise<Uint8Array> {
   const abortController = new AbortController()
-  const heliaDelay = 500
 
   try {
     if (await helia.blockstore.has(cid)) {
@@ -99,24 +98,10 @@ export async function getRawBlock (helia: Helia, cid: CID, timeout = 30000): Pro
     }
 
     const timeoutId = setTimeout(() => { abortController.abort('Request timed out') }, timeout)
-    /**
-     * Try gateway first, and then try getting it from helia after a delay.
-     */
-    const heliaGetPromise = new Promise((resolve, reject) => {
-      // eslint-disable-next-line @typescript-eslint/no-misused-promises
-      setTimeout(async () => {
-        try {
-          const rawBlock = await helia.blockstore.get(cid, { signal: abortController.signal })
-          resolve(rawBlock)
-        } catch (err) {
-          reject(err)
-        }
-      }, heliaDelay)
-    })
-    const rawBlock = await Promise.any([getBlockFromAnyGateway(cid, abortController.signal), heliaGetPromise])
-
+    const rawBlock = await Promise.any([getBlockFromAnyGateway(cid, abortController.signal), helia.blockstore.get(cid, { signal: abortController.signal })])
     abortController.abort('Content obtained') // abort any other requests.
     clearTimeout(timeoutId)
+
     /**
      * if we got the block from the gateway, verifyBytes is called, and we can safely store the block.
      * if we got the block from helia, helia's blockstore should already have the block.

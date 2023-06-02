@@ -1,12 +1,9 @@
 /* globals globalThis */
-import { gossipsub } from '@chainsafe/libp2p-gossipsub'
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
-import { bootstrap } from '@libp2p/bootstrap'
 import { delegatedContentRouting } from '@libp2p/delegated-content-routing'
 import { delegatedPeerRouting } from '@libp2p/delegated-peer-routing'
 import { ipniContentRouting } from '@libp2p/ipni-content-routing'
-import { kadDHT } from '@libp2p/kad-dht'
 import { mplex } from '@libp2p/mplex'
 import { webRTC, webRTCDirect } from '@libp2p/webrtc'
 import { webSockets } from '@libp2p/websockets'
@@ -115,17 +112,8 @@ const bundle = {
 export default bundle
 
 async function initHelia (ipfsApi) {
-  const delegatedClient1 = kuboClient(ipfsApi)
-  const delegatedClient2 = kuboClient({
-    protocol: 'https',
-    port: 443,
-    /**
-     * randomly select node0, node1, node2, or node3 delegate
-     *
-     * @see https://github.com/ipfs/ipld-explorer-components/pull/360#discussion_r1206640407
-     */
-    host: `node${parseInt(Math.random() * 4)}.delegate.ipfs.io`
-  })
+  const delegatedKuboClient = kuboClient(ipfsApi)
+
   const blockstore = new MemoryBlockstore()
   const datastore = new MemoryDatastore()
 
@@ -140,13 +128,10 @@ async function initHelia (ipfsApi) {
       ]
     },
     peerRouters: [
-      delegatedPeerRouting(delegatedClient1),
-      delegatedPeerRouting(delegatedClient2)
+      delegatedPeerRouting(delegatedKuboClient)
     ],
     contentRouters: [
-      ipniContentRouting('https://cid.contact'),
-      delegatedContentRouting(delegatedClient1),
-      delegatedContentRouting(delegatedClient2)
+      delegatedContentRouting(delegatedKuboClient)
     ],
     datastore,
     transports: [
@@ -165,24 +150,9 @@ async function initHelia (ipfsApi) {
       yamux(),
       mplex()
     ],
-    peerDiscovery: [
-      bootstrap({
-        list: [
-          '/dnsaddr/bootstrap.libp2p.io/p2p/QmNnooDu7bfjPFoTZYxMNLWUQJyrVwtbZg5gBMjTezGAJN',
-          '/dnsaddr/bootstrap.libp2p.io/p2p/QmQCU2EcMqAqQPR2i9bChDtGNJchTbq5TbXJJ16u19uLTa',
-          '/dnsaddr/bootstrap.libp2p.io/p2p/QmbLHAnMoJPWSCR5Zhtx6BHJX9KiKNN6tpvbUcqanj75Nb',
-          '/dnsaddr/bootstrap.libp2p.io/p2p/QmcZf59bWwK5XFi76CZX8cbJ4BhTzzA3gU1ZjYZcYW3dwt',
-          '/ip4/104.131.131.82/tcp/4001/p2p/QmaCpDMGvV2BGHeYERUEnRQAwe3N8SzbUtfsmvsqQLuvuJ'
-        ]
-      })
-    ],
     services: {
       identify: identifyService(),
       autoNAT: autoNATService(),
-      pubsub: gossipsub(),
-      dht: kadDHT({
-        clientMode: true
-      }),
       relay: circuitRelayServer({
         advertise: true
       })

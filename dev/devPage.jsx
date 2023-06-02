@@ -14,7 +14,7 @@ import heliaBundle from '../src/bundles/helia'
 import '../src/components/loader/Loader.css'
 import '../src/components/object-info/LinksTable.css'
 import i18n from '../src/i18n'
-import { exploreBundle, ExplorePage, StartExploringPage, IpldExploreForm, IpldCarExploreForm } from '../src/index.js'
+import { exploreBundle, ExplorePage, StartExploringPage, IpldExploreForm, IpldCarExploreForm } from '../src/index'
 
 globalThis.Buffer = Buffer
 
@@ -75,7 +75,7 @@ const HeaderComponent = ({ t }) => {
             </svg>
           </a>
         </div>
-      </div>
+    </div>
 
     </header>
   )
