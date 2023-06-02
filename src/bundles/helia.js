@@ -133,7 +133,7 @@ async function initHelia (ipfsApi) {
    * based on https://github.com/ipfs/helia/blob/ed4985677b62021f76541354ad06b70bd53e929a/packages/helia/src/utils/libp2p.browser.ts#L20
    */
   const libp2p = await createLibp2p({
-    start: false, // don't start libp2p yet, we'll do it later
+    start: true, // TODO: libp2p bug with stop/start - https://github.com/libp2p/js-libp2p/issues/1787
     addresses: {
       listen: [
         '/webrtc'
