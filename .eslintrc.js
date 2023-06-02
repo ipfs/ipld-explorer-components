@@ -1,15 +1,18 @@
 module.exports = {
   parser: '@typescript-eslint/parser',
-  plugins: [
-    'import'
-  ],
+  ignorePatterns: ['node_modules'],
+  parserOptions: {
+    project: './tsconfig.eslint.json'
+  },
+  plugins: ['import'],
   extends: [
     'react-app',
     'plugin:jsx-a11y/recommended',
     'plugin:@typescript-eslint/recommended',
     'plugin:react-hooks/recommended',
     'plugin:import/typescript',
-    'ipfs'
+    'ipfs',
+    'plugin:storybook/recommended'
   ],
   rules: {
     'import/order': ['error', {
@@ -25,8 +28,11 @@ module.exports = {
       },
       warnOnUnassignedImports: true
     }],
-    'no-console': ['error', { allow: ['error', 'info', 'time', 'timeEnd', 'warn'] }],
+    'no-console': ['error', {
+      allow: ['error', 'info', 'time', 'timeEnd', 'warn']
+    }],
     'no-warning-comments': ['off'],
-    strict: ['error', 'never']
+    strict: ['error', 'never'],
+    'react/jsx-filename-extension': ['error', { extensions: ['.jsx', '.tsx'] }]
   }
 }

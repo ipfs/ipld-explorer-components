@@ -38,14 +38,14 @@
     "src/**/*"
   ],
   "exclude": [
-    "src/*/*.test.*",
+    "src/**/*.test.*",
+    "src/**/*.stories.*",
     "node_modules",
     "storybook-static",
     "build",
     "dist",
     "custom-jest-env.js",
     "vite.config.ts",
-    "src/**/*.stories.*",
     "jest.config.js",
     "rollup.config.mjs",
     "webpack.config.js",
