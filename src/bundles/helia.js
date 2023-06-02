@@ -116,11 +116,6 @@ export default bundle
 
 async function initHelia (ipfsApi) {
   const delegatedClient1 = kuboClient(ipfsApi)
-  const delegatedClient2 = kuboClient({
-    protocol: 'https',
-    port: 443,
-    host: 'node3.delegate.ipfs.io'
-  })
   const blockstore = new MemoryBlockstore()
   const datastore = new MemoryDatastore()
 
@@ -128,19 +123,18 @@ async function initHelia (ipfsApi) {
    * based on https://github.com/ipfs/helia/blob/ed4985677b62021f76541354ad06b70bd53e929a/packages/helia/src/utils/libp2p.browser.ts#L20
    */
   const libp2p = await createLibp2p({
+    start: false, // don't start libp2p yet, we'll do it later
     addresses: {
       listen: [
         '/webrtc'
       ]
     },
     peerRouters: [
-      delegatedPeerRouting(delegatedClient1),
-      delegatedPeerRouting(delegatedClient2)
+      delegatedPeerRouting(delegatedClient1)
     ],
     contentRouters: [
       ipniContentRouting('https://cid.contact'),
-      delegatedContentRouting(delegatedClient1),
-      delegatedContentRouting(delegatedClient2)
+      delegatedContentRouting(delegatedClient1)
     ],
     datastore,
     transports: [

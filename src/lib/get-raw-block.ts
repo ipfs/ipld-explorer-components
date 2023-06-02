@@ -90,13 +90,23 @@ const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
  */
 export async function getRawBlock (helia: Helia, cid: CID): Promise<Uint8Array> {
   const abortController = new AbortController()
+  const timeoutId = setTimeout(() => { abortController.abort('Request timed out after 30s') }, 30000)
 
   try {
     if (await helia.blockstore.has(cid)) {
       return await helia.blockstore.get(cid)
     }
+    try {
+      if (!helia.libp2p.isStarted()) {
+        await helia.libp2p.start()
+      }
+    } catch (err) {
+      console.error('unable to start libp2p', err)
+    }
+    // await helia.libp2p.start()
     const rawBlock = await Promise.any([helia.blockstore.get(cid, { signal: abortController.signal }), getBlockFromAnyGateway(cid, abortController.signal)])
-    abortController.abort() // abort any other requests.
+    abortController.abort('Content obtained') // abort any other requests.
+    clearTimeout(timeoutId)
     /**
      * if we got the block from the gateway, verifyBytes is called, and we can safely store the block.
      * if we got the block from helia, helia's blockstore should already have the block.
@@ -109,5 +119,9 @@ export async function getRawBlock (helia: Helia, cid: CID): Promise<Uint8Array> 
   } catch (err) {
     console.error('unable to get raw block', err)
     throw err
+  } finally {
+    if (helia.libp2p.isStarted()) {
+      await helia.libp2p.stop()
+    }
   }
 }
