@@ -105,9 +105,7 @@ export default defineConfig(() => {
       { find: /^_stream_transform$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/transform' }
     ]
   }
-  viteOptimizeDeps.include = [
-    'ipld-ethereum'
-  ]
+  viteOptimizeDeps.include = []
   viteOptimizeDeps.esbuildOptions = {
     ...viteOptimizeDeps.esbuildOptions,
     plugins: [
