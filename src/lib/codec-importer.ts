@@ -17,7 +17,7 @@ export default async function codecImporter<T extends CodecDataTypes = CodecData
       return await import('@ipld/dag-pb') satisfies BlockCodec<typeof multicodecs.DAG_PB, PBNode>
     case multicodecs.GIT_RAW:
       return {
-        decode: (await import('ipld-git')).util.deserialize
+        decode: (await import('ipld-git')).default.util.deserialize
       }
     case multicodecs.RAW:
       // @ts-expect-error - return types need normalizing

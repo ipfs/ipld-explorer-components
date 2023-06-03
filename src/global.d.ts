@@ -29,43 +29,4 @@ interface OldIpldFormat {
 declare module 'ipld-git' {
   const defaultExport: OldIpldFormat
   export default defaultExport
-  export const util: OldIpldFormat['util']
-}
-
-declare module 'ipld-ethereum/eth-account-snapshot' {
-  const defaultExport: OldIpldFormat
-  export default defaultExport
-  export const util: OldIpldFormat['util']
-}
-declare module 'ipld-ethereum/eth-block' {
-  const defaultExport: OldIpldFormat
-  export default defaultExport
-  export const util: OldIpldFormat['util']
-}
-
-declare module 'ipld-ethereum/eth-block-list' {
-  const defaultExport: OldIpldFormat
-  export default defaultExport
-  export const util: OldIpldFormat['util']
-}
-
-declare module 'ipld-ethereum/eth-state-trie' {
-  const defaultExport: OldIpldFormat
-  export default defaultExport
-  export const util: OldIpldFormat['util']
-}
-declare module 'ipld-ethereum/eth-storage-trie' {
-  const defaultExport: OldIpldFormat
-  export default defaultExport
-  export const util: OldIpldFormat['util']
-}
-declare module 'ipld-ethereum/eth-tx' {
-  const defaultExport: OldIpldFormat
-  export default defaultExport
-  export const util: OldIpldFormat['util']
-}
-declare module 'ipld-ethereum/eth-tx-trie' {
-  const defaultExport: OldIpldFormat
-  export default defaultExport
-  export const util: OldIpldFormat['util']
 }
