@@ -28,3 +28,8 @@ export interface NormalizedDagNode {
   size?: number
   format: NormalizedDagNodeFormat
 }
+
+export interface ResolveType<DecodedType = any> {
+  value: DecodedType
+  remainderPath: string
+}

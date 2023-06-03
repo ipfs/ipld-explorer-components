@@ -1,18 +1,12 @@
 import type { PBLink, PBNode } from '@ipld/dag-pb'
-import { convert } from 'blockcodec-to-ipld-format'
-import type { CodecCode, IPLDFormat } from 'ipld'
+import type { CodecCode } from 'ipld'
 import multicodecs from 'multicodec'
 import { CID } from 'multiformats'
-import { type BlockCodec } from 'multiformats/codecs/interface'
 
 import codecImporter from './codec-importer.js'
 import { isPBNode } from './guards'
 import { ensureLeadingSlash } from './helpers'
-
-interface ResolveType<DecodedType = any> {
-  value: DecodedType
-  remainderPath: string
-}
+import type { ResolveType } from '../types'
 
 interface CodecWrapper<DecodedType = any> {
   decode: (bytes: Uint8Array) => DecodedType
@@ -99,22 +93,12 @@ export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
 
   const codecName: string = multicodecs.codeToName[codecCode as CodecCode]
   const codec = await codecImporter(codecCode)
-  const blockCodec = codec as BlockCodec<CodecCode, unknown>
-  const ipldFormat = codec as IPLDFormat
-  const convertedCodec = convert({ ...blockCodec, code: codecCode, name: blockCodec.name ?? codecName })
 
   const decode = (bytes: Uint8Array): unknown => {
-    if (blockCodec.decode != null) {
-      return blockCodec.decode(bytes)
+    if (codec.decode != null) {
+      return codec.decode(bytes)
     }
-    if (ipldFormat.util?.deserialize != null) {
-      return ipldFormat.util.deserialize(bytes)
-    }
-    // TODO: Ideally, we want to remove dependency on deprecated and old packages, multicodecs and blockcodec-to-ipld-format, this warning is to help us track down where we are still using them.
-    console.warn('Using lib with old deps: blockcodec-to-ipld-format')
-    if (convertedCodec.util.deserialize != null) {
-      return convertedCodec.util.deserialize(bytes)
-    }
+
     throw new Error(`codec ${codecCode}=${codecName} does not have a decode function`)
   }
 
@@ -130,21 +114,11 @@ export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
           // allow the resolver to fail and fall through to the next resolver
         }
       }
-      // if the codec has resolver.resolve, use that
-      if (ipldFormat.resolver?.resolve != null) {
-        try {
-          return ipldFormat.resolver.resolve(bytes, path)
-        } catch {
-          console.error('error resolving path for cid with ipldFormat.resolver.resolve', cid, path)
-          // allow the resolver to fail and fall through to the next resolver
-        }
-      }
       try {
         const resolverFn = resolveFn(decode)
         return resolverFn(bytes, path)
       } catch (err) {
         console.error('error resolving path for cid with resolveFn', cid, path)
-        // throw err
       }
 
       throw new Error(`codec ${codecCode}=${codecName} does not have a resolve function`)
