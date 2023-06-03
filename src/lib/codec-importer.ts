@@ -19,34 +19,6 @@ export default async function codecImporter<T extends CodecDataTypes = CodecData
       return {
         decode: (await import('ipld-git')).util.deserialize
       }
-    case multicodecs.ETH_ACCOUNT_SNAPSHOT:
-      return {
-        decode: (await import('ipld-ethereum/eth-account-snapshot')).util.deserialize
-      }
-    case multicodecs.ETH_BLOCK:
-      return {
-        decode: (await import('ipld-ethereum/eth-block')).util.deserialize
-      }
-    case multicodecs.ETH_BLOCK_LIST:
-      return {
-        decode: (await import('ipld-ethereum/eth-block-list')).util.deserialize
-      }
-    case multicodecs.ETH_STATE_TRIE:
-      return {
-        decode: (await import('ipld-ethereum/eth-state-trie')).util.deserialize
-      }
-    case multicodecs.ETH_STORAGE_TRIE:
-      return {
-        decode: (await import('ipld-ethereum/eth-storage-trie')).util.deserialize
-      }
-    case multicodecs.ETH_TX:
-      return {
-        decode: (await import('ipld-ethereum/eth-tx')).util.deserialize
-      }
-    case multicodecs.ETH_TX_TRIE:
-      return {
-        decode: (await import('ipld-ethereum/eth-tx-trie')).util.deserialize
-      }
     case multicodecs.RAW:
       // @ts-expect-error - return types need normalizing
       return await import('multiformats/codecs/raw') satisfies BlockCodec<typeof multicodecs.RAW, Uint8Array>
