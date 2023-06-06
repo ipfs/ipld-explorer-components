@@ -69,6 +69,20 @@ To add another codec you will need to:
 
 see https://github.com/ipfs/ipld-explorer-components/pull/360#discussion_r1206251817 for history.
 
+### Redux-bundler requirements
+
+These components use [redux-bundler](https://reduxbundler.com/) and your app will need to use a redux-bundler provider in order to propogate the properties and selectors. You can find a basic example of this in ./dev/devPage.jsx.
+
+In short, these components export two bundles found in ./src/bundles: `explore` and `heliaBundle`. The explore bundle and components herein have a few redux-bundler selector dependencies that you need to make sure exist and are called properly.
+
+| Dependent          | redux-bundler selector | Notes                                                                                                         |
+|--------------------|------------------------|---------------------------------------------------------------------------------------------------------------|
+| explore bundle     | selectIpfsReady        | The explore bundle depends on this selector so it knows when the IPFS node is available for use               |
+| explore & other bundles     | getIpfs        | The explore bundle gets the IPFS node via this selector |
+| Main page (or any) | doInitIpfs             | A consuming app needs to call this selector to tell the bundle that provides the IPFS node to instantiate it. |
+
+If you don't want to use the `heliaBundle`, i.e. like we won't in ipfs-webui, then you will need to make sure you adapt the selectors as appropriate.
+
 ## Contribute
 
 Feel free to dive in! [Open an issue](https://github.com/ipfs/ipld-explorer-components/issues/new) or submit PRs.

@@ -20,7 +20,6 @@ const getCidFromCidOrFqdn = (cidOrFqdn) => {
 
 // Find all the nodes and path boundaries traversed along a given path
 const makeBundle = () => {
-  // Lazy load ipld because it is a large dependency
   const bundle = createAsyncResourceBundle({
     name: 'explore',
     actionBaseType: 'EXPLORE',
