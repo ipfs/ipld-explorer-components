@@ -77,9 +77,9 @@ In short, these components export two bundles found in ./src/bundles: `explore` 
 
 | Dependent          | redux-bundler selector | Notes                                                                                                         |
 |--------------------|------------------------|---------------------------------------------------------------------------------------------------------------|
-| explore bundle     | selectIpfsReady        | The explore bundle depends on this selector so it knows when the IPFS node is available for use               |
-| explore & other bundles     | getIpfs        | The explore bundle gets the IPFS node via this selector |
-| Main page (or any) | doInitIpfs             | A consuming app needs to call this selector to tell the bundle that provides the IPFS node to instantiate it. |
+| explore bundle     | selectHeliaReady        | The explore bundle depends on this selector so it knows when the Helia node is available for use               |
+| explore & other bundles     | selectHelia        | The explore bundle gets the Helia node via this selector |
+| Main page (or any) | doInitHelia             | A consuming app needs to call this selector to tell the bundle that provides the Helia node to instantiate it. |
 
 If you don't want to use the `heliaBundle`, i.e. like we won't in ipfs-webui, then you will need to make sure you adapt the selectors as appropriate.
 

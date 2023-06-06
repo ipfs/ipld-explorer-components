@@ -35,7 +35,7 @@ import normaliseDagNode from './normalise-dag-node'
  *
  * Usage:
  * ```js
- * const res = resolveIpldPath(getIpfs, 'zdpuHash' '/favourites/0/a/css')
+ * const res = resolveIpldPath(getHelia, 'zdpuHash' '/favourites/0/a/css')
  * const {targetNode, canonicalPath, localPath, nodes, pathBoundaries} = res
  * ```
  * Where:

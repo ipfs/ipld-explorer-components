@@ -23,8 +23,7 @@ const makeBundle = () => {
   const bundle = createAsyncResourceBundle({
     name: 'explore',
     actionBaseType: 'EXPLORE',
-    getPromise: async (args) => {
-      const { store, getIpfs } = args
+    getPromise: async ({ store }) => {
       const path = store.selectExplorePathFromHash()
       if (!path) return null
       const pathParts = parseIpldPath(path)
@@ -39,7 +38,7 @@ const makeBundle = () => {
           localPath,
           nodes,
           pathBoundaries
-        } = await resolveIpldPath(await getIpfs(), cid, rest)
+        } = await resolveIpldPath(store.selectHelia(), cid, rest)
 
         return {
           path,
@@ -67,9 +66,14 @@ const makeBundle = () => {
     }
   )
 
-  // Fetch the explore data when the address in the url hash changes.
+  /**
+   * Fetch the explore data when the address in the url hash changes.
+   * Note that this is called automatically by redux-bundler
+   *
+   * @see https://reduxbundler.com/api-reference/bundle#bundle.reactx
+   */
   bundle.reactExploreFetch = createSelector(
-    'selectIpfsReady',
+    'selectHeliaReady',
     'selectExploreIsLoading',
     'selectExploreIsWaitingToRetry',
     'selectExplorePathFromHash',
@@ -108,10 +112,9 @@ const makeBundle = () => {
     store.doUpdateHash(hash)
   }
 
-  bundle.doUploadUserProvidedCar = (file, uploadImage) => async (args) => {
-    const { store, getIpfs } = args
+  bundle.doUploadUserProvidedCar = (file, uploadImage) => async ({ store }) => {
     try {
-      const rootCid = await importCar(file, getIpfs())
+      const rootCid = await importCar(file, await store.selectHelia())
       const hash = rootCid.toString() ? `#/explore${ensureLeadingSlash(rootCid.toString())}` : '#/explore'
       store.doUpdateHash(hash)
 

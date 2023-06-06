@@ -87,12 +87,12 @@ const PageRenderer = connect(
   'selectRoute',
   'selectQueryObject',
   'doUpdateUrl',
-  'doInitIpfs',
+  'doInitHelia',
   (props) => {
     const Page = props?.route
     const { embed } = props.queryObject
     useEffect(() => {
-      props.doInitIpfs()
+      props.doInitHelia()
     }, [])
 
     return (
