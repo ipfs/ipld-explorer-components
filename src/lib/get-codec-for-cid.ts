@@ -1,9 +1,8 @@
 import type { PBLink, PBNode } from '@ipld/dag-pb'
-import type { CodecCode } from 'ipld'
-import multicodecs from 'multicodec'
 import { CID } from 'multiformats'
 
 import codecImporter from './codec-importer.js'
+import getCodecNameFromCode from './get-codec-name-from-code'
 import { isPBNode } from './guards'
 import { ensureLeadingSlash } from './helpers'
 import type { ResolveType } from '../types'
@@ -52,7 +51,7 @@ interface CodecResolverFn {
 }
 
 const codecResolverMap: Record<string, CodecResolverFn> = {
-  [multicodecs.DAG_PB]: async (node, path) => {
+  'dag-pb': async (node, path) => {
     if (!isPBNode(node)) {
       throw new Error('node is not a PBNode')
     }
@@ -91,7 +90,7 @@ export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
     throw new Error(`CID codec code is undefined for CID '${cid.toString()}'`)
   }
 
-  const codecName: string = multicodecs.codeToName[codecCode as CodecCode]
+  const codecName = getCodecNameFromCode(codecCode)
   const codec = await codecImporter(codecCode)
 
   const decode = (bytes: Uint8Array): unknown => {
@@ -105,9 +104,9 @@ export default async function getCodecForCid (cid: CID): Promise<CodecWrapper> {
   return {
     decode,
     resolve: async (path: string, bytes: Uint8Array) => {
-      if (codecResolverMap[codecCode] != null) {
+      if (codecResolverMap[codecName] != null) {
         try {
-          return await codecResolverMap[codecCode](decode(bytes), path)
+          return await codecResolverMap[codecName](decode(bytes), path)
         } catch (err) {
           console.error(err)
           console.error('error resolving path for cid with codecResolverMap', cid, path)

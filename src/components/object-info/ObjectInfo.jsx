@@ -1,9 +1,12 @@
 import { ObjectInspector, chromeLight } from '@tableflip/react-inspector'
 import filesize from 'filesize'
+import { CID } from 'multiformats'
 import React from 'react'
 import { withTranslation } from 'react-i18next'
 
 import LinksTable from './LinksTable'
+import getCodecNameFromCode from '../../lib/get-codec-name-from-code'
+
 const humansize = filesize.partial({ round: 0 })
 
 const objectInspectorTheme = {
@@ -77,19 +80,26 @@ const DagNodeIcon = ({ type, ...props }) => (
 )
 
 const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, links, format, onLinkClick, gatewayUrl, publicGatewayUrl, ...props }) => {
+  const isUnixFs = format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type)
+  let nodeStyleType = type
+
+  if (!isNaN(type) || isUnixFs || nameForNode(type) === 'DAG Node') {
+    nodeStyleType = getCodecNameFromCode(CID.parse(cid).code) ?? type
+  }
+
   return (
     <section className={`pa4 sans-serif ${className}`} {...props}>
-      <h2 className='ma0 lh-title f4 fw4 montserrat pb2' title={type}>
-        <DagNodeIcon type={type} className='mr3' style={{ verticalAlign: -8 }} />
+      <h2 className='ma0 lh-title f4 fw4 montserrat pb2' title={nodeStyleType}>
+        <DagNodeIcon type={nodeStyleType} className='mr3' style={{ verticalAlign: -8 }} />
         <span className='v-mid'>
-          {nameForNode(type)}
+          {nameForNode(nodeStyleType)}
         </span>
         {format === 'unixfs'
           ? (
           <a className='dn di-ns no-underline charcoal ml2' href='https://docs.ipfs.io/concepts/glossary/#unixfs' rel='external' target='_external'>UnixFS</a>
             )
           : null}
-        {format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type)
+        {isUnixFs
           ? (
           <span className='dib'>
             {gatewayUrl && gatewayUrl !== publicGatewayUrl && (

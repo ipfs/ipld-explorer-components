@@ -1,39 +1,7 @@
-import multicodecs from 'multicodec'
 import React, { useEffect, useState } from 'react'
 import { withTranslation } from 'react-i18next'
 
-import { decodeCid } from './decode-cid'
-
-async function extractInfo (cid) {
-  const cidInfo = await decodeCid(cid)
-  const hashFn = cidInfo.multihash.name
-  const hashFnCode = cidInfo.multihash.code.toString('16')
-  const hashLengthCode = cidInfo.multihash.size
-  const hashLengthInBits = cidInfo.multihash.size * 8
-  const hashValue = toHex(cidInfo.multihash.digest)
-  const hashValueIn32CharChunks = hashValue.split('').reduce((resultArray, item, index) => {
-    const chunkIndex = Math.floor(index / 32)
-    if (!resultArray[chunkIndex]) {
-      resultArray[chunkIndex] = [] // start a new chunk
-    }
-    resultArray[chunkIndex].push(item)
-    return resultArray
-  }, [])
-  const codecName = multicodecs.codeToName[cidInfo.cid.code]
-
-  const humanReadable = `${cidInfo.multibase.name} - cidv${cidInfo.cid.version} - ${codecName} - ${hashFn}~${hashLengthInBits}~${hashValue}`
-  return {
-    hashFn,
-    hashFnCode,
-    hashLengthCode,
-    hashLengthInBits,
-    hashValue,
-    hashValueIn32CharChunks,
-    humanReadable
-  }
-}
-
-const toHex = (bytes) => Array.prototype.map.call(bytes, x => x.toString(16).padStart(2, '0')).join('').toUpperCase()
+import extractInfo from '../../lib/extract-info'
 
 export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
   const [cidErr, setCidErr] = useState(null)
