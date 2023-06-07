@@ -3,7 +3,7 @@ import { type CID } from 'multiformats'
 import getCodecNameFromCode from './get-codec-name-from-code'
 import { decodeCid } from '../components/cid-info/decode-cid'
 
-const toHex = (bytes: Uint8Array): string => Array.prototype.map.call(bytes, x => x.toString(16).padStart(2, '0')).join('').toUpperCase()
+const toHex = (bytes: Uint8Array): string => Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).toString('hex').toUpperCase()
 
 interface ExtractedInfo {
   base: string
