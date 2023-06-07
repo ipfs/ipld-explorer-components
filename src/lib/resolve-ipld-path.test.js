@@ -2,6 +2,7 @@
 // @ts-check
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
+import { create as createKuboClient } from 'kubo-rpc-client'
 import * as raw from 'multiformats/codecs/raw'
 
 import { addDagNodeToHelia } from './helpers'
@@ -13,8 +14,10 @@ describe('resolveIpldPath', () => {
    * @type {import('@helia/interface').Helia}
    */
   let helia
+  let kuboClient
   beforeEach(async () => {
     helia = await createHeliaMock()
+    kuboClient = await createKuboClient()
   })
   it('resolves all nodes traversed along a path', async () => {
     const node4Cid = await addDagNodeToHelia(helia, dagPb, createDagPbNode('4th node', []))
@@ -33,7 +36,7 @@ describe('resolveIpldPath', () => {
       cid: node2Cid.toString(),
       size: 101
     }]))
-    const res = await resolveIpldPath(helia, rootNodeCid.toString(), '/a/b/a')
+    const res = await resolveIpldPath(helia, kuboClient, rootNodeCid.toString(), '/a/b/a')
     expect(res.canonicalPath).toBe(node4Cid.toString())
     expect(res.nodes.length).toBe(4)
     expect(res.nodes[0].cid).toBe(rootNodeCid.toString())
@@ -68,7 +71,7 @@ describe('resolveIpldPath', () => {
     }
     const dagNode1Cid = await addDagNodeToHelia(helia, dagCbor, dagNode1)
 
-    const res = await resolveIpldPath(helia, dagNode1Cid.toString(), path)
+    const res = await resolveIpldPath(helia, kuboClient, dagNode1Cid.toString(), path)
 
     expect(res.targetNode.cid).toEqual(dagNode3CID.toString())
     expect(res.canonicalPath).toBe(dagNode3CID.toString())
@@ -123,7 +126,7 @@ describe('resolveIpldPath', () => {
       something: childNode
     })
 
-    const res = await resolveIpldPath(helia, rootNode.toString(), path)
+    const res = await resolveIpldPath(helia, kuboClient, rootNode.toString(), path)
 
     expect(res.targetNode.cid.toString()).toBe(childNode.toString())
     expect(res.canonicalPath).toBe(childNode.toString())
