@@ -1,5 +1,6 @@
 /* globals globalThis */
 import { type Helia } from '@helia/interface'
+import { create as createKuboClient, type IPFSHTTPClient } from 'kubo-rpc-client'
 
 import initHelia from '../lib/init-helia'
 
@@ -7,6 +8,7 @@ interface HeliaBundleState {
   apiOpts: Record<string, string>
   instance: Helia | null
   error: Error | null
+  kuboClient: IPFSHTTPClient | null
 }
 
 const defaultState: HeliaBundleState = {
@@ -16,7 +18,8 @@ const defaultState: HeliaBundleState = {
     protocol: 'http'
   },
   instance: null,
-  error: null
+  error: null,
+  kuboClient: null
 }
 
 function getUserOpts (key: string): Record<string, unknown> {
@@ -39,6 +42,7 @@ const bundle = {
     if (type === 'HELIA_INIT_FINISHED') {
       return Object.assign({}, state, {
         instance: payload.instance ?? state.instance,
+        kuboClient: payload.kuboClient ?? state.kuboClient,
         apiOpts: payload.apiOpts ?? state.apiOpts,
         error: null
       })
@@ -51,6 +55,7 @@ const bundle = {
     return state
   },
 
+  selectKuboClient: ({ helia }: { helia: HeliaBundleState }): IPFSHTTPClient | null => helia.kuboClient,
   selectHelia: ({ helia }: { helia: HeliaBundleState }) => helia.instance,
 
   selectHeliaReady: ({ helia }: { helia: HeliaBundleState }) => helia.instance !== null,
@@ -71,16 +76,18 @@ const bundle = {
     )
     // TRY helia!
     try {
-      console.time('HELIA_INIT')
       console.info(
         "🎛️ Customise your kubo-rpc-client opts by setting an `ipfsApi` value in localStorage. e.g. localStorage.setItem('ipfsApi', JSON.stringify({port: '1337'}))"
       )
-      const helia = await initHelia(apiOpts)
-      // identity = helia.libp2p.services.identify.host.agentVersion.split(' ')[0]
+      const kuboClient = createKuboClient(apiOpts)
+      console.time('HELIA_INIT')
+      const helia = await initHelia(kuboClient)
       console.timeEnd('HELIA_INIT')
       return dispatch({
         type: 'HELIA_INIT_FINISHED',
         payload: {
+          apiOpts,
+          kuboClient,
           instance: helia,
           provider: 'helia'
         }

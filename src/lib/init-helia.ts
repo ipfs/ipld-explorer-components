@@ -10,7 +10,7 @@ import { webTransport } from '@libp2p/webtransport'
 import { MemoryBlockstore } from 'blockstore-core'
 import { MemoryDatastore } from 'datastore-core'
 import { createHelia } from 'helia'
-import { create as kuboClient } from 'kubo-rpc-client'
+import { type create as createKuboClient } from 'kubo-rpc-client'
 import { createLibp2p } from 'libp2p'
 import { autoNATService } from 'libp2p/autonat'
 import { circuitRelayTransport } from 'libp2p/circuit-relay'
@@ -18,9 +18,7 @@ import { identifyService } from 'libp2p/identify'
 
 import { addDagNodeToHelia } from '../lib/helpers'
 
-export default async function initHelia (ipfsApi: Parameters<typeof kuboClient>[0]): Promise<Helia> {
-  const delegatedKuboClient = kuboClient(ipfsApi)
-
+export default async function initHelia (kuboClient: ReturnType<typeof createKuboClient>): Promise<Helia> {
   const blockstore = new MemoryBlockstore()
   const datastore = new MemoryDatastore()
 
@@ -30,10 +28,10 @@ export default async function initHelia (ipfsApi: Parameters<typeof kuboClient>[
   const libp2p = await createLibp2p({
     start: true, // TODO: libp2p bug with stop/start - https://github.com/libp2p/js-libp2p/issues/1787
     peerRouters: [
-      delegatedPeerRouting(delegatedKuboClient)
+      delegatedPeerRouting(kuboClient)
     ],
     contentRouters: [
-      delegatedContentRouting(delegatedKuboClient)
+      delegatedContentRouting(kuboClient)
     ],
     datastore,
     transports: [

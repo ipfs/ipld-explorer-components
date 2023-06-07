@@ -1,4 +1,5 @@
 import type { Helia } from '@helia/interface'
+import { type IPFSHTTPClient } from 'kubo-rpc-client'
 import { CID } from 'multiformats'
 import type { Version as CIDVersion } from 'multiformats/cid'
 
@@ -57,7 +58,25 @@ export async function verifyBytes (providedCid: CID, bytes: Uint8Array): Promise
   }
 }
 
+/**
+ * allow users to disable fetching from gateways by setting 'explore.ipld.gatewayEnabled' to false in localStorage
+ *
+ * @returns {boolean}
+ */
+function ensureGatewayFetchEnabled (): boolean {
+  console.info('import.meta.env.NODE_ENV: ', import.meta.env.NODE_ENV)
+  console.info(
+    "🎛️ Customise whether ipld-explorer-components fetches content from gateways by setting an `explore.ipld.gatewayEnabled` value to true/false in localStorage. e.g. localStorage.setItem('explore.ipld.gatewayEnabled', false) -- NOTE: defaults to true"
+  )
+  const gatewayEnabledSetting = localStorage.getItem('explore.ipld.gatewayEnabled')
+
+  return gatewayEnabledSetting != null ? JSON.parse(gatewayEnabledSetting) : true
+}
+
 export async function getBlockFromAnyGateway (cid: CID, signal: AbortSignal, moreGateways: string[] = []): Promise<Uint8Array> {
+  if (!ensureGatewayFetchEnabled()) {
+    throw new Error('Fetching from gateways is disabled')
+  }
   const gateways = moreGateways.concat(defaultGateways)
   for (const url of gateways) {
     if (signal.aborted) {
@@ -86,7 +105,7 @@ const defaultGateways = ['https://ipfs.io', 'https://dweb.link']
  * Method for getting a raw block either with helia or https://docs.ipfs.tech/reference/http/gateway/#trusted-vs-trustless
  * inspiration from https://github.com/ipfs-shipyard/ipfs-geoip/blob/466cd9d6454098c0fcf998b2217225099a654695/src/lookup.js#L18
  */
-export async function getRawBlock (helia: Helia, cid: CID, timeout = 30000): Promise<Uint8Array> {
+export async function getRawBlock (helia: Helia, kuboClient: IPFSHTTPClient, cid: CID, timeout = 30000): Promise<Uint8Array> {
   const abortController = new AbortController()
 
   try {
@@ -96,7 +115,7 @@ export async function getRawBlock (helia: Helia, cid: CID, timeout = 30000): Pro
     }
 
     const timeoutId = setTimeout(() => { abortController.abort('Request timed out') }, timeout)
-    const rawBlock = await Promise.any([getBlockFromAnyGateway(cid, abortController.signal), helia.blockstore.get(cid, { signal: abortController.signal })])
+    const rawBlock = await Promise.any([kuboClient.block.get(cid), getBlockFromAnyGateway(cid, abortController.signal), helia.blockstore.get(cid, { signal: abortController.signal })])
     abortController.abort('Content obtained') // abort any other requests.
     clearTimeout(timeoutId)
 
