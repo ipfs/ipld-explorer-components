@@ -9,10 +9,12 @@ import resolveIpldPath from '../lib/resolve-ipld-path'
 const getCidFromCidOrFqdn = (cidOrFqdn) => {
   if (cidOrFqdn.startsWith('/ipfs/')) {
     return cidOrFqdn.slice('/ipfs/'.length)
-  } else if (cidOrFqdn.startsWith('/ipns/')) {
+  }
+  if (cidOrFqdn.startsWith('/ipns/')) {
     // TODO: handle ipns
     throw new Error('ipns not supported yet')
-  } else if (cidOrFqdn.startsWith('/')) {
+  }
+  if (cidOrFqdn.startsWith('/')) {
     return cidOrFqdn.slice(1)
   }
   return cidOrFqdn

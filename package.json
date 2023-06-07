@@ -135,7 +135,6 @@
     "filesize": "^6.1.0",
     "helia": "^1.1.2",
     "ipfs-unixfs": "^4.0.1",
-    "ipld": "0.29.0",
     "ipld-git": "^0.6.6",
     "ipld-raw": "7.0.0",
     "kubo-rpc-client": "^3.0.1",
@@ -247,9 +246,7 @@
     "vite": "^4.3.7",
     "vite-plugin-svgr": "^3.2.0",
     "vite-react-jsx": "^1.1.2",
-    "vitest": "^0.31.3",
-    "webpack": "^5.83.1",
-    "webpack-cli": "^5.1.1"
+    "vitest": "^0.31.3"
   },
   "peerDependencies": {
     "@loadable/component": "^5.14.1",

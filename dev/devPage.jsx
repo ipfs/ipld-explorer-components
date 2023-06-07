@@ -93,27 +93,25 @@ const PageRenderer = connect(
     const { embed } = props.queryObject
     useEffect(() => {
       props.doInitHelia()
-    }, [])
+    }, [props])
 
     return (
       <>
-      <Header />
-      <div style={{ margin: '5vh 10vw' }}>
-        <Page embed={embed}/>
-      </div>
+        <Header />
+        <div style={{ margin: '5vh 10vw' }}>
+          <Page embed={embed}/>
+        </div>
       </>
     )
   }
 )
 
-const App = () => {
-  return (
-    <ReduxStoreProvider store={getStore()}>
-      <I18nextProvider i18n={i18n}>
-        <PageRenderer />
-      </I18nextProvider>
-    </ReduxStoreProvider>
-  )
-}
+const App = () => (
+  <ReduxStoreProvider store={getStore()}>
+    <I18nextProvider i18n={i18n}>
+      <PageRenderer />
+    </I18nextProvider>
+  </ReduxStoreProvider>
+)
 
 ReactDOM.render(<App />, document.getElementById('root'))
