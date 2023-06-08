@@ -1,3 +1,11 @@
+### [4.0.0](https://github.com/ipfs/ipld-explorer-components/compare/v3.0.3...v4.0.0) (2023-06-08)
+
+This is a major update that removes all old deps: js-ipfs, ipld, and out of date related ipld deps.
+
+* chore: pull new translations by @github-actions in https://github.com/ipfs/ipld-explorer-components/pull/357
+* chore: pull new translations by @github-actions in https://github.com/ipfs/ipld-explorer-components/pull/358
+* feat!: remove all old deps by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/360
+
 ### [3.0.3](https://github.com/ipfs/ipld-explorer-components/compare/v3.0.2...v3.0.3) (2022-12-06)
 
 
