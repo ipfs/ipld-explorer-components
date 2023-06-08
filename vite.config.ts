@@ -36,7 +36,7 @@ function reactVirtualized (): PluginOption {
 }
 
 // https://vitejs.dev/config/
-export default defineConfig(() => {
+export default defineConfig(({ mode, command }) => {
   const vitePlugins: UserConfig['plugins'] = [
     react(),
     svgrPlugin(),
@@ -49,9 +49,11 @@ export default defineConfig(() => {
     alias: [{ find: '@', replacement: pathResolve(__dirname, '/src') }]
   }
 
-  const viteDefine: UserConfig['define'] = {
-    global: 'globalThis'
+  const viteDefine: UserConfig['define'] = {}
+  if (mode === 'development' && command === 'serve') {
+    viteDefine.global = 'globalThis'
   }
+
   const viteOptimizeDeps: UserConfig['optimizeDeps'] = {
     esbuildOptions: {
       loader: {
