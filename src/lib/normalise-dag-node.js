@@ -1,10 +1,28 @@
 // @ts-check
-import { UnixFS } from 'ipfs-unixfs'
-import * as dagPb from '@ipld/dag-pb'
 import * as dagCbor from '@ipld/dag-cbor'
+import * as dagPb from '@ipld/dag-pb'
+import { UnixFS } from 'ipfs-unixfs'
 
 import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
 
+/**
+ * @typedef dagNodeLink
+ * @property {string} cid
+ * @property {string} name
+ * @property {number} size
+ */
+/**
+ * @typedef dagNodeData
+ * @property {unknown[]} blockSizes
+ * @property {unknown} data
+ * @property {string} type
+ */
+/**
+ * @typedef dagNode
+ * @property {dagNodeData} data
+ * @property {dagNodeLink[]} links
+ * @property {number} size
+ */
 /**
  * Provide a uniform shape for all^ node types.
  *
@@ -14,15 +32,17 @@ import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
  * ^: currently dag-cbor and dag-pb are supported.
  *
  * @function normaliseDagNode
- * @param {Object} node the `value` prop from `ipfs.dag.get` response.
- * @param {string} cidStr the cid string passed to `ipfs.dag.get`
+ * @param {dagNode|import('@ipld/dag-pb').PBNode} node - the `value` prop from `ipfs.dag.get` response.
+ * @param {string} cidStr - the cid string passed to `ipfs.dag.get`
+ * @returns {import('../types').NormalizedDagNode}
  */
 export default function normaliseDagNode (node, cidStr) {
   const code = getCodeOrNull(cidStr)
   if (code === dagPb.code) {
-    return normaliseDagPb(node, cidStr, code)
+    return normaliseDagPb(/** @type {import('@ipld/dag-pb').PBNode} */(node), cidStr, code)
   }
   // try cbor style if we don't know any better
+  // @ts-expect-error - todo: resolve this type error
   return normaliseDagCbor(node, cidStr, code ?? dagCbor.code)
 }
 
@@ -63,7 +83,8 @@ export function normaliseDagPb (node, cid, type) {
       return {
         cid: cidStr,
         type,
-        data: { type: /** @type {import('../types').UnixFsNodeTypes} */(type), data: unixFsData, blockSizes },
+        // @ts-expect-error - type is a string and not assignable to `UnixFsNodeTypes`
+        data: { type, data: unixFsData, blockSizes },
         links: normaliseDagPbLinks(node.Links, cid),
         size: unixFsObj.fileSize(),
         format
@@ -73,7 +94,6 @@ export function normaliseDagPb (node, cid, type) {
       // console.error(err)
     }
   }
-  // const cidStr = toCidStrOrNull(cid)
 
   return {
     cid: cidStr,
@@ -147,18 +167,20 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
     return obj
       .map((val, i) => findAndReplaceDagCborLinks(val, sourceCid, path ? `${path}/${i}` : `${i}`))
       .reduce((a, b) => a.concat(b))
-      .filter(a => !!a)
+      .filter(a => Boolean(a))
   }
 
   const keys = Object.keys(obj)
 
   // Support older `{ "/": Buffer } style links until all the IPLD formats are updated.
   if (keys.length === 1 && keys[0] === '/') {
+    // @ts-expect-error - todo: resolve this type error
     const targetCid = toCidOrNull(obj['/'])
 
     if (!targetCid) return []
 
     const target = targetCid.toString()
+    // @ts-expect-error - todo: resolve this type error
     obj['/'] = target
 
     return [{ path, source: sourceCid, target, size: 0, index: 0 }]
@@ -166,9 +188,10 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
 
   if (keys.length > 0) {
     return keys
+      // @ts-expect-error - todo: resolve this type error
       .map(key => findAndReplaceDagCborLinks(obj[key], sourceCid, path ? `${path}/${key}` : `${key}`))
       .reduce((a, b) => a.concat(b))
-      .filter(a => !!a)
+      .filter(a => Boolean(a))
   } else {
     return []
   }

@@ -1,140 +1,147 @@
-
-/* global describe it expect jest */
+/* global describe it expect */
 // @ts-check
-import * as dagPb from '@ipld/dag-pb'
 import * as dagCbor from '@ipld/dag-cbor'
+import * as dagPb from '@ipld/dag-pb'
+import { create as createKuboClient } from 'kubo-rpc-client'
+import * as raw from 'multiformats/codecs/raw'
 
+import { addDagNodeToHelia } from './helpers'
 import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
-import { toCidOrNull } from './cid'
-
-const testCidString = 'bafyreiddymapg5zcpma3iu4wingqvois6jirucn5776wdsyg5f3f65v75a'
+import { createHeliaMock } from '../../test/unit/heliaMock'
 
 describe('resolveIpldPath', () => {
+  /**
+   * @type {import('@helia/interface').Helia}
+   */
+  let helia
+  let kuboClient
+  beforeEach(async () => {
+    helia = await createHeliaMock()
+    kuboClient = await createKuboClient()
+  })
   it('resolves all nodes traversed along a path', async () => {
-    const testCidString = 'bafyreiddymapg5zcpma3iu4wingqvois6jirucn5776wdsyg5f3f65v75a'
-
-    const testCID = /** @type {import('multiformats').CID} */(toCidOrNull(testCidString))
-    const ipldMock = {
-      get: jest.fn(),
-      resolve: jest.fn()
-    }
-    const path = '/a/b/a'
-    const linkCid = 'bafyreigjtxtteq6vj3gtb7gzhwkmnprd2al5mjyttptcmu5cp3gvzmau3a'
-
-    const dagGetRes1 = {
-      a: {
-        b: toCidOrNull(linkCid)
-      }
-    }
-    const dagGetRes2 = {
-      first: () => Promise.resolve({ remainderPath: '/a' })
-    }
-    const dagGetRes3 = {
-      a: 'hello world'
-    }
-    const dagGetRes4 = {
-      first: () => Promise.resolve({ remainderPath: '/a' })
-    }
-
-    ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes1))
-    ipldMock.resolve.mockReturnValueOnce(dagGetRes2)
-    ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes3))
-    ipldMock.resolve.mockReturnValueOnce(dagGetRes4)
-
-    const res = await resolveIpldPath(ipldMock, testCID.toString(), path)
-
-    expect(ipldMock.get.mock.calls.length).toBe(2)
-    expect(ipldMock.resolve.mock.calls.length).toBe(2)
-    expect(res.canonicalPath).toBe(`${linkCid}/a`)
-    expect(res.nodes.length).toBe(2)
-    expect(res.nodes[0].type).toBe(dagCbor.code)
-    expect(res.nodes[0].cid).toBe(testCidString)
-    expect(res.nodes[1].type).toBe(dagCbor.code)
-    expect(res.nodes[1].cid).toBe(linkCid)
-    expect(res.pathBoundaries.length).toBe(1)
+    const node4Cid = await addDagNodeToHelia(helia, dagPb, createDagPbNode('4th node', []))
+    const node3Cid = await addDagNodeToHelia(helia, dagPb, createDagPbNode('3rd node', [{
+      name: 'a',
+      cid: node4Cid.toString(),
+      size: 101
+    }]))
+    const node2Cid = await addDagNodeToHelia(helia, dagPb, createDagPbNode('2nd node', [{
+      name: 'b',
+      cid: node3Cid.toString(),
+      size: 101
+    }]))
+    const rootNodeCid = await addDagNodeToHelia(helia, dagPb, createDagPbNode('root node', [{
+      name: 'a',
+      cid: node2Cid.toString(),
+      size: 101
+    }]))
+    const res = await resolveIpldPath(helia, kuboClient, rootNodeCid.toString(), '/a/b/a')
+    expect(res.canonicalPath).toBe(node4Cid.toString())
+    expect(res.nodes.length).toBe(4)
+    expect(res.nodes[0].cid).toBe(rootNodeCid.toString())
+    expect(res.nodes[1].cid).toBe(node2Cid.toString())
+    expect(res.nodes[2].cid).toBe(node3Cid.toString())
+    expect(res.nodes[3].cid).toBe(node4Cid.toString())
+    expect(res.pathBoundaries.length).toBe(3)
     expect(res.pathBoundaries[0]).toEqual(expect.objectContaining({
-      path: 'a/b',
-      source: testCidString,
-      target: linkCid
+      path: 'a',
+      source: rootNodeCid.toString(),
+      target: node2Cid.toString()
     }))
   })
 
   it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
-    const ipldMock = {
-      get: jest.fn(),
-      resolve: jest.fn()
-    }
-
     const path = '/a/b/pb1'
 
     const dagNode3 = await createDagPbNode('the second pb node', [])
-    const dagNode3CID = 'bafybeibmrzxo3u4epqek6xkk2vkjzn4ika5rp4445hdkgi2h3ovsk6iwpm'
+    const dagNode3CID = await addDagNodeToHelia(helia, dagPb, dagNode3)
 
     const dagNode2 = await createDagPbNode('the first pb node', [{
       name: 'pb1',
-      cid: dagNode3CID,
+      cid: dagNode3CID.toString(),
       size: 101
     }])
-    const dagNode2CID = 'bafybeids2kauewqpsenxbaet4ar5sbsaddd24p2yk7a4b2vdwyrnsej45e'
+    const dagNode2CID = await addDagNodeToHelia(helia, dagPb, dagNode2)
 
     const dagNode1 = {
       a: {
-        b: toCidOrNull(dagNode2CID)
+        b: dagNode2CID
       }
     }
+    const dagNode1Cid = await addDagNodeToHelia(helia, dagCbor, dagNode1)
 
-    const dagGetRes1 = dagNode1
+    const res = await resolveIpldPath(helia, kuboClient, dagNode1Cid.toString(), path)
 
-    const dagGetRes2 = {
-      first: () => Promise.resolve({ remainderPath: 'pb1' })
-    }
-
-    const dagGetRes3 = dagNode2
-
-    const dagGetRes4 = {
-      first: () => Promise.resolve({ remainderPath: '' })
-    }
-
-    const dagGetRes5 = dagNode3
-
-    const dagGetRes6 = {
-      first: () => Promise.resolve({ remainderPath: '' })
-    }
-
-    ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes1))
-    ipldMock.resolve.mockReturnValueOnce(dagGetRes2)
-    ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes3))
-    ipldMock.resolve.mockReturnValueOnce(dagGetRes4)
-    ipldMock.get.mockReturnValueOnce(Promise.resolve(dagGetRes5))
-    ipldMock.resolve.mockReturnValueOnce(dagGetRes6)
-
-    const res = await resolveIpldPath(ipldMock, testCidString, path)
-
-    expect(ipldMock.get.mock.calls.length).toBe(3)
-    expect(ipldMock.resolve.mock.calls.length).toBe(3)
-    expect(res.targetNode.cid).toEqual(dagNode3CID)
-    expect(res.canonicalPath).toBe(dagNode3CID)
+    expect(res.targetNode.cid).toEqual(dagNode3CID.toString())
+    expect(res.canonicalPath).toBe(dagNode3CID.toString())
     expect(res.nodes.length).toBe(3)
     expect(res.nodes[0].type).toBe(dagCbor.code)
-    expect(res.nodes[0].cid).toBe(testCidString)
+    expect(res.nodes[0].cid).toBe(dagNode1Cid.toString())
     expect(res.nodes[0].links.length).toBe(1)
     expect(res.nodes[1].type).toBe(dagPb.code)
-    expect(res.nodes[1].cid).toBe(dagNode2CID)
+    expect(res.nodes[1].cid).toBe(dagNode2CID.toString())
     expect(res.nodes[1].links.length).toBe(1)
     expect(res.nodes[2].type).toBe(dagPb.code)
-    expect(res.nodes[2].cid).toBe(dagNode3CID)
+    expect(res.nodes[2].cid).toBe(dagNode3CID.toString())
     expect(res.nodes[2].links.length).toBe(0)
     expect(res.pathBoundaries.length).toBe(2)
     expect(res.pathBoundaries[0]).toEqual(expect.objectContaining({
       path: 'a/b',
-      source: testCidString,
-      target: dagNode2CID
+      source: dagNode1Cid.toString(),
+      target: dagNode2CID.toString()
     }))
     expect(res.pathBoundaries[1]).toEqual(expect.objectContaining({
       index: 0,
       path: 'pb1',
-      source: dagNode2CID,
-      target: dagNode3CID
+      source: dagNode2CID.toString(),
+      target: dagNode3CID.toString()
+    }))
+  })
+
+  /**
+   * This test proves that an error ("Requested IPLD path should end with the remainder path") discovered when viewing
+   * the dag-cbor example from the start exploring page when loading path
+   * `bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq/cheese/0` does not occur.
+   *
+   * The CIDs of the below objects should be:
+   *
+   * rootNode: bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq
+   * childNode: bafkreifvxooyaffa7gy5mhrb46lnpdom34jvf4r42mubf5efbodyvzeujq
+   *
+   * but it doesn't necessarily matter, this was just an edgecase discovered accidentally.
+   */
+  it('resolves dag-cbor node with children all pointing to raw node', async () => {
+    const path = '/cheese/0'
+    const textEncoder = new TextEncoder()
+    const childNode = await addDagNodeToHelia(helia, raw, textEncoder.encode('foo\n'))
+    const rootNode = await addDagNodeToHelia(helia, dagCbor, {
+      cats: 'not cats',
+      cheese: [
+        childNode,
+        childNode,
+        childNode,
+        childNode
+      ],
+      something: childNode
+    })
+
+    const res = await resolveIpldPath(helia, kuboClient, rootNode.toString(), path)
+
+    expect(res.targetNode.cid.toString()).toBe(childNode.toString())
+    expect(res.canonicalPath).toBe(childNode.toString())
+    expect(res.nodes.length).toBe(2)
+    expect(res.nodes[0].cid.toString()).toBe(rootNode.toString())
+    expect(res.nodes[0].type).toBe(dagCbor.code)
+    expect(res.nodes[0].links.length).toBe(5)
+    expect(res.nodes[1].cid.toString()).toBe(childNode.toString())
+    expect(res.nodes[1].type).toBe(raw.code)
+    expect(res.nodes[1].links.length).toBe(0)
+    expect(res.pathBoundaries.length).toBe(1)
+    expect(res.pathBoundaries[0]).toEqual(expect.objectContaining({
+      path: 'cheese/0',
+      source: rootNode.toString(),
+      target: childNode.toString()
     }))
   })
 })

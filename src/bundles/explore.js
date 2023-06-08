@@ -1,43 +1,46 @@
-import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
-import resolveIpldPath from '../lib/resolve-ipld-path'
-import parseIpldPath from '../lib/parse-ipld-path'
 import { CID } from 'multiformats/cid'
-import Cid from 'cids'
-import { convert } from 'blockcodec-to-ipld-format'
+import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
+
+import { ensureLeadingSlash } from '../lib/helpers'
+import { importCar } from '../lib/import-car'
+import parseIpldPath from '../lib/parse-ipld-path'
+import resolveIpldPath from '../lib/resolve-ipld-path'
+
+const getCidFromCidOrFqdn = (cidOrFqdn) => {
+  if (cidOrFqdn.startsWith('/ipfs/')) {
+    return cidOrFqdn.slice('/ipfs/'.length)
+  }
+  if (cidOrFqdn.startsWith('/ipns/')) {
+    // TODO: handle ipns
+    throw new Error('ipns not supported yet')
+  }
+  if (cidOrFqdn.startsWith('/')) {
+    return cidOrFqdn.slice(1)
+  }
+  return cidOrFqdn
+}
 
 // Find all the nodes and path boundaries traversed along a given path
 const makeBundle = () => {
-  // Lazy load ipld because it is a large dependency
-  let IpldResolver = null
-  let ipldFormats = null
-
   const bundle = createAsyncResourceBundle({
     name: 'explore',
     actionBaseType: 'EXPLORE',
-    getPromise: async (args) => {
-      const { store, getIpfs } = args
+    getPromise: async ({ store }) => {
       const path = store.selectExplorePathFromHash()
       if (!path) return null
       const pathParts = parseIpldPath(path)
       if (!pathParts) return null
       const { cidOrFqdn, rest } = pathParts
       try {
-        if (!IpldResolver) {
-          const { ipld, formats } = await getIpld()
-
-          IpldResolver = ipld
-          ipldFormats = formats
-        }
-        const ipld = makeIpld(IpldResolver, ipldFormats, getIpfs)
         // TODO: handle ipns, which would give us a fqdn in the cid position.
-        const cid = new Cid(cidOrFqdn)
+        const cid = CID.parse(getCidFromCidOrFqdn(cidOrFqdn))
         const {
           targetNode,
           canonicalPath,
           localPath,
           nodes,
           pathBoundaries
-        } = await resolveIpldPath(ipld, cid, rest)
+        } = await resolveIpldPath(store.selectHelia(), store.selectKuboClient(), cid, rest)
 
         return {
           path,
@@ -65,9 +68,14 @@ const makeBundle = () => {
     }
   )
 
-  // Fetch the explore data when the address in the url hash changes.
+  /**
+   * Fetch the explore data when the address in the url hash changes.
+   * Note that this is called automatically by redux-bundler
+   *
+   * @see https://reduxbundler.com/api-reference/bundle#bundle.reactx
+   */
   bundle.reactExploreFetch = createSelector(
-    'selectIpfsReady',
+    'selectHeliaReady',
     'selectExploreIsLoading',
     'selectExploreIsWaitingToRetry',
     'selectExplorePathFromHash',
@@ -106,101 +114,20 @@ const makeBundle = () => {
     store.doUpdateHash(hash)
   }
 
-  bundle.doUploadUserProvidedCar = (file, uploadImage) => (args) => {
-    const { store, getIpfs } = args
-    importCar(file, getIpfs()).then(result => {
-      const cid = result.root.cid
-      const hash = cid.toString() ? `#/explore${ensureLeadingSlash(cid.toString())}` : '#/explore'
+  bundle.doUploadUserProvidedCar = (file, uploadImage) => async ({ store }) => {
+    try {
+      const rootCid = await importCar(file, await store.selectHelia())
+      const hash = rootCid.toString() ? `#/explore${ensureLeadingSlash(rootCid.toString())}` : '#/explore'
       store.doUpdateHash(hash)
 
       //  Grab the car loader image so we can change it's state
       const imageFileLoader = document.getElementById('car-loader-image')
       imageFileLoader.src = uploadImage
-    })
+    } catch (err) {
+      console.error('Could not import car file', err)
+    }
   }
   return bundle
-}
-
-async function importCar (file, ipfs) {
-  const inStream = file.stream()
-  const toIterable = require('stream-to-it')
-  for await (const result of ipfs.dag.import(toIterable.source(inStream))) {
-    return result
-  }
-}
-
-function ensureLeadingSlash (str) {
-  if (str.startsWith('/')) return str
-  return `/${str}`
-}
-
-function makeIpld (IpldResolver, ipldFormats, getIpfs) {
-  return new IpldResolver({
-    blockService: painfullyCompatibleBlockService(getIpfs()),
-    formats: ipldFormats
-  })
-}
-
-// This wrapper ensures the new block service from js-ipfs AND js-ipfs-http-client
-// works with the legacy code present in ipld-explorer-components
-//
-// (ir)rationale: we have no bandwidth to rewrite entire IPLD Explorer
-// but thanks to it using only ipfs.block.get, making it extra compatible
-// is not very expensive. This buys us some time, but this technical debt needs
-// to be paid eventually.
-function painfullyCompatibleBlockService (ipfs) {
-  const blockService = new Proxy(ipfs.block, {
-    get: function (obj, prop) {
-      if (prop === 'get') { // augument ipfs.block.get()
-        return async (cid, options) => {
-          let block
-          try {
-            block = await ipfs.block.get(cid, options)
-          } catch (e) {
-            // recover when two different CID libraries are used,
-            // and below error is produced by the modern ipfs-code
-            if (e.toString().includes('Unknown type, must be binary type')) {
-              block = await ipfs.block.get(CID.parse(cid.toString()), options)
-            } else {
-              throw e
-            }
-          }
-          // recover from new return type in modern JS APIs
-          // https://github.com/ipfs/js-ipfs/pull/3990
-          if (typeof block.cid === 'undefined') {
-            return { cid, data: block }
-          }
-          return block
-        }
-      }
-      return obj[prop]
-    }
-  })
-  return blockService
-}
-
-async function getIpld () {
-  const ipldDeps = await Promise.all([
-    import(/* webpackChunkName: "ipld" */ 'ipld'),
-    import(/* webpackChunkName: "ipld" */ '@ipld/dag-cbor'),
-    import(/* webpackChunkName: "ipld" */ '@ipld/dag-pb'),
-    import(/* webpackChunkName: "ipld" */ 'ipld-git'),
-    import(/* webpackChunkName: "ipld" */ 'ipld-raw'),
-    import(/* webpackChunkName: "ipld" */ 'ipld-ethereum')
-  ])
-
-  // CommonJs exports object is .default when imported ESM style
-  const [ipld, ...formats] = ipldDeps.map(mod => mod.default)
-
-  // ipldEthereum is an Object, each key points to a ipld format impl
-  const ipldEthereum = formats.pop()
-  formats.push(...Object.values(ipldEthereum))
-
-  // ipldJson uses the new format, use the conversion tool
-  const ipldJson = await import(/* webpackChunkName: "ipld" */ '@ipld/dag-json')
-  formats.push(convert(ipldJson))
-
-  return { ipld, formats }
 }
 
 export default makeBundle

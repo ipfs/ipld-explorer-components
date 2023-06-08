@@ -1,11 +1,12 @@
-import StartExploringPage from './components/StartExploringPage'
-import ExplorePage from './components/LoadableExplorePage.js'
-import IpldExploreForm from './components/explore/IpldExploreForm.js'
-import IpldCarExploreForm from './components/explore/IpldCarExploreForm.js'
-import CidInfo from './components/cid-info/CidInfo'
-import IpldGraph from './components/graph/LoadableIpldGraph'
-import ObjectInfo from './components/object-info/ObjectInfo'
 import exploreBundle from './bundles/explore'
+import heliaBundle from './bundles/helia'
+import CidInfo from './components/cid-info/CidInfo'
+import IpldCarExploreForm from './components/explore/IpldCarExploreForm'
+import IpldExploreForm from './components/explore/IpldExploreForm'
+import IpldGraph from './components/graph/LoadableIpldGraph'
+import ExplorePage from './components/LoadableExplorePage'
+import ObjectInfo from './components/object-info/ObjectInfo'
+import StartExploringPage from './components/StartExploringPage'
 
 export {
   StartExploringPage,
@@ -15,5 +16,6 @@ export {
   CidInfo,
   IpldGraph,
   ObjectInfo,
-  exploreBundle
+  exploreBundle,
+  heliaBundle
 }

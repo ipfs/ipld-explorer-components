@@ -1,3 +1,7 @@
+import { CID } from 'multiformats'
+
+import getCodecForCid from './get-codec-for-cid'
+import { getRawBlock } from './get-raw-block'
 import normaliseDagNode from './normalise-dag-node'
 
 /**
@@ -31,7 +35,7 @@ import normaliseDagNode from './normalise-dag-node'
  *
  * Usage:
  * ```js
- * const res = resolveIpldPath(getIpfs, 'zdpuHash' '/favourites/0/a/css')
+ * const res = resolveIpldPath(getHelia, 'zdpuHash' '/favourites/0/a/css')
  * const {targetNode, canonicalPath, localPath, nodes, pathBoundaries} = res
  * ```
  * Where:
@@ -41,15 +45,16 @@ import normaliseDagNode from './normalise-dag-node'
  * - `nodes` is the array of nodes that the path traverses.
  * - `pathBoundaries` is the array of links that the path traverses.
  *
- * @param {IpldInterface} ipldGet fn that returns a promise of the ipld data for a (cid, path, options)
- * @param {string} sourceCid the root hash
- * @param {string} path everything after the hash
- * @param {object[]} nodes accumulated node info
- * @param {object[]} pathBoundaries accumulated path boundary info
+ * @param {import('@helia/interface').Helia} helia
+ * @param {import('kubo-rpc-client').IPFSHTTPClient} kuboClient
+ * @param {string} sourceCid - the root hash
+ * @param {string} path - everything after the hash
+ * @param {object[]} nodes - accumulated node info
+ * @param {object[]} pathBoundaries - accumulated path boundary info
  * @returns {ResolvedIpldPathInfo} resolved path info
  */
-export default async function resolveIpldPath (ipld, sourceCid, path, nodes = [], pathBoundaries = []) {
-  const { value, remainderPath } = await ipldGetNodeAndRemainder(ipld, sourceCid, path)
+export default async function resolveIpldPath (helia, kuboClient, sourceCid, path, nodes = [], pathBoundaries = []) {
+  const { value, remainderPath } = await ipldGetNodeAndRemainder(helia, kuboClient, sourceCid, path)
   if (sourceCid == null) {
     throw new Error('sourceCid is null')
   }
@@ -64,45 +69,54 @@ export default async function resolveIpldPath (ipld, sourceCid, path, nodes = []
   if (link) {
     pathBoundaries.push(link)
     // Go again, using the link.target as the sourceCid, and the remainderPath as the path.
-    return resolveIpldPath(ipld, link.target, remainderPath, nodes, pathBoundaries)
+    return resolveIpldPath(helia, kuboClient, link.target, remainderPath, nodes, pathBoundaries)
   }
   // we made it to the containing node. Hand back the info
   const canonicalPath = path ? `${sourceCidStr}${path}` : sourceCidStr
   const targetNode = node
+
   return { targetNode, canonicalPath, localPath: path, nodes, pathBoundaries }
 }
 
 /**
  * @function ipldGetNodeAndRemainder
- * @param {IpldInterface} ipld
+ * @param {typeof import('@helia/interface').Helia} helia
+ * @param {import('kubo-rpc-client').IPFSHTTPClient} kuboClient
  * @param {string} sourceCid
  * @param {string} path
  * @returns
  */
-export async function ipldGetNodeAndRemainder (ipld, sourceCid, path) {
+export async function ipldGetNodeAndRemainder (helia, kuboClient, sourceCid, path) {
   if (sourceCid == null) {
     throw new Error('sourceCid is null')
   }
-  // TODO: find out why ipfs.dag.get with localResolve never resolves.
-  // const {value, remainderPath} = await getIpfs().dag.get(sourceCid, path, {localResolve: true})
+  let cidInstance = CID.asCID(sourceCid)
+  if (cidInstance === null) {
+    cidInstance = CID.parse(sourceCid)
+  }
+  const codecWrapper = await getCodecForCid(cidInstance)
+  const encodedValue = await getRawBlock(helia, kuboClient, cidInstance)
+  const value = codecWrapper.decode(encodedValue)
 
-  // TODO: use ipfs.dag.get when it gets ipld super powers
-  // SEE: https://github.com/ipfs/js-ipfs-api/pull/755
-  // const {value} = await getIpfs().dag.get(sourceCid)
+  const codecWrapperResolveResult = await codecWrapper.resolve(path || '/', encodedValue)
+  const { remainderPath, resolve: resolveValue } = codecWrapperResolveResult
 
-  // TODO: handle indexing into dag-pb links without using Links prefix as per go-ipfs dag.get does.
-  // Current js-ipld-dag-pb resolver will throw with a path not available error if Links prefix is missing.
+  if (resolveValue?.Hash != null) {
+    // This is a PBLink, and we should resolve that link so we're returning PBNodes not PBLinks
+    return await ipldGetNodeAndRemainder(helia, value.Hash, remainderPath)
+  }
+
   return {
-    value: await ipld.get(sourceCid),
-    remainderPath: (await ipld.resolve(sourceCid, path || '/').first()).remainderPath
+    value,
+    remainderPath
   }
 }
 
 /**
  * Find the link object that matches linkPath
  *
- * @param {import('./normalise-dag-node').NormalizedDagNode} node a `normalisedDagNode`
- * @param {string} linkPath an IPLD path string
+ * @param {import('./normalise-dag-node').NormalizedDagNode} node - a `normalisedDagNode`
+ * @param {string} linkPath - an IPLD path string
  * @returns {import('./normalise-dag-node').NormalizedDagLink} the link object for `linkPath`
  */
 export function findLink (node, linkPath) {

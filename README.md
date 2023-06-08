@@ -12,7 +12,7 @@ This module was extracted from the [explore.ipld.io](https://github.com/ipfs/exp
 
 ## Usage
 
-**WARNING: This module is not intended to be re-used in it's current form by other projects.** It's just enough to work with a `create-react-app` set up, as long as you follow the steps below. There is much more work to do to make this a nice set of generic components.
+**WARNING: This module is not intended to be re-used in it's current form by other projects.** There is more work to do to make this a nice set of generic components.
 
 Install it from npm:
 
@@ -38,7 +38,8 @@ export {
   CidInfo,
   IpldGraph
   ObjectInfo,
-  exploreBundle
+  exploreBundle,
+  heliaBundle
 }
 ```
 
@@ -55,9 +56,36 @@ import 'ipld-explorer-components/dist/components/object-info/LinksTable.css'
 import 'ipld-explorer-components/dist/components/loader/Loader.css'
 ```
 
+### Adding another codec
+
+**NOTE:** PRs adding an old IPLDFormat codec would need the old `blockcodec-to-ipld-format` tool which has many out of date deps. We will only accept PRs for adding BlockCodec interface codecs.
+
+To add another codec you will need to:
+
+1. Add a dependency on the codec to this package
+1. Add the codec in the switch statement in src/lib/codec-importer.ts
+1. Add a unit test to src/lib/resolve-ipld-path.test.js and ensure that calling `resolveIpldPath` returns the expected results
+  * If the default `resolveFn` in src/lib/get-codec-for-cid.ts doesn't resolve your paths correctly, you will need to add a resolver method for your codec to the `codecResolverMap` in src/lib/get-codec-for-cid.ts
+
+see https://github.com/ipfs/ipld-explorer-components/pull/360#discussion_r1206251817 for history.
+
+### Redux-bundler requirements
+
+These components use [redux-bundler](https://reduxbundler.com/) and your app will need to use a redux-bundler provider in order to propogate the properties and selectors. You can find a basic example of this in ./dev/devPage.jsx.
+
+In short, these components export two bundles found in ./src/bundles: `explore` and `heliaBundle`. The explore bundle and components herein have a few redux-bundler selector dependencies that you need to make sure exist and are called properly.
+
+| Dependent          | redux-bundler selector | Notes                                                                                                         |
+|--------------------|------------------------|---------------------------------------------------------------------------------------------------------------|
+| explore bundle     | selectHeliaReady        | The explore bundle depends on this selector so it knows when the Helia node is available for use               |
+| explore & other bundles     | selectHelia        | The explore bundle gets the Helia node via this selector |
+| Main page (or any) | doInitHelia             | A consuming app needs to call this selector to tell the bundle that provides the Helia node to instantiate it. |
+
+If you don't want to use the `heliaBundle`, i.e. like we won't in ipfs-webui, then you will need to make sure you adapt the selectors as appropriate.
+
 ## Contribute
 
-Feel free to dive in! [Open an issue](https://github.com/ipfs-shipyard/ipld-explorer/issues/new) or submit PRs.
+Feel free to dive in! [Open an issue](https://github.com/ipfs/ipld-explorer-components/issues/new) or submit PRs.
 
 To contribute to IPFS in general, see the [contributing guide](https://github.com/ipfs/community/blob/master/CONTRIBUTING.md).
 
@@ -69,7 +97,7 @@ To contribute to IPFS in general, see the [contributing guide](https://github.co
 - Update the version (`npm version major/minor/patch`)
 - Push the changes (`git push && git push --follow-tags`)
 - Update the [changelog](./CHANGELOG.md)
-- Add release notes to https://github.com/ipfs-shipyard/ipld-explorer-components/releases, use the tag and copy changelog changes
+- Add release notes to https://github.com/ipfs/ipld-explorer-components/releases, use the tag and copy changelog changes
 - Publish to npm (`npm publish`)
 
 ## License

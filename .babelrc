@@ -1,11 +1,26 @@
 {
   "presets": [
     ["@babel/preset-env", {
-      "modules": false
+      "modules": false,
+      "targets": "> 2%, not dead"
+    }],
+    ["@babel/preset-typescript", {
+      "isTSX": true,
+      "allExtensions": true
     }],
     "@babel/preset-react"
   ],
   "plugins": [
-    "@babel/plugin-proposal-class-properties"
-  ]
+    "@babel/plugin-proposal-class-properties",
+  ],
+  "ignore": [
+    "**/*.test.js",
+    "**/*.test.jsx",
+    "**/*.test.ts",
+    "**/*.test.tsx",
+    "**/*.stories.js",
+    "**/*.stories.jsx",
+    "**/*.stories.ts",
+    "**/*.stories.tsx"
+  ],
 }
