@@ -11,7 +11,7 @@ jobs:
     outputs:
       status: ${{ steps.should-automerge.outputs.status }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
       with:
         fetch-depth: 0
     - name: Check if we should automerge
@@ -42,7 +42,7 @@ jobs:
         wait-interval: 10
         running-workflow-name: 'automerge' # the name of this job
     - name: Merge PR
-      uses: pascalgn/automerge-action@741c311a47881be9625932b0a0de1b0937aab1ae # v0.13.1
+      uses: pascalgn/automerge-action@22948e0bc22f0aa673800da838595a3e7347e584 # v0.15.6
       env:
         GITHUB_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
         MERGE_LABELS: ""
