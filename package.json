@@ -115,7 +115,7 @@
     "start": "cross-env NODE_ENV=production babel src -d dist --copy-files --no-copy-ignored --extensions '.ts,.tsx,.js,.jsx' --watch",
     "test": "vitest run --environment=node",
     "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+    "storybook:build": "storybook build"
   },
   "dependencies": {
     "@chainsafe/libp2p-gossipsub": "^8.0.0",
