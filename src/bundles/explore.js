@@ -52,7 +52,7 @@ const makeBundle = () => {
         }
       } catch (error) {
         console.warn('Failed to resolve path', path, error)
-        return { path, error: error.toString() }
+        return { path, error }
       }
     },
     staleAfter: Infinity,

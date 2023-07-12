@@ -3,6 +3,7 @@ import { type IPFSHTTPClient } from 'kubo-rpc-client'
 import { CID } from 'multiformats'
 import type { Version as CIDVersion } from 'multiformats/cid'
 
+import { BlockFetchTimeoutError } from './errors'
 import getHasherForCode from './hash-importer.js'
 
 async function getCidFromBytes (bytes: Uint8Array, cidVersion: CIDVersion, codecCode: number, multihashCode: number): Promise<CID> {
@@ -130,6 +131,10 @@ export async function getRawBlock (helia: Helia, kuboClient: IPFSHTTPClient, cid
     return rawBlock
   } catch (err) {
     console.error('unable to get raw block', err)
+    if (abortController.signal.aborted) {
+      // if we timed out, we want to throw a timeout error, not a Promise.any error
+      throw new BlockFetchTimeoutError({ timeout: timeout / 1000 })
+    }
     throw err
   }
 }
