@@ -1,3 +1,13 @@
+### [4.0.1](https://github.com/ipfs/ipld-explorer-components/compare/v4.0.0...v4.0.1) (2023-07-12)
+
+* chore: bump pascalgn/automerge-action from 0.13.1 to 0.15.6 by @dependabot in https://github.com/ipfs/ipld-explorer-components/pull/374
+* chore: bump actions/checkout from 2 to 3 by @dependabot in https://github.com/ipfs/ipld-explorer-components/pull/372
+* chore: bump repo-sync/pull-request from 2.6.2 to 2.12.1 by @dependabot in https://github.com/ipfs/ipld-explorer-components/pull/371
+* chore: bump actions/setup-node from 2 to 3 by @dependabot in https://github.com/ipfs/ipld-explorer-components/pull/370
+* fix: storybook build by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/367
+* docs: update changelog by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/368
+* fix: fetch timeout has better error UX by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/378
+
 ### [4.0.0](https://github.com/ipfs/ipld-explorer-components/compare/v3.0.3...v4.0.0) (2023-06-08)
 
 This is a major update that removes all old deps: js-ipfs, ipld, and out of date related ipld deps.
@@ -169,6 +179,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [v1.6.0] - 2020-06-04
 
-- fix(i18): correctly load all translations (#245) 
+- fix(i18): correctly load all translations (#245)
 - fix: show as many node links as height allows (#238)
 - chore: dependency bumps & aligning with ipfs-webui
