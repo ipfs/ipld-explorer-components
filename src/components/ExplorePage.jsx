@@ -6,6 +6,7 @@ import { connect } from 'redux-bundler-react'
 
 import CidInfo from './cid-info/CidInfo'
 import ErrorBoundary from './error/ErrorBoundary'
+import { IpldExploreErrorComponent } from './explore/IpldExploreErrorComponent'
 import IpldGraph from './graph/LoadableIpldGraph'
 import GraphCrumb from './graph-crumb/GraphCrumb'
 import ComponentLoader from './loader/ComponentLoader'
@@ -51,13 +52,7 @@ export class ExplorePage extends React.Component {
 
         <div className='dt-l dt--fixed'>
           <div className='dtc-l w-100 w-two-thirds-l pr3-l v-top'>
-            {error
-              ? (
-              <div className='bg-red white pa3 lh-copy'>
-                {error}
-              </div>
-                )
-              : null}
+            <IpldExploreErrorComponent error={error} />
 
             {targetNode
               ? (
