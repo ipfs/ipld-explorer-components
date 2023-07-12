@@ -17,7 +17,7 @@ export default class IpldExploreError extends Error {
    * t('NameOfErrorClassThatExtendsIpldExploreError')
    */
   toString (t: TFunction<'translation', undefined, 'translation'>): string {
-    return t(this.constructor.name, this.options)
+    return t(this.name, this.options)
   }
 }
 
