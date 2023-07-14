@@ -14,6 +14,8 @@ export default function getCodecNameFromCode (code: number): string {
       return 'json'
     case multicodecs.DAG_JSON:
       return 'dag-json'
+    case multicodecs.DAG_JOSE:
+      return 'dag-jose'
     default:
       // TODO: Remove dependency on multicodecs
       return multicodecs.codeToName[code as multicodecs.CodecCode]
