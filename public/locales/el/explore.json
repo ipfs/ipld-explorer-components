@@ -66,5 +66,8 @@
         "paragraph1": "Μια οπτική αναπαράσταση του κόμβου και των στοιχείων του."
       }
     }
+  },
+  "errors": {
+    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID."
   }
 }
