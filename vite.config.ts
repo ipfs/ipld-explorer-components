@@ -69,33 +69,34 @@ export default defineConfig(({ mode, command }) => {
     include: /\.(tsx?|jsx?)$/
   }
   const viteBuild: UserConfig['build'] = {
-    lib: {
-      entry: [
-        pathResolve(__dirname, 'src/index.js')
-      ],
-      fileName: (format, entryName) => `${format}/${entryName}.js`,
-      formats: ['es']
-    },
+    // lib: {
+    //   entry: [
+    //     pathResolve(__dirname, 'src/index.js')
+    //   ],
+    //   fileName: (format, entryName) => `${format}/${entryName}.js`,
+    //   formats: ['es']
+    // },
     outDir: 'dist-vite',
     target: 'esnext',
-    minify: false,
-    cssCodeSplit: false,
+    // minify: false,
+    // cssCodeSplit: false,
     rollupOptions: {
       external: [
         /node_modules/,
         /\.stories\..+$/
-      ],
-      preserveEntrySignatures: 'strict',
-      input: {
-        index: pathResolve(__dirname, 'src/index.js')
-      },
-      output: {
-        preserveModules: true,
-        preserveModulesRoot: 'src',
-        entryFileNames: '[name].js'
-      },
-      plugins: [
       ]
+    //   preserveEntrySignatures: 'strict',
+    //   input: {
+    //     // index: pathResolve(__dirname, 'dev/devPage.jsx')
+    //     index: pathResolve(__dirname, 'index.html')
+    //   },
+    //   output: {
+    //     preserveModules: true,
+    //     preserveModulesRoot: 'src',
+    //     entryFileNames: '[name].js'
+    //   },
+    //   plugins: [
+    //   ]
     }
   }
 
@@ -116,6 +117,7 @@ export default defineConfig(({ mode, command }) => {
   }
 
   const finalConfig: UserConfigExport = {
+    base: './',
     plugins: vitePlugins,
     resolve: viteResolve,
     define: viteDefine,

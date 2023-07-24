@@ -65,7 +65,6 @@ export async function verifyBytes (providedCid: CID, bytes: Uint8Array): Promise
  * @returns {boolean}
  */
 function ensureGatewayFetchEnabled (): boolean {
-  console.info('import.meta.env.NODE_ENV: ', import.meta.env.NODE_ENV)
   console.info(
     "🎛️ Customise whether ipld-explorer-components fetches content from gateways by setting an `explore.ipld.gatewayEnabled` value to true/false in localStorage. e.g. localStorage.setItem('explore.ipld.gatewayEnabled', false) -- NOTE: defaults to true"
   )
