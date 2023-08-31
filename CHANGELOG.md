@@ -1,3 +1,25 @@
+### [4.0.3](https://github.com/ipfs/ipld-explorer-components/compare/v4.0.2...v4.0.3) (2023-07-28)
+
+
+### Trivial Changes
+
+* pull new translations ([#383](https://github.com/ipfs/ipld-explorer-components/issues/383)) ([59845d9](https://github.com/ipfs/ipld-explorer-components/commit/59845d99d08f4b0ccbf0a4377aa884f2d02407e5))
+
+### [4.0.2](https://github.com/ipfs/ipld-explorer-components/compare/v4.0.1...v4.0.2) (2023-07-24)
+
+
+### Bug Fixes
+
+* url-encoded dag-PB names can be explored ([#384](https://github.com/ipfs/ipld-explorer-components/issues/384)) ([d5c6899](https://github.com/ipfs/ipld-explorer-components/commit/d5c6899a6eeb94860eff239f4634f2197060e2dd))
+
+
+### Trivial Changes
+
+* **ci:** checkout with unifiedCI token ([#387](https://github.com/ipfs/ipld-explorer-components/issues/387)) ([79f09c1](https://github.com/ipfs/ipld-explorer-components/commit/79f09c1e2aa7a6a202f411310d08b5c8ddd7dd19))
+* **ci:** update Unified CI configuration ([#386](https://github.com/ipfs/ipld-explorer-components/issues/386)) ([549a056](https://github.com/ipfs/ipld-explorer-components/commit/549a056620db505a410e037247d0df227515240f))
+* pull new translations ([#381](https://github.com/ipfs/ipld-explorer-components/issues/381)) ([a3c67ce](https://github.com/ipfs/ipld-explorer-components/commit/a3c67ce0544cc3cf300d1aeff41b78923892d464))
+* v4.0.1 changelog ([346dc60](https://github.com/ipfs/ipld-explorer-components/commit/346dc60ae65a5d5d2b80037d0edb189b2b7077e2))
+
 ### [4.0.1](https://github.com/ipfs/ipld-explorer-components/compare/v4.0.0...v4.0.1) (2023-07-12)
 
 * chore: bump pascalgn/automerge-action from 0.13.1 to 0.15.6 by @dependabot in https://github.com/ipfs/ipld-explorer-components/pull/374

@@ -103,7 +103,7 @@ const makeBundle = () => {
     }
     // add the root cid to the start
     pathParts.unshift(cid)
-    const path = pathParts.join('/')
+    const path = pathParts.map((part) => encodeURIComponent(part)).join('/')
     const hash = `#/explore/${path}`
     store.doUpdateHash(hash)
   }
