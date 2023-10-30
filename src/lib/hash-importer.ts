@@ -1,5 +1,4 @@
 /* global globalThis */
-import { digest as blake3Digest } from 'blake3-multihash'
 import { keccak256 } from 'js-sha3'
 import { type Hasher, from } from 'multiformats/hashes/hasher'
 import * as sha2 from 'multiformats/hashes/sha2'
@@ -40,6 +39,7 @@ export default async function getHasherForCode (code: number): Promise<Supported
         name: 'blake3-multihash',
         code,
         encode: async (data: Uint8Array): Promise<Uint8Array> => {
+          const { digest: blake3Digest } = await import('blake3-multihash')
           const { digest } = await blake3Digest(data)
           return digest
         }
