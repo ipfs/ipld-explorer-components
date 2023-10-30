@@ -130,7 +130,6 @@
     "@libp2p/ipni-content-routing": "^1.0.1",
     "@loadable/component": "^5.14.1",
     "@tableflip/react-inspector": "^2.3.0",
-    "blake3-multihash": "^0.0.4",
     "cytoscape": "^3.18.1",
     "cytoscape-dagre": "^2.3.2",
     "filesize": "^6.1.0",
@@ -251,6 +250,7 @@
   },
   "peerDependencies": {
     "@loadable/component": "^5.14.1",
+    "blake3-multihash": "^0.0.4",
     "i18next": "^21.6.16",
     "i18next-browser-languagedetector": "^6.1.0",
     "i18next-http-backend": "^1.2.1",
