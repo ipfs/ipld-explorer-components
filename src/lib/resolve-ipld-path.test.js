@@ -36,7 +36,7 @@ describe('resolveIpldPath', () => {
       cid: node2Cid.toString(),
       size: 101
     }]))
-    const res = await resolveIpldPath(helia, kuboClient, rootNodeCid.toString(), '/a/b/a')
+    const res = await resolveIpldPath(helia, rootNodeCid.toString(), '/a/b/a')
     expect(res.canonicalPath).toBe(node4Cid.toString())
     expect(res.nodes.length).toBe(4)
     expect(res.nodes[0].cid).toBe(rootNodeCid.toString())
@@ -71,7 +71,7 @@ describe('resolveIpldPath', () => {
     }
     const dagNode1Cid = await addDagNodeToHelia(helia, dagCbor, dagNode1)
 
-    const res = await resolveIpldPath(helia, kuboClient, dagNode1Cid.toString(), path)
+    const res = await resolveIpldPath(helia, dagNode1Cid.toString(), path)
 
     expect(res.targetNode.cid).toEqual(dagNode3CID.toString())
     expect(res.canonicalPath).toBe(dagNode3CID.toString())
@@ -126,7 +126,7 @@ describe('resolveIpldPath', () => {
       something: childNode
     })
 
-    const res = await resolveIpldPath(helia, kuboClient, rootNode.toString(), path)
+    const res = await resolveIpldPath(helia, rootNode.toString(), path)
 
     expect(res.targetNode.cid.toString()).toBe(childNode.toString())
     expect(res.canonicalPath).toBe(childNode.toString())

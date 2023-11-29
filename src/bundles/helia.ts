@@ -74,7 +74,7 @@ const bundle = {
       getState().helia.apiOpts,
       getUserOpts('ipfsApi')
     )
-    // TRY helia!
+
     try {
       console.info(
         "🎛️ Customise your kubo-rpc-client opts by setting an `ipfsApi` value in localStorage. e.g. localStorage.setItem('ipfsApi', JSON.stringify({port: '1337'}))"

@@ -40,7 +40,7 @@ const makeBundle = () => {
           localPath,
           nodes,
           pathBoundaries
-        } = await resolveIpldPath(store.selectHelia(), store.selectKuboClient(), cid, rest)
+        } = await resolveIpldPath(store.selectHelia(), cid, rest)
 
         return {
           path,
