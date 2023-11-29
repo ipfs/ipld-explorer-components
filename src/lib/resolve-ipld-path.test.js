@@ -2,7 +2,6 @@
 // @ts-check
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
-import { create as createKuboClient } from 'kubo-rpc-client'
 import * as raw from 'multiformats/codecs/raw'
 
 import { addDagNodeToHelia } from './helpers'
@@ -14,10 +13,8 @@ describe('resolveIpldPath', () => {
    * @type {import('@helia/interface').Helia}
    */
   let helia
-  let kuboClient
   beforeEach(async () => {
     helia = await createHeliaMock()
-    kuboClient = await createKuboClient()
   })
   it('resolves all nodes traversed along a path', async () => {
     const node4Cid = await addDagNodeToHelia(helia, dagPb, createDagPbNode('4th node', []))
