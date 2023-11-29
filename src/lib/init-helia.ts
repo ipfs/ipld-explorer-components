@@ -67,7 +67,10 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
   })
 
   // add helia-only examples
-  await addDagNodeToHelia(helia, await import('@ipld/dag-json'), { hello: 'world' }) // baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea
+  // consumers may not have the peer-deps installed for these examples, and we don't want to break them if they're not supported.
+  await Promise.allSettled([
+    import('@ipld/dag-json').then(async (dagJsonModule) => addDagNodeToHelia(helia, dagJsonModule, { hello: 'world' })) // baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea
+  ])
 
   return helia
 }
