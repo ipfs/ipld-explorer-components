@@ -21,9 +21,7 @@ export default async function codecImporter<T extends CodecDataTypes = CodecData
     case 'dag-pb':
       return import('@ipld/dag-pb')
     case 'git-raw':
-      return {
-        decode: (await import('ipld-git')).default.util.deserialize
-      }
+      throw new Error('git-raw is unsupported until https://github.com/ipld/js-ipld-git is updated.')
     case 'raw':
       return import('multiformats/codecs/raw')
     case 'json':

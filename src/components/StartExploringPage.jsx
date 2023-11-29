@@ -54,9 +54,6 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
           <li>
             <ExploreSuggestion name='dag-json hello world' cid='baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea' type='dag-json' />
           </li>
-          <li>
-            <ExploreSuggestion name='IGIS Git Repo' cid='baf4bcfg4ep767tjp5lxyanx5urpjjgx5q2volvy' type='git-raw' />
-          </li>
         </ul>
       </div>
       <div className='pt2-l'>
