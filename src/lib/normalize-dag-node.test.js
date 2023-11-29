@@ -45,28 +45,28 @@ it('normalizes a cbor node with links', () => {
     data: obj,
     type: dagCbor.code,
     format: 'unknown',
-    size: 0,
+    size: BigInt(0),
     links: [
       {
         path: 'foo',
         source: cid1,
         target: cid2,
         index: 0,
-        size: 0
+        size: BigInt(0)
       },
       {
         path: 'bar/0',
         source: cid1,
         target: cid2,
         index: 0,
-        size: 0
+        size: BigInt(0)
       },
       {
         path: 'bar/1',
         source: cid1,
         target: cid3,
         index: 0,
-        size: 0
+        size: BigInt(0)
       }
     ]
   })

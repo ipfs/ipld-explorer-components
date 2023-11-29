@@ -3,7 +3,7 @@
  */
 declare module 'stream-to-it' {
   interface toIterable {
-    source: <T>(stream: ReadableStream<T>) => AsyncIterable<T>
+    source<T>(stream: ReadableStream<T>): AsyncIterable<T>
   }
   const toIterable: toIterable
   export default toIterable
@@ -11,8 +11,8 @@ declare module 'stream-to-it' {
 
 interface OldIpldFormat {
   util: {
-    serialize: (obj: unknown) => Promise<Uint8Array>
-    deserialize: (bytes: Uint8Array) => Promise<unknown>
+    serialize(obj: unknown): Promise<Uint8Array>
+    deserialize(bytes: Uint8Array): Promise<unknown>
 
     codec: number
     defaultHashAlg: number
@@ -21,8 +21,8 @@ interface OldIpldFormat {
   }
   codec: number
   resolver: {
-    resolve: (bytes: Uint8Array, path: string) => Promise<unknown>
-    tree: (bytes: Uint8Array) => Promise<unknown>
+    resolve(bytes: Uint8Array, path: string): Promise<unknown>
+    tree(bytes: Uint8Array): Promise<unknown>
   }
   defaultHashAlg: number
 }

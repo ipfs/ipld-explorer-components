@@ -1,8 +1,7 @@
 import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
+import { createDelegatedRoutingV1HttpApiClient } from '@helia/delegated-routing-v1-http-api-client'
 import { type Helia } from '@helia/interface'
-import { delegatedContentRouting } from '@libp2p/delegated-content-routing'
-import { delegatedPeerRouting } from '@libp2p/delegated-peer-routing'
 import { mplex } from '@libp2p/mplex'
 import { webRTC, webRTCDirect } from '@libp2p/webrtc'
 import { webSockets } from '@libp2p/websockets'
@@ -10,15 +9,17 @@ import { webTransport } from '@libp2p/webtransport'
 import { MemoryBlockstore } from 'blockstore-core'
 import { MemoryDatastore } from 'datastore-core'
 import { createHelia } from 'helia'
-import { type create as createKuboClient } from 'kubo-rpc-client'
+import { trustlessGateway } from 'helia/block-brokers'
 import { createLibp2p } from 'libp2p'
 import { autoNATService } from 'libp2p/autonat'
 import { circuitRelayTransport } from 'libp2p/circuit-relay'
 import { identifyService } from 'libp2p/identify'
 
-import { addDagNodeToHelia } from '../lib/helpers'
+import { getHashersForCodes } from './hash-importer.js'
+import { addDagNodeToHelia } from '../lib/helpers.js'
+import type { KuboGatewayOptions } from '../types.d.js'
 
-export default async function initHelia (kuboClient: ReturnType<typeof createKuboClient>): Promise<Helia> {
+export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions): Promise<Helia> {
   const blockstore = new MemoryBlockstore()
   const datastore = new MemoryDatastore()
 
@@ -27,12 +28,10 @@ export default async function initHelia (kuboClient: ReturnType<typeof createKub
    */
   const libp2p = await createLibp2p({
     start: true, // TODO: libp2p bug with stop/start - https://github.com/libp2p/js-libp2p/issues/1787
-    peerRouters: [
-      delegatedPeerRouting(kuboClient)
-    ],
-    contentRouters: [
-      delegatedContentRouting(kuboClient)
-    ],
+    connectionManager: {
+      // do not auto-dial peers. We will manually dial peers when we need them.
+      minConnections: 0
+    },
     datastore,
     transports: [
       webRTC(),
@@ -52,11 +51,18 @@ export default async function initHelia (kuboClient: ReturnType<typeof createKub
     ],
     services: {
       identify: identifyService(),
-      autoNAT: autoNATService()
+      autoNAT: autoNATService(),
+      delegatedRouting: () => createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev')
     }
   })
 
   const helia = await createHelia({
+    blockBrokers: [
+      // no bitswap
+      trustlessGateway(),
+      trustlessGateway({ gateways: [`${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`] })
+    ],
+    hashers: await getHashersForCodes(17, 18, 19, 27),
     datastore,
     blockstore,
     libp2p

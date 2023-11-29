@@ -13,14 +13,12 @@ export default async function codecImporter<T extends CodecDataTypes = CodecData
     case 'dag-cbor':
       return import('@ipld/dag-cbor')
     case 'dag-pb':
-      // @ts-expect-error - return types need normalizing
       return import('@ipld/dag-pb')
     case 'git-raw':
       return {
         decode: (await import('ipld-git')).default.util.deserialize
       }
     case 'raw':
-      // @ts-expect-error - return types need normalizing
       return import('multiformats/codecs/raw')
     case 'json':
       return import('multiformats/codecs/json')
