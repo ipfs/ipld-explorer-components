@@ -10,6 +10,7 @@ import { webTransport } from '@libp2p/webtransport'
 import { MemoryBlockstore } from 'blockstore-core'
 import { MemoryDatastore } from 'datastore-core'
 import { createHelia } from 'helia'
+import { trustlessGateway } from 'helia/block-brokers'
 import { type create as createKuboClient } from 'kubo-rpc-client'
 import { createLibp2p } from 'libp2p'
 import { autoNATService } from 'libp2p/autonat'
@@ -57,6 +58,10 @@ export default async function initHelia (kuboClient: ReturnType<typeof createKub
   })
 
   const helia = await createHelia({
+    blockBrokers: [
+      // no bitswap
+      trustlessGateway()
+    ],
     datastore,
     blockstore,
     libp2p
