@@ -9,7 +9,7 @@ export type NormalizedDagNodeFormat = NormalizedDagPbNodeFormat | 'unknown'
 export interface UnixFsNodeData {
   type: UnixFsNodeTypes
   data: NodeData | undefined
-  blockSizes: number[]
+  blockSizes: bigint[]
 }
 
 export interface NormalizedDagLink {

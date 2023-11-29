@@ -79,7 +79,24 @@ const DagNodeIcon = ({ type, ...props }) => (
   </svg>
 )
 
+/**
+ * @param {object} props
+ * @param {import('react-i18next').TFunction} props.t
+ * @param {boolean} props.tReady
+ * @param {string} props.className
+ * @param {string} props.type
+ * @param {string} props.cid
+ * @param {string} props.localPath
+ * @param {bigint} props.size
+ * @param {import('../../types').NormalizedDagNode['data']} props.data
+ * @param {object[]} props.links
+ * @param {string} props.format
+ * @param {Function} props.onLinkClick
+ * @param {string} props.gatewayUrl
+ * @param {string} props.publicGatewayUrl
+ */
 const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, links, format, onLinkClick, gatewayUrl, publicGatewayUrl, ...props }) => {
+  if (!tReady) return null
   const isUnixFs = format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type)
   let nodeStyleType = type
 
@@ -130,7 +147,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
           <div className='dt dt--fixed pt2'>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className='dtc silver tracked ttu f7' style={{ width: 48 }}>Size</label>
-            <div className='dtc truncate charcoal monospace'>{humansize(size)}</div>
+            <div className='dtc truncate charcoal monospace'>{humansize(Number(size))}</div>
           </div>
             )}
         <div className='dt dt--fixed pt2'>
