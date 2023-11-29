@@ -1,9 +1,9 @@
-import { ObjectInspector, chromeLight } from '@tableflip/react-inspector'
 import filesize from 'filesize'
 import theme from 'ipfs-css/theme.json'
 import { CID } from 'multiformats'
 import React from 'react'
 import { withTranslation } from 'react-i18next'
+import { ObjectInspector, chromeLight } from 'react-inspector'
 
 import LinksTable from './LinksTable'
 import getCodecNameFromCode from '../../lib/get-codec-name-from-code'
