@@ -80,6 +80,21 @@ const DagNodeIcon = ({ type, ...props }) => (
 )
 
 /**
+ * replace bigint or other non-JSON-serializable values with appropriate values for the react-inspector
+ * Note that data for some blocks (e.g. bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq) currently do not
+ * look like NormalizedDagNode['data']
+ *
+ * @param {import('../../types').NormalizedDagNode['data']} data
+ */
+const getObjectInspectorData = (data) => {
+  if (data == null) return data
+  if (data.blockSizes != null) {
+    data.blockSizes = data.blockSizes.map(Number)
+  }
+  return data
+}
+
+/**
  * @param {object} props
  * @param {import('react-i18next').TFunction} props.t
  * @param {boolean} props.tReady
@@ -168,7 +183,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
           ? null
           : (
           <div className='pa3 mt2 bg-white f5 nl3 nr3 mh0-l'>
-            <ObjectInspector showMaxKeys={100} data={data} theme={objectInspectorTheme} expandPaths={toExpandPathsNotation(localPath)} />
+            <ObjectInspector showMaxKeys={100} data={getObjectInspectorData(data)} theme={objectInspectorTheme} expandPaths={toExpandPathsNotation(localPath)} />
           </div>
             )}
       </div>
