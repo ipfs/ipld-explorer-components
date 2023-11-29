@@ -2,7 +2,6 @@ import { noise } from '@chainsafe/libp2p-noise'
 import { yamux } from '@chainsafe/libp2p-yamux'
 import { createDelegatedRoutingV1HttpApiClient } from '@helia/delegated-routing-v1-http-api-client'
 import { type Helia } from '@helia/interface'
-import { mplex } from '@libp2p/mplex'
 import { webRTC, webRTCDirect } from '@libp2p/webrtc'
 import { webSockets } from '@libp2p/websockets'
 import { webTransport } from '@libp2p/webtransport'
@@ -46,8 +45,7 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
       noise()
     ],
     streamMuxers: [
-      yamux(),
-      mplex()
+      yamux()
     ],
     services: {
       identify: identifyService(),
