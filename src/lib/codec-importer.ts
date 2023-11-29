@@ -7,8 +7,14 @@ type CodecDataTypes = PBNode | Uint8Array
 interface CodecImporterResponse<T> extends Pick<BlockCodec<number, T | unknown>, 'decode'> {
 }
 
-export default async function codecImporter<T extends CodecDataTypes = CodecDataTypes> (codecCode: number): Promise<CodecImporterResponse<T>> {
-  const codecName = getCodecNameFromCode(codecCode)
+export default async function codecImporter<T extends CodecDataTypes = CodecDataTypes> (codeOrName: number | string): Promise<CodecImporterResponse<T>> {
+  let codecName: string
+  if (typeof codeOrName === 'string') {
+    codecName = codeOrName
+  } else {
+    codecName = getCodecNameFromCode(codeOrName)
+  }
+
   switch (codecName) {
     case 'dag-cbor':
       return import('@ipld/dag-cbor')
@@ -30,6 +36,6 @@ export default async function codecImporter<T extends CodecDataTypes = CodecData
           ((bytes: Uint8Array) => Promise<unknown>)
       }
     default:
-      throw new Error(`unsupported codec: ${codecCode}=${getCodecNameFromCode(codecCode)}`)
+      throw new Error(`unsupported codec: ${codeOrName}=${codecName}`)
   }
 }
