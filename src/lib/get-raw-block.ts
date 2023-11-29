@@ -4,7 +4,7 @@ import { type CID } from 'multiformats'
 import { BlockFetchTimeoutError } from './errors.js'
 
 /**
- * Method for getting a raw block either with helia from trustless gateways or kubo-rpc-client.
+ * Method for getting a raw block either with helia from trustless gateways or a local Kubo gateway.
  */
 export async function getRawBlock (helia: Helia, cid: CID, timeout = 30000): Promise<Uint8Array> {
   const abortController = new AbortController()

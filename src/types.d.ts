@@ -33,3 +33,9 @@ export interface ResolveType<DecodedType = any> {
   value: DecodedType
   remainderPath: string
 }
+
+export interface KuboGatewayOpts {
+  host: string
+  port: string
+  protocol?: string
+}
