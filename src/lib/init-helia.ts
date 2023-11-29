@@ -15,11 +15,11 @@ import { autoNATService } from 'libp2p/autonat'
 import { circuitRelayTransport } from 'libp2p/circuit-relay'
 import { identifyService } from 'libp2p/identify'
 
-import getHasherForCode from './hash-importer.js'
+import { getHashersForCodes } from './hash-importer.js'
 import { addDagNodeToHelia } from '../lib/helpers.js'
-import type { KuboGatewayOpts } from '../types.d.js'
+import type { KuboGatewayOptions } from '../types.d.js'
 
-export default async function initHelia (apiOpts: KuboGatewayOpts): Promise<Helia> {
+export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions): Promise<Helia> {
   const blockstore = new MemoryBlockstore()
   const datastore = new MemoryDatastore()
 
@@ -60,14 +60,9 @@ export default async function initHelia (apiOpts: KuboGatewayOpts): Promise<Heli
     blockBrokers: [
       // no bitswap
       trustlessGateway(),
-      trustlessGateway({ gateways: [`${apiOpts.protocol ?? 'http'}://${apiOpts.host}:${apiOpts.port}`] })
+      trustlessGateway({ gateways: [`${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`] })
     ],
-    hashers: [
-      await getHasherForCode(17),
-      await getHasherForCode(18),
-      await getHasherForCode(19),
-      await getHasherForCode(27)
-    ],
+    hashers: await getHashersForCodes(17, 18, 19, 27),
     datastore,
     blockstore,
     libp2p

@@ -2,16 +2,16 @@
 import { type Helia } from '@helia/interface'
 
 import initHelia from '../lib/init-helia.js'
-import type { KuboGatewayOpts } from '../types.d.js'
+import type { KuboGatewayOptions } from '../types.d.js'
 
 interface HeliaBundleState {
-  apiOpts: KuboGatewayOpts
+  kuboGatewayOptions: KuboGatewayOptions
   instance: Helia | null
   error: Error | null
 }
 
 const defaultState: HeliaBundleState = {
-  apiOpts: {
+  kuboGatewayOptions: {
     host: '127.0.0.1',
     port: '8080',
     protocol: 'http'
@@ -40,7 +40,7 @@ const bundle = {
     if (type === 'HELIA_INIT_FINISHED') {
       return Object.assign({}, state, {
         instance: payload.instance ?? state.instance,
-        apiOpts: payload.apiOpts ?? state.apiOpts,
+        kuboGatewayOptions: payload.kuboGatewayOptions ?? state.kuboGatewayOptions,
         error: null
       })
     }
@@ -65,9 +65,9 @@ const bundle = {
   doInitHelia: () => async ({ dispatch, getState }: any) => {
     dispatch({ type: 'HELIA_INIT_STARTED' })
 
-    const apiOpts = Object.assign(
+    const kuboGatewayOptions = Object.assign(
       {},
-      getState().helia.apiOpts,
+      getState().helia.kuboGatewayOptions,
       getUserOpts('kuboGateway')
     )
 
@@ -76,12 +76,12 @@ const bundle = {
         "🎛️ Customise your Kubo gateway opts by setting an `kuboGateway` value in localStorage. e.g. localStorage.setItem('kuboGateway', JSON.stringify({port: '1337'}))"
       )
       console.time('HELIA_INIT')
-      const helia = await initHelia(apiOpts)
+      const helia = await initHelia(kuboGatewayOptions)
       console.timeEnd('HELIA_INIT')
       return dispatch({
         type: 'HELIA_INIT_FINISHED',
         payload: {
-          apiOpts,
+          kuboGatewayOptions,
           instance: helia,
           provider: 'helia'
         }
