@@ -46,15 +46,14 @@ import normaliseDagNode from './normalise-dag-node'
  * - `pathBoundaries` is the array of links that the path traverses.
  *
  * @param {import('@helia/interface').Helia} helia
- * @param {import('kubo-rpc-client').IPFSHTTPClient} kuboClient
  * @param {string} sourceCid - the root hash
  * @param {string} path - everything after the hash
  * @param {object[]} nodes - accumulated node info
  * @param {object[]} pathBoundaries - accumulated path boundary info
  * @returns {ResolvedIpldPathInfo} resolved path info
  */
-export default async function resolveIpldPath (helia, kuboClient, sourceCid, path, nodes = [], pathBoundaries = []) {
-  const { value, remainderPath } = await ipldGetNodeAndRemainder(helia, kuboClient, sourceCid, path)
+export default async function resolveIpldPath (helia, sourceCid, path, nodes = [], pathBoundaries = []) {
+  const { value, remainderPath } = await ipldGetNodeAndRemainder(helia, sourceCid, path)
   if (sourceCid == null) {
     throw new Error('sourceCid is null')
   }
@@ -69,7 +68,7 @@ export default async function resolveIpldPath (helia, kuboClient, sourceCid, pat
   if (link) {
     pathBoundaries.push(link)
     // Go again, using the link.target as the sourceCid, and the remainderPath as the path.
-    return resolveIpldPath(helia, kuboClient, link.target, remainderPath, nodes, pathBoundaries)
+    return resolveIpldPath(helia, link.target, remainderPath, nodes, pathBoundaries)
   }
   // we made it to the containing node. Hand back the info
   const canonicalPath = path ? `${sourceCidStr}${path}` : sourceCidStr
@@ -81,12 +80,11 @@ export default async function resolveIpldPath (helia, kuboClient, sourceCid, pat
 /**
  * @function ipldGetNodeAndRemainder
  * @param {typeof import('@helia/interface').Helia} helia
- * @param {import('kubo-rpc-client').IPFSHTTPClient} kuboClient
  * @param {string} sourceCid
  * @param {string} path
  * @returns
  */
-export async function ipldGetNodeAndRemainder (helia, kuboClient, sourceCid, path) {
+export async function ipldGetNodeAndRemainder (helia, sourceCid, path) {
   if (sourceCid == null) {
     throw new Error('sourceCid is null')
   }
@@ -95,7 +93,7 @@ export async function ipldGetNodeAndRemainder (helia, kuboClient, sourceCid, pat
     cidInstance = CID.parse(sourceCid)
   }
   const codecWrapper = await getCodecForCid(cidInstance)
-  const encodedValue = await getRawBlock(helia, kuboClient, cidInstance)
+  const encodedValue = await getRawBlock(helia, cidInstance)
   const value = codecWrapper.decode(encodedValue)
 
   const codecWrapperResolveResult = await codecWrapper.resolve(path || '/', encodedValue)
