@@ -129,7 +129,6 @@
     "@libp2p/delegated-peer-routing": "^4.0.6",
     "@libp2p/ipni-content-routing": "^1.0.1",
     "@loadable/component": "^5.14.1",
-    "@tableflip/react-inspector": "^2.3.0",
     "cytoscape": "^3.18.1",
     "cytoscape-dagre": "^2.3.2",
     "filesize": "^6.1.0",
@@ -141,6 +140,7 @@
     "libp2p": "^0.45.1",
     "milliseconds": "^1.0.3",
     "multiformats": "^11.0.2",
+    "react-inspector": "^6.0.2",
     "react-joyride": "^2.3.0",
     "stream-to-it": "^0.2.4",
     "web-encoding": "^1.1.5"
