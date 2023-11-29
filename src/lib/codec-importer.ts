@@ -26,6 +26,11 @@ export default async function codecImporter<T extends CodecDataTypes = CodecData
       return import('multiformats/codecs/json')
     case 'dag-json':
       return import('@ipld/dag-json')
+    case 'dag-jose':
+      return {
+        decode: (await import('dag-jose')).decode as unknown as
+          ((bytes: Uint8Array) => Promise<unknown>)
+      }
     default:
       throw new Error(`unsupported codec: ${codecCode}=${getCodecNameFromCode(codecCode)}`)
   }

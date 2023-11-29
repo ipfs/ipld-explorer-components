@@ -1,45 +1,25 @@
 name: test & maybe release
+
 on:
   push:
     branches:
-      - master # with #262 - ${{{ github.default_branch }}}
+      - master
   pull_request:
-    branches:
-      - master # with #262 - ${{{ github.default_branch }}}
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  packages: write
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name }}-${{ github.event_name == 'push' && github.sha || github.ref }}
+  cancel-in-progress: true
 
 jobs:
-
-  check:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v3
-    - uses: actions/setup-node@v3
-      with:
-        node-version: 18
-    - uses: ipfs/aegir/actions/cache-node-modules@master
-    - run: npm run --if-present build
-    - run: npm run --if-present storybook:build
-    - run: npm run --if-present test
-    - run: npm run --if-present lint
-    - run: npm run --if-present dep-check
-
-  release:
-    needs: [check]
-    runs-on: ubuntu-latest
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master' # with #262 - 'refs/heads/${{{ github.default_branch }}}'
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
-      - uses: actions/setup-node@v3
-        with:
-          node-version: 18
-      - uses: ipfs/aegir/actions/cache-node-modules@master
-      - uses: ipfs/aegir/actions/docker-login@master
-        with:
-          docker-token: ${{ secrets.DOCKER_TOKEN }}
-          docker-username: ${{ secrets.DOCKER_USERNAME }}
-      - run: npm run --if-present release
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+  js-test-and-release:
+    uses: pl-strflt/uci/.github/workflows/js-test-and-release.yml@v0.0
+    secrets:
+      DOCKER_TOKEN: ${{ secrets.DOCKER_TOKEN }}
+      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+      UCI_GITHUB_TOKEN: ${{ secrets.UCI_GITHUB_TOKEN }}
