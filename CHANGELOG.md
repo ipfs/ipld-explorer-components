@@ -1,3 +1,10 @@
+## [5.1.0](https://github.com/ipfs/ipld-explorer-components/compare/v5.0.0...v5.1.0) (2023-11-30)
+
+
+### Features
+
+* **hasher:** add blake3 ([#395](https://github.com/ipfs/ipld-explorer-components/issues/395)) ([6ea74e5](https://github.com/ipfs/ipld-explorer-components/commit/6ea74e52d569a3012b6b12683c4bd0a37797ea79))
+
 ## [5.0.0](https://github.com/ipfs/ipld-explorer-components/compare/v4.0.3...v5.0.0) (2023-11-30)
 
 
