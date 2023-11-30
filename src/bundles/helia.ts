@@ -6,7 +6,6 @@ import type { KuboGatewayOptions } from '../types.d.js'
 
 interface HeliaBundleState {
   kuboGatewayOptions: KuboGatewayOptions
-  instance: Helia | null
   error: Error | null
 }
 
@@ -16,7 +15,6 @@ const defaultState: HeliaBundleState = {
     port: '8080',
     protocol: 'http'
   },
-  instance: null,
   error: null
 }
 
@@ -33,13 +31,13 @@ function getUserOpts (key: string): Record<string, unknown> {
   return userOpts
 }
 
+let helia: Helia | null = null
 const bundle = {
   name: 'helia',
   reducer (state: HeliaBundleState, { type, payload, error }: { type: string, payload: Partial<HeliaBundleState>, error?: Error }) {
     state = state ?? defaultState
     if (type === 'HELIA_INIT_FINISHED') {
       return Object.assign({}, state, {
-        instance: payload.instance ?? state.instance,
         kuboGatewayOptions: payload.kuboGatewayOptions ?? state.kuboGatewayOptions,
         error: null
       })
@@ -52,12 +50,12 @@ const bundle = {
     return state
   },
 
-  selectHelia: ({ helia }: { helia: HeliaBundleState }) => helia.instance,
+  selectHelia: () => helia,
 
-  selectHeliaReady: ({ helia }: { helia: HeliaBundleState }) => helia.instance !== null,
+  selectHeliaReady: () => helia !== null,
 
-  selectHeliaIdentity: ({ helia }: { helia: HeliaBundleState }) => {
-    const identifyService = helia.instance?.libp2p.services?.identify as { host: Record<'agentVersion', string> }
+  selectHeliaIdentity: () => {
+    const identifyService = helia?.libp2p.services?.identify as { host: Record<'agentVersion', string> }
 
     return identifyService?.host?.agentVersion.split(' ')[0] ?? 'null'
   },
@@ -76,13 +74,12 @@ const bundle = {
         "🎛️ Customise your Kubo gateway opts by setting an `kuboGateway` value in localStorage. e.g. localStorage.setItem('kuboGateway', JSON.stringify({port: '1337'}))"
       )
       console.time('HELIA_INIT')
-      const helia = await initHelia(kuboGatewayOptions)
+      helia = await initHelia(kuboGatewayOptions)
       console.timeEnd('HELIA_INIT')
       return dispatch({
         type: 'HELIA_INIT_FINISHED',
         payload: {
           kuboGatewayOptions,
-          instance: helia,
           provider: 'helia'
         }
       })
