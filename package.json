@@ -135,6 +135,7 @@
     "cytoscape": "^3.18.1",
     "cytoscape-dagre": "^2.3.2",
     "filesize": "^6.1.0",
+    "hash-wasm": "^4.11.0",
     "helia": "^2.1.0",
     "ipfs-unixfs": "^11.1.0",
     "libp2p": "^1.0.0",

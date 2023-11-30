@@ -1,5 +1,6 @@
 /* global globalThis */
 import * as sha3 from '@multiformats/sha3'
+import { createBLAKE3 } from 'hash-wasm'
 import { type Hasher, from } from 'multiformats/hashes/hasher'
 import * as sha2 from 'multiformats/hashes/sha2'
 
@@ -54,8 +55,10 @@ export async function getHasherForCode (code: number): Promise<SupportedHashers>
         name: 'blake3',
         code,
         encode: async (data: Uint8Array): Promise<Uint8Array> => {
-          const { digest } = await import('blake3-multihash')
-          return (await digest(data)).digest
+          const blake3Hasher = await createBLAKE3()
+          blake3Hasher.init()
+          blake3Hasher.update(data)
+          return blake3Hasher.digest('binary')
         }
       }))
     default:
