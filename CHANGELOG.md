@@ -1,3 +1,12 @@
+### [5.1.2](https://github.com/ipfs/ipld-explorer-components/compare/v5.1.1...v5.1.2) (2023-11-30)
+
+
+### Bug Fixes
+
+* add toJSON to BigInt prototype ([a606a7c](https://github.com/ipfs/ipld-explorer-components/commit/a606a7c010b77b9dc57742bd26b87590f4647711))
+* react-i18next peerDep ([09589ca](https://github.com/ipfs/ipld-explorer-components/commit/09589cacc58e961eb7291c44a96b7fc8ead3cdb5))
+* replace blake3-multihash with hash-wasm ([8a85612](https://github.com/ipfs/ipld-explorer-components/commit/8a85612c98404c125d86626afbaef67adf8f1a67))
+
 ### [5.1.1](https://github.com/ipfs/ipld-explorer-components/compare/v5.1.0...v5.1.1) (2023-11-30)
 
 
