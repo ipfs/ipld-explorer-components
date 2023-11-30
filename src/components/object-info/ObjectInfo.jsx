@@ -183,7 +183,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
         {!data
           ? null
           : (
-          <div className='pa3 mt2 bg-white f5 nl3 nr3 mh0-l'>
+          <div className='pa3 mt2 bg-white f5 nl3 nr3 mh0-l overflow-x-auto'>
             <ObjectInspector showMaxKeys={100} data={getObjectInspectorData(data)} theme={objectInspectorTheme} expandPaths={toExpandPathsNotation(localPath)} />
           </div>
             )}
