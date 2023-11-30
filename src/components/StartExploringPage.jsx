@@ -49,21 +49,21 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
             <ExploreSuggestion name='DAG-CBOR Block' cid='bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq' type='dag-cbor' />
           </li>
           <li>
+            <ExploreSuggestion name='dag-cbor hello world (keccak-256)' cid='bafyrwigbexamue2ba3hmtai7hwlcmd6ekiqsduyf5avv7oz6ln3radvjde' type='dag-cbor' />
+          </li>
+          <li>
             {/*
               From https://cerscan.com/mainnet/stream/kjzl6cwe1jw148sn9t1pkwlwr28a93bfd5mvxxnif4u8x2jomlpqqukwk940u5v
               For https://snapshot.org/#/sgbchat.eth/proposal/0x75506089eb396c42e833a49a75faebddeede0fa94c7d894741e0a31cae58dbfd
               see https://developers.ceramic.network/reference/typescript/interfaces/_ceramicnetwork_common.LogEntry.html for more information
             */}
-            <ExploreSuggestion name='dag-jose Ceramic LogEntry for SGB Chat Ambassador proposal' cid='bagcqcerarvdwmhvk73mze3e2n6yvpt5h7fh3eae7n6y3hizsflz5grpyeczq' type='dag-jose' />
+            <ExploreSuggestion name='Ceramic LogEntry for sgb.chat Ambassador proposal' cid='bagcqcerarvdwmhvk73mze3e2n6yvpt5h7fh3eae7n6y3hizsflz5grpyeczq' type='dag-jose' />
           </li>
           <li>
-            <ExploreSuggestion name='dag-cbor hello world (keccak-256)' cid='bafyrwigbexamue2ba3hmtai7hwlcmd6ekiqsduyf5avv7oz6ln3radvjde' type='dag-cbor' />
+            <ExploreSuggestion name='hello world' cid='baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea' type='dag-json' />
           </li>
           <li>
-            <ExploreSuggestion name='dag-json hello world' cid='baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea' type='dag-json' />
-          </li>
-          <li>
-            <ExploreSuggestion name='json hello world (sha3-512)' cid='bagaaifcavabu6fzheerrmtxbbwv7jjhc3kaldmm7lbnvfopyrthcvod4m6ygpj3unrcggkzhvcwv5wnhc5ufkgzlsji7agnmofovc2g4a3ui7ja' type='json' />
+            <ExploreSuggestion name='hello world (sha3-512)' cid='bagaaifcavabu6fzheerrmtxbbwv7jjhc3kaldmm7lbnvfopyrthcvod4m6ygpj3unrcggkzhvcwv5wnhc5ufkgzlsji7agnmofovc2g4a3ui7ja' type='json' />
           </li>
           <li>
             <ExploreSuggestion name='Raw Block for "hello"' cid='bafkreibm6jg3ux5qumhcn2b3flc3tyu6dmlb4xa7u5bf44yegnrjhc4yeq' type='raw' />

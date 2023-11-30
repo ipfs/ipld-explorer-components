@@ -1,4 +1,5 @@
 import filesize from 'filesize'
+import theme from 'ipfs-css/theme.json'
 import { CID } from 'multiformats'
 import React from 'react'
 import { withTranslation } from 'react-i18next'
@@ -19,31 +20,27 @@ const objectInspectorTheme = {
   TREENODE_LINE_HEIGHT: '19px'
 }
 
-// TODO: Use https://github.com/multiformats/multicodec/blob/master/table.csv to get full name.
-/**
- * Note that existing colors were added into the "Mass Editor" at colordesigner.io:
- *
- * * #28CA9F
- * * #244e66
- * * #378085
- * * #f14e32
- * * #383838
- *
- * And then hamt-sharded-directory was set to #9f28ca which was listed under "Color Harmonies - Triad" on 2023-05-22
- */
+// Use https://github.com/multiformats/multicodec/blob/master/table.csv to get full name.
 const nodeStyles = {
-  'dag-cbor': { shortName: 'DAG-CBOR', name: 'dag-cbor', color: '#378085' },
-  'dag-json': { shortName: 'DAG-JSON', name: 'dag-json', color: '#378065' },
-  'json': { shortName: 'JSON', name: 'JSON', color: '#378065' }, // eslint-disable-line quote-props
-  'dag-pb': { shortName: 'DAG-PB', name: 'dag-pb', color: '#244e66' },
-  'git-raw': { shortName: 'GIT', name: 'Git', color: '#378085' },
-  'raw': { shortName: 'RAW', name: 'Raw Block', color: '#f14e32' }, // eslint-disable-line quote-props
-  'eth-block': { shortName: 'ETH', name: 'Ethereum Block', color: '#383838' },
-  'eth-block-list': { shortName: 'ETH', name: 'Ethereum Block List', color: '#383838' },
-  'eth-tx-trie': { shortName: 'ETH', name: 'Ethereum Tx Trie', color: '#383838' },
-  'eth-tx': { shortName: 'ETH', name: 'Ethereum Tx', color: '#383838' },
-  'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: '#383838' },
-  'hamt-sharded-directory': { shortName: 'HAMT\nDAG-PB', name: 'HAMT-Sharded dag-pb Directory', color: '#244e66' }
+  // most-common
+  'dag-cbor': { shortName: 'DAG-CBOR', name: 'dag-cbor', color: theme.colors.aqua },
+  'dag-json': { shortName: 'DAG-JSON', name: 'dag-json', color: theme.colors.green },
+  raw: { shortName: 'RAW', name: 'Raw Block', color: theme.colors.red }, // red because it's special
+  'dag-pb': { shortName: 'DAG-PB', name: 'dag-pb', color: theme.colors.teal },
+
+  // exciting
+  'dag-jose': { shortName: 'DAG-JOSE', name: 'dag-jose', color: theme.colors.yellow },
+
+  // less common
+  json: { shortName: 'JSON', name: 'JSON', color: theme.colors['green-muted'] },
+  'hamt-sharded-directory': { shortName: 'HAMT\nDAG-PB', name: 'HAMT-Sharded dag-pb Directory', color: theme.colors['teal-muted'] },
+
+  // rare
+  'eth-block': { shortName: 'ETH', name: 'Ethereum Block', color: theme.colors.charcoal },
+  'eth-block-list': { shortName: 'ETH', name: 'Ethereum Block List', color: theme.colors.charcoal },
+  'eth-tx-trie': { shortName: 'ETH', name: 'Ethereum Tx Trie', color: theme.colors.charcoal },
+  'eth-tx': { shortName: 'ETH', name: 'Ethereum Tx', color: theme.colors.charcoal },
+  'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: theme.colors.charcoal }
 }
 
 export function shortNameForNode (type) {
