@@ -20,6 +20,27 @@ const getCidFromCidOrFqdn = (cidOrFqdn) => {
   return cidOrFqdn
 }
 
+/**
+ * Get rid of redux-bundler action creator errors for 'Do not know how to serialize a BigInt' when
+ * they are converted to JSON.
+ *
+ * @template T
+ * @param {T & Record<string, unknown>} node
+ * @returns {T}
+ */
+function convertBigIntSizesToNumber (node) {
+  if (node.size != null) {
+    node.size = Number(node.size)
+  }
+  if (node.links != null) {
+    node.links = node.links.map(convertBigIntSizesToNumber)
+  }
+  if (node.blockSizes != null) {
+    node.blockSizes = node.blockSizes.map(Number)
+  }
+  return node
+}
+
 // Find all the nodes and path boundaries traversed along a given path
 const makeBundle = () => {
   const bundle = createAsyncResourceBundle({
@@ -44,10 +65,10 @@ const makeBundle = () => {
 
         return {
           path,
-          targetNode,
+          targetNode: convertBigIntSizesToNumber(targetNode),
           canonicalPath,
           localPath,
-          nodes,
+          nodes: nodes.map(convertBigIntSizesToNumber),
           pathBoundaries
         }
       } catch (error) {
