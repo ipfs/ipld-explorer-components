@@ -1,0 +1,73 @@
+{
+  "appName": "Explorador IPLD",
+  "tabName": "Explorar",
+  "homeLink": "Início",
+  "UpdateAvailable": {
+    "paragraph1": "A new version of IPLD Explorer is available; <1>please reload</1>."
+  },
+  "StartExploringPage": {
+    "title": "Explorador - IPLD",
+    "header": "Explore a Floresta de Merkle",
+    "leadParagraph": "Cole um CID na caixa para explorar o nó IPLD a que se refere, ou escolha uma das coleções de dados abaixo."
+  },
+  "AboutIpld": {
+    "paragraph1":"<0>IPLD é <1>o modelo de dados endereçável por conteúdos da web</1>. Permite-nos tratar todas as estruturas de dados ligadas por hashes como sub-peças de um sistema de informação unificado, unificando assim todos os modelos de dados que relacionam dados com hashes em instâncias do IPLD.</0>",
+    "paragraph2": "<0>Endereçamento de conteúdo através de hashes tornou-se um sistema de relacionamento de dados bastante utilizado em sistemas distribuídos, desde blockchains na base das suas criptomoedas favoritas, às commits do seu trabalho, a qualquer conteúdo da web. No entanto, apesar de todas estas ferramentas se basearem em primitivas comuns, as suas estruturas de dados não são interoperáveis.</0>",
+    "paragraph3": "<0>IPLD: um espaço para todos os protocolos inspirados em hashes. Com o IPLD, pode relacionar diferentes protocolos e navegar entre eles, permitindo que explore os dados independentemente do protocolo subjacente.</0>"
+  },
+  "ExplorePage": {
+    "title": "A Explorar - IPLD"
+  },
+  "IpldExploreForm": {
+    "explore": "Explorar"
+  },
+  "IpldCarExploreForm": {
+    "imports": "Import",
+    "uploadCarFile": "Upload CAR File"
+  },
+  "CidInfo": {
+    "header": "CID info",
+    "hashDigest": "Hash digest"
+  },
+  "ObjectInfo": {
+    "publicGateway": "View on Public Gateway",
+    "privateGateway": "View on Local Gateway"
+  },
+  "base": "base",
+  "version": "versão",
+  "codec": "codec",
+  "multihash": "multihash",
+  "tour": {
+    "projects": {
+      "title": "Featured datasets",
+      "paragraph1": "Explore the featured datasets or paste a CID to see how that data is structured and linked across protocols."
+    },
+    "explorer": {
+      "step1": {
+        "title": "Explorador IPLD",
+        "paragraph1": "Your journey with IPLD Explorer starts here. Click \"Next\" to learn more."
+      },
+      "step2": {
+        "title": "Navegação",
+        "paragraph1": "The path that leads to this node.",
+        "paragraph2": "Click on it to traverse to its parents or children."
+      },
+      "step3": {
+        "title": "Node info",
+        "paragraph1": "Here you have detailed info about the node and you can open it in the IPFS gateway.",
+        "paragraph2": "If the node is a directory you can see its children and navigate to them."
+      },
+      "step4": {
+        "title": "CID info",
+        "paragraph1": "The decomposed CID so you can learn its meaning."
+      },
+      "step5": {
+        "title": "Visual representation",
+        "paragraph1": "A visual representation of the node and its children."
+      }
+    }
+  },
+  "errors": {
+    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID."
+  }
+}

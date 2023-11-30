@@ -114,6 +114,10 @@ export default defineConfig(({ mode, command }) => {
       NodeGlobalsPolyfillPlugin({ buffer: true, process: true })
     ]
   }
+  viteOptimizeDeps.exclude = [
+    'blake3-multihash',
+    '@rollup/browser'
+  ]
 
   const finalConfig: UserConfigExport = {
     plugins: vitePlugins,
