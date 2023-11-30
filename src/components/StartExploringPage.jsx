@@ -60,6 +60,9 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
             <ExploreSuggestion name='Ceramic LogEntry for sgb.chat Ambassador proposal' cid='bagcqcerarvdwmhvk73mze3e2n6yvpt5h7fh3eae7n6y3hizsflz5grpyeczq' type='dag-jose' />
           </li>
           <li>
+            <ExploreSuggestion name='hello world (blake3)' cid='bagaaihraf4oq2kddg6o5ewlu6aol6xab75xkwbgzx2dlot7cdun7iirve23a' type='dag-json' />
+          </li>
+          <li>
             <ExploreSuggestion name='hello world' cid='baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea' type='dag-json' />
           </li>
           <li>
@@ -67,6 +70,9 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
           </li>
           <li>
             <ExploreSuggestion name='Raw Block for "hello"' cid='bafkreibm6jg3ux5qumhcn2b3flc3tyu6dmlb4xa7u5bf44yegnrjhc4yeq' type='raw' />
+          </li>
+          <li>
+            <ExploreSuggestion name='Raw Block for "hello" (blake3)' cid='bafkr4ihkr4ld3m4gqkjf4reryxsy2s5tkbxprqkow6fin2iiyvreuzzab4' type='raw' />
           </li>
         </ul>
       </div>

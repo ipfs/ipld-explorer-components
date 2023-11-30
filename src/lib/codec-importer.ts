@@ -15,6 +15,7 @@ export default async function codecImporter<T extends CodecDataTypes = CodecData
     codecName = getCodecNameFromCode(codeOrName)
   }
 
+  // #WhenAddingNewCodec
   switch (codecName) {
     case 'dag-cbor':
       return import('@ipld/dag-cbor')

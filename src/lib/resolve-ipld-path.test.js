@@ -8,6 +8,7 @@ import { addDagNodeToHelia } from './helpers'
 import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
 import { createHeliaMock } from '../../test/unit/heliaMock'
 
+// #WhenAddingNewCodec
 describe('resolveIpldPath', () => {
   /**
    * @type {import('@helia/interface').Helia}

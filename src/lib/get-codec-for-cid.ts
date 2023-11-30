@@ -50,6 +50,7 @@ interface CodecResolverFn {
   (node: PBNode | unknown, path: string): Promise<ResolveType<PBNode | PBLink>>
 }
 
+// #WhenAddingNewCodec (maybe)
 const codecResolverMap: Record<string, CodecResolverFn> = {
   'dag-pb': async (node, path) => {
     if (!isPBNode(node)) {
