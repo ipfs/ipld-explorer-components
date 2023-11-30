@@ -1,3 +1,16 @@
+### [5.1.1](https://github.com/ipfs/ipld-explorer-components/compare/v5.1.0...v5.1.1) (2023-11-30)
+
+
+### Bug Fixes
+
+* no more BigInt serialization errors ([a580bd9](https://github.com/ipfs/ipld-explorer-components/commit/a580bd985b6588ecbda7b5333b3a820d3c1181de))
+* no more window is not defined errors ([794c9c6](https://github.com/ipfs/ipld-explorer-components/commit/794c9c60c227e423442131ad44a2833c8bce6369))
+
+
+### Trivial Changes
+
+* update package-lock.json ([a4089f1](https://github.com/ipfs/ipld-explorer-components/commit/a4089f1a9290844ea107996373d7db500b7f7f09))
+
 ## [5.1.0](https://github.com/ipfs/ipld-explorer-components/compare/v5.0.0...v5.1.0) (2023-11-30)
 
 
