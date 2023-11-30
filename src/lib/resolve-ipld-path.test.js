@@ -17,18 +17,18 @@ describe('resolveIpldPath', () => {
     helia = await createHeliaMock()
   })
   it('resolves all nodes traversed along a path', async () => {
-    const node4Cid = await addDagNodeToHelia(helia, dagPb, createDagPbNode('4th node', []))
-    const node3Cid = await addDagNodeToHelia(helia, dagPb, createDagPbNode('3rd node', [{
+    const node4Cid = await addDagNodeToHelia(helia, 'dag-pb', createDagPbNode('4th node', []))
+    const node3Cid = await addDagNodeToHelia(helia, 'dag-pb', createDagPbNode('3rd node', [{
       name: 'a',
       cid: node4Cid.toString(),
       size: 101
     }]))
-    const node2Cid = await addDagNodeToHelia(helia, dagPb, createDagPbNode('2nd node', [{
+    const node2Cid = await addDagNodeToHelia(helia, 'dag-pb', createDagPbNode('2nd node', [{
       name: 'b',
       cid: node3Cid.toString(),
       size: 101
     }]))
-    const rootNodeCid = await addDagNodeToHelia(helia, dagPb, createDagPbNode('root node', [{
+    const rootNodeCid = await addDagNodeToHelia(helia, 'dag-pb', createDagPbNode('root node', [{
       name: 'a',
       cid: node2Cid.toString(),
       size: 101
@@ -52,21 +52,21 @@ describe('resolveIpldPath', () => {
     const path = '/a/b/pb1'
 
     const dagNode3 = await createDagPbNode('the second pb node', [])
-    const dagNode3CID = await addDagNodeToHelia(helia, dagPb, dagNode3)
+    const dagNode3CID = await addDagNodeToHelia(helia, 'dag-pb', dagNode3)
 
     const dagNode2 = await createDagPbNode('the first pb node', [{
       name: 'pb1',
       cid: dagNode3CID.toString(),
       size: 101
     }])
-    const dagNode2CID = await addDagNodeToHelia(helia, dagPb, dagNode2)
+    const dagNode2CID = await addDagNodeToHelia(helia, 'dag-pb', dagNode2)
 
     const dagNode1 = {
       a: {
         b: dagNode2CID
       }
     }
-    const dagNode1Cid = await addDagNodeToHelia(helia, dagCbor, dagNode1)
+    const dagNode1Cid = await addDagNodeToHelia(helia, 'dag-cbor', dagNode1)
 
     const res = await resolveIpldPath(helia, dagNode1Cid.toString(), path)
 
@@ -111,8 +111,8 @@ describe('resolveIpldPath', () => {
   it('resolves dag-cbor node with children all pointing to raw node', async () => {
     const path = '/cheese/0'
     const textEncoder = new TextEncoder()
-    const childNode = await addDagNodeToHelia(helia, raw, textEncoder.encode('foo\n'))
-    const rootNode = await addDagNodeToHelia(helia, dagCbor, {
+    const childNode = await addDagNodeToHelia(helia, 'raw', textEncoder.encode('foo\n'))
+    const rootNode = await addDagNodeToHelia(helia, 'dag-cbor', {
       cats: 'not cats',
       cheese: [
         childNode,
