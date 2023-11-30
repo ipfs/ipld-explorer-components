@@ -1,12 +1,12 @@
 import { CID } from 'multiformats'
 
 import baseImporter from '../../lib/base-importer'
-import hashImporter from '../../lib/hash-importer'
+import { getHasherForCode } from '../../lib/hash-importer'
 
 export async function decodeCid (value) {
   const cid = CID.parse(value)
   try {
-    const multihasher = await hashImporter(cid.multihash.code)
+    const multihasher = await getHasherForCode(cid.multihash.code)
     const multibase = await baseImporter(value.substring(0, 1))
     const multicodec = {
       name: cid.code

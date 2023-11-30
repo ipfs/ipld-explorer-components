@@ -10,8 +10,8 @@ import { projectsTour } from '../lib/tours'
 
 const ExploreSuggestion = ({ cid, name, type }) => (
   <a className='flex items-center lh-copy pl3 pl0-l pv3 bb b--black-10 link focus-outline' href={`#/explore/${cid}`}>
-    <span className='flex items-center justify-center w3 h3 flex-none br-100 tc' style={{ background: colorForNode(type) }}>
-      <span className='montserrat fw2 f4 snow' title={nameForNode(type)}>{shortNameForNode(type)}</span>
+    <span className='flex items-center justify-center w3 h3 w3-m h3-m w3-l h3-l flex-none br-100 tc' style={{ background: colorForNode(type) }}>
+      <span className='montserrat fw3 f6 snow' title={nameForNode(type)}>{shortNameForNode(type)}</span>
     </span>
     <span className='pl3 truncate'>
       <h2 className='ma0 fw4 f5 db black montserrat'>{name}</h2>
@@ -43,19 +43,36 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
             <ExploreSuggestion name='HAMT-sharded Wikipedia mirror (>20M files)' cid='bafybeiaysi4s6lnjev27ln5icwm6tueaw2vdykrtjkwiphwekaywqhcjze' type='hamt-sharded-directory' />
           </li>
           <li>
-            <ExploreSuggestion name='B-tree search index from ipfs-geoip' cid='bafyreihnpl7ami7esahkfdnemm6idx4r2n6u3apmtcrxlqwuapgjsciihy' type='dag-cbor' />
+            <ExploreSuggestion name='B-tree search index from ipfs-geoip' cid='bafyreif3tfdpr5n4jdrbielmcapwvbpcthepfkwq2vwonmlhirbjmotedi' type='dag-cbor' />
           </li>
           <li>
             <ExploreSuggestion name='DAG-CBOR Block' cid='bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq' type='dag-cbor' />
           </li>
           <li>
+            <ExploreSuggestion name='dag-cbor hello world (keccak-256)' cid='bafyrwigbexamue2ba3hmtai7hwlcmd6ekiqsduyf5avv7oz6ln3radvjde' type='dag-cbor' />
+          </li>
+          <li>
+            {/*
+              From https://cerscan.com/mainnet/stream/kjzl6cwe1jw148sn9t1pkwlwr28a93bfd5mvxxnif4u8x2jomlpqqukwk940u5v
+              For https://snapshot.org/#/sgbchat.eth/proposal/0x75506089eb396c42e833a49a75faebddeede0fa94c7d894741e0a31cae58dbfd
+              see https://developers.ceramic.network/reference/typescript/interfaces/_ceramicnetwork_common.LogEntry.html for more information
+            */}
+            <ExploreSuggestion name='Ceramic LogEntry for sgb.chat Ambassador proposal' cid='bagcqcerarvdwmhvk73mze3e2n6yvpt5h7fh3eae7n6y3hizsflz5grpyeczq' type='dag-jose' />
+          </li>
+          <li>
+            <ExploreSuggestion name='hello world (blake3)' cid='bagaaihraf4oq2kddg6o5ewlu6aol6xab75xkwbgzx2dlot7cdun7iirve23a' type='dag-json' />
+          </li>
+          <li>
+            <ExploreSuggestion name='hello world' cid='baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea' type='dag-json' />
+          </li>
+          <li>
+            <ExploreSuggestion name='hello world (sha3-512)' cid='bagaaifcavabu6fzheerrmtxbbwv7jjhc3kaldmm7lbnvfopyrthcvod4m6ygpj3unrcggkzhvcwv5wnhc5ufkgzlsji7agnmofovc2g4a3ui7ja' type='json' />
+          </li>
+          <li>
             <ExploreSuggestion name='Raw Block for "hello"' cid='bafkreibm6jg3ux5qumhcn2b3flc3tyu6dmlb4xa7u5bf44yegnrjhc4yeq' type='raw' />
           </li>
           <li>
-            <ExploreSuggestion name='dag-json hello world' cid='baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea' type='dag-json' />
-          </li>
-          <li>
-            <ExploreSuggestion name='IGIS Git Repo' cid='baf4bcfg4ep767tjp5lxyanx5urpjjgx5q2volvy' type='git-raw' />
+            <ExploreSuggestion name='Raw Block for "hello" (blake3)' cid='bafkr4ihkr4ld3m4gqkjf4reryxsy2s5tkbxprqkow6fin2iiyvreuzzab4' type='raw' />
           </li>
         </ul>
       </div>

@@ -1,8 +1,9 @@
-import { ObjectInspector, chromeLight } from '@tableflip/react-inspector'
 import filesize from 'filesize'
+import theme from 'ipfs-css/theme.json'
 import { CID } from 'multiformats'
 import React from 'react'
 import { withTranslation } from 'react-i18next'
+import { ObjectInspector, chromeLight } from 'react-inspector'
 
 import LinksTable from './LinksTable'
 import getCodecNameFromCode from '../../lib/get-codec-name-from-code'
@@ -19,30 +20,27 @@ const objectInspectorTheme = {
   TREENODE_LINE_HEIGHT: '19px'
 }
 
-// TODO: Use https://github.com/multiformats/multicodec/blob/master/table.csv to get full name.
-/**
- * Note that existing colors were added into the "Mass Editor" at colordesigner.io:
- *
- * * #28CA9F
- * * #244e66
- * * #378085
- * * #f14e32
- * * #383838
- *
- * And then hamt-sharded-directory was set to #9f28ca which was listed under "Color Harmonies - Triad" on 2023-05-22
- */
+// Use https://github.com/multiformats/multicodec/blob/master/table.csv to get full name.
 const nodeStyles = {
-  'dag-cbor': { shortName: 'CBOR', name: 'dag-cbor', color: '#378085' },
-  'dag-json': { shortName: 'JSON', name: 'dag-json', color: '#378065' },
-  'dag-pb': { shortName: 'PB', name: 'dag-pb', color: '#244e66' },
-  'git-raw': { shortName: 'GIT', name: 'Git', color: '#378085' },
-  'raw': { shortName: 'RAW', name: 'Raw Block', color: '#f14e32' }, // eslint-disable-line quote-props
-  'eth-block': { shortName: 'ETH', name: 'Ethereum Block', color: '#383838' },
-  'eth-block-list': { shortName: 'ETH', name: 'Ethereum Block List', color: '#383838' },
-  'eth-tx-trie': { shortName: 'ETH', name: 'Ethereum Tx Trie', color: '#383838' },
-  'eth-tx': { shortName: 'ETH', name: 'Ethereum Tx', color: '#383838' },
-  'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: '#383838' },
-  'hamt-sharded-directory': { shortName: 'PB+H', name: 'HAMT-Sharded dag-pb Directory', color: '#244e66' }
+  // most-common
+  'dag-cbor': { shortName: 'DAG-CBOR', name: 'dag-cbor', color: theme.colors.aqua },
+  'dag-json': { shortName: 'DAG-JSON', name: 'dag-json', color: theme.colors.green },
+  raw: { shortName: 'RAW', name: 'Raw Block', color: theme.colors.red }, // red because it's special
+  'dag-pb': { shortName: 'DAG-PB', name: 'dag-pb', color: theme.colors.teal },
+
+  // exciting
+  'dag-jose': { shortName: 'DAG-JOSE', name: 'dag-jose', color: theme.colors.yellow },
+
+  // less common
+  json: { shortName: 'JSON', name: 'JSON', color: theme.colors['green-muted'] },
+  'hamt-sharded-directory': { shortName: 'HAMT\nDAG-PB', name: 'HAMT-Sharded dag-pb Directory', color: theme.colors['teal-muted'] },
+
+  // rare
+  'eth-block': { shortName: 'ETH', name: 'Ethereum Block', color: theme.colors.charcoal },
+  'eth-block-list': { shortName: 'ETH', name: 'Ethereum Block List', color: theme.colors.charcoal },
+  'eth-tx-trie': { shortName: 'ETH', name: 'Ethereum Tx Trie', color: theme.colors.charcoal },
+  'eth-tx': { shortName: 'ETH', name: 'Ethereum Tx', color: theme.colors.charcoal },
+  'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: theme.colors.charcoal }
 }
 
 export function shortNameForNode (type) {
@@ -79,7 +77,39 @@ const DagNodeIcon = ({ type, ...props }) => (
   </svg>
 )
 
+/**
+ * replace bigint or other non-JSON-serializable values with appropriate values for the react-inspector
+ * Note that data for some blocks (e.g. bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq) currently do not
+ * look like NormalizedDagNode['data']
+ *
+ * @param {import('../../types').NormalizedDagNode['data']} data
+ */
+const getObjectInspectorData = (data) => {
+  if (data == null) return data
+  if (data.blockSizes != null) {
+    data.blockSizes = data.blockSizes.map(Number)
+  }
+  return data
+}
+
+/**
+ * @param {object} props
+ * @param {import('react-i18next').TFunction} props.t
+ * @param {boolean} props.tReady
+ * @param {string} props.className
+ * @param {string} props.type
+ * @param {string} props.cid
+ * @param {string} props.localPath
+ * @param {bigint} props.size
+ * @param {import('../../types').NormalizedDagNode['data']} props.data
+ * @param {object[]} props.links
+ * @param {string} props.format
+ * @param {Function} props.onLinkClick
+ * @param {string} props.gatewayUrl
+ * @param {string} props.publicGatewayUrl
+ */
 const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, links, format, onLinkClick, gatewayUrl, publicGatewayUrl, ...props }) => {
+  if (!tReady) return null
   const isUnixFs = format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type)
   let nodeStyleType = type
 
@@ -130,7 +160,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
           <div className='dt dt--fixed pt2'>
             {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
             <label className='dtc silver tracked ttu f7' style={{ width: 48 }}>Size</label>
-            <div className='dtc truncate charcoal monospace'>{humansize(size)}</div>
+            <div className='dtc truncate charcoal monospace'>{humansize(Number(size))}</div>
           </div>
             )}
         <div className='dt dt--fixed pt2'>
@@ -150,8 +180,8 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
         {!data
           ? null
           : (
-          <div className='pa3 mt2 bg-white f5 nl3 nr3 mh0-l'>
-            <ObjectInspector showMaxKeys={100} data={data} theme={objectInspectorTheme} expandPaths={toExpandPathsNotation(localPath)} />
+          <div className='pa3 mt2 bg-white f5 nl3 nr3 mh0-l overflow-x-auto'>
+            <ObjectInspector showMaxKeys={100} data={getObjectInspectorData(data)} theme={objectInspectorTheme} expandPaths={toExpandPathsNotation(localPath)} />
           </div>
             )}
       </div>

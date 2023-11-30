@@ -60,14 +60,28 @@ import 'ipld-explorer-components/dist/components/loader/Loader.css'
 
 **NOTE:** PRs adding an old IPLDFormat codec would need the old `blockcodec-to-ipld-format` tool which has many out of date deps. We will only accept PRs for adding BlockCodec interface codecs.
 
-To add another codec you will need to:
+To add another codec you will need to update all locations containing the comment `// #WhenAddingNewCodec`:
 
-1. Add a dependency on the codec to this package
-1. Add the codec in the switch statement in src/lib/codec-importer.ts
-1. Add a unit test to src/lib/resolve-ipld-path.test.js and ensure that calling `resolveIpldPath` returns the expected results
-  * If the default `resolveFn` in src/lib/get-codec-for-cid.ts doesn't resolve your paths correctly, you will need to add a resolver method for your codec to the `codecResolverMap` in src/lib/get-codec-for-cid.ts
+1. Add a dependency on the codec to this package (if it's not already in multiformats or other package)
+1. Add the codec in the switch statement in [./src/lib/codec-importer.ts](./src/lib/codec-importer.ts)
+1. Update [./src/lib/get-codec-name-from-code.ts](./src/lib/get-codec-name-from-code.ts) to return the codec name for your codec
+1. Add a unit test to [./src/lib/resolve-ipld-path.test.js](./src/lib/resolve-ipld-path.test.js) and ensure that calling `resolveIpldPath` returns the expected results
+  * If the default `resolveFn` in [./src/lib/get-codec-for-cid.ts](./src/lib/get-codec-for-cid.ts) doesn't resolve your paths correctly, you will need to add a resolver method for your codec to the `codecResolverMap` in [./src/lib/get-codec-for-cid.ts](./src/lib/get-codec-for-cid.ts)
 
 see https://github.com/ipfs/ipld-explorer-components/pull/360#discussion_r1206251817 for history.
+
+### Adding another hasher
+
+To add another hasher you will need to update all locations containing the comment `// #WhenAddingNewHasher`:
+
+1. Add a dependency on the hasher to this package (if it's not already in multiformats or other package)
+1. Add the hasher in the switch statement in [./src/lib/get-codec-for-cid.ts](./src/lib/get-codec-for-cid.ts)
+1. Update [./src/lib/hash-importer.ts](./src/lib/hash-importer.ts)
+  - Update `SupportedHashers` to include your hasher type
+  - Update `getHasherForCode` to return your hasher
+1. Update the hasher codes used by the `hashers` property passed to Helia init in [./src/lib/init-helia.ts](./src/lib/init-helia.ts)
+
+see https://github.com/ipfs/ipld-explorer-components/pull/395 for an example.
 
 ### Redux-bundler requirements
 
