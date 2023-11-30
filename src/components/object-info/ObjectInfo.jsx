@@ -23,18 +23,17 @@ const objectInspectorTheme = {
 // Use https://github.com/multiformats/multicodec/blob/master/table.csv to get full name.
 const nodeStyles = {
   // most-common
-  'dag-cbor': { shortName: 'CBOR', name: 'dag-cbor', color: theme.colors.aqua },
-  'dag-json': { shortName: 'JSON', name: 'dag-json', color: theme.colors.green },
+  'dag-cbor': { shortName: 'DAG-CBOR', name: 'dag-cbor', color: theme.colors.aqua },
+  'dag-json': { shortName: 'DAG-JSON', name: 'dag-json', color: theme.colors.green },
   raw: { shortName: 'RAW', name: 'Raw Block', color: theme.colors.red }, // red because it's special
-  'dag-pb': { shortName: 'PB', name: 'dag-pb', color: theme.colors.teal },
+  'dag-pb': { shortName: 'DAG-PB', name: 'dag-pb', color: theme.colors.teal },
+
+  // exciting
+  'dag-jose': { shortName: 'DAG-JOSE', name: 'dag-jose', color: theme.colors.yellow },
 
   // less common
   json: { shortName: 'JSON', name: 'JSON', color: theme.colors['green-muted'] },
-  'hamt-sharded-directory': { shortName: 'PB+H', name: 'HAMT-Sharded dag-pb Directory', color: theme.colors['teal-muted'] },
-
-  // infrequent
-  'dag-jose': { shortName: 'JOSE', name: 'dag-jose', color: theme.colors.yellow },
-  'git-raw': { shortName: 'GIT', name: 'Git', color: theme.colors['yellow-muted'] },
+  'hamt-sharded-directory': { shortName: 'HAMT\nDAG-PB', name: 'HAMT-Sharded dag-pb Directory', color: theme.colors['teal-muted'] },
 
   // rare
   'eth-block': { shortName: 'ETH', name: 'Ethereum Block', color: theme.colors.charcoal },
@@ -181,7 +180,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
         {!data
           ? null
           : (
-          <div className='pa3 mt2 bg-white f5 nl3 nr3 mh0-l'>
+          <div className='pa3 mt2 bg-white f5 nl3 nr3 mh0-l overflow-x-auto'>
             <ObjectInspector showMaxKeys={100} data={getObjectInspectorData(data)} theme={objectInspectorTheme} expandPaths={toExpandPathsNotation(localPath)} />
           </div>
             )}
