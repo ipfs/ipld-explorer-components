@@ -32,9 +32,10 @@ const objectInspectorTheme = {
  * And then hamt-sharded-directory was set to #9f28ca which was listed under "Color Harmonies - Triad" on 2023-05-22
  */
 const nodeStyles = {
-  'dag-cbor': { shortName: 'CBOR', name: 'dag-cbor', color: '#378085' },
-  'dag-json': { shortName: 'JSON', name: 'dag-json', color: '#378065' },
-  'dag-pb': { shortName: 'PB', name: 'dag-pb', color: '#244e66' },
+  'dag-cbor': { shortName: 'DAG-CBOR', name: 'dag-cbor', color: '#378085' },
+  'dag-json': { shortName: 'DAG-JSON', name: 'dag-json', color: '#378065' },
+  'json': { shortName: 'JSON', name: 'JSON', color: '#378065' }, // eslint-disable-line quote-props
+  'dag-pb': { shortName: 'DAG-PB', name: 'dag-pb', color: '#244e66' },
   'git-raw': { shortName: 'GIT', name: 'Git', color: '#378085' },
   'raw': { shortName: 'RAW', name: 'Raw Block', color: '#f14e32' }, // eslint-disable-line quote-props
   'eth-block': { shortName: 'ETH', name: 'Ethereum Block', color: '#383838' },
@@ -42,7 +43,7 @@ const nodeStyles = {
   'eth-tx-trie': { shortName: 'ETH', name: 'Ethereum Tx Trie', color: '#383838' },
   'eth-tx': { shortName: 'ETH', name: 'Ethereum Tx', color: '#383838' },
   'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: '#383838' },
-  'hamt-sharded-directory': { shortName: 'PB+H', name: 'HAMT-Sharded dag-pb Directory', color: '#244e66' }
+  'hamt-sharded-directory': { shortName: 'HAMT\nDAG-PB', name: 'HAMT-Sharded dag-pb Directory', color: '#244e66' }
 }
 
 export function shortNameForNode (type) {

@@ -4,7 +4,7 @@ import { type BlockCodec } from 'multiformats/codecs/interface'
 import getCodecNameFromCode from './get-codec-name-from-code'
 
 type CodecDataTypes = PBNode | Uint8Array
-interface CodecImporterResponse<T> extends Pick<BlockCodec<number, T | unknown>, 'decode'> {
+interface CodecImporterResponse<T> extends Pick<BlockCodec<number, T | unknown>, 'decode' | 'encode' | 'code'> {
 }
 
 export default async function codecImporter<T extends CodecDataTypes = CodecDataTypes> (codeOrName: number | string): Promise<CodecImporterResponse<T>> {
@@ -29,10 +29,7 @@ export default async function codecImporter<T extends CodecDataTypes = CodecData
     case 'dag-json':
       return import('@ipld/dag-json')
     case 'dag-jose':
-      return {
-        decode: (await import('dag-jose')).decode as unknown as
-          ((bytes: Uint8Array) => Promise<unknown>)
-      }
+      return import('dag-jose')
     default:
       throw new Error(`unsupported codec: ${codeOrName}=${codecName}`)
   }

@@ -59,7 +59,7 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
       trustlessGateway(),
       trustlessGateway({ gateways: [`${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`] })
     ],
-    hashers: await getHashersForCodes(17, 18, 19, 27),
+    hashers: await getHashersForCodes(17, 18, 19, 20, 27),
     datastore,
     blockstore,
     // @ts-expect-error - libp2p types are borked right now
@@ -69,7 +69,9 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
   // add helia-only examples
   // consumers may not have the peer-deps installed for these examples, and we don't want to break them if they're not supported.
   await Promise.allSettled([
-    import('@ipld/dag-json').then(async (dagJsonModule) => addDagNodeToHelia(helia, dagJsonModule, { hello: 'world' })) // baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea
+    addDagNodeToHelia(helia, 'dag-json', { hello: 'world' }), // baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea
+    addDagNodeToHelia(helia, 'dag-cbor', { hello: 'world' }, 27), // bafyrwigbexamue2ba3hmtai7hwlcmd6ekiqsduyf5avv7oz6ln3radvjde
+    addDagNodeToHelia(helia, 'json', { hello: 'world' }, 20) // bagaaifcavabu6fzheerrmtxbbwv7jjhc3kaldmm7lbnvfopyrthcvod4m6ygpj3unrcggkzhvcwv5wnhc5ufkgzlsji7agnmofovc2g4a3ui7ja
   ])
 
   return helia
