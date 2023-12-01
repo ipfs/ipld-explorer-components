@@ -18,6 +18,16 @@ import { getHashersForCodes } from './hash-importer.js'
 import { addDagNodeToHelia } from '../lib/helpers.js'
 import type { KuboGatewayOptions } from '../types.d.js'
 
+function areRemoteGatewaysEnabled (): boolean {
+  const localStorageKey = 'explore.ipld.gatewayEnabled'
+  console.info(
+    `🎛️ Customise whether ipld-explorer-components fetches content from gateways by setting an '${localStorageKey}' value to true/false in localStorage. e.g. localStorage.setItem('explore.ipld.gatewayEnabled', false) -- NOTE: defaults to true`
+  )
+  const gatewayEnabledSetting = localStorage.getItem(localStorageKey)
+
+  return gatewayEnabledSetting != null ? JSON.parse(gatewayEnabledSetting) : true
+}
+
 export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions): Promise<Helia> {
   const blockstore = new MemoryBlockstore()
   const datastore = new MemoryDatastore()
@@ -53,11 +63,19 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
     }
   })
 
+  // Always add the Kubo gatewawy
+  const trustlessGateways = [
+    trustlessGateway({ gateways: [`${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`] })
+  ]
+
+  if (areRemoteGatewaysEnabled()) {
+    trustlessGateways.push(trustlessGateway())
+  }
+
   const helia = await createHelia({
     blockBrokers: [
       // no bitswap
-      trustlessGateway(),
-      trustlessGateway({ gateways: [`${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`] })
+      ...trustlessGateways
     ],
     // #WhenAddingNewHasher
     hashers: await getHashersForCodes(17, 18, 19, 20, 27, 30),
