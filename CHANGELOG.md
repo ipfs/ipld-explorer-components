@@ -1,3 +1,10 @@
+## [5.2.0](https://github.com/ipfs/ipld-explorer-components/compare/v5.1.2...v5.2.0) (2023-12-01)
+
+
+### Features
+
+* re-allow disabling of remote gateways ([#416](https://github.com/ipfs/ipld-explorer-components/issues/416)) ([1fa3025](https://github.com/ipfs/ipld-explorer-components/commit/1fa30251803eb0c3f8836c96ffda3f5493375718))
+
 ### [5.1.2](https://github.com/ipfs/ipld-explorer-components/compare/v5.1.1...v5.1.2) (2023-11-30)
 
 
