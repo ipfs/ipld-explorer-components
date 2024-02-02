@@ -27,18 +27,6 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
     trustlessGateways.push(trustlessGateway())
   }
 
-  // const helia = await createHelia({
-  //   blockBrokers: [
-  //     // no bitswap
-  //     ...trustlessGateways
-  //   ],
-  //   // #WhenAddingNewHasher
-  //   hashers: await getHashersForCodes(17, 18, 19, 20, 27, 30),
-  //   datastore,
-  //   blockstore,
-  //   // @ts-expect-error - libp2p types are borked right now
-  //   libp2p
-  // })
   const helia = await createHeliaHTTP({
     blockBrokers: [
       ...trustlessGateways
@@ -46,9 +34,6 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
     routers: ['http://delegated-ipfs.dev'].map(delegatedHTTPRouting),
     // #WhenAddingNewHasher
     hashers: await getHashersForCodes(17, 18, 19, 20, 27, 30)
-    // datastore,
-    // blockstore
-    // libp2p
   })
 
   // add helia-only examples
