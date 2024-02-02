@@ -8,7 +8,6 @@ export async function createHeliaMock () {
   const helia = await createHelia({
     datastore,
     blockstore
-    // libp2p: {}
   })
   await helia.libp2p.stop()
 

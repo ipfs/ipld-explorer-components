@@ -1,5 +1,5 @@
 import type { Helia } from '@helia/interface'
-import { type CID } from 'multiformats'
+import { type CID } from 'multiformats/cid'
 
 import { BlockFetchTimeoutError } from './errors.js'
 

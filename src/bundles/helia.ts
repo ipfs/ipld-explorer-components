@@ -55,9 +55,7 @@ const bundle = {
   selectHeliaReady: () => helia !== null,
 
   selectHeliaIdentity: () => {
-    const identifyService = helia?.libp2p.services?.identify as { host: Record<'agentVersion', string> }
-
-    return identifyService?.host?.agentVersion.split(' ')[0] ?? 'null'
+    return '@helia/http@^1.0.1'
   },
 
   doInitHelia: () => async ({ dispatch, getState }: any) => {
