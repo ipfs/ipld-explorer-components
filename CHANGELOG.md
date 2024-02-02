@@ -1,3 +1,12 @@
+### [5.2.1](https://github.com/ipfs/ipld-explorer-components/compare/v5.2.0...v5.2.1) (2024-02-02)
+
+
+### Trivial Changes
+
+* Update .github/dependabot.yml [skip ci] ([7467972](https://github.com/ipfs/ipld-explorer-components/commit/7467972808e3e4545ad597b1df8ec469031dc215))
+* Update .github/workflows/stale.yml [skip ci] ([e5e78da](https://github.com/ipfs/ipld-explorer-components/commit/e5e78da2bb68daf5791808f72e44d8ced008eae8))
+* update README ([#412](https://github.com/ipfs/ipld-explorer-components/issues/412)) ([8b62741](https://github.com/ipfs/ipld-explorer-components/commit/8b627415e42231583ab7e7b57b5996df49e3c5be))
+
 ## [5.2.0](https://github.com/ipfs/ipld-explorer-components/compare/v5.1.2...v5.2.0) (2023-12-01)
 
 
