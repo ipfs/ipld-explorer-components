@@ -1,4 +1,4 @@
-import filesize from 'filesize'
+import { partial } from 'filesize'
 import theme from 'ipfs-css/theme.json'
 import { CID } from 'multiformats'
 import React from 'react'
@@ -8,7 +8,7 @@ import { ObjectInspector, chromeLight } from 'react-inspector'
 import LinksTable from './LinksTable'
 import getCodecNameFromCode from '../../lib/get-codec-name-from-code'
 
-const humansize = filesize.partial({ round: 0 })
+const humansize = partial({ round: 0 })
 
 const objectInspectorTheme = {
   ...chromeLight,
