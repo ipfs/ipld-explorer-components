@@ -128,7 +128,7 @@
     "@ipld/dag-json": "^10.1.7",
     "@ipld/dag-pb": "^4.0.8",
     "@loadable/component": "^5.14.1",
-    "@multiformats/sha3": "^3.0.1",
+    "@multiformats/sha3": "^3.0.2",
     "cytoscape": "^3.28.1",
     "cytoscape-dagre": "^2.5.0",
     "dag-jose": "^4.0.0",
