@@ -117,7 +117,7 @@ export function normaliseDagPbLinks (links, sourceCid) {
     path: link.Name || `Links/${index}`,
     source: sourceCid,
     target: toCidStrOrNull(link.Hash) ?? '',
-    size: link.Tsize ?? 0,
+    size: BigInt(link.Tsize ?? 0),
     index
   }))
 }
@@ -138,7 +138,7 @@ export function normaliseDagCbor (data, cid, code) {
     type: code,
     data,
     links,
-    size: links.reduce((acc, { size }) => acc + size, 0),
+    size: links.reduce((acc, { size }) => acc + size, BigInt(0)),
     format: 'unknown'
   }
 }
@@ -158,7 +158,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
 
   const cid = toCidOrNull(obj)
   if (cid) {
-    return [{ path, source: sourceCid, target: cid.toString(), size: 0, index: 0 }]
+    return [{ path, source: sourceCid, target: cid.toString(), size: BigInt(0), index: 0 }]
   }
 
   if (Array.isArray(obj)) {
@@ -183,7 +183,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
     // @ts-expect-error - todo: resolve this type error
     obj['/'] = target
 
-    return [{ path, source: sourceCid, target, size: 0, index: 0 }]
+    return [{ path, source: sourceCid, target, size: BigInt(0), index: 0 }]
   }
 
   if (keys.length > 0) {

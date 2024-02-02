@@ -9,14 +9,14 @@ export type NormalizedDagNodeFormat = NormalizedDagPbNodeFormat | 'unknown'
 export interface UnixFsNodeData {
   type: UnixFsNodeTypes
   data: NodeData | undefined
-  blockSizes: number[]
+  blockSizes: bigint[]
 }
 
 export interface NormalizedDagLink {
   path: string
   source: string
   target: string
-  size: number
+  size: bigint
   index: number
 }
 
@@ -25,11 +25,17 @@ export interface NormalizedDagNode {
   type: CodecType | string
   data: UnixFsNodeData | NodeData | undefined
   links: NormalizedDagLink[]
-  size?: number
+  size?: bigint
   format: NormalizedDagNodeFormat
 }
 
 export interface ResolveType<DecodedType = any> {
   value: DecodedType
   remainderPath: string
+}
+
+export interface KuboGatewayOptions {
+  host: string
+  port: string
+  protocol?: string
 }

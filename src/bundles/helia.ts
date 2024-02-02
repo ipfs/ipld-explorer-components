@@ -1,25 +1,21 @@
 /* globals globalThis */
 import { type Helia } from '@helia/interface'
-import { create as createKuboClient, type IPFSHTTPClient } from 'kubo-rpc-client'
 
-import initHelia from '../lib/init-helia'
+import initHelia from '../lib/init-helia.js'
+import type { KuboGatewayOptions } from '../types.d.js'
 
 interface HeliaBundleState {
-  apiOpts: Record<string, string>
-  instance: Helia | null
+  kuboGatewayOptions: KuboGatewayOptions
   error: Error | null
-  kuboClient: IPFSHTTPClient | null
 }
 
 const defaultState: HeliaBundleState = {
-  apiOpts: {
+  kuboGatewayOptions: {
     host: '127.0.0.1',
-    port: '5001',
+    port: '8080',
     protocol: 'http'
   },
-  instance: null,
-  error: null,
-  kuboClient: null
+  error: null
 }
 
 function getUserOpts (key: string): Record<string, unknown> {
@@ -35,15 +31,14 @@ function getUserOpts (key: string): Record<string, unknown> {
   return userOpts
 }
 
+let helia: Helia | null = null
 const bundle = {
   name: 'helia',
   reducer (state: HeliaBundleState, { type, payload, error }: { type: string, payload: Partial<HeliaBundleState>, error?: Error }) {
     state = state ?? defaultState
     if (type === 'HELIA_INIT_FINISHED') {
       return Object.assign({}, state, {
-        instance: payload.instance ?? state.instance,
-        kuboClient: payload.kuboClient ?? state.kuboClient,
-        apiOpts: payload.apiOpts ?? state.apiOpts,
+        kuboGatewayOptions: payload.kuboGatewayOptions ?? state.kuboGatewayOptions,
         error: null
       })
     }
@@ -55,13 +50,12 @@ const bundle = {
     return state
   },
 
-  selectKuboClient: ({ helia }: { helia: HeliaBundleState }): IPFSHTTPClient | null => helia.kuboClient,
-  selectHelia: ({ helia }: { helia: HeliaBundleState }) => helia.instance,
+  selectHelia: () => helia,
 
-  selectHeliaReady: ({ helia }: { helia: HeliaBundleState }) => helia.instance !== null,
+  selectHeliaReady: () => helia !== null,
 
-  selectHeliaIdentity: ({ helia }: { helia: HeliaBundleState }) => {
-    const identifyService = helia.instance?.libp2p.services?.identify as { host: Record<'agentVersion', string> }
+  selectHeliaIdentity: () => {
+    const identifyService = helia?.libp2p.services?.identify as { host: Record<'agentVersion', string> }
 
     return identifyService?.host?.agentVersion.split(' ')[0] ?? 'null'
   },
@@ -69,26 +63,23 @@ const bundle = {
   doInitHelia: () => async ({ dispatch, getState }: any) => {
     dispatch({ type: 'HELIA_INIT_STARTED' })
 
-    const apiOpts = Object.assign(
+    const kuboGatewayOptions = Object.assign(
       {},
-      getState().helia.apiOpts,
-      getUserOpts('ipfsApi')
+      getState().helia.kuboGatewayOptions,
+      getUserOpts('kuboGateway')
     )
-    // TRY helia!
+
     try {
       console.info(
-        "🎛️ Customise your kubo-rpc-client opts by setting an `ipfsApi` value in localStorage. e.g. localStorage.setItem('ipfsApi', JSON.stringify({port: '1337'}))"
+        "🎛️ Customise your Kubo gateway opts by setting an `kuboGateway` value in localStorage. e.g. localStorage.setItem('kuboGateway', JSON.stringify({port: '1337'}))"
       )
-      const kuboClient = createKuboClient(apiOpts)
       console.time('HELIA_INIT')
-      const helia = await initHelia(kuboClient)
+      helia = await initHelia(kuboGatewayOptions)
       console.timeEnd('HELIA_INIT')
       return dispatch({
         type: 'HELIA_INIT_FINISHED',
         payload: {
-          apiOpts,
-          kuboClient,
-          instance: helia,
+          kuboGatewayOptions,
           provider: 'helia'
         }
       })

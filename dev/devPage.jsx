@@ -91,9 +91,10 @@ const PageRenderer = connect(
   (props) => {
     const Page = props?.route
     const { embed } = props.queryObject
+    const { doInitHelia } = props
     useEffect(() => {
-      props.doInitHelia()
-    }, [props])
+      doInitHelia()
+    }, [doInitHelia])
 
     return (
       <>

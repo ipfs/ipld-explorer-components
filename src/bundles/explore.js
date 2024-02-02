@@ -20,6 +20,17 @@ const getCidFromCidOrFqdn = (cidOrFqdn) => {
   return cidOrFqdn
 }
 
+/**
+ * fix BigInt serialization until https://tc39.es/proposal-bigint/#sec-serializejsonproperty is implemented
+ *
+ * @see https://github.com/GoogleChromeLabs/jsbi/issues/30
+ * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt#use_within_json
+ */
+// eslint-disable-next-line no-extend-native
+BigInt.prototype.toJSON = function () {
+  return this.toString()
+}
+
 // Find all the nodes and path boundaries traversed along a given path
 const makeBundle = () => {
   const bundle = createAsyncResourceBundle({
@@ -40,7 +51,7 @@ const makeBundle = () => {
           localPath,
           nodes,
           pathBoundaries
-        } = await resolveIpldPath(store.selectHelia(), store.selectKuboClient(), cid, rest)
+        } = await resolveIpldPath(store.selectHelia(), cid, rest)
 
         return {
           path,

@@ -1,23 +1,24 @@
-import multicodecs from 'multicodec'
-
+/**
+ * Converts supported codec codes from https://github.com/multiformats/multicodec/blob/master/table.csv to their names.
+ */
 export default function getCodecNameFromCode (code: number): string {
+  // #WhenAddingNewCodec
   switch (code) {
-    case multicodecs.DAG_CBOR:
+    case 113:
       return 'dag-cbor'
-    case multicodecs.DAG_PB:
+    case 112:
       return 'dag-pb'
-    case multicodecs.GIT_RAW:
+    case 120:
       return 'git-raw'
-    case multicodecs.RAW:
+    case 85:
       return 'raw'
-    case multicodecs.JSON:
+    case 512:
       return 'json'
-    case multicodecs.DAG_JSON:
+    case 297:
       return 'dag-json'
-    case multicodecs.DAG_JOSE:
+    case 133:
       return 'dag-jose'
     default:
-      // TODO: Remove dependency on multicodecs
-      return multicodecs.codeToName[code as multicodecs.CodecCode]
+      return `codec code ${code}=unknown`
   }
 }

@@ -8,8 +8,8 @@ import { ensureLeadingSlash } from './helpers'
 import type { ResolveType } from '../types'
 
 interface CodecWrapper<DecodedType = any> {
-  decode: (bytes: Uint8Array) => DecodedType
-  resolve: (path: string, bytes: Uint8Array) => Promise<ResolveType<DecodedType>>
+  decode(bytes: Uint8Array): DecodedType
+  resolve(path: string, bytes: Uint8Array): Promise<ResolveType<DecodedType>>
 }
 
 interface DecodeFn<T = any> {
@@ -50,6 +50,7 @@ interface CodecResolverFn {
   (node: PBNode | unknown, path: string): Promise<ResolveType<PBNode | PBLink>>
 }
 
+// #WhenAddingNewCodec (maybe)
 const codecResolverMap: Record<string, CodecResolverFn> = {
   'dag-pb': async (node, path) => {
     if (!isPBNode(node)) {

@@ -1,3 +1,69 @@
+### [5.2.1](https://github.com/ipfs/ipld-explorer-components/compare/v5.2.0...v5.2.1) (2024-02-02)
+
+
+### Trivial Changes
+
+* Update .github/dependabot.yml [skip ci] ([7467972](https://github.com/ipfs/ipld-explorer-components/commit/7467972808e3e4545ad597b1df8ec469031dc215))
+* Update .github/workflows/stale.yml [skip ci] ([e5e78da](https://github.com/ipfs/ipld-explorer-components/commit/e5e78da2bb68daf5791808f72e44d8ced008eae8))
+* update README ([#412](https://github.com/ipfs/ipld-explorer-components/issues/412)) ([8b62741](https://github.com/ipfs/ipld-explorer-components/commit/8b627415e42231583ab7e7b57b5996df49e3c5be))
+
+## [5.2.0](https://github.com/ipfs/ipld-explorer-components/compare/v5.1.2...v5.2.0) (2023-12-01)
+
+
+### Features
+
+* re-allow disabling of remote gateways ([#416](https://github.com/ipfs/ipld-explorer-components/issues/416)) ([1fa3025](https://github.com/ipfs/ipld-explorer-components/commit/1fa30251803eb0c3f8836c96ffda3f5493375718))
+
+### [5.1.2](https://github.com/ipfs/ipld-explorer-components/compare/v5.1.1...v5.1.2) (2023-11-30)
+
+
+### Bug Fixes
+
+* add toJSON to BigInt prototype ([a606a7c](https://github.com/ipfs/ipld-explorer-components/commit/a606a7c010b77b9dc57742bd26b87590f4647711))
+* react-i18next peerDep ([09589ca](https://github.com/ipfs/ipld-explorer-components/commit/09589cacc58e961eb7291c44a96b7fc8ead3cdb5))
+* replace blake3-multihash with hash-wasm ([8a85612](https://github.com/ipfs/ipld-explorer-components/commit/8a85612c98404c125d86626afbaef67adf8f1a67))
+
+### [5.1.1](https://github.com/ipfs/ipld-explorer-components/compare/v5.1.0...v5.1.1) (2023-11-30)
+
+
+### Bug Fixes
+
+* no more BigInt serialization errors ([a580bd9](https://github.com/ipfs/ipld-explorer-components/commit/a580bd985b6588ecbda7b5333b3a820d3c1181de))
+* no more window is not defined errors ([794c9c6](https://github.com/ipfs/ipld-explorer-components/commit/794c9c60c227e423442131ad44a2833c8bce6369))
+
+
+### Trivial Changes
+
+* update package-lock.json ([a4089f1](https://github.com/ipfs/ipld-explorer-components/commit/a4089f1a9290844ea107996373d7db500b7f7f09))
+
+## [5.1.0](https://github.com/ipfs/ipld-explorer-components/compare/v5.0.0...v5.1.0) (2023-11-30)
+
+
+### Features
+
+* **hasher:** add blake3 ([#395](https://github.com/ipfs/ipld-explorer-components/issues/395)) ([6ea74e5](https://github.com/ipfs/ipld-explorer-components/commit/6ea74e52d569a3012b6b12683c4bd0a37797ea79))
+
+## [5.0.0](https://github.com/ipfs/ipld-explorer-components/compare/v4.0.3...v5.0.0) (2023-11-30)
+
+
+### ⚠ BREAKING CHANGES
+
+* update of many ipfs/ipld/libp2p/helia deps that may break consumers. API of ipld-explorer-components has not changed.
+
+### Features
+
+* use Helia's blockBroker interface ([#406](https://github.com/ipfs/ipld-explorer-components/issues/406)) ([c964a76](https://github.com/ipfs/ipld-explorer-components/commit/c964a76a8e29741bd7bef8e33c2207ef6ff66771))
+* use ipfs-css colors and add dag-jose example ([#408](https://github.com/ipfs/ipld-explorer-components/issues/408)) ([4e96491](https://github.com/ipfs/ipld-explorer-components/commit/4e964919bfa0c05539d4aeac97041778fd962316))
+
+
+### Trivial Changes
+
+* bump protobufjs from 6.11.3 to 6.11.4 ([#393](https://github.com/ipfs/ipld-explorer-components/issues/393)) ([f8db274](https://github.com/ipfs/ipld-explorer-components/commit/f8db2747a3a37652b98a11ea49718a1ca1366550))
+* **ci:** remove circleci config ([#388](https://github.com/ipfs/ipld-explorer-components/issues/388)) ([13698af](https://github.com/ipfs/ipld-explorer-components/commit/13698af1a40dd2edc2e49b1892dd5231b384d353))
+* pull new translations ([#390](https://github.com/ipfs/ipld-explorer-components/issues/390)) ([2caac4a](https://github.com/ipfs/ipld-explorer-components/commit/2caac4a6cffcd49ea5ecf37c43fdb71f3a09dda8))
+* pull new translations ([#396](https://github.com/ipfs/ipld-explorer-components/issues/396)) ([73799f8](https://github.com/ipfs/ipld-explorer-components/commit/73799f8f895c60479e931175d0a1496d6d5a35ee))
+* pull new translations ([#405](https://github.com/ipfs/ipld-explorer-components/issues/405)) ([5805bd8](https://github.com/ipfs/ipld-explorer-components/commit/5805bd8cb06f0b4edffc86db96bf00904834a7f2))
+
 ### [4.0.3](https://github.com/ipfs/ipld-explorer-components/compare/v4.0.2...v4.0.3) (2023-07-28)
 
 
