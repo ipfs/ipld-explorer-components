@@ -136,7 +136,7 @@
     "hash-wasm": "^4.11.0",
     "i18next-chained-backend": "^4.6.2",
     "i18next-localstorage-backend": "^4.2.0",
-    "ipfs-unixfs": "^11.1.0",
+    "ipfs-unixfs": "^11.1.3",
     "multiformats": "^13.0.1",
     "react-inspector": "^6.0.2",
     "react-joyride": "^2.3.0",
