@@ -30,7 +30,7 @@
     "outDir": "dist",
     "declarationDir": "dist",
     "jsx": "react",
-    "rootDir": "src",
+    "rootDir": "src"
   },
   "include": [
     "src/**/*"

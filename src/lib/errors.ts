@@ -16,7 +16,7 @@ export default class IpldExploreError extends Error {
    * const {t} = useTranslation('explore', { keyPrefix: 'errors' })
    * t('NameOfErrorClassThatExtendsIpldExploreError')
    */
-  toString (t: TFunction<'translation', undefined, 'translation'>): string {
+  toString (t: TFunction<'translation', 'translation'>): string {
     return t(this.name, this.options)
   }
 }

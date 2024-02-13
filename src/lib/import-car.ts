@@ -5,7 +5,7 @@ import toIterable from 'stream-to-it'
 
 /**
  * Given a file object representing a CAR archive, import it into the given Helia instance,
- * and reeturn the CID for the root block
+ * and return the CID for the root block
  *
  * TODO: Handle multiple roots
  */

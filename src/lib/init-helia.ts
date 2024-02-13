@@ -1,18 +1,7 @@
-import { noise } from '@chainsafe/libp2p-noise'
-import { yamux } from '@chainsafe/libp2p-yamux'
-import { createDelegatedRoutingV1HttpApiClient } from '@helia/delegated-routing-v1-http-api-client'
+import { trustlessGateway } from '@helia/block-brokers'
+import { createHeliaHTTP } from '@helia/http'
 import { type Helia } from '@helia/interface'
-import { autoNAT } from '@libp2p/autonat'
-import { circuitRelayTransport } from '@libp2p/circuit-relay-v2'
-import { identify } from '@libp2p/identify'
-import { webRTC, webRTCDirect } from '@libp2p/webrtc'
-import { webSockets } from '@libp2p/websockets'
-import { webTransport } from '@libp2p/webtransport'
-import { MemoryBlockstore } from 'blockstore-core'
-import { MemoryDatastore } from 'datastore-core'
-import { createHelia } from 'helia'
-import { trustlessGateway } from 'helia/block-brokers'
-import { createLibp2p } from 'libp2p'
+import { delegatedHTTPRouting } from '@helia/routers'
 
 import { getHashersForCodes } from './hash-importer.js'
 import { addDagNodeToHelia } from '../lib/helpers.js'
@@ -29,40 +18,6 @@ function areRemoteGatewaysEnabled (): boolean {
 }
 
 export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions): Promise<Helia> {
-  const blockstore = new MemoryBlockstore()
-  const datastore = new MemoryDatastore()
-
-  /**
-   * based on https://github.com/ipfs/helia/blob/ed4985677b62021f76541354ad06b70bd53e929a/packages/helia/src/utils/libp2p.browser.ts#L20
-   */
-  const libp2p = await createLibp2p({
-    connectionManager: {
-      // do not auto-dial peers. We will manually dial peers when we need them.
-      minConnections: 0
-    },
-    datastore,
-    transports: [
-      webRTC(),
-      webRTCDirect(),
-      webTransport(),
-      webSockets(),
-      circuitRelayTransport({
-        discoverRelays: 1
-      })
-    ],
-    connectionEncryption: [
-      noise()
-    ],
-    streamMuxers: [
-      yamux()
-    ],
-    services: {
-      identify: identify(),
-      autoNAT: autoNAT(),
-      delegatedRouting: () => createDelegatedRoutingV1HttpApiClient('https://delegated-ipfs.dev')
-    }
-  })
-
   // Always add the Kubo gatewawy
   const trustlessGateways = [
     trustlessGateway({ gateways: [`${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`] })
@@ -72,17 +27,13 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
     trustlessGateways.push(trustlessGateway())
   }
 
-  const helia = await createHelia({
+  const helia = await createHeliaHTTP({
     blockBrokers: [
-      // no bitswap
       ...trustlessGateways
     ],
+    routers: ['http://delegated-ipfs.dev'].map(delegatedHTTPRouting),
     // #WhenAddingNewHasher
-    hashers: await getHashersForCodes(17, 18, 19, 20, 27, 30),
-    datastore,
-    blockstore,
-    // @ts-expect-error - libp2p types are borked right now
-    libp2p
+    hashers: await getHashersForCodes(17, 18, 19, 20, 27, 30)
   })
 
   // add helia-only examples
