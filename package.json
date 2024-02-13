@@ -115,7 +115,7 @@
     "dev": "vite",
     "start": "cross-env NODE_ENV=production babel src -d dist --copy-files --no-copy-ignored --extensions '.ts,.tsx,.js,.jsx' --watch",
     "test": "run-s test:unit test:consumer",
-    "test:node": "run-s test:unit test:consumer",
+    "test:node": "run-s test:unit",
     "test:unit": "vitest run --environment=node",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build",
