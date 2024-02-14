@@ -24,9 +24,6 @@ module.exports = {
       '@storybook/react-dom-shim',
       '@storybook/types',
 
-      // releasing
-      'conventional-changelog-conventionalcommits',
-
       // problem with deps
       '@typescript-eslint/eslint-plugin'
     ],
