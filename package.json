@@ -179,7 +179,6 @@
     "@typescript-eslint/parser": "^5.59.7",
     "@vitejs/plugin-react": "^4.0.0",
     "aegir": "^42.2.4",
-    "conventional-changelog-conventionalcommits": "^7.0.2",
     "cross-env": "^6.0.0",
     "eslint": "^8.41.0",
     "eslint-config-ipfs": "^6.0.1",
