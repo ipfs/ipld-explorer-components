@@ -1,12 +1,11 @@
-/* global describe it expect */
+/* global describe it expect beforeEach */
 // @ts-check
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
 import * as raw from 'multiformats/codecs/raw'
-
+import { createHeliaMock } from '../../test/unit/heliaMock'
 import { addDagNodeToHelia } from './helpers'
 import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
-import { createHeliaMock } from '../../test/unit/heliaMock'
 
 // #WhenAddingNewCodec
 describe('resolveIpldPath', () => {

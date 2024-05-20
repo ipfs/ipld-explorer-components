@@ -1,5 +1,4 @@
 import React from 'react'
-
 import { getCodecOrNull } from '../../lib/cid'
 import Cid from '../cid/Cid'
 import { colorForNode } from '../object-info/ObjectInfo'

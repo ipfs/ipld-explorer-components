@@ -1,6 +1,5 @@
 /* globals globalThis */
 import { type Helia } from '@helia/interface'
-
 import initHelia from '../lib/init-helia.js'
 import type { KuboGatewayOptions } from '../types.d.js'
 

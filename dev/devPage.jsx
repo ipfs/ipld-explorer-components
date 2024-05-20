@@ -1,6 +1,5 @@
 /* globals globalThis */
 import { Buffer } from 'buffer'
-
 import 'ipfs-css'
 import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
@@ -9,7 +8,6 @@ import 'react-virtualized/styles.css'
 import { composeBundles, createRouteBundle } from 'redux-bundler'
 import { Provider as ReduxStoreProvider, connect } from 'redux-bundler-react'
 import 'tachyons'
-
 import heliaBundle from '../src/bundles/helia'
 import '../src/components/loader/Loader.css'
 import '../src/components/object-info/LinksTable.css'

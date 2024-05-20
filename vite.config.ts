@@ -2,7 +2,6 @@ import fs from 'node:fs/promises'
 import { createRequire } from 'node:module'
 import path, { resolve as pathResolve } from 'node:path'
 import url from 'node:url'
-
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
 import resolve from '@rollup/plugin-node-resolve'
 import react from '@vitejs/plugin-react'

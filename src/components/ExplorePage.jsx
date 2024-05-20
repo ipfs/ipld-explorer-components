@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet'
 import { withTranslation } from 'react-i18next'
 import ReactJoyride from 'react-joyride'
 import { connect } from 'redux-bundler-react'
-
+import { explorerTour } from '../lib/tours'
 import CidInfo from './cid-info/CidInfo'
 import ErrorBoundary from './error/ErrorBoundary'
 import { IpldExploreErrorComponent } from './explore/IpldExploreErrorComponent'
@@ -11,7 +11,6 @@ import IpldGraph from './graph/LoadableIpldGraph'
 import GraphCrumb from './graph-crumb/GraphCrumb'
 import ComponentLoader from './loader/ComponentLoader'
 import ObjectInfo from './object-info/ObjectInfo'
-import { explorerTour } from '../lib/tours'
 
 export class ExplorePage extends React.Component {
   render () {

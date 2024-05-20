@@ -1,7 +1,6 @@
 import { type CID } from 'multiformats'
-
-import getCodecNameFromCode from './get-codec-name-from-code'
 import { decodeCid } from '../components/cid-info/decode-cid'
+import getCodecNameFromCode from './get-codec-name-from-code'
 
 const toHex = (bytes: Uint8Array): string => Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).toString('hex').toUpperCase()
 

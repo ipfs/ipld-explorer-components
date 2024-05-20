@@ -1,5 +1,4 @@
 import { CID } from 'multiformats'
-
 import baseImporter from '../../lib/base-importer'
 import { getHasherForCode } from '../../lib/hash-importer'
 

@@ -1,7 +1,6 @@
 /* global it expect */
 import * as dagCbor from '@ipld/dag-cbor'
 import { CID } from 'multiformats'
-
 import normaliseDagNode from './normalise-dag-node'
 
 const cid1 = 'bafyreifiioc5v7xh3xbqjkdvgcz5ywo2vnhzd2gdnybfogxajjnchzzhei'

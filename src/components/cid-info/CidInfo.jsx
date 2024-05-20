@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import { withTranslation } from 'react-i18next'
-
 import extractInfo from '../../lib/extract-info'
 
 export const CidInfo = ({ t, tReady, cid, className, ...props }) => {

@@ -1,11 +1,9 @@
 /* global describe it expect */
 // @ts-check
 import crypto from 'crypto'
-
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
 import * as multiformats from 'multiformats'
-
 import { toCidOrNull, getCodecOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
 
 const { CID, hasher, bytes } = multiformats

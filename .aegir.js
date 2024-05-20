@@ -1,5 +1,16 @@
 /** @type {import('aegir').PartialOptions} */
 module.exports = {
+  lint: {
+    files: [
+      // '!node_modules/**',
+      'src/**/*.{js,jsx,ts,tsx}',
+      'test/**/*.{js,jsx,ts,tsx}',
+      // 'src/**/*.tsx',
+      // 'src/**/*.js',
+      // 'src/**/*.jsx',
+      'dev/**/*.{js,jsx,ts,tsx}',
+    ]
+  },
   dependencyCheck: {
     ignore: [
       // .jsx files aren't checked properly.

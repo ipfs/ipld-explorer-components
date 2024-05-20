@@ -1,7 +1,6 @@
-import type { Helia } from '@helia/interface'
 import { type CID } from 'multiformats/cid'
-
 import { BlockFetchTimeoutError } from './errors.js'
+import type { Helia } from '@helia/interface'
 
 /**
  * Method for getting a raw block either with helia from trustless gateways or a local Kubo gateway.

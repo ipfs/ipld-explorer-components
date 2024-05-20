@@ -1,7 +1,6 @@
-import type { PBNode } from '@ipld/dag-pb'
 import { type BlockCodec } from 'multiformats/codecs/interface'
-
 import getCodecNameFromCode from './get-codec-name-from-code'
+import type { PBNode } from '@ipld/dag-pb'
 
 type CodecDataTypes = PBNode | Uint8Array
 interface CodecImporterResponse<T> extends Pick<BlockCodec<number, T | unknown>, 'decode' | 'encode' | 'code'> {

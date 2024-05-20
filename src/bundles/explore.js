@@ -1,6 +1,5 @@
 import { CID } from 'multiformats/cid'
 import { createAsyncResourceBundle, createSelector } from 'redux-bundler'
-
 import { ensureLeadingSlash } from '../lib/helpers'
 import { importCar } from '../lib/import-car'
 import parseIpldPath from '../lib/parse-ipld-path'

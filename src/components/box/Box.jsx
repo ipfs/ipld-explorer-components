@@ -1,5 +1,4 @@
 import React from 'react'
-
 import ErrorBoundary from '../error/ErrorBoundary'
 
 export const Box = ({

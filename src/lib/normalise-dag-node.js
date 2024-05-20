@@ -2,7 +2,6 @@
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
 import { UnixFS } from 'ipfs-unixfs'
-
 import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
 
 /**

@@ -4,9 +4,8 @@ import { CID } from 'multiformats'
 import React from 'react'
 import { withTranslation } from 'react-i18next'
 import { ObjectInspector, chromeLight } from 'react-inspector'
-
-import LinksTable from './LinksTable'
 import getCodecNameFromCode from '../../lib/get-codec-name-from-code'
+import LinksTable from './LinksTable'
 
 const humansize = partial({ round: 0 })
 

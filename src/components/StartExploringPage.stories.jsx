@@ -1,7 +1,6 @@
 import React from 'react'
-
-import StartExploringPage from './StartExploringPage'
 import i18n from '../i18n-decorator'
+import StartExploringPage from './StartExploringPage'
 
 export default {
   title: 'Start Exploring page',
