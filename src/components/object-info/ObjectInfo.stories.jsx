@@ -1,11 +1,10 @@
 import { action } from '@storybook/addon-actions'
 import React from 'react'
-
+import i18n from '../../i18n-decorator'
+import ObjectInfo from './ObjectInfo'
 import dagNodeC from './fixtures/object-info-1240-links.json'
 import dagNodeB from './fixtures/object-info-36-links.json'
 import dagNodeA from './fixtures/object-info-8-links.json'
-import ObjectInfo from './ObjectInfo'
-import i18n from '../../i18n-decorator'
 
 export default {
   title: 'IPLD Node Info',

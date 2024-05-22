@@ -2,9 +2,8 @@ import { trustlessGateway } from '@helia/block-brokers'
 import { createHeliaHTTP } from '@helia/http'
 import { type Helia } from '@helia/interface'
 import { delegatedHTTPRouting } from '@helia/routers'
-
-import { getHashersForCodes } from './hash-importer.js'
 import { addDagNodeToHelia } from '../lib/helpers.js'
+import { getHashersForCodes } from './hash-importer.js'
 import type { KuboGatewayOptions } from '../types.d.js'
 
 function areRemoteGatewaysEnabled (): boolean {

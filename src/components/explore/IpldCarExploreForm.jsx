@@ -1,7 +1,6 @@
 import React from 'react'
 import { withTranslation } from 'react-i18next'
 import { connect } from 'redux-bundler-react'
-
 import spinnerImage from './spinner.svg'
 import uploadImage from './upload.svg'
 

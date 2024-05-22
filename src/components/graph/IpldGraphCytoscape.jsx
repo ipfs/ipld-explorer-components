@@ -1,7 +1,6 @@
 import cytoscape from 'cytoscape'
 import dagre from 'cytoscape-dagre'
 import React from 'react'
-
 import { getCodecOrNull } from '../../lib/cid'
 import { colorForNode } from '../object-info/ObjectInfo'
 

@@ -1,9 +1,8 @@
 import { action } from '@storybook/addon-actions'
 import React from 'react'
-
-import IpldCarExploreForm from './IpldCarExploreForm'
 import bundleDecorator from '../../bundle-decorator'
 import i18n from '../../i18n-decorator'
+import IpldCarExploreForm from './IpldCarExploreForm'
 
 const mockExploreBundle = {
   name: 'explore',

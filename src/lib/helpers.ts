@@ -1,6 +1,5 @@
 import { type Helia } from '@helia/interface'
 import { CID } from 'multiformats'
-
 import codecImporter from './codec-importer.js'
 import { getHasherForCode } from './hash-importer.js'
 

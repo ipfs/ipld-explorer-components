@@ -1,5 +1,4 @@
 import React from 'react'
-
 import ErrorIcon from '../../icons/GlyphSmallCancel'
 
 class ErrorBoundary extends React.Component {

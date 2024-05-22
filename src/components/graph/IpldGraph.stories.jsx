@@ -1,10 +1,9 @@
 import { action } from '@storybook/addon-actions'
 import React from 'react'
-
-import IpldGraphCytoscape from './IpldGraphCytoscape'
 import dagNodeD from '../object-info/fixtures/object-info-0-links.json'
 import dagNodeB from '../object-info/fixtures/object-info-36-links.json'
 import dagNodeA from '../object-info/fixtures/object-info-8-links.json'
+import IpldGraphCytoscape from './IpldGraphCytoscape'
 
 export default {
   title: 'IPLD Graph'

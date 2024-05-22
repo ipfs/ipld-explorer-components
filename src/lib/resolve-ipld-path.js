@@ -1,5 +1,4 @@
 import { CID } from 'multiformats'
-
 import getCodecForCid from './get-codec-for-cid'
 import { getRawBlock } from './get-raw-block'
 import normaliseDagNode from './normalise-dag-node'

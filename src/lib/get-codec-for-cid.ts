@@ -1,11 +1,10 @@
-import type { PBLink, PBNode } from '@ipld/dag-pb'
 import { CID } from 'multiformats'
-
 import codecImporter from './codec-importer.js'
 import getCodecNameFromCode from './get-codec-name-from-code'
 import { isPBNode } from './guards'
 import { ensureLeadingSlash } from './helpers'
 import type { ResolveType } from '../types'
+import type { PBLink, PBNode } from '@ipld/dag-pb'
 
 interface CodecWrapper<DecodedType = any> {
   decode(bytes: Uint8Array): DecodedType

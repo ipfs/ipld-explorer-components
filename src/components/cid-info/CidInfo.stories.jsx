@@ -1,7 +1,6 @@
 import React from 'react'
-
-import CidInfo from './CidInfo'
 import i18n from '../../i18n-decorator'
+import CidInfo from './CidInfo'
 
 export default {
   title: 'CID Info',

@@ -1,5 +1,4 @@
 import React from 'react'
-
 import GraphCrumb from './GraphCrumb'
 
 export default {
