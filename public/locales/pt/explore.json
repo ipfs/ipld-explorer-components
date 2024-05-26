@@ -8,7 +8,8 @@
   "StartExploringPage": {
     "title": "Explorador - IPLD",
     "header": "Explore a Floresta de Merkle",
-    "leadParagraph": "Cole um CID na caixa para explorar o nó IPLD a que se refere, ou escolha uma das coleções de dados abaixo."
+    "leadParagraph": "Cole um CID na caixa para explorar o nó IPLD a que se refere, ou escolha uma das coleções de dados abaixo.",
+    "noDataAvailable": "Nenhum dado disponível"
   },
   "AboutIpld": {
     "paragraph1":"<0>IPLD é <1>o modelo de dados endereçável por conteúdos da web</1>. Permite-nos tratar todas as estruturas de dados ligadas por hashes como sub-peças de um sistema de informação unificado, unificando assim todos os modelos de dados que relacionam dados com hashes em instâncias do IPLD.</0>",

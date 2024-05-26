@@ -8,7 +8,8 @@
   "StartExploringPage": {
     "title": "Udforsk - IPLD",
     "header": "Udforsk Merkle-skoven",
-    "leadParagraph": "Indsæt et CID i boksen for at fremsøge IPLD-klienten som adresseres, eller vælg fra et udstillet datasæt."
+    "leadParagraph": "Indsæt et CID i boksen for at fremsøge IPLD-klienten som adresseres, eller vælg fra et udstillet datasæt.",
+    "noDataAvailable": "Ingen data tilgængelige"
   },
   "AboutIpld": {
     "paragraph1":"<0>IPLD er <1>datamodellen for det indholds-adresserbare net.</1> Hvilket gør os i stand til at behandle alle hash-linkede data-strukturer som undergrupper hjemhørende under et fælles informations-rum, der kan kombinere alle datamodeller som linker til data via hashes, som instanser af IPLD</0> ",

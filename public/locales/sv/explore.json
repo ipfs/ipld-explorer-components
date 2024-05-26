@@ -8,7 +8,8 @@
   "StartExploringPage": {
     "title": "Utforska - IPLD",
     "header": "Utforksa Merkle-skogen",
-    "leadParagraph": "Klistrain en CID i rutan för att hämta IPLD-noden den adresserar, eller välj ett presenterat dataset."
+    "leadParagraph": "Klistrain en CID i rutan för att hämta IPLD-noden den adresserar, eller välj ett presenterat dataset.",
+    "noDataAvailable": "Inga data tillgängliga"
   },
   "AboutIpld": {
     "paragraph1":"<0>IPLD is <1>the data model of the content-addressable web.</1> It allows us to treat all hash-linked data structures as subsets of a unified information space, unifying all data models that link data with hashes as instances of IPLD.</0>",
