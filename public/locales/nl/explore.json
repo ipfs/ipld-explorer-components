@@ -8,7 +8,8 @@
   "StartExploringPage": {
     "title": "Verken - IPLD",
     "header": "Verken het Merkle Forest",
-    "leadParagraph": "Plak een CID in het vak om de IPLD node op te halen waar hij naar verwijst of kies een van de aanbevolen datasets."
+    "leadParagraph": "Plak een CID in het vak om de IPLD node op te halen waar hij naar verwijst of kies een van de aanbevolen datasets.",
+    "noDataAvailable": "Geen gegevens beschikbaar"
   },
   "AboutIpld": {
     "paragraph1":"<0>IPLD is <1>het data model van het inhoud-adresseerbare web.</1>Hiermee kunnen we alle hash-gekoppelde gegevensstructuren behandelen als onderdeel van een uniforme informatieverzameling, waarbij alle gegevens, die met hashes aan elkaar gekoppeld zijn, verenigd worden als onderdelen van IPLD. </0>",

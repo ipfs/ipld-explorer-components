@@ -8,7 +8,8 @@
   "StartExploringPage": {
     "title": "Explora - IPLD",
     "header": "Explora el bosc de Merkle",
-    "leadParagraph": "Enganxa un CID al quadre de text per trobar el node IPLD al que es refereix, o tria un conjunt de dades acceptat."
+    "leadParagraph": "Enganxa un CID al quadre de text per trobar el node IPLD al que es refereix, o tria un conjunt de dades acceptat.",
+    "noDataAvailable": "No hi ha dades disponibles"
   },
   "AboutIpld": {
     "paragraph1":"<0>IPLD is <1>the data model of the content-addressable web.</1> It allows us to treat all hash-linked data structures as subsets of a unified information space, unifying all data models that link data with hashes as instances of IPLD.</0>",

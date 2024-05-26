@@ -8,7 +8,8 @@
   "StartExploringPage": {
     "title": "Utforsk - IPLD",
     "header": "Utforsk Merkle Forest",
-    "leadParagraph": "Lim inn en CID i boksen for å hente IPLD-noden den adresserer, eller velg et utvalgt datasett."
+    "leadParagraph": "Lim inn en CID i boksen for å hente IPLD-noden den adresserer, eller velg et utvalgt datasett.",
+    "noDataAvailable": "Ingen data tilgjengelig"
   },
   "AboutIpld": {
     "paragraph1":"<0>IPLD er <1>datamodellen til den innholdsadresserbare webben.</1> Den tillater oss å behandle alle hash-linkede datastrukturer som undergrupper av en enhetlig informasjonsplass, og forener alle datamodeller som linker data med hasher som forekomster av IPLD.</0>",
