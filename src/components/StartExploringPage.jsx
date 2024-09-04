@@ -19,7 +19,7 @@ const ExploreSuggestion = ({ cid, name, type }) => (
   </a>
 )
 
-const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
+const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback, links = [] }) => (
   <div className='mw9 center explore-sug-2'>
     <Helmet>
       <title>{t('StartExploringPage.title')}</title>
@@ -32,47 +32,13 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback }) => (
         </div>
         {embed ? <IpldExploreForm /> : null}
         <ul className='list pl0 ma0 mt4 mt0-l bt bn-l b--black-10'>
-          <li>
-            <ExploreSuggestion name='Project Apollo Archives' cid='QmSnuWmxptJZdLJpKRarxBMS2Ju2oANVrgbr2xWbie9b2D' type='dag-pb' />
-          </li>
-          <li>
-            <ExploreSuggestion name='XKCD Archives' cid='QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm' type='dag-pb' />
-          </li>
-          <li>
-            <ExploreSuggestion name='HAMT-sharded Wikipedia mirror (>20M files)' cid='bafybeiaysi4s6lnjev27ln5icwm6tueaw2vdykrtjkwiphwekaywqhcjze' type='hamt-sharded-directory' />
-          </li>
-          <li>
-            <ExploreSuggestion name='B-tree search index from ipfs-geoip' cid='bafyreif3tfdpr5n4jdrbielmcapwvbpcthepfkwq2vwonmlhirbjmotedi' type='dag-cbor' />
-          </li>
-          <li>
-            <ExploreSuggestion name='DAG-CBOR Block' cid='bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq' type='dag-cbor' />
-          </li>
-          <li>
-            <ExploreSuggestion name='dag-cbor hello world (keccak-256)' cid='bafyrwigbexamue2ba3hmtai7hwlcmd6ekiqsduyf5avv7oz6ln3radvjde' type='dag-cbor' />
-          </li>
-          <li>
-            {/*
-              From https://cerscan.com/mainnet/stream/kjzl6cwe1jw148sn9t1pkwlwr28a93bfd5mvxxnif4u8x2jomlpqqukwk940u5v
-              For https://snapshot.org/#/sgbchat.eth/proposal/0x75506089eb396c42e833a49a75faebddeede0fa94c7d894741e0a31cae58dbfd
-              see https://developers.ceramic.network/reference/typescript/interfaces/_ceramicnetwork_common.LogEntry.html for more information
-            */}
-            <ExploreSuggestion name='Ceramic LogEntry for sgb.chat Ambassador proposal' cid='bagcqcerarvdwmhvk73mze3e2n6yvpt5h7fh3eae7n6y3hizsflz5grpyeczq' type='dag-jose' />
-          </li>
-          <li>
-            <ExploreSuggestion name='hello world (blake3)' cid='bagaaihraf4oq2kddg6o5ewlu6aol6xab75xkwbgzx2dlot7cdun7iirve23a' type='dag-json' />
-          </li>
-          <li>
-            <ExploreSuggestion name='hello world' cid='baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea' type='dag-json' />
-          </li>
-          <li>
-            <ExploreSuggestion name='hello world (sha3-512)' cid='bagaaifcavabu6fzheerrmtxbbwv7jjhc3kaldmm7lbnvfopyrthcvod4m6ygpj3unrcggkzhvcwv5wnhc5ufkgzlsji7agnmofovc2g4a3ui7ja' type='json' />
-          </li>
-          <li>
-            <ExploreSuggestion name='Raw Block for "hello"' cid='bafkreibm6jg3ux5qumhcn2b3flc3tyu6dmlb4xa7u5bf44yegnrjhc4yeq' type='raw' />
-          </li>
-          <li>
-            <ExploreSuggestion name='Raw Block for "hello" (blake3)' cid='bafkr4ihkr4ld3m4gqkjf4reryxsy2s5tkbxprqkow6fin2iiyvreuzzab4' type='raw' />
-          </li>
+        {(links.length > 0)
+          ? links.map((suggestion) => (
+            <li key={suggestion.cid}>
+              <ExploreSuggestion name={suggestion.name} cid={suggestion.cid} type={suggestion.type} />
+            </li>
+          ))
+          : <p className='lh-copy f5 avenir charcoal-muted'>{t('StartExploringPage.noDataAvailable')}</p>}
         </ul>
       </div>
       <div className='pt2-l'>
