@@ -1,7 +1,7 @@
 import { trustlessGateway } from '@helia/block-brokers'
 import { createHeliaHTTP } from '@helia/http'
 import { type Helia } from '@helia/interface'
-import { delegatedHTTPRouting } from '@helia/routers'
+import { delegatedHTTPRouting, httpGatewayRouting } from '@helia/routers'
 import { addDagNodeToHelia } from '../lib/helpers.js'
 import { getHashersForCodes } from './hash-importer.js'
 import type { KuboGatewayOptions } from '../types.d.js'
@@ -17,20 +17,23 @@ function areRemoteGatewaysEnabled (): boolean {
 }
 
 export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions): Promise<Helia> {
-  // Always add the Kubo gatewawy
-  const trustlessGateways = [
-    trustlessGateway({ gateways: [`${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`] })
+  const routers = [
+    // always use delegated routing
+    delegatedHTTPRouting('http://delegated-ipfs.dev'),
+    // Always add the Kubo gatewawy
+    httpGatewayRouting({ gateways: [`${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`] })
   ]
 
   if (areRemoteGatewaysEnabled()) {
-    trustlessGateways.push(trustlessGateway())
+    routers.push(httpGatewayRouting())
   }
 
   const helia = await createHeliaHTTP({
     blockBrokers: [
-      ...trustlessGateways
+      trustlessGateway(kuboGatewayOptions.trustlessBlockBrokerConfig?.init)
     ],
-    routers: ['http://delegated-ipfs.dev'].map(delegatedHTTPRouting),
+
+    routers,
     // #WhenAddingNewHasher
     hashers: await getHashersForCodes(17, 18, 19, 20, 27, 30)
   })
