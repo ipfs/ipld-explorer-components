@@ -1,3 +1,4 @@
+import type { TrustlessGatewayBlockBrokerInit } from '@helia/block-brokers'
 export type { CID } from 'multiformats/cid'
 
 export type CodecType = number
@@ -38,4 +39,8 @@ export interface KuboGatewayOptions {
   host: string
   port: string
   protocol?: string
+  trustlessBlockBrokerConfig?: {
+    init?: TrustlessGatewayBlockBrokerInit
+  }
+
 }

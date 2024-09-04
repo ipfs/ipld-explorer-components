@@ -12,7 +12,15 @@ const defaultState: HeliaBundleState = {
   kuboGatewayOptions: {
     host: '127.0.0.1',
     port: '8080',
-    protocol: 'http'
+    protocol: 'http',
+    trustlessBlockBrokerConfig: {
+      init: {
+        /**
+         * We want to allow connection to local nodes (for webui and local dev).
+         */
+        allowLocal: true
+      }
+    }
   },
   error: null
 }

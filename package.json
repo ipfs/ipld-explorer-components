@@ -157,10 +157,10 @@
     "test:consumer:ipld.io": "aegir test-dependant https://github.com/ipld/explore.ipld.io"
   },
   "dependencies": {
-    "@helia/block-brokers": "^2.0.1",
-    "@helia/http": "^1.0.1",
-    "@helia/interface": "^4.0.0",
-    "@helia/routers": "^1.0.0",
+    "@helia/block-brokers": "^3.0.3",
+    "@helia/http": "^1.0.10",
+    "@helia/interface": "^4.3.1",
+    "@helia/routers": "^1.1.1",
     "@ipld/car": "^5.2.6",
     "@ipld/dag-cbor": "^9.1.0",
     "@ipld/dag-json": "^10.1.7",
