@@ -1,6 +1,6 @@
 /* global globalThis */
 import * as sha3 from '@multiformats/sha3'
-import { createBLAKE3 } from 'hash-wasm'
+import { createBLAKE3, createBLAKE2b } from 'hash-wasm'
 import { type Hasher, from } from 'multiformats/hashes/hasher'
 import * as sha2 from 'multiformats/hashes/sha2'
 
@@ -9,11 +9,12 @@ export type SupportedHashers = typeof sha2.sha256 |
   typeof sha2.sha512 |
   Hasher<'keccak-256', 27> |
   Hasher<'sha1', 17> |
-  Hasher<'blake2b-512', 45632> |
+  Hasher<'blake2b-256', 0xb220> |
+  Hasher<'blake2b-512', 0xb240> |
   Hasher<'sha3-512', 20> |
   Hasher<'blake3', 30>
 
-export async function getHashersForCodes (code: number, ...codes: number[]): Promise<SupportedHashers[]> {
+export async function getHashersForCodes (...codes: number[]): Promise<SupportedHashers[]> {
   return Promise.all(codes.map(getHasherForCode))
 }
 
@@ -61,6 +62,30 @@ export async function getHasherForCode (code: number): Promise<SupportedHashers>
           return blake3Hasher.digest('binary')
         }
       }))
+    case 0xb220: // blake2b-256
+      return getBoundHasher(from({
+        name: 'blake2b-256',
+        code,
+        encode: async (data: Uint8Array): Promise<Uint8Array> => {
+          const blake2bHasher = await createBLAKE2b(256)
+          blake2bHasher.init()
+          blake2bHasher.update(data)
+          return blake2bHasher.digest('binary')
+        }
+      }))
+    case 0xb240: // blake2b-512
+      return getBoundHasher(from({
+        name: 'blake2b-512',
+        code,
+        encode: async (data: Uint8Array): Promise<Uint8Array> => {
+          const blake2bHasher = await createBLAKE2b(512)
+          blake2bHasher.init()
+          blake2bHasher.update(data)
+          return blake2bHasher.digest('binary')
+        }
+      })
+      )
+
     default:
       throw new Error(`unknown multihasher code '${code}'`)
   }
