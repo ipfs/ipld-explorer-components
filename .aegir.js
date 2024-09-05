@@ -22,6 +22,7 @@ module.exports = {
 
       // storybook deps
       '@storybook/addon-actions',
+      '@storybook/addon-coverage',
       '@storybook/addon-essentials',
       '@storybook/addon-interactions',
       '@storybook/addon-links',
@@ -36,7 +37,10 @@ module.exports = {
       '@storybook/types',
 
       // problem with deps
-      '@typescript-eslint/eslint-plugin'
+      '@typescript-eslint/eslint-plugin',
+
+      // scripts
+      'wait-on',
     ],
     productionIgnorePatterns: [
       '.aegir.js',
