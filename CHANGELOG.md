@@ -1,3 +1,20 @@
+### [7.0.0](https://github.com/ipfs/ipld-explorer-components/compare/v5.2.1...v7.0.0)
+
+* feat!: migrate to @helia/http by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/419
+* fix: release by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/420
+* ci: uci/copy-templates by @web3-bot in https://github.com/ipfs/ipld-explorer-components/pull/422
+* chore: bump ip from 2.0.0 to 2.0.1 by @dependabot in https://github.com/ipfs/ipld-explorer-components/pull/421
+* chore: bump stefanzweifel/git-auto-commit-action from 4.14.1 to 5.0.1 by @dependabot in https://github.com/ipfs/ipld-explorer-components/pull/425
+* CID search fix: empty searches are blocked by @ravishxt in https://github.com/ipfs/ipld-explorer-components/pull/427
+* deps: update linting deps and optimize settings by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/428
+* feat: update Helia packages by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/434
+* chore: bump braces from 3.0.2 to 3.0.3 by @dependabot in https://github.com/ipfs/ipld-explorer-components/pull/431
+* chore: bump ejs from 3.1.9 to 3.1.10 by @dependabot in https://github.com/ipfs/ipld-explorer-components/pull/426
+* feat: add blake2b-256 hasher by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/436
+
+
+**Full Changelog**: https://github.com/ipfs/ipld-explorer-components/compare/v5.2.1...v7.0.0
+
 ### [5.2.1](https://github.com/ipfs/ipld-explorer-components/compare/v5.2.0...v5.2.1) (2024-02-02)
 
 
