@@ -103,7 +103,11 @@
     ]
   },
   "eslintConfig": {
-    "settings": { "react": {"version": "16.3"}},
+    "settings": {
+      "react": {
+        "version": "16.3"
+      }
+    },
     "extends": [
       "plugin:react/recommended",
       "plugin:jsx-a11y/recommended",
@@ -147,14 +151,16 @@
     "prepare": "npm run build",
     "dev": "vite",
     "start": "cross-env NODE_ENV=production babel src -d dist --copy-files --no-copy-ignored --extensions '.ts,.tsx,.js,.jsx' --watch",
-    "test": "run-s test:unit test:consumer",
+    "test": "run-s test:unit test:storybook:ci test:consumer",
     "test:node": "run-s test:unit",
     "test:unit": "vitest run --environment=node",
-    "storybook": "storybook dev -p 6006",
+    "storybook": "run-s storybook:build storybook:serve",
     "storybook:build": "storybook build",
+    "storybook:serve": "http-server storybook-static --port 6006",
     "test:consumer": "run-s test:consumer:webui test:consumer:ipld.io",
     "test:consumer:webui": "aegir test-dependant https://github.com/ipfs/ipfs-webui",
-    "test:consumer:ipld.io": "aegir test-dependant https://github.com/ipld/explore.ipld.io"
+    "test:consumer:ipld.io": "aegir test-dependant https://github.com/ipld/explore.ipld.io",
+    "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"storybook build --quiet && http-server storybook-static --port 6006 --silent\" \"wait-on 'tcp:127.0.0.1:6006' && test-storybook --coverage\""
   },
   "dependencies": {
     "@helia/block-brokers": "^3.0.3",
@@ -189,6 +195,7 @@
     "@babel/preset-typescript": "^7.23.3",
     "@esbuild-plugins/node-globals-polyfill": "^0.2.3",
     "@rollup/plugin-node-resolve": "^15.2.3",
+    "@storybook/addon-coverage": "^1.0.4",
     "@storybook/addon-essentials": "^7.0.18",
     "@storybook/addon-interactions": "^7.0.18",
     "@storybook/addon-links": "^7.0.18",
@@ -202,6 +209,7 @@
     "@storybook/react": "^7.0.18",
     "@storybook/react-dom-shim": "^7.6.12",
     "@storybook/react-vite": "^7.0.18",
+    "@storybook/test-runner": "^0.19.1",
     "@storybook/types": "^7.6.12",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^12.1.5",
@@ -211,10 +219,12 @@
     "@types/react-dom": "^18.2.18",
     "@vitejs/plugin-react": "^4.0.0",
     "aegir": "^42.2.11",
+    "concurrently": "^8.2.2",
     "cross-env": "^6.0.0",
     "eslint-config-ipfs": "^6.0.2",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.34.1",
+    "http-server": "^14.1.1",
     "i18next": "^23.8.2",
     "i18next-browser-languagedetector": "7.2.0",
     "i18next-http-backend": "2.4.3",
@@ -237,7 +247,8 @@
     "typescript": "^5.0.4",
     "vite": "^4.3.7",
     "vite-plugin-svgr": "^3.2.0",
-    "vitest": "^0.31.3"
+    "vitest": "^0.31.3",
+    "wait-on": "^8.0.0"
   },
   "peerDependencies": {
     "@loadable/component": "^5.14.1",

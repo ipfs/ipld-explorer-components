@@ -75,7 +75,6 @@ see https://github.com/ipfs/ipld-explorer-components/pull/360#discussion_r120625
 To add another hasher, you will need to update all locations containing the comment `// #WhenAddingNewHasher`:
 
 1. Add a dependency on the hasher to this package (if it's not already in multiformats or other package)
-1. Add the hasher in the switch statement in [./src/lib/get-codec-for-cid.ts](./src/lib/get-codec-for-cid.ts)
 1. Update [./src/lib/hash-importer.ts](./src/lib/hash-importer.ts)
     - Update `SupportedHashers` to include your hasher type
     - Update `getHasherForCode` to return your hasher

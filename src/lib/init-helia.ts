@@ -35,7 +35,7 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
 
     routers,
     // #WhenAddingNewHasher
-    hashers: await getHashersForCodes(17, 18, 19, 20, 27, 30)
+    hashers: await getHashersForCodes(17, 18, 19, 20, 27, 30, 45600, 45632)
   })
 
   // add helia-only examples
@@ -45,7 +45,8 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
     addDagNodeToHelia(helia, 'dag-cbor', { hello: 'world' }, 27), // bafyrwigbexamue2ba3hmtai7hwlcmd6ekiqsduyf5avv7oz6ln3radvjde
     addDagNodeToHelia(helia, 'json', { hello: 'world' }, 20), // bagaaifcavabu6fzheerrmtxbbwv7jjhc3kaldmm7lbnvfopyrthcvod4m6ygpj3unrcggkzhvcwv5wnhc5ufkgzlsji7agnmofovc2g4a3ui7ja
     addDagNodeToHelia(helia, 'json', { hello: 'world' }, 30), // bagaaihraf4oq2kddg6o5ewlu6aol6xab75xkwbgzx2dlot7cdun7iirve23a
-    addDagNodeToHelia(helia, 'raw', (new TextEncoder()).encode('hello'), 30) // bafkr4ihkr4ld3m4gqkjf4reryxsy2s5tkbxprqkow6fin2iiyvreuzzab4
+    addDagNodeToHelia(helia, 'raw', (new TextEncoder()).encode('hello'), 30), // bafkr4ihkr4ld3m4gqkjf4reryxsy2s5tkbxprqkow6fin2iiyvreuzzab4
+    addDagNodeToHelia(helia, 'dag-pb', { Data: (new TextEncoder()).encode('hello'), Links: [] }, 0xb220) // bafykbzacec3ssfzln7bfcn54t5voa4onlcx63kkx3reucaiwc7eaffmla7gci
   ])
 
   return helia
