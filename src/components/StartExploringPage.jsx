@@ -2,6 +2,7 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import { withTranslation } from 'react-i18next'
 import ReactJoyride from 'react-joyride'
+import { explorePageLinks } from '../lib/explorePageSuggestions'
 import { projectsTour } from '../lib/tours'
 import AboutIpld from './about/AboutIpld'
 import IpldExploreForm from './explore/IpldExploreForm'
@@ -19,7 +20,17 @@ const ExploreSuggestion = ({ cid, name, type }) => (
   </a>
 )
 
-const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback, links = [] }) => (
+/**
+ *
+ * @param {object} props
+ * @param {Function} props.t
+ * @param {Function} props.embed
+ * @param {boolean} [props.runTour]
+ * @param {Function} props.joyrideCallback
+ * @param {typeof explorePageLinks} [props.links]
+ * @returns
+ */
+const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback, links }) => (
   <div className='mw9 center explore-sug-2'>
     <Helmet>
       <title>{t('StartExploringPage.title')}</title>
@@ -32,13 +43,12 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback, links 
         </div>
         {embed ? <IpldExploreForm /> : null}
         <ul className='list pl0 ma0 mt4 mt0-l bt bn-l b--black-10'>
-        {(links.length > 0)
-          ? links.map((suggestion) => (
+        {(links ?? explorePageLinks).map((suggestion) => (
             <li key={suggestion.cid}>
               <ExploreSuggestion name={suggestion.name} cid={suggestion.cid} type={suggestion.type} />
             </li>
-          ))
-          : <p className='lh-copy f5 avenir charcoal-muted'>{t('StartExploringPage.noDataAvailable')}</p>}
+        ))
+        }
         </ul>
       </div>
       <div className='pt2-l'>

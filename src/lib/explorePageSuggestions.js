@@ -1,3 +1,8 @@
+/**
+ * Default Explore page suggestions
+ *
+ * @type {Array<{name: string, cid: string, type: string}>}
+ */
 const explorePageLinks = [
   {
     name: 'Project Apollo Archives',

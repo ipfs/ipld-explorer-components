@@ -56,6 +56,20 @@ import 'ipld-explorer-components/dist/components/object-info/LinksTable.css'
 import 'ipld-explorer-components/dist/components/loader/Loader.css'
 ```
 
+You can see an example of how to use these components in the [devPage.jsx](./dev/devPage.jsx) file.
+
+### Customizing the links displayed in the StartExploringPage
+
+To customize the links displayed in the start exploring page, you can pass a `links` property to the `StartExploringPage` component. This property should be an array of objects with the following properties:
+
+```
+{
+  name: 'Name of your example link',
+  cid: 'bafyfoo...',
+  type: 'dag-pb' // or dag-json, etc...
+}
+```
+
 ### Adding another codec
 
 **NOTE:** PRs adding an old IPLDFormat codec would need the old `blockcodec-to-ipld-format` tool, which has many out-of-date deps. We will only accept PRs for adding BlockCodec interface codecs.
