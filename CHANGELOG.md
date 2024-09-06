@@ -1,3 +1,9 @@
+### [7.0.1](https://github.com/ipfs/ipld-explorer-components/compare/v7.0.0...v7.0.1)
+
+* fix: use default explore links by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/437
+
+**Full Changelog**: https://github.com/ipfs/ipld-explorer-components/compare/v7.0.0...v7.0.1
+
 ### [7.0.0](https://github.com/ipfs/ipld-explorer-components/compare/v5.2.1...v7.0.0)
 
 * feat!: migrate to @helia/http by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/419
