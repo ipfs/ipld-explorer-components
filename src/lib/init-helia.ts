@@ -1,7 +1,8 @@
 import { trustlessGateway } from '@helia/block-brokers'
 import { createHeliaHTTP } from '@helia/http'
 import { type Helia } from '@helia/interface'
-import { delegatedHTTPRouting, httpGatewayRouting } from '@helia/routers'
+// import { delegatedHTTPRouting, httpGatewayRouting } from '@helia/routers'
+import { httpGatewayRouting } from '@helia/routers'
 import { addDagNodeToHelia } from '../lib/helpers.js'
 import { getHashersForCodes } from './hash-importer.js'
 import type { KuboGatewayOptions } from '../types.d.js'
@@ -19,7 +20,7 @@ function areRemoteGatewaysEnabled (): boolean {
 export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions): Promise<Helia> {
   const routers = [
     // always use delegated routing
-    delegatedHTTPRouting('http://delegated-ipfs.dev'),
+    // delegatedHTTPRouting('http://delegated-ipfs.dev'),
     // Always add the Kubo gatewawy
     httpGatewayRouting({ gateways: [`${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`] })
   ]
