@@ -1,6 +1,6 @@
 /* global globalThis */
 import * as sha3 from '@multiformats/sha3'
-import { createBLAKE3, createBLAKE2b } from 'hash-wasm'
+// import { createBLAKE3, createBLAKE2b } from 'hash-wasm'
 import { type Hasher, from } from 'multiformats/hashes/hasher'
 import * as sha2 from 'multiformats/hashes/sha2'
 
@@ -56,6 +56,7 @@ export async function getHasherForCode (code: number): Promise<SupportedHashers>
         name: 'blake3',
         code,
         encode: async (data: Uint8Array): Promise<Uint8Array> => {
+          const { createBLAKE3 } = await import('hash-wasm')
           const blake3Hasher = await createBLAKE3()
           blake3Hasher.init()
           blake3Hasher.update(data)
@@ -67,6 +68,7 @@ export async function getHasherForCode (code: number): Promise<SupportedHashers>
         name: 'blake2b-256',
         code,
         encode: async (data: Uint8Array): Promise<Uint8Array> => {
+          const { createBLAKE2b } = await import('hash-wasm')
           const blake2bHasher = await createBLAKE2b(256)
           blake2bHasher.init()
           blake2bHasher.update(data)
@@ -78,6 +80,7 @@ export async function getHasherForCode (code: number): Promise<SupportedHashers>
         name: 'blake2b-512',
         code,
         encode: async (data: Uint8Array): Promise<Uint8Array> => {
+          const { createBLAKE2b } = await import('hash-wasm')
           const blake2bHasher = await createBLAKE2b(512)
           blake2bHasher.init()
           blake2bHasher.update(data)

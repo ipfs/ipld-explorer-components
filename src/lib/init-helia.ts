@@ -40,14 +40,17 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
 
   // add helia-only examples
   // consumers may not have the peer-deps installed for these examples, and we don't want to break them if they're not supported.
-  await Promise.allSettled([
+  const foo = await Promise.allSettled([
     addDagNodeToHelia(helia, 'dag-json', { hello: 'world' }), // baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea
     addDagNodeToHelia(helia, 'dag-cbor', { hello: 'world' }, 27), // bafyrwigbexamue2ba3hmtai7hwlcmd6ekiqsduyf5avv7oz6ln3radvjde
     addDagNodeToHelia(helia, 'json', { hello: 'world' }, 20), // bagaaifcavabu6fzheerrmtxbbwv7jjhc3kaldmm7lbnvfopyrthcvod4m6ygpj3unrcggkzhvcwv5wnhc5ufkgzlsji7agnmofovc2g4a3ui7ja
     addDagNodeToHelia(helia, 'json', { hello: 'world' }, 30), // bagaaihraf4oq2kddg6o5ewlu6aol6xab75xkwbgzx2dlot7cdun7iirve23a
     addDagNodeToHelia(helia, 'raw', (new TextEncoder()).encode('hello'), 30), // bafkr4ihkr4ld3m4gqkjf4reryxsy2s5tkbxprqkow6fin2iiyvreuzzab4
-    addDagNodeToHelia(helia, 'dag-pb', { Data: (new TextEncoder()).encode('hello'), Links: [] }, 0xb220) // bafykbzacec3ssfzln7bfcn54t5voa4onlcx63kkx3reucaiwc7eaffmla7gci
+    addDagNodeToHelia(helia, 'dag-pb', { Data: (new TextEncoder()).encode('hello'), Links: [] }, 0xb220), // bafykbzacec3ssfzln7bfcn54t5voa4onlcx63kkx3reucaiwc7eaffmla7gci
+    addDagNodeToHelia(helia, 'dag-pb', { Data: (new TextEncoder()).encode('hello'), Links: [] }, 0xb240) // bafymbzacia5oqpl3kqdjk6hgisdemv44omuqse33bf3a2gnurnzcmkstjhupcqymbuvsj2qlke4phr5iudjruwbjqsx34psaqsuezr4ivka5ul2y
   ])
+  // eslint-disable-next-line no-console
+  console.log(foo)
 
   return helia
 }
