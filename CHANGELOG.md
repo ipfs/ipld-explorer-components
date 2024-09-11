@@ -1,3 +1,9 @@
+### [7.0.1](https://github.com/ipfs/ipld-explorer-components/compare/v7.0.1...v7.0.2)
+
+* fix: local only unless remote is enabled(default) by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/438
+
+**Full Changelog**: https://github.com/ipfs/ipld-explorer-components/compare/v7.0.1...v7.0.2
+
 ### [7.0.1](https://github.com/ipfs/ipld-explorer-components/compare/v7.0.0...v7.0.1)
 
 * fix: use default explore links by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/437
