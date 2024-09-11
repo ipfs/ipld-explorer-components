@@ -1,6 +1,5 @@
 /* global globalThis */
 import * as sha3 from '@multiformats/sha3'
-// import { createBLAKE3, createBLAKE2b } from 'hash-wasm'
 import { type Hasher, from } from 'multiformats/hashes/hasher'
 import * as sha2 from 'multiformats/hashes/sha2'
 

@@ -1,8 +1,7 @@
 import { trustlessGateway } from '@helia/block-brokers'
 import { createHeliaHTTP } from '@helia/http'
 import { type Helia } from '@helia/interface'
-// import { delegatedHTTPRouting, httpGatewayRouting } from '@helia/routers'
-import { httpGatewayRouting } from '@helia/routers'
+import { delegatedHTTPRouting, httpGatewayRouting } from '@helia/routers'
 import { addDagNodeToHelia } from '../lib/helpers.js'
 import { getHashersForCodes } from './hash-importer.js'
 import type { KuboGatewayOptions } from '../types.d.js'
@@ -26,6 +25,9 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
   ]
 
   if (areRemoteGatewaysEnabled()) {
+    // eslint-disable-next-line no-console
+    console.log('remote gateways are enabled')
+    routers.push(delegatedHTTPRouting('http://delegated-ipfs.dev'))
     routers.push(httpGatewayRouting())
   }
 
@@ -41,7 +43,7 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
 
   // add helia-only examples
   // consumers may not have the peer-deps installed for these examples, and we don't want to break them if they're not supported.
-  const foo = await Promise.allSettled([
+  await Promise.allSettled([
     addDagNodeToHelia(helia, 'dag-json', { hello: 'world' }), // baguqeerasords4njcts6vs7qvdjfcvgnume4hqohf65zsfguprqphs3icwea
     addDagNodeToHelia(helia, 'dag-cbor', { hello: 'world' }, 27), // bafyrwigbexamue2ba3hmtai7hwlcmd6ekiqsduyf5avv7oz6ln3radvjde
     addDagNodeToHelia(helia, 'json', { hello: 'world' }, 20), // bagaaifcavabu6fzheerrmtxbbwv7jjhc3kaldmm7lbnvfopyrthcvod4m6ygpj3unrcggkzhvcwv5wnhc5ufkgzlsji7agnmofovc2g4a3ui7ja
@@ -50,8 +52,6 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
     addDagNodeToHelia(helia, 'dag-pb', { Data: (new TextEncoder()).encode('hello'), Links: [] }, 0xb220), // bafykbzacec3ssfzln7bfcn54t5voa4onlcx63kkx3reucaiwc7eaffmla7gci
     addDagNodeToHelia(helia, 'dag-pb', { Data: (new TextEncoder()).encode('hello'), Links: [] }, 0xb240) // bafymbzacia5oqpl3kqdjk6hgisdemv44omuqse33bf3a2gnurnzcmkstjhupcqymbuvsj2qlke4phr5iudjruwbjqsx34psaqsuezr4ivka5ul2y
   ])
-  // eslint-disable-next-line no-console
-  console.log(foo)
 
   return helia
 }
