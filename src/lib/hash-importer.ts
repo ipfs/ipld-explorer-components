@@ -15,7 +15,15 @@ export type SupportedHashers = typeof sha2.sha256 |
   Hasher<'blake3', 30>
 
 export async function getHashersForCodes (...codes: number[]): Promise<SupportedHashers[]> {
-  return Promise.all(codes.map(getHasherForCode))
+  const hashers: SupportedHashers[] = []
+  for (const code of codes) {
+    try {
+      hashers.push(await getHasherForCode(code))
+    } catch (error) {
+      console.error(`Failed to get hasher for code ${code}: ${error}`)
+    }
+  }
+  return hashers
 }
 
 /**
