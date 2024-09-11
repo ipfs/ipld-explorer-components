@@ -18,9 +18,7 @@ function areRemoteGatewaysEnabled (): boolean {
 
 export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions): Promise<Helia> {
   const routers = [
-    // always use delegated routing
-    // delegatedHTTPRouting('http://delegated-ipfs.dev'),
-    // Always add the Kubo gatewawy
+    // Always add the Kubo gateway
     httpGatewayRouting({ gateways: [`${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`] })
   ]
 
