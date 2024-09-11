@@ -18,13 +18,14 @@ function areRemoteGatewaysEnabled (): boolean {
 
 export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions): Promise<Helia> {
   const routers = [
-    // always use delegated routing
-    delegatedHTTPRouting('http://delegated-ipfs.dev'),
-    // Always add the Kubo gatewawy
+    // Always add the Kubo gateway
     httpGatewayRouting({ gateways: [`${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`] })
   ]
 
   if (areRemoteGatewaysEnabled()) {
+    // eslint-disable-next-line no-console
+    console.log('remote gateways and delegated routing are enabled')
+    routers.push(delegatedHTTPRouting('http://delegated-ipfs.dev'))
     routers.push(httpGatewayRouting())
   }
 
@@ -46,7 +47,8 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
     addDagNodeToHelia(helia, 'json', { hello: 'world' }, 20), // bagaaifcavabu6fzheerrmtxbbwv7jjhc3kaldmm7lbnvfopyrthcvod4m6ygpj3unrcggkzhvcwv5wnhc5ufkgzlsji7agnmofovc2g4a3ui7ja
     addDagNodeToHelia(helia, 'json', { hello: 'world' }, 30), // bagaaihraf4oq2kddg6o5ewlu6aol6xab75xkwbgzx2dlot7cdun7iirve23a
     addDagNodeToHelia(helia, 'raw', (new TextEncoder()).encode('hello'), 30), // bafkr4ihkr4ld3m4gqkjf4reryxsy2s5tkbxprqkow6fin2iiyvreuzzab4
-    addDagNodeToHelia(helia, 'dag-pb', { Data: (new TextEncoder()).encode('hello'), Links: [] }, 0xb220) // bafykbzacec3ssfzln7bfcn54t5voa4onlcx63kkx3reucaiwc7eaffmla7gci
+    addDagNodeToHelia(helia, 'dag-pb', { Data: (new TextEncoder()).encode('hello'), Links: [] }, 0xb220), // bafykbzacec3ssfzln7bfcn54t5voa4onlcx63kkx3reucaiwc7eaffmla7gci
+    addDagNodeToHelia(helia, 'dag-pb', { Data: (new TextEncoder()).encode('hello'), Links: [] }, 0xb240) // bafymbzacia5oqpl3kqdjk6hgisdemv44omuqse33bf3a2gnurnzcmkstjhupcqymbuvsj2qlke4phr5iudjruwbjqsx34psaqsuezr4ivka5ul2y
   ])
 
   return helia
