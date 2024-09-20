@@ -1,5 +1,5 @@
 /* globals globalThis */
-import { Buffer } from 'buffer'
+// import { Buffer } from 'buffer'
 import 'ipfs-css'
 import React, { useEffect } from 'react'
 import ReactDOM from 'react-dom'
@@ -8,13 +8,13 @@ import 'react-virtualized/styles.css'
 import { composeBundles, createRouteBundle } from 'redux-bundler'
 import { Provider as ReduxStoreProvider, connect } from 'redux-bundler-react'
 import 'tachyons'
-import heliaBundle from '../src/bundles/helia'
+import heliaBundle from './bundles/helia'
 import '../src/components/loader/Loader.css'
 import '../src/components/object-info/LinksTable.css'
-import i18n from '../src/i18n'
-import { exploreBundle, ExplorePage, StartExploringPage, IpldExploreForm, IpldCarExploreForm } from '../src/index'
+import i18n from './i18n'
+import { exploreBundle, ExplorePage, StartExploringPage, IpldExploreForm, IpldCarExploreForm } from './index.js'
 
-globalThis.Buffer = Buffer
+// globalThis.Buffer = Buffer
 
 const routesBundle = createRouteBundle(
   {

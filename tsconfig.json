@@ -33,7 +33,8 @@
     "rootDir": "src"
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "src/devPage.jsx"
   ],
   "exclude": [
     "src/**/*.test.*",
