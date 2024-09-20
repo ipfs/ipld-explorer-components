@@ -148,7 +148,7 @@
     "dep-check": "aegir dep-check",
     "lint": "aegir lint",
     "lint:fix": "aegir lint -- --fix",
-    "prepare": "npm run build",
+    "prepare-NO": "npm run build",
     "dev": "vite",
     "start": "cross-env NODE_ENV=production babel src -d dist --copy-files --no-copy-ignored --extensions '.ts,.tsx,.js,.jsx' --watch",
     "web-build": "vite build -c vite.config-web.ts",
