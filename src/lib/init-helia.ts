@@ -6,6 +6,9 @@ import { addDagNodeToHelia } from '../lib/helpers.js'
 import { getHashersForCodes } from './hash-importer.js'
 import type { KuboGatewayOptions } from '../types.d.js'
 
+/**
+ * Whether to enable remote gateways for fetching content. We default to true if the setting is not present.
+ */
 function areRemoteGatewaysEnabled (): boolean {
   const localStorageKey = 'explore.ipld.gatewayEnabled'
   console.info(
