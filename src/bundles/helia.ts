@@ -76,7 +76,7 @@ const bundle = {
 
     try {
       console.info(
-        "🎛️ Customise your Kubo gateway opts by setting an `kuboGateway` value in localStorage. e.g. localStorage.setItem('kuboGateway', JSON.stringify({port: '1337'}))"
+        "🎛️ Customise your Kubo gateway opts by setting a `kuboGateway` value in localStorage. e.g. localStorage.setItem('kuboGateway', JSON.stringify({ port: '8080', trustlessBlockBrokerConfig: { init: { allowLocal: true, allowInsecure: true }}}))"
       )
       console.time('HELIA_INIT')
       helia = await initHelia(kuboGatewayOptions)
