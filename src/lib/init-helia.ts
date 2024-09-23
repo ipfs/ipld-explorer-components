@@ -28,7 +28,7 @@ export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions)
   if (areRemoteGatewaysEnabled()) {
     // eslint-disable-next-line no-console
     console.log('remote gateways and delegated routing are enabled')
-    routers.push(delegatedHTTPRouting('http://delegated-ipfs.dev'))
+    routers.push(delegatedHTTPRouting('https://delegated-ipfs.dev'))
     routers.push(httpGatewayRouting())
   }
 
