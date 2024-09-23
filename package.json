@@ -163,7 +163,7 @@
     "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"storybook build --quiet && http-server storybook-static --port 6006 --silent\" \"wait-on 'tcp:127.0.0.1:6006' && test-storybook --coverage\""
   },
   "dependencies": {
-    "@helia/block-brokers": "^3.0.3",
+    "@helia/block-brokers": "^3.0.4",
     "@helia/http": "^1.0.10",
     "@helia/interface": "^4.3.1",
     "@helia/routers": "^1.1.1",
