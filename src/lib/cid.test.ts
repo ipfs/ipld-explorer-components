@@ -3,10 +3,10 @@
 import crypto from 'crypto'
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
-import * as multiformats from 'multiformats'
+import { hasher, bytes } from 'multiformats'
+import { CID } from 'multiformats/cid'
 import { toCidOrNull, getCodecOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
-
-const { CID, hasher, bytes } = multiformats
+import type { BlockEncoder, MultihashHasher } from 'multiformats'
 
 export const sha256 = hasher.from({
   name: 'sha2-256',
@@ -21,7 +21,7 @@ export const sha256 = hasher.from({
  * @param {import('multiformats/hashes/interface').MultihashHasher<Code>} hasher
  * @returns
  */
-const createCID = async (value, codec, hasher) => {
+const createCID = async <Code extends number>(value: any, codec: BlockEncoder<Code, any>, hasher: MultihashHasher<Code>): Promise<CID | null> => {
   try {
     const digest = await hasher.digest(codec.encode(value))
     return CID.create(1, codec.code, digest)

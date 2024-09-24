@@ -1,7 +1,9 @@
+import { type TFunction } from 'i18next'
 import React from 'react'
+import { type Step } from 'react-joyride'
 
 export const projectsTour = {
-  getSteps: ({ t }) => [{
+  getSteps: ({ t }: { t: TFunction<'explore', undefined> }): Step[] => [{
     content: (
       <div className='montserrat charcoal'>
         <h2 className='f3 fw4'>{t('tour.projects.title')}</h2>
@@ -22,7 +24,7 @@ export const projectsTour = {
 }
 
 export const explorerTour = {
-  getSteps: ({ t }) => [
+  getSteps: ({ t }: { t: TFunction<'explore', undefined> }): Step[] => [
     {
       content: (
         <div className='montserrat charcoal'>

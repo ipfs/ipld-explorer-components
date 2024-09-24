@@ -1,7 +1,8 @@
 /* globals globalThis */
 import { Buffer } from 'buffer'
 import 'ipfs-css'
-import React, { useEffect, useState } from 'react'
+import { type TFunction } from 'i18next'
+import React, { type MouseEvent, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { I18nextProvider, withTranslation } from 'react-i18next'
 import 'react-virtualized/styles.css'
@@ -9,22 +10,26 @@ import 'tachyons'
 import '../src/components/loader/Loader.css'
 import '../src/components/object-info/LinksTable.css'
 import i18n from '../src/i18n.js'
-import { ExplorePage, StartExploringPage, IpldExploreForm, IpldCarExploreForm, ExploreProvider, HeliaProvider, useHelia } from '../src/index.js'
-// import { ExploreProvider } from '../src/providers/explore.jsx'
-// import { HeliaProvider } from '../src/providers/helia.jsx'
+import { ExplorePage, StartExploringPage, IpldExploreForm, IpldCarExploreForm, ExploreProvider, HeliaProvider } from '../src/index.js'
 
 globalThis.Buffer = Buffer
 
-const HeaderComponent = ({ t }) => {
+const HeaderComponent = ({ t }: { t: TFunction<'explore', undefined> }): JSX.Element => {
   const activeColor = 'navy 0-100'
   const inActiveColor = 'navy o-50'
   const [exploreFormType, setExploreFormType] = useState('cid')
   const [cidColor, setCidColor] = useState(activeColor)
   const [carColor, setCarColor] = useState(inActiveColor)
 
-  function handleOnChange (evt) {
-    setExploreFormType(evt.target.value)
-    if (evt.target.value === 'cid') {
+  function handleOnChange (evt: MouseEvent<HTMLButtonElement>): void {
+    const selectedType = evt.currentTarget.getAttribute('data-value')
+    if (selectedType == null) {
+      console.error('No data-value attribute found on the button')
+      return
+    }
+    setExploreFormType(selectedType)
+
+    if (selectedType === 'cid') {
       setCidColor(activeColor)
       setCarColor(inActiveColor)
     } else {
@@ -39,8 +44,8 @@ const HeaderComponent = ({ t }) => {
         {/* <img src={ipfsLogo} alt='IPFS' style={{height: 50, width: 117.5}} /> */}
       </a>
       <div className='btn-group ph1 ph3-l pt1'>
-        <button onClick={handleOnChange} value="cid" className={`f6 pointer ph3 pv2 mb2 dib navy bg-aqua ${cidColor} border-navy br2 ba br--left`} aria-current="page">CID</button>
-        <button onClick={handleOnChange} value="car" className={`f6 pointer ph3 pv2 mb2 dib navy bg-aqua ${carColor} border-navy br2 ba br--right`} aria-current="page">CAR</button>
+        <button onClick={handleOnChange} data-value="cid" className={`f6 pointer ph3 pv2 mb2 dib navy bg-aqua ${cidColor} border-navy br2 ba br--left`} aria-current="page">CID</button>
+        <button onClick={handleOnChange} data-value="car" className={`f6 pointer ph3 pv2 mb2 dib navy bg-aqua ${carColor} border-navy br2 ba br--right`} aria-current="page">CAR</button>
       </div>
       <div className='flex-auto ph2 ph0-l pt1'>
         <div style={{ maxWidth: 560 }} className='center-m'>
@@ -63,16 +68,16 @@ const HeaderComponent = ({ t }) => {
 
 const TranslatedHeaderComponent = withTranslation('explore')(HeaderComponent)
 
-const PageRenderer = () => {
-  const [route, setRoute] = useState(window.location.hash.slice(1) || '/')
+const PageRenderer = (): JSX.Element => {
+  const [route, setRoute] = useState(window.location.hash.slice(1) ?? '/')
 
   useEffect(() => {
-    const onHashChange = () => setRoute(window.location.hash.slice(1) || '/')
+    const onHashChange = (): void => { setRoute(window.location.hash.slice(1) ?? '/') }
     window.addEventListener('hashchange', onHashChange)
-    return () => window.removeEventListener('hashchange', onHashChange)
+    return () => { window.removeEventListener('hashchange', onHashChange) }
   }, [])
 
-  const renderPage = () => {
+  const renderPage = (): JSX.Element => {
     switch (true) {
       case route.startsWith('/explore'):
         return <ExplorePage />
@@ -91,7 +96,7 @@ const PageRenderer = () => {
   )
 }
 
-const App = () => {
+const App = (): JSX.Element => {
   return (
     <HeliaProvider>
       <ExploreProvider>
@@ -101,7 +106,6 @@ const App = () => {
     </HeliaProvider>
   )
 }
-
 
 ReactDOM.render(
   <I18nextProvider i18n={i18n}>

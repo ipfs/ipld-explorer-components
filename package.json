@@ -218,7 +218,7 @@
     "@types/cytoscape-dagre": "^2.3.3",
     "@types/jest": "^29.5.12",
     "@types/loadable__component": "^5.13.9",
-    "@types/mocha": "^10.0.6",
+    "@types/mocha": "^10.0.8",
     "@types/react": "^18.2.51",
     "@types/react-dom": "^18.2.18",
     "@types/react-helmet": "^6.1.11",
@@ -245,8 +245,6 @@
     "react-helmet": "^5.2.1",
     "react-i18next": "^14.0.1",
     "react-virtualized": "^9.22.5",
-    "redux-bundler": "^26.1.0",
-    "redux-bundler-react": "^1.2.0",
     "rollup": "^4.9.6",
     "storybook": "^7.6.12",
     "tachyons": "^4.12.0",
@@ -271,8 +269,6 @@
     "react-helmet": "^5.2.1",
     "react-i18next": "^12.3.1",
     "react-virtualized": "^9.21.1",
-    "redux-bundler": "^26.0.0",
-    "redux-bundler-react": "^1.2.0",
     "tachyons": "^4.11.1"
   },
   "browsers": [

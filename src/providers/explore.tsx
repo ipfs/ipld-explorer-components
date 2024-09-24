@@ -1,14 +1,15 @@
 import { CID } from 'multiformats/cid'
-import React, { createContext, useContext, useState, useEffect, type ReactNode, type Provider, useCallback } from 'react'
+import React, { createContext, useContext, useState, useEffect, type ReactNode, useCallback } from 'react'
 import { ensureLeadingSlash } from '../lib/helpers.js'
 import { importCar } from '../lib/import-car.js'
 import { parseIpldPath } from '../lib/parse-ipld-path.js'
 import { resolveIpldPath } from '../lib/resolve-ipld-path.js'
 import { useHelia } from './helia.js'
+import type IpldExploreError from '../lib/errors.js'
 
 interface ExploreContextProps {
   exploreState: ExploreState
-  selectExplorePathFromHash(): string
+  explorePathFromHash: string | null
   doExploreLink(link: any): void
   doExploreUserProvidedPath(path: string): void
   doUploadUserProvidedCar(file: File, uploadImage: string): Promise<void>
@@ -16,12 +17,13 @@ interface ExploreContextProps {
 
 interface ExploreState {
   path: string | null
+  rootCID: CID | null
   targetNode: any
   canonicalPath: string
   localPath: string
   nodes: any[]
   pathBoundaries: any[]
-  error: Error | null
+  error: IpldExploreError | null
 }
 
 export const ExploreContext = createContext<ExploreContextProps | undefined>(undefined)
@@ -47,6 +49,7 @@ const getCidFromCidOrFqdn = (cidOrFqdn: CID | string): CID => {
 export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
   const [exploreState, setExploreState] = useState<ExploreState>({
     path: null,
+    rootCID: null,
     targetNode: null,
     canonicalPath: '',
     localPath: '',
@@ -54,12 +57,9 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
     pathBoundaries: [],
     error: null
   })
+  const [explorePathFromHash, setExplorePathFromHash] = useState<string | null>(null)
 
   const { helia } = useHelia()
-
-  // const helia = heliaContext.selectHelia()
-  // eslint-disable-next-line no-console
-  console.log('helia', helia)
 
   const fetchExploreData = useCallback(async (path: string): Promise<void> => {
     const pathParts = parseIpldPath(path)
@@ -69,11 +69,14 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
     try {
       const cid = getCidFromCidOrFqdn(cidOrFqdn)
       // eslint-disable-next-line no-console
-      console.log('getting ready to call resolveIpldPath with helia', helia)
+      console.log('cidOrFqdn', cidOrFqdn)
+      // eslint-disable-next-line no-console
+      console.log('getting ready to call resolveIpldPath with:', helia, cid, rest)
       const { targetNode, canonicalPath, localPath, nodes, pathBoundaries } = await resolveIpldPath(helia, cid, rest)
 
       setExploreState({
         path,
+        rootCID: cid,
         targetNode,
         canonicalPath,
         localPath,
@@ -126,10 +129,12 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
 
   useEffect(() => {
     const handleHashChange = (): void => {
-      const path = window.location.hash.slice('#/explore'.length)
-      if (path != null) {
+      const explorePathFromHash = window.location.hash.slice('#/explore'.length)
+      setExplorePathFromHash(explorePathFromHash)
+
+      if (explorePathFromHash != null) {
         void (async () => {
-          await fetchExploreData(decodeURIComponent(path))
+          await fetchExploreData(decodeURIComponent(explorePathFromHash))
         })()
       }
     }
@@ -142,16 +147,12 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
     }
   }, [helia])
 
-  const selectExplorePathFromHash = (): string => {
-    return window.location.hash.slice('#/explore'.length)
-  }
-
   if (helia == null) {
     return null
   }
 
   return (
-    <ExploreContext.Provider value={{ exploreState, selectExplorePathFromHash, doExploreLink, doExploreUserProvidedPath, doUploadUserProvidedCar }}>
+    <ExploreContext.Provider value={{ exploreState, explorePathFromHash, doExploreLink, doExploreUserProvidedPath, doUploadUserProvidedCar }}>
       {children}
     </ExploreContext.Provider>
   )

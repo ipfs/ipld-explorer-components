@@ -1,4 +1,6 @@
 import type { TrustlessGatewayBlockBrokerInit } from '@helia/block-brokers'
+import type { MultihashDigest } from 'multiformats'
+
 export type { CID } from 'multiformats/cid'
 
 export type CodecType = number
@@ -47,4 +49,12 @@ export interface KuboGatewayOptions {
     init?: TrustlessGatewayBlockBrokerInit
   }
 
+}
+
+export interface DecodedCidMulticodec {
+  name: number
+  code: string
+}
+export interface DecodedCidMultihash extends MultihashDigest {
+  name: Awaited<ReturnType<typeof getHasherForCode>>['name']
 }

@@ -48,11 +48,11 @@ const graphOpts: Omit<cytoscape.CytoscapeOptions, 'elements' | 'container' | 'la
   ]
 }
 
-export interface IpldGraphCytoscapeProps {
+export interface IpldGraphCytoscapeProps extends React.HTMLAttributes<HTMLDivElement> {
   links: any[]
   path: string
-  cid: string
-  onNodeClick: any
+  // cid: string
+  onNodeClick?(arg0: any): void
   className: string
 }
 
@@ -75,7 +75,7 @@ export default class IpldGraphCytoscape extends React.Component<IpldGraphCytosca
   static getDerivedStateFromProps (props: IpldGraphCytoscapeProps, state: IpldGraphCytoscapeState): IpldGraphCytoscapeState {
     // TODO: Show that links have been truncated.
     return {
-      truncatedLinks: props.links.slice(0, 100)
+      truncatedLinks: props.links?.slice(0, 100) ?? []
     }
   }
 
@@ -96,7 +96,7 @@ export default class IpldGraphCytoscape extends React.Component<IpldGraphCytosca
 
   render (): React.ReactNode {
     // pluck out custom props. Pass anything else on
-    const { onNodeClick, path, cid, className, ...props } = this.props
+    const { onNodeClick, path, className, ...props } = this.props
     return <div className={className} ref={this.graphRef} {...props} />
   }
 
@@ -123,7 +123,7 @@ export default class IpldGraphCytoscape extends React.Component<IpldGraphCytosca
         if (e.target.data == null) return
         const data = e.target.data()
         const link = this.state?.truncatedLinks?.[data.index]
-        this.props.onNodeClick(link)
+        this.props.onNodeClick?.(link)
       })
     }
 
@@ -161,12 +161,4 @@ export default class IpldGraphCytoscape extends React.Component<IpldGraphCytosca
       }
     }
   }
-
-  // runLayout (cy: cytoscape.Core): void {
-  //   cy.layout(this.layoutOpts).run()
-  // }
-
-  // layoutOpts (layoutOpts: any) {
-  //   throw new Error('Method not implemented.')
-  // }
 }

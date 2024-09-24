@@ -6,10 +6,10 @@ import { CID, type MultibaseDecoder } from 'multiformats/cid'
 /**
  * Converts a value to a CID or returns null if it cannot be converted.
  */
-export function toCidOrNull <T extends string> (value: any, base?: MultibaseDecoder<T> | undefined): CID | null {
+export function toCidOrNull <T extends string> (value: CID | string | null, base?: MultibaseDecoder<T> | undefined): CID | null {
   if (value == null) return null
   try {
-    return CID.asCID(value) ?? CID.parse(value, base)
+    return CID.asCID(value) ?? CID.parse(value as string, base)
   } catch (err) {
     return null
   }
@@ -22,7 +22,7 @@ export function toCidOrNull <T extends string> (value: any, base?: MultibaseDeco
  *
  * @deprecated
  */
-export function getCodecOrNull (value: any): string | null {
+export function getCodecOrNull (value: CID | string | null): string | null {
   const cid = toCidOrNull(value)
 
   if (cid == null) return null
@@ -38,12 +38,12 @@ export function getCodecOrNull (value: any): string | null {
   }
 }
 
-export function getCodeOrNull (value: string): number | null {
+export function getCodeOrNull (value: CID | string | null): number | null {
   const cid = toCidOrNull(value)
   return (cid != null) ? cid.code : null
 }
 
-export function toCidStrOrNull (value: string | CID): string | null {
+export function toCidStrOrNull (value: CID | string | null): string | null {
   const cid = toCidOrNull(value)
   return (cid != null) ? cid.toString() : null
 }

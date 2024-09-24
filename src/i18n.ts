@@ -5,10 +5,14 @@ import HttpBackend from 'i18next-http-backend'
 import ICU from 'i18next-icu'
 import LocalStorageBackend from 'i18next-localstorage-backend'
 
-i18n
+const chain = i18n
   .use(ICU)
+
+chain
   .use(Backend)
   .use(LanguageDetector)
+
+void chain
   .init({
     backend: {
       backends: [
@@ -18,7 +22,7 @@ i18n
       backendOptions: [
         { // LocalStorageBackend
           defaultVersion: 'v1',
-          expirationTime: (!import.meta.env.NODE_ENV || import.meta.env.NODE_ENV === 'development') ? 1 : 7 * 24 * 60 * 60 * 1000
+          expirationTime: (import.meta.env.NODE_ENV == null || import.meta.env.NODE_ENV === 'development') ? 1 : 7 * 24 * 60 * 60 * 1000
         },
         { // HttpBackend
           // ensure a relative path is used to look up the locales, so it works when loaded from /ipfs/<cid>
@@ -40,9 +44,14 @@ i18n
     react: {
       useSuspense: false,
       bindI18n: 'languageChanged loaded',
-      bindStore: 'added removed',
+      // bindStore: 'added removed',
       nsMode: 'default'
     }
+  }, () => {
+    // eslint-disable-next-line no-console
+    console.log('i18n initialized')
+  }).catch((err) => {
+    console.error('i18n init error', err)
   })
 
 export default i18n

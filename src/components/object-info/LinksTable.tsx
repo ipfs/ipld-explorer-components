@@ -17,6 +17,9 @@ export const LinksTable: React.FC<LinksTableProps> = ({ links, onLinkClick }) =>
   const headerHeight = 32
   const tableHeight = Math.max(370, (Math.min(window.innerHeight - 500, links.length * rowHeight + headerHeight)))
 
+  // eslint-disable-next-line no-console
+  console.log('onLinkClick', onLinkClick)
+
   const handleOnRowClick = useCallback(({ rowData }: RowMouseEventHandlerParams) => {
     onLinkClick(rowData)
   }, [onLinkClick])

@@ -46,17 +46,19 @@ const nodeStyles = {
   default: { shortName: 'DAG', name: 'DAG Node', color: theme.colors.red }
 }
 
-export function shortNameForNode (type: keyof typeof nodeStyles = 'default'): string {
+export type NodeStyle = keyof typeof nodeStyles
+
+export function shortNameForNode (type: NodeStyle = 'default'): string {
   const style = nodeStyles[type]
   return style?.shortName ?? 'DAG'
 }
 
-export function nameForNode (type: keyof typeof nodeStyles = 'default'): string {
+export function nameForNode (type: NodeStyle = 'default'): string {
   const style = nodeStyles[type]
   return style?.name ?? 'DAG Node'
 }
 
-export function colorForNode (type: keyof typeof nodeStyles = 'default'): string {
+export function colorForNode (type: NodeStyle = 'default'): string {
   const style = nodeStyles[type]
   return style?.color ?? '#ea5037'
 }
@@ -75,7 +77,7 @@ export function toExpandPathsNotation (localPath: string): string[] {
 }
 
 interface DagNodeIconProps extends React.SVGProps<SVGSVGElement> {
-  type: keyof typeof nodeStyles
+  type: NodeStyle
 }
 
 const DagNodeIcon: React.FC<DagNodeIconProps> = ({ type, ...props }) => (
@@ -102,7 +104,7 @@ const getObjectInspectorData = (data?: NormalizedDagNode['data']): NormalizedDag
 
 export interface ObjectInfoProps extends Omit<HTMLProps<HTMLElement>, 'data' | 'size'> {
   className: string
-  type: keyof typeof nodeStyles
+  type: NodeStyle
   cid: string
   localPath: string
   size: bigint
@@ -119,11 +121,11 @@ export const ObjectInfo: React.FC<ObjectInfoProps> = ({ className, type, cid, lo
   const { t, ready: tReady } = useTranslation('explore')
   if (!tReady) return null
   const isUnixFs = format === 'unixfs' && !(data instanceof Uint8Array) && data?.type != null && ['directory', 'file'].some(x => x === data.type)
-  let nodeStyleType: keyof typeof nodeStyles = type
+  let nodeStyleType: NodeStyle = type
 
   // if (!isNaN(type) || isUnixFs || nameForNode(type) === 'DAG Node') {
   if (isUnixFs || nameForNode(type) === 'DAG Node') {
-    nodeStyleType = getCodecNameFromCode(CID.parse(cid).code) as keyof typeof nodeStyles ?? type
+    nodeStyleType = getCodecNameFromCode(CID.parse(cid).code) as NodeStyle ?? type
   }
 
   return (

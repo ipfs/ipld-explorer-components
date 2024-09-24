@@ -12,7 +12,9 @@
     ],
     "types": [
       "vite/client",
-      "vite-plugin-svgr/client"
+      "vite-plugin-svgr/client",
+      "mocha",
+      "jest"
     ],
     "allowJs": false,
     "skipLibCheck": true,
@@ -30,20 +32,19 @@
     "outDir": "dist",
     "declarationDir": "dist",
     "jsx": "react",
-    "rootDir": "src"
+    "rootDir": "."
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "dev/**/*"
   ],
   "exclude": [
-    "src/**/*.test.*",
     "src/**/*.stories.*",
     "node_modules",
     "storybook-static",
     "build",
     "dist",
     "vite.config.ts",
-    "package.json",
-    "dev"
+    "package.json"
   ]
 }

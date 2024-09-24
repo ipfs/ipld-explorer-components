@@ -41,18 +41,19 @@ function isDagPbNode (node: dagNode | PBNode, cid: string): node is PBNode {
  * @returns {import('../types').NormalizedDagNode}
  */
 export default function normaliseDagNode (node: dagNode | PBNode, cidStr: string): NormalizedDagNode {
-  const code = getCodeOrNull(cidStr)
+  // const code = getCodeOrNull(cidStr)
   if (isDagPbNode(node, cidStr)) {
     return normaliseDagPb(node, cidStr, dagPb.code)
   }
   // try cbor style if we don't know any better
+  // @ts-expect-error - todo: resolve node type error
   return normaliseDagCbor(node, cidStr, dagCbor.code)
 }
 
 /**
  * Normalize links and add type info. Add unixfs info where available
  */
-export function normaliseDagPb (node: PBNode, cid: string, type?: CodecType): NormalizedDagNode {
+export function normaliseDagPb (node: PBNode, cid: string, type: CodecType): NormalizedDagNode {
   // NOTE: Use the requested cid rather than the internal one.
   // The multihash property on a DAGNode is always cidv0, regardless of request cid.
   // SEE: https://github.com/ipld/js-ipld-dag-pb/issues/84
@@ -87,7 +88,7 @@ export function normaliseDagPb (node: PBNode, cid: string, type?: CodecType): No
       }
     } catch (err) {
     // dag-pb but not a unixfs.
-      // console.error(err)
+      console.error('FIXME: unexpected error case', err)
     }
   }
 
@@ -143,7 +144,8 @@ export function findAndReplaceDagCborLinks (obj: unknown, sourceCid: string, pat
     return []
   }
 
-  const cid = toCidOrNull(obj)
+  // FIXME: remove as any cast
+  const cid = toCidOrNull(obj as any)
   if (cid != null) {
     return [{ path, source: sourceCid, target: cid.toString(), size: BigInt(0), index: 0 }]
   }

@@ -4,7 +4,7 @@ import { getCodecOrNull } from '../../lib/cid.js'
 import Cid from '../cid/Cid.jsx'
 import { colorForNode } from '../object-info/ObjectInfo.jsx'
 
-export interface GraphCrumbProps {
+export interface GraphCrumbProps extends React.HTMLAttributes<HTMLDivElement> {
   cid: CID
   pathBoundaries: Array<{ path: string, source: CID, target: CID }>
   localPath?: string

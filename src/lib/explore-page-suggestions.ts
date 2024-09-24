@@ -1,9 +1,15 @@
+import type { NodeStyle } from '../components/object-info/ObjectInfo.jsx'
+
 /**
  * Default Explore page suggestions
- *
- * @type {Array<{name: string, cid: string, type: string}>}
  */
-export const explorePageLinks = [
+export interface ExplorePageLink {
+  name: string
+  cid: string
+  type: NodeStyle
+}
+
+export const explorePageLinks: ExplorePageLink[] = [
   {
     name: 'Project Apollo Archives',
     cid: 'QmSnuWmxptJZdLJpKRarxBMS2Ju2oANVrgbr2xWbie9b2D',

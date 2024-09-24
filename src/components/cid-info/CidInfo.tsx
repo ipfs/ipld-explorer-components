@@ -3,7 +3,11 @@ import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import extractInfo, { type ExtractedInfo } from '../../lib/extract-info.js'
 
-export const CidInfo: React.FC<{ cid: CID, className: string }> = ({ cid, className, ...props }) => {
+export interface CidInfoProps extends React.HTMLAttributes<HTMLDivElement> {
+  cid: CID | null
+}
+
+export const CidInfo: React.FC<CidInfoProps> = ({ cid, className, ...props }) => {
   const { t } = useTranslation('explore')
   const [cidErr, setCidErr] = useState<Error | null>(null)
   const [cidInfo, setCidInfo] = useState<ExtractedInfo | null>(null)
