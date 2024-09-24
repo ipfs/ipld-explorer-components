@@ -1,27 +1,32 @@
 // @ts-check
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
+import { type PBLink, type PBNode } from '@ipld/dag-pb'
 import { UnixFS } from 'ipfs-unixfs'
-import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
+import { type NormalizedDagPbNodeFormat, type CodecType, type NormalizedDagNode, type NormalizedDagLink } from '../types.js'
+import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid.js'
 
-/**
- * @typedef dagNodeLink
- * @property {string} cid
- * @property {string} name
- * @property {number} size
- */
-/**
- * @typedef dagNodeData
- * @property {unknown[]} blockSizes
- * @property {unknown} data
- * @property {string} type
- */
-/**
- * @typedef dagNode
- * @property {dagNodeData} data
- * @property {dagNodeLink[]} links
- * @property {number} size
- */
+interface dagNodeLink {
+  cid: string
+  name: string
+  size: number
+}
+interface dagNodeData {
+  blockSizes: unknown[]
+  data: unknown
+  type: string
+}
+interface dagNode {
+  data: dagNodeData
+  links: dagNodeLink[]
+  size: number
+}
+
+function isDagPbNode (node: dagNode | PBNode, cid: string): node is PBNode {
+  const code = getCodeOrNull(cid)
+  return code === dagPb.code && (node as PBNode).Data !== undefined
+}
+
 /**
  * Provide a uniform shape for all^ node types.
  *
@@ -35,25 +40,19 @@ import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid'
  * @param {string} cidStr - the cid string passed to `ipfs.dag.get`
  * @returns {import('../types').NormalizedDagNode}
  */
-export default function normaliseDagNode (node, cidStr) {
+export default function normaliseDagNode (node: dagNode | PBNode, cidStr: string): NormalizedDagNode {
   const code = getCodeOrNull(cidStr)
-  if (code === dagPb.code) {
-    return normaliseDagPb(/** @type {import('@ipld/dag-pb').PBNode} */(node), cidStr, code)
+  if (isDagPbNode(node, cidStr)) {
+    return normaliseDagPb(node, cidStr, dagPb.code)
   }
   // try cbor style if we don't know any better
-  // @ts-expect-error - todo: resolve this type error
-  return normaliseDagCbor(node, cidStr, code ?? dagCbor.code)
+  return normaliseDagCbor(node, cidStr, dagCbor.code)
 }
 
 /**
  * Normalize links and add type info. Add unixfs info where available
- *
- * @param {import('@ipld/dag-pb').PBNode} node
- * @param {string} cid
- * @param {import('../types').CodecType} type
- * @returns {import('../types').NormalizedDagNode}
  */
-export function normaliseDagPb (node, cid, type) {
+export function normaliseDagPb (node: PBNode, cid: string, type?: CodecType): NormalizedDagNode {
   // NOTE: Use the requested cid rather than the internal one.
   // The multihash property on a DAGNode is always cidv0, regardless of request cid.
   // SEE: https://github.com/ipld/js-ipld-dag-pb/issues/84
@@ -66,10 +65,8 @@ export function normaliseDagPb (node, cid, type) {
   if (cidStr == null) {
     throw new Error(`cidStr is null for cid: ${cid}`)
   }
-  /**
-   * @type {import('../types').NormalizedDagPbNodeFormat}
-   */
-  let format = 'non-unixfs'
+
+  let format: NormalizedDagPbNodeFormat = 'non-unixfs'
   const data = node.Data
 
   if (data != null) {
@@ -106,14 +103,10 @@ export function normaliseDagPb (node, cid, type) {
 /**
  * Convert DagLink shape into normalized form that can be used interchangeably
  * with links found in dag-cbor
- *
- * @param {import('@ipld/dag-pb').PBLink[]} links
- * @param {string} sourceCid
- * @returns {import('../types').NormalizedDagLink[]}
  */
-export function normaliseDagPbLinks (links, sourceCid) {
+export function normaliseDagPbLinks (links: PBLink[], sourceCid: string): NormalizedDagLink[] {
   return links.map((link, index) => ({
-    path: link.Name || `Links/${index}`,
+    path: link.Name ?? `Links/${index}`,
     source: sourceCid,
     target: toCidStrOrNull(link.Hash) ?? '',
     size: BigInt(link.Tsize ?? 0),
@@ -130,7 +123,7 @@ export function normaliseDagPbLinks (links, sourceCid) {
  * @param {number} code - multicodec code, see https://github.com/multiformats/multicodec/blob/master/table.csv
  * @returns {import('../types').NormalizedDagNode}
  */
-export function normaliseDagCbor (data, cid, code) {
+export function normaliseDagCbor (data: NormalizedDagNode['data'], cid: string, code: number): NormalizedDagNode {
   const links = findAndReplaceDagCborLinks(data, cid)
   return {
     cid,
@@ -144,27 +137,22 @@ export function normaliseDagCbor (data, cid, code) {
 
 /**
  * A valid IPLD link in a dag-cbor node is an object with single "/" property.
- *
- * @param {unknown} obj
- * @param {string} sourceCid
- * @param {string} path
- * @returns {import('../types').NormalizedDagLink[]}
  */
-export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
-  if (!obj || typeof obj !== 'object' || Buffer.isBuffer(obj) || typeof obj === 'string') {
+export function findAndReplaceDagCborLinks (obj: unknown, sourceCid: string, path: string = ''): NormalizedDagLink[] {
+  if (obj == null || typeof obj !== 'object' || Buffer.isBuffer(obj) || typeof obj === 'string') {
     return []
   }
 
   const cid = toCidOrNull(obj)
-  if (cid) {
+  if (cid != null) {
     return [{ path, source: sourceCid, target: cid.toString(), size: BigInt(0), index: 0 }]
   }
 
   if (Array.isArray(obj)) {
-    if (!obj.length) return []
+    if (obj.length === 0) return []
 
     return obj
-      .map((val, i) => findAndReplaceDagCborLinks(val, sourceCid, path ? `${path}/${i}` : `${i}`))
+      .map((val, i) => findAndReplaceDagCborLinks(val, sourceCid, path != null ? `${path}/${i}` : `${i}`))
       .reduce((a, b) => a.concat(b))
       .filter(a => Boolean(a))
   }
@@ -176,7 +164,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
     // @ts-expect-error - todo: resolve this type error
     const targetCid = toCidOrNull(obj['/'])
 
-    if (!targetCid) return []
+    if (targetCid == null) return []
 
     const target = targetCid.toString()
     // @ts-expect-error - todo: resolve this type error
@@ -188,7 +176,7 @@ export function findAndReplaceDagCborLinks (obj, sourceCid, path = '') {
   if (keys.length > 0) {
     return keys
       // @ts-expect-error - todo: resolve this type error
-      .map(key => findAndReplaceDagCborLinks(obj[key], sourceCid, path ? `${path}/${key}` : `${key}`))
+      .map(key => findAndReplaceDagCborLinks(obj[key], sourceCid, path != null ? `${path}/${key}` : `${key}`))
       .reduce((a, b) => a.concat(b))
       .filter(a => Boolean(a))
   } else {

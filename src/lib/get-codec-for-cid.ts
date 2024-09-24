@@ -1,9 +1,9 @@
 import { CID } from 'multiformats'
 import codecImporter from './codec-importer.js'
-import getCodecNameFromCode from './get-codec-name-from-code'
-import { isPBNode } from './guards'
-import { ensureLeadingSlash } from './helpers'
-import type { ResolveType } from '../types'
+import getCodecNameFromCode from './get-codec-name-from-code.js'
+import { isPBNode } from './guards.js'
+import { ensureLeadingSlash } from './helpers.js'
+import type { ResolveType } from '../types.js'
 import type { PBLink, PBNode } from '@ipld/dag-pb'
 
 interface CodecWrapper<DecodedType = any> {

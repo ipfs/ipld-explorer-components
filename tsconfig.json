@@ -14,7 +14,7 @@
       "vite/client",
       "vite-plugin-svgr/client"
     ],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,

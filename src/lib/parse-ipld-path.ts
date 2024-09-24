@@ -6,9 +6,16 @@
 */
 export const pathRegEx = /(\/(ipns|ipfs|ipld)\/)?([^/]+)(\/.*)?/
 
-export default function parseIpldPath (str) {
+export interface IpldPath {
+  namespace: string
+  cidOrFqdn: string
+  rest: string
+  address: string
+}
+
+export function parseIpldPath (str: string): IpldPath | null {
   const res = pathRegEx.exec(str)
-  if (!res) return null
+  if (res == null) return null
   return {
     namespace: res[2], // 'ipfs'
     cidOrFqdn: res[3], // 'QmHash'

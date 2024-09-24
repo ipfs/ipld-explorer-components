@@ -1,18 +1,15 @@
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagJson from '@ipld/dag-json'
 import * as dagPb from '@ipld/dag-pb'
-import { CID } from 'multiformats/cid'
+import { CID, type MultibaseDecoder } from 'multiformats/cid'
 
 /**
- * @template {string} Prefix
- * @param {any} value
- * @param {import('multiformats/bases/interface').MultibaseDecoder<Prefix>} [base]
- * @returns
+ * Converts a value to a CID or returns null if it cannot be converted.
  */
-export function toCidOrNull (value, base) {
-  if (!value) return null
+export function toCidOrNull <T extends string> (value: any, base?: MultibaseDecoder<T> | undefined): CID | null {
+  if (value == null) return null
   try {
-    return CID.asCID(value) || CID.parse(value, base)
+    return CID.asCID(value) ?? CID.parse(value, base)
   } catch (err) {
     return null
   }
@@ -23,11 +20,9 @@ export function toCidOrNull (value, base) {
  *
  * `cid.codec` is deprecated, use integer "code" property instead
  *
- * @param {any} value
- * @returns {string}
  * @deprecated
  */
-export function getCodecOrNull (value) {
+export function getCodecOrNull (value: any): string | null {
   const cid = toCidOrNull(value)
 
   if (cid == null) return null
@@ -43,12 +38,12 @@ export function getCodecOrNull (value) {
   }
 }
 
-export function getCodeOrNull (value) {
+export function getCodeOrNull (value: string): number | null {
   const cid = toCidOrNull(value)
-  return cid ? cid.code : null
+  return (cid != null) ? cid.code : null
 }
 
-export function toCidStrOrNull (value) {
+export function toCidStrOrNull (value: string | CID): string | null {
   const cid = toCidOrNull(value)
-  return cid ? cid.toString() : null
+  return (cid != null) ? cid.toString() : null
 }

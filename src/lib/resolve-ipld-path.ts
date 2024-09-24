@@ -1,21 +1,22 @@
+import { type Helia } from '@helia/interface'
 import { CID } from 'multiformats'
-import getCodecForCid from './get-codec-for-cid'
-import { getRawBlock } from './get-raw-block'
-import normaliseDagNode from './normalise-dag-node'
+import { type NormalizedDagLink, type NormalizedDagNode } from '../types.js'
+import getCodecForCid from './get-codec-for-cid.js'
+import { getRawBlock } from './get-raw-block.js'
+import normaliseDagNode from './normalise-dag-node.js'
 
-/**
- * @typedef {object} ResolvedIpldPathInfo
- * @property {object} targetNode
- * @property {string} canonicalPath
- * @property {string} localPath
- * @property {object[]} nodes
- * @property {object[]} pathBoundaries
- */
-/**
- * @typedef {object} IpldInterface
- * @property {() => Promise<unknown>} get
- * @property {() => Promise<unknown>} resolve
- */
+interface ResolvedIpldPathInfo {
+  targetNode: object
+  canonicalPath: string
+  localPath: string
+  nodes: object[]
+  pathBoundaries: object[]
+}
+
+export interface IpldInterface {
+  get(): Promise<unknown>
+  resolve(): Promise<unknown>
+}
 
 /**
  * Walk an IPLD path to find all the nodes and path boundaries it traverses.
@@ -51,7 +52,7 @@ import normaliseDagNode from './normalise-dag-node'
  * @param {object[]} pathBoundaries - accumulated path boundary info
  * @returns {ResolvedIpldPathInfo} resolved path info
  */
-export default async function resolveIpldPath (helia, sourceCid, path, nodes = [], pathBoundaries = []) {
+export async function resolveIpldPath (helia: Helia, sourceCid: CID | string, path: string, nodes: NormalizedDagNode[] = [], pathBoundaries: NormalizedDagLink[] = []): Promise<ResolvedIpldPathInfo> {
   const { value, remainderPath } = await ipldGetNodeAndRemainder(helia, sourceCid, path)
   if (sourceCid == null) {
     throw new Error('sourceCid is null')
@@ -64,13 +65,13 @@ export default async function resolveIpldPath (helia, sourceCid, path, nodes = [
   const linkPath = findLinkPath(path, remainderPath)
   const link = findLink(node, linkPath)
 
-  if (link) {
+  if (link != null) {
     pathBoundaries.push(link)
     // Go again, using the link.target as the sourceCid, and the remainderPath as the path.
     return resolveIpldPath(helia, link.target, remainderPath, nodes, pathBoundaries)
   }
   // we made it to the containing node. Hand back the info
-  const canonicalPath = path ? `${sourceCidStr}${path}` : sourceCidStr
+  const canonicalPath = path != null ? `${sourceCidStr}${path}` : sourceCidStr
   const targetNode = node
 
   return { targetNode, canonicalPath, localPath: path, nodes, pathBoundaries }
@@ -83,7 +84,7 @@ export default async function resolveIpldPath (helia, sourceCid, path, nodes = [
  * @param {string} path
  * @returns
  */
-export async function ipldGetNodeAndRemainder (helia, sourceCid, path) {
+export async function ipldGetNodeAndRemainder (helia: Helia, sourceCid: CID | string, path: string): Promise<{ value: any, remainderPath: string }> {
   if (sourceCid == null) {
     throw new Error('sourceCid is null')
   }
@@ -95,12 +96,11 @@ export async function ipldGetNodeAndRemainder (helia, sourceCid, path) {
   const encodedValue = await getRawBlock(helia, cidInstance)
   const value = codecWrapper.decode(encodedValue)
 
-  const codecWrapperResolveResult = await codecWrapper.resolve(path || '/', encodedValue)
-  const { remainderPath, resolve: resolveValue } = codecWrapperResolveResult
+  const { remainderPath, value: resolveValue } = await codecWrapper.resolve(path ?? '/', encodedValue)
 
   if (resolveValue?.Hash != null) {
     // This is a PBLink, and we should resolve that link so we're returning PBNodes not PBLinks
-    return await ipldGetNodeAndRemainder(helia, value.Hash, remainderPath)
+    return ipldGetNodeAndRemainder(helia, value.Hash, remainderPath)
   }
 
   return {
@@ -116,26 +116,26 @@ export async function ipldGetNodeAndRemainder (helia, sourceCid, path) {
  * @param {string} linkPath - an IPLD path string
  * @returns {import('./normalise-dag-node').NormalizedDagLink} the link object for `linkPath`
  */
-export function findLink (node, linkPath) {
-  if (!linkPath) return null
-  if (!node) return null
+export function findLink (node: NormalizedDagNode, linkPath: string | null): NormalizedDagLink | null {
+  if (linkPath == null) return null
+  if (node == null) return null
   const { links } = node
-  const link = links.find(link => link.path === linkPath)
-  return link
+  const link = links.find((link) => link.path === linkPath)
+  return link ?? null
 }
 
-export function findLinkPath (fullPath, remainderPath) {
-  if (!fullPath || fullPath === '/') return null
-  if (!remainderPath) return trimSlashes(fullPath)
-  if (!fullPath.endsWith(remainderPath)) {
-    throw new Error('Requested IPLD path should end with the remainder path', { fullPath, remainderPath })
+export function findLinkPath (fullPath?: string, remainderPath?: string): string | null {
+  if (fullPath == null || fullPath === '/') return null
+  if (remainderPath == null) return trimSlashes(fullPath)
+  if (fullPath.endsWith(remainderPath)) {
+    throw new Error(`Requested IPLD path should end with the remainder path: fullPath=${fullPath}, remainderPath=${remainderPath}`)
   }
   // Remove remainder path from end of full path to get link path
   const linkPath = fullPath.substring(0, fullPath.length - remainderPath.length)
   return trimSlashes(linkPath)
 }
 
-export function trimSlashes (str) {
+export function trimSlashes (str: string): string {
   if (str.startsWith('/')) {
     str = str.substring(1)
   }
