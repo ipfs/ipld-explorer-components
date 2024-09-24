@@ -1,5 +1,5 @@
 import { type Helia } from '@helia/interface'
-import React, { createContext, useContext, useReducer, useEffect, type ReactNode } from 'react'
+import React, { createContext, useContext, useReducer, useEffect, type ReactNode, useState } from 'react'
 import packageJson from '../../package.json'
 import initHelia from '../lib/init-helia.js'
 import type { KuboGatewayOptions } from '../types.js'
@@ -11,7 +11,8 @@ interface HeliaBundleState {
 
 interface HeliaContextProps {
   state: HeliaBundleState
-  selectHelia(): Helia | null
+  helia: Helia | null
+  // selectHelia(): Helia | null
   selectHeliaReady(): boolean
   selectHeliaIdentity(): string
   doInitHelia(): Promise<void>
@@ -53,9 +54,7 @@ const heliaReducer = (state: HeliaBundleState, action: { type: string, payload?:
 
 export const HeliaProvider = ({ children }: { children: ReactNode }): any => {
   const [state, dispatch] = useReducer(heliaReducer, defaultState)
-  let helia: Helia | null = null
-
-  const selectHelia = (): Helia | null => helia
+  const [helia, setHelia] = useState<Helia | null>(null)
 
   const selectHeliaReady = (): boolean => helia !== null
 
@@ -66,10 +65,14 @@ export const HeliaProvider = ({ children }: { children: ReactNode }): any => {
 
   const doInitHelia = async (): Promise<void> => {
     dispatch({ type: 'HELIA_INIT_STARTED' })
+    // eslint-disable-next-line no-console
+    console.log('state.kuboGatewayOptions', state.kuboGatewayOptions)
     try {
-      helia = await initHelia(state.kuboGatewayOptions)
+      const helia = await initHelia(state.kuboGatewayOptions)
+      setHelia(helia)
       dispatch({ type: 'HELIA_INIT_FINISHED', payload: { kuboGatewayOptions: state.kuboGatewayOptions } })
     } catch (error: any) {
+      console.error('doInitHelia error', error)
       dispatch({ type: 'HELIA_INIT_FAILED', error })
     }
   }
@@ -79,7 +82,7 @@ export const HeliaProvider = ({ children }: { children: ReactNode }): any => {
   }, [])
 
   return (
-    <HeliaContext.Provider value={{ state, selectHelia, selectHeliaReady, selectHeliaIdentity, doInitHelia }}>
+    <HeliaContext.Provider value={{ state, helia, selectHeliaReady, selectHeliaIdentity, doInitHelia }}>
       {children}
     </HeliaContext.Provider>
   )

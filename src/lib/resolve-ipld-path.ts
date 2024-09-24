@@ -90,7 +90,7 @@ export async function ipldGetNodeAndRemainder (helia: Helia, sourceCid: CID | st
   }
   let cidInstance = CID.asCID(sourceCid)
   if (cidInstance === null) {
-    cidInstance = CID.parse(sourceCid)
+    cidInstance = CID.parse(sourceCid.toString())
   }
   const codecWrapper = await getCodecForCid(cidInstance)
   const encodedValue = await getRawBlock(helia, cidInstance)

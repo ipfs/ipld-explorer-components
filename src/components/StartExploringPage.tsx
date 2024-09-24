@@ -1,14 +1,14 @@
 import React from 'react'
-import { Helmet } from 'react-helmet'
+import Helmet from 'react-helmet'
 import { withTranslation } from 'react-i18next'
 import ReactJoyride from 'react-joyride'
-import { explorePageLinks } from '../lib/explorePageSuggestions'
-import { projectsTour } from '../lib/tours'
-import AboutIpld from './about/AboutIpld'
-import IpldExploreForm from './explore/IpldExploreForm'
-import { colorForNode, nameForNode, shortNameForNode } from './object-info/ObjectInfo'
+import { explorePageLinks } from '../lib/explore-page-suggestions.js'
+import { projectsTour } from '../lib/tours.jsx'
+import { AboutIpld } from './about/AboutIpld.jsx'
+import IpldExploreForm from './explore/IpldExploreForm.jsx'
+import { colorForNode, nameForNode, shortNameForNode } from './object-info/ObjectInfo.jsx'
 
-const ExploreSuggestion = ({ cid, name, type }) => (
+const ExploreSuggestion = ({ cid, name, type }: { cid: string, name: string, type: string }): JSX.Element => (
   <a className='flex items-center lh-copy pl3 pl0-l pv3 bb b--black-10 link focus-outline' href={`#/explore/${cid}`}>
     <span className='flex items-center justify-center w3 h3 w3-m h3-m w3-l h3-l flex-none br-100 tc' style={{ background: colorForNode(type) }}>
       <span className='montserrat fw3 f6 snow' title={nameForNode(type)}>{shortNameForNode(type)}</span>
@@ -20,17 +20,15 @@ const ExploreSuggestion = ({ cid, name, type }) => (
   </a>
 )
 
-/**
- *
- * @param {object} props
- * @param {Function} props.t
- * @param {Function} props.embed
- * @param {boolean} [props.runTour]
- * @param {Function} props.joyrideCallback
- * @param {typeof explorePageLinks} [props.links]
- * @returns
- */
-const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback, links }) => (
+interface StartExploringPageProps {
+  t: any
+  embed: any
+  runTour?: boolean
+  joyrideCallback: any
+  links: any
+}
+
+const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback, links }: StartExploringPageProps): JSX.Element => (
   <div className='mw9 center explore-sug-2'>
     <Helmet>
       <title>{t('StartExploringPage.title')}</title>
@@ -43,12 +41,11 @@ const StartExploringPage = ({ t, embed, runTour = false, joyrideCallback, links 
         </div>
         {embed ? <IpldExploreForm /> : null}
         <ul className='list pl0 ma0 mt4 mt0-l bt bn-l b--black-10'>
-        {(links ?? explorePageLinks).map((suggestion) => (
+          {(links ?? explorePageLinks).map((suggestion) => (
             <li key={suggestion.cid}>
               <ExploreSuggestion name={suggestion.name} cid={suggestion.cid} type={suggestion.type} />
             </li>
-        ))
-        }
+          ))}
         </ul>
       </div>
       <div className='pt2-l'>

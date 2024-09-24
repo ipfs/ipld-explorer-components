@@ -1,6 +1,11 @@
-import React from 'react'
+import React, { type HTMLProps } from 'react'
 
-const IpldGraph = ({ className, root, links }) => {
+export interface IpldGraphProps extends HTMLProps<HTMLDivElement> {
+  root: string
+  links: string[]
+}
+
+const IpldGraph: React.FC<IpldGraphProps> = ({ className, root, links }) => {
   const cls = `tc ma4 ${className}`
   return (
     <div className={cls}>

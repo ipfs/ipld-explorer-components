@@ -13,6 +13,10 @@ export interface UnixFsNodeData {
   blockSizes: bigint[]
 }
 
+export interface UnixFsNodeDataWithNumbers extends Omit<UnixFsNodeData, 'blockSizes'> {
+  blockSizes: number[]
+}
+
 export interface NormalizedDagLink {
   path: string
   source: string

@@ -3,7 +3,7 @@
  *
  * @type {Array<{name: string, cid: string, type: string}>}
  */
-const explorePageLinks = [
+export const explorePageLinks = [
   {
     name: 'Project Apollo Archives',
     cid: 'QmSnuWmxptJZdLJpKRarxBMS2Ju2oANVrgbr2xWbie9b2D',
@@ -65,5 +65,3 @@ const explorePageLinks = [
     type: 'raw'
   }
 ]
-
-export { explorePageLinks }

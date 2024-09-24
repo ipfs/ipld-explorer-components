@@ -1,11 +1,12 @@
 import { partial } from 'filesize'
 import theme from 'ipfs-css/theme.json'
 import { CID } from 'multiformats'
-import React from 'react'
-import { withTranslation } from 'react-i18next'
+import React, { type HTMLProps } from 'react'
+import { useTranslation } from 'react-i18next'
 import { ObjectInspector, chromeLight } from 'react-inspector'
 import getCodecNameFromCode from '../../lib/get-codec-name-from-code'
-import LinksTable from './LinksTable'
+import { type NormalizedDagNode, type UnixFsNodeDataWithNumbers } from '../../types.js'
+import LinksTable, { type LinksTableProps } from './LinksTable.jsx'
 
 const humansize = partial({ round: 0 })
 
@@ -39,39 +40,46 @@ const nodeStyles = {
   'eth-block-list': { shortName: 'ETH', name: 'Ethereum Block List', color: theme.colors.charcoal },
   'eth-tx-trie': { shortName: 'ETH', name: 'Ethereum Tx Trie', color: theme.colors.charcoal },
   'eth-tx': { shortName: 'ETH', name: 'Ethereum Tx', color: theme.colors.charcoal },
-  'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: theme.colors.charcoal }
+  'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: theme.colors.charcoal },
+
+  // fallback
+  default: { shortName: 'DAG', name: 'DAG Node', color: theme.colors.red }
 }
 
-export function shortNameForNode (type) {
+export function shortNameForNode (type: keyof typeof nodeStyles = 'default'): string {
   const style = nodeStyles[type]
-  return (style && style.shortName) || 'DAG'
+  return style?.shortName ?? 'DAG'
 }
 
-export function nameForNode (type) {
+export function nameForNode (type: keyof typeof nodeStyles = 'default'): string {
   const style = nodeStyles[type]
-  return (style && style.name) || 'DAG Node'
+  return style?.name ?? 'DAG Node'
 }
 
-export function colorForNode (type) {
+export function colorForNode (type: keyof typeof nodeStyles = 'default'): string {
   const style = nodeStyles[type]
-  return (style && style.color) || '#ea5037'
+  return style?.color ?? '#ea5037'
 }
 
 // '/a/b' => ['$', '$.a', '$.a.b']
 // See: https://github.com/xyc/react-inspector#api
-export function toExpandPathsNotation (localPath) {
-  if (!localPath) return []
+export function toExpandPathsNotation (localPath: string): string[] {
+  if (localPath == null) return []
   const parts = localPath.split('/')
-  const expandPaths = parts.map((part, i) => {
-    if (!part) return '$'
+  const expandPaths = parts.map((part: any, i: any) => {
+    if (part == null) return '$'
     const relPath = parts.slice(0, i).join('.')
     return `$${relPath}.${part}`
   })
   return expandPaths.slice(0, expandPaths.length - 1)
 }
 
-const DagNodeIcon = ({ type, ...props }) => (
-  <svg {...props} title={nameForNode(type)} width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'>
+interface DagNodeIconProps extends React.SVGProps<SVGSVGElement> {
+  type: keyof typeof nodeStyles
+}
+
+const DagNodeIcon: React.FC<DagNodeIconProps> = ({ type, ...props }) => (
+  <svg {...props} data-title={nameForNode(type)} width='30' height='30' viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'>
     <circle cx='15' cy='15' r='15' fillRule='evenodd' fill={colorForNode(type)} />
   </svg>
 )
@@ -80,40 +88,42 @@ const DagNodeIcon = ({ type, ...props }) => (
  * replace bigint or other non-JSON-serializable values with appropriate values for the react-inspector
  * Note that data for some blocks (e.g. bafyreicnokmhmrnlp2wjhyk2haep4tqxiptwfrp2rrs7rzq7uk766chqvq) currently do not
  * look like NormalizedDagNode['data']
- *
- * @param {import('../../types').NormalizedDagNode['data']} data
  */
-const getObjectInspectorData = (data) => {
-  if (data == null) return data
-  if (data.blockSizes != null) {
-    data.blockSizes = data.blockSizes.map(Number)
+const getObjectInspectorData = (data?: NormalizedDagNode['data']): NormalizedDagNode['data'] | UnixFsNodeDataWithNumbers => {
+  if (data == null || data instanceof Uint8Array || data.blockSizes == null) {
+    return data
   }
-  return data
+
+  return {
+    ...data,
+    blockSizes: data.blockSizes.map(Number)
+  }
 }
 
-/**
- * @param {object} props
- * @param {import('react-i18next').TFunction} props.t
- * @param {boolean} props.tReady
- * @param {string} props.className
- * @param {string} props.type
- * @param {string} props.cid
- * @param {string} props.localPath
- * @param {bigint} props.size
- * @param {import('../../types').NormalizedDagNode['data']} props.data
- * @param {object[]} props.links
- * @param {string} props.format
- * @param {Function} props.onLinkClick
- * @param {string} props.gatewayUrl
- * @param {string} props.publicGatewayUrl
- */
-const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, links, format, onLinkClick, gatewayUrl, publicGatewayUrl, ...props }) => {
-  if (!tReady) return null
-  const isUnixFs = format === 'unixfs' && data.type && ['directory', 'file'].some(x => x === data.type)
-  let nodeStyleType = type
+export interface ObjectInfoProps extends Omit<HTMLProps<HTMLElement>, 'data' | 'size'> {
+  className: string
+  type: keyof typeof nodeStyles
+  cid: string
+  localPath: string
+  size: bigint
+  data: NormalizedDagNode['data']
+  links: object[]
+  format: string
+  onLinkClick: LinksTableProps['onLinkClick']
+  gatewayUrl: string
+  publicGatewayUrl: string
+}
 
-  if (!isNaN(type) || isUnixFs || nameForNode(type) === 'DAG Node') {
-    nodeStyleType = getCodecNameFromCode(CID.parse(cid).code) ?? type
+// eslint-disable-next-line complexity
+export const ObjectInfo: React.FC<ObjectInfoProps> = ({ className, type, cid, localPath, size, data, links, format, onLinkClick, gatewayUrl, publicGatewayUrl, ...props }) => {
+  const { t, ready: tReady } = useTranslation('explore')
+  if (!tReady) return null
+  const isUnixFs = format === 'unixfs' && !(data instanceof Uint8Array) && data?.type != null && ['directory', 'file'].some(x => x === data.type)
+  let nodeStyleType: keyof typeof nodeStyles = type
+
+  // if (!isNaN(type) || isUnixFs || nameForNode(type) === 'DAG Node') {
+  if (isUnixFs || nameForNode(type) === 'DAG Node') {
+    nodeStyleType = getCodecNameFromCode(CID.parse(cid).code) as keyof typeof nodeStyles ?? type
   }
 
   return (
@@ -131,11 +141,11 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
         {isUnixFs
           ? (
           <span className='dib'>
-            {gatewayUrl && gatewayUrl !== publicGatewayUrl && (
+            {gatewayUrl != null && gatewayUrl !== publicGatewayUrl && (
               <a className='no-underline avenir ml2 pa2 fw5 f6 navy dib' href={`${gatewayUrl}/ipfs/${cid}`} rel='external nofollow' target='_external'>
                 {t('ObjectInfo.privateGateway')}
               </a>)}
-            {publicGatewayUrl && (
+            {publicGatewayUrl != null && (
               <a className='no-underline avenir ml2 pa2 fw5 f6 navy dib' href={`${publicGatewayUrl}/ipfs/${cid}`} rel='external nofollow' target='_external'>
                 {t('ObjectInfo.publicGateway')}
               </a>)}
@@ -144,7 +154,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
           : null}
       </h2>
       <div className='f6'>
-        {!cid
+        {cid == null
           ? null
           : (
           <div className='dt dt--fixed pt2'>
@@ -153,7 +163,7 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
             <div className='dtc truncate charcoal monospace' data-id='ObjectInfo-cid'>{cid}</div>
           </div>
             )}
-        {!size
+        {size == null
           ? null
           : (
           <div className='dt dt--fixed pt2'>
@@ -166,25 +176,26 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label className='dtc silver tracked ttu f7' style={{ width: 48 }}>Links</label>
           <div className='dtc truncate charcoal'>
-            {links ? (<code>{links.length}</code>) : 'No Links'}
+            {links != null ? (<code>{links.length}</code>) : 'No Links'}
           </div>
         </div>
         <div className='dt dt--fixed pt2' style={{ height: 26 }}>
           {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
           <label className='dtc silver tracked ttu f7 v-mid' style={{ width: 48 }}>Data</label>
           <div className='dtc truncate mid-gray'>
-            {data ? null : 'No data'}
+            {data != null ? null : 'No data'}
           </div>
         </div>
-        {!data
+        {data == null
           ? null
           : (
           <div className='pa3 mt2 bg-white f5 nl3 nr3 mh0-l overflow-x-auto'>
+            {/* @ts-expect-error - object inspector types are wrong. see https://www.npmjs.com/package/react-inspector#theme  */}
             <ObjectInspector showMaxKeys={100} data={getObjectInspectorData(data)} theme={objectInspectorTheme} expandPaths={toExpandPathsNotation(localPath)} />
           </div>
             )}
       </div>
-      {!links || !links.length
+      {links?.length == null || links.length === 0
         ? null
         : (
         <div className='mv2 nl3 nr3 mh0-l'>
@@ -195,4 +206,4 @@ const ObjectInfo = ({ t, tReady, className, type, cid, localPath, size, data, li
   )
 }
 
-export default withTranslation('explore')(ObjectInfo)
+export default ObjectInfo

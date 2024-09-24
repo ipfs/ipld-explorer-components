@@ -1,9 +1,11 @@
 import React from 'react'
-import { Trans, withTranslation } from 'react-i18next'
-import Box from '../box/Box'
+import { Trans, useTranslation } from 'react-i18next'
+import Box from '../box/Box.jsx'
 import ipldLogoSrc from './ipld.svg'
 
-export const AboutIpld = ({ t }) => {
+export const AboutIpld: React.FC = () => {
+  const { t } = useTranslation()
+
   return (
     <Box className='tl dib pa4 avenir measure-wide-l lh-copy dark-gray ba-l b--black-10'>
       <div className='tc'>
@@ -23,5 +25,3 @@ export const AboutIpld = ({ t }) => {
     </Box>
   )
 }
-
-export default withTranslation('explore')(AboutIpld)

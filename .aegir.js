@@ -1,5 +1,5 @@
 /** @type {import('aegir').PartialOptions} */
-module.exports = {
+export default {
   lint: {
     files: [
       // '!node_modules/**',

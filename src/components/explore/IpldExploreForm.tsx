@@ -1,14 +1,16 @@
-import React, { useState } from 'react'
-import { withTranslation } from 'react-i18next'
+import React, { type FormEvent, useState, type ChangeEvent } from 'react'
+import { useTranslation } from 'react-i18next'
 import StrokeIpld from '../../icons/StrokeIpld'
-import { useExplore } from '../../providers/explore.tsx'
+import { useExplore } from '../../providers/explore'
 
-const IpldExploreForm = ({ t }) => {
+export const IpldExploreForm: React.FC = () => {
+  const { t } = useTranslation('explore')
+
   const [path, setPath] = useState('')
   const [showEmptyError, setShowEmptyError] = useState(false)
   const { doExploreUserProvidedPath } = useExplore()
 
-  const handleOnSubmit = (evt) => {
+  const handleOnSubmit = (evt: FormEvent<HTMLFormElement>): void => {
     evt.preventDefault()
     if (path.trim().length === 0) {
       setShowEmptyError(true)
@@ -17,7 +19,7 @@ const IpldExploreForm = ({ t }) => {
     doExploreUserProvidedPath(path)
   }
 
-  const handleOnChange = (evt) => {
+  const handleOnChange = (evt: ChangeEvent<HTMLInputElement>): void => {
     const newPath = evt.target.value
     if (showEmptyError && newPath.length > 0) {
       setShowEmptyError(false)
@@ -59,4 +61,4 @@ const IpldExploreForm = ({ t }) => {
   )
 }
 
-export default withTranslation('explore')(IpldExploreForm)
+export default IpldExploreForm

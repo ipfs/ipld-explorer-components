@@ -1,39 +1,43 @@
+import { type CID } from 'multiformats/cid'
 import React, { useEffect, useState } from 'react'
-import { withTranslation } from 'react-i18next'
-import extractInfo from '../../lib/extract-info'
+import { useTranslation } from 'react-i18next'
+import extractInfo, { type ExtractedInfo } from '../../lib/extract-info.js'
 
-export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
-  const [cidErr, setCidErr] = useState(null)
-  const [cidInfo, setCidInfo] = useState(null)
+export const CidInfo: React.FC<{ cid: CID, className: string }> = ({ cid, className, ...props }) => {
+  const { t } = useTranslation('explore')
+  const [cidErr, setCidErr] = useState<Error | null>(null)
+  const [cidInfo, setCidInfo] = useState<ExtractedInfo | null>(null)
   useEffect(() => {
-    const asyncFn = async () => {
+    const asyncFn = async (): Promise<void> => {
       try {
-        if (cid) {
+        if (cid != null) {
           setCidInfo(await extractInfo(cid))
         }
-      } catch (err) {
+      } catch (err: any) {
         console.error(err)
         setCidErr(err)
       }
     }
-    asyncFn()
+    void asyncFn()
   }, [cid])
 
-  return !cid
-    ? null
-    : (
+  if (cid == null) {
+    return null
+  }
+
+  return (
     <section className={`ph3 pv4 sans-serif ${className}`} {...props}>
       <label className='db pb2'>
         <a className='tracked ttu f5 fw2 teal-muted hover-aqua link' href='https://docs.ipfs.io/concepts/glossary/#cid' rel='external' target='_external'>
           {t('CidInfo.header')}
         </a>
       </label>
-      {!cidInfo
+      {(cidInfo == null)
         ? null
         : (
         <div>
-          <div className='f7 monospace fw4 ma0 pb2 truncate mid-gray force-select' title={cid}>
-            {cid}
+          <div className='f7 monospace fw4 ma0 pb2 truncate mid-gray force-select' title={cid.toString()}>
+            {cid.toString()}
           </div>
           <div className='f6 sans-serif fw4 ma0 pb2 truncate' id='CidInfo-human-readable-cid'>
             {cidInfo.humanReadable}
@@ -74,18 +78,18 @@ export const CidInfo = ({ t, tReady, cid, className, ...props }) => {
           </div>
         </div>
           )}
-      {!cidErr
+      {(cidErr == null)
         ? null
         : (
         <div>
           <div className='f5 sans-serif fw5 ma0 pv2 truncate navy'>
-            {cid}
+            {cid.toString()}
           </div>
           <div className='red fw2 ma0 f7'>{cidErr.message}</div>
         </div>
           )}
     </section>
-      )
+  )
 }
 
-export default withTranslation('explore')(CidInfo)
+export default CidInfo

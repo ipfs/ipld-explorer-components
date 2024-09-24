@@ -1,5 +1,5 @@
 import { CID } from 'multiformats/cid'
-import React, { createContext, useContext, useState, useEffect, type ReactNode, type Provider } from 'react'
+import React, { createContext, useContext, useState, useEffect, type ReactNode, type Provider, useCallback } from 'react'
 import { ensureLeadingSlash } from '../lib/helpers.js'
 import { importCar } from '../lib/import-car.js'
 import { parseIpldPath } from '../lib/parse-ipld-path.js'
@@ -8,6 +8,7 @@ import { useHelia } from './helia.js'
 
 interface ExploreContextProps {
   exploreState: ExploreState
+  selectExplorePathFromHash(): string
   doExploreLink(link: any): void
   doExploreUserProvidedPath(path: string): void
   doUploadUserProvidedCar(file: File, uploadImage: string): Promise<void>
@@ -25,6 +26,24 @@ interface ExploreState {
 
 export const ExploreContext = createContext<ExploreContextProps | undefined>(undefined)
 
+const getCidFromCidOrFqdn = (cidOrFqdn: CID | string): CID => {
+  // eslint-disable-next-line no-console
+  console.log('cidOrFqdn', cidOrFqdn)
+  if (typeof cidOrFqdn === 'object' && 'multihash' in cidOrFqdn) {
+    return cidOrFqdn
+  }
+  if (cidOrFqdn.toString().startsWith('/ipfs/')) {
+    return CID.parse(cidOrFqdn.slice('/ipfs/'.length))
+  }
+  if (cidOrFqdn.toString().startsWith('/ipns/')) {
+    throw new Error('ipns not supported yet')
+  }
+  if (cidOrFqdn.startsWith('/')) {
+    return CID.parse(cidOrFqdn.slice(1))
+  }
+  return CID.parse(cidOrFqdn)
+}
+
 export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
   const [exploreState, setExploreState] = useState<ExploreState>({
     path: null,
@@ -36,33 +55,21 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
     error: null
   })
 
-  const thing = useHelia()
+  const { helia } = useHelia()
 
-  const helia = thing.selectHelia()
+  // const helia = heliaContext.selectHelia()
+  // eslint-disable-next-line no-console
+  console.log('helia', helia)
 
-  const getCidFromCidOrFqdn = (cidOrFqdn: CID | string): CID => {
-    if (typeof cidOrFqdn === 'object' && 'multihash' in cidOrFqdn) {
-      return cidOrFqdn
-    }
-    if (cidOrFqdn.toString().startsWith('/ipfs/')) {
-      return CID.parse(cidOrFqdn.slice('/ipfs/'.length))
-    }
-    if (cidOrFqdn.toString().startsWith('/ipns/')) {
-      throw new Error('ipns not supported yet')
-    }
-    if (cidOrFqdn.startsWith('/')) {
-      return CID.parse(cidOrFqdn.slice(1))
-    }
-    throw new Error('Invalid CID or FQDN')
-  }
-
-  const fetchExploreData = async (path: string): Promise<void> => {
+  const fetchExploreData = useCallback(async (path: string): Promise<void> => {
     const pathParts = parseIpldPath(path)
-    if (pathParts == null) return
+    if (pathParts == null || helia == null) return
 
     const { cidOrFqdn, rest } = pathParts
     try {
       const cid = getCidFromCidOrFqdn(cidOrFqdn)
+      // eslint-disable-next-line no-console
+      console.log('getting ready to call resolveIpldPath with helia', helia)
       const { targetNode, canonicalPath, localPath, nodes, pathBoundaries } = await resolveIpldPath(helia, cid, rest)
 
       setExploreState({
@@ -78,7 +85,7 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
       console.warn('Failed to resolve path', path, error)
       setExploreState((prevState) => ({ ...prevState, error }))
     }
-  }
+  }, [helia])
 
   const doExploreLink = (link: any): void => {
     const { nodes, pathBoundaries } = exploreState
@@ -98,9 +105,13 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
     window.location.hash = hash
   }
 
-  const doUploadUserProvidedCar = async (file: File, uploadImage: string): Promise<void> => {
+  const doUploadUserProvidedCar = useCallback(async (file: File, uploadImage: string): Promise<void> => {
+    if (helia == null) {
+      console.error('FIXME: Helia not ready yet, but user tried to upload a car file')
+      return
+    }
     try {
-      const rootCid = await importCar(helia, file)
+      const rootCid = await importCar(file, helia)
       const hash = rootCid.toString() != null ? `#/explore${ensureLeadingSlash(rootCid.toString())}` : '#/explore'
       window.location.hash = hash
 
@@ -111,7 +122,7 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
     } catch (err) {
       console.error('Could not import car file', err)
     }
-  }
+  }, [helia])
 
   useEffect(() => {
     const handleHashChange = (): void => {
@@ -129,10 +140,18 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
     return () => {
       window.removeEventListener('hashchange', handleHashChange)
     }
-  }, [])
+  }, [helia])
+
+  const selectExplorePathFromHash = (): string => {
+    return window.location.hash.slice('#/explore'.length)
+  }
+
+  if (helia == null) {
+    return null
+  }
 
   return (
-    <ExploreContext.Provider value={{ exploreState, doExploreLink, doExploreUserProvidedPath, doUploadUserProvidedCar }}>
+    <ExploreContext.Provider value={{ exploreState, selectExplorePathFromHash, doExploreLink, doExploreUserProvidedPath, doUploadUserProvidedCar }}>
       {children}
     </ExploreContext.Provider>
   )

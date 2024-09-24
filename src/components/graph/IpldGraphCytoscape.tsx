@@ -1,12 +1,12 @@
 import cytoscape from 'cytoscape'
 import dagre from 'cytoscape-dagre'
 import React from 'react'
-import { getCodecOrNull } from '../../lib/cid'
-import { colorForNode } from '../object-info/ObjectInfo'
+import { getCodecOrNull } from '../../lib/cid.js'
+import { colorForNode } from '../object-info/ObjectInfo.jsx'
 
 cytoscape.use(dagre)
 
-const graphOpts = {
+const graphOpts: Omit<cytoscape.CytoscapeOptions, 'elements' | 'container' | 'layout'> & { layout: dagre.DagreLayoutOptions } = {
   wheelSensitivity: 0.05,
   layout: {
     name: 'dagre',
@@ -36,8 +36,10 @@ const graphOpts = {
         'target-label': 'data(index)',
         'font-family': 'Consolas, monaco, monospace',
         'font-size': '8px',
+        // @ts-expect-error - maybe cytoscape types bug
         'target-text-margin-x': '-5px',
         color: '#ccc',
+        // @ts-expect-error - maybe cytoscape types bug
         'target-text-margin-y': '-2px',
         'text-halign': 'center',
         'text-valign': 'bottom'
@@ -46,45 +48,59 @@ const graphOpts = {
   ]
 }
 
-export default class IpldGraphCytoscape extends React.Component {
-  constructor (props) {
+export interface IpldGraphCytoscapeProps {
+  links: any[]
+  path: string
+  cid: string
+  onNodeClick: any
+  className: string
+}
+
+interface IpldGraphCytoscapeState {
+  truncatedLinks: any[]
+}
+
+export default class IpldGraphCytoscape extends React.Component<IpldGraphCytoscapeProps, IpldGraphCytoscapeState> {
+  readonly graphRef: React.RefObject<HTMLDivElement>
+  cy: cytoscape.Core | null
+  constructor (props: IpldGraphCytoscapeProps) {
     super(props)
     this.graphRef = React.createRef()
     this.renderTree = this.renderTree.bind(this)
     this.ipfsLinksToCy = this.ipfsLinksToCy.bind(this)
     this.cy = null
-    this.state = {}
+    this.state = { truncatedLinks: [] }
   }
 
-  static getDerivedStateFromProps (props, state) {
+  static getDerivedStateFromProps (props: IpldGraphCytoscapeProps, state: IpldGraphCytoscapeState): IpldGraphCytoscapeState {
     // TODO: Show that links have been truncated.
     return {
       truncatedLinks: props.links.slice(0, 100)
     }
   }
 
-  componentDidMount () {
+  componentDidMount (): void {
     const { path } = this.props
     const { truncatedLinks: links } = this.state
     const container = this.graphRef.current
     this.cy = this.renderTree({ path, links, container })
   }
 
-  componentDidUpdate () {
-    this.cy.destroy()
+  componentDidUpdate (): void {
+    this.cy?.destroy()
     const { path } = this.props
     const { truncatedLinks: links } = this.state
     const container = this.graphRef.current
     this.cy = this.renderTree({ path, links, container })
   }
 
-  render () {
+  render (): React.ReactNode {
     // pluck out custom props. Pass anything else on
     const { onNodeClick, path, cid, className, ...props } = this.props
     return <div className={className} ref={this.graphRef} {...props} />
   }
 
-  renderTree ({ path, links, container }) {
+  renderTree ({ path, links, container }: { path: string, links: any[], container: HTMLElement | null | undefined }): cytoscape.Core {
     const cyLinks = this.ipfsLinksToCy(links)
     // TODO: path is currently alwasys the root cid, but this will change.
     const root = this.makeNode({ target: path }, '')
@@ -101,12 +117,12 @@ export default class IpldGraphCytoscape extends React.Component {
       ...graphOpts
     })
 
-    if (this.props.onNodeClick) {
-      cy.on('tap', async (e) => {
+    if (this.props.onNodeClick != null) {
+      cy.on('tap', (e): void => {
         // onNodeClick is triggered when clicking in gaps between nodes which is weird
-        if (!e.target.data) return
+        if (e.target.data == null) return
         const data = e.target.data()
-        const link = this.state.truncatedLinks[data.index]
+        const link = this.state?.truncatedLinks?.[data.index]
         this.props.onNodeClick(link)
       })
     }
@@ -114,14 +130,15 @@ export default class IpldGraphCytoscape extends React.Component {
     return cy
   }
 
-  ipfsLinksToCy (links) {
+  ipfsLinksToCy (links: any[]): any[] {
     const edges = links.map(this.makeLink)
     const nodes = links.map(this.makeNode)
     return [...nodes, ...edges]
   }
 
-  makeNode ({ target, path }, index) {
+  makeNode ({ target, path }: any, index: string | number): any {
     const type = getCodecOrNull(target)
+    // @ts-expect-error - todo: resolve this type error
     const bg = colorForNode(type)
     return {
       group: 'nodes',
@@ -134,7 +151,7 @@ export default class IpldGraphCytoscape extends React.Component {
     }
   }
 
-  makeLink ({ source, target, path }, index) {
+  makeLink ({ source, target, path }: any, index: number): any {
     return {
       group: 'edges',
       data: {
@@ -145,7 +162,11 @@ export default class IpldGraphCytoscape extends React.Component {
     }
   }
 
-  runLayout (cy) {
-    cy.layout(this.layoutOpts).run()
-  }
+  // runLayout (cy: cytoscape.Core): void {
+  //   cy.layout(this.layoutOpts).run()
+  // }
+
+  // layoutOpts (layoutOpts: any) {
+  //   throw new Error('Method not implemented.')
+  // }
 }

@@ -1,6 +1,7 @@
-import React from 'react'
+import { type CID } from 'multiformats/cid'
+import React, { type HTMLProps } from 'react'
 
-export function cidStartAndEnd (value) {
+export function cidStartAndEnd (value: any): { value: any, start: string, end: string } {
   const chars = value.split('')
   if (chars.length <= 9) return value
   const start = chars.slice(0, 4).join('')
@@ -12,18 +13,23 @@ export function cidStartAndEnd (value) {
   }
 }
 
-export function shortCid (value) {
+export function shortCid (value: any): string {
   const { start, end } = cidStartAndEnd(value)
   return `${start}…${end}`
 }
 
-const Cid = ({ value, title, style, ...props }) => {
+export interface CidProps extends Omit<HTMLProps<JSX.IntrinsicElements['abbr']>, 'value'> {
+  value: CID
+}
+
+const Cid: React.FC<CidProps> = ({ value, title, style, ...props }) => {
   style = Object.assign({}, {
     textDecoration: 'none'
   }, style)
   const { start, end } = cidStartAndEnd(value)
   return (
-    <abbr title={title || value} style={style} {...props}>
+    // @ts-expect-error - todo: resolve this type error
+    <abbr title={title ?? value} style={style} {...props}>
       <span>{start}</span>
       <span className='o-20'>…</span>
       <span>{end}</span>

@@ -1,9 +1,18 @@
-import React from 'react'
-import { getCodecOrNull } from '../../lib/cid'
-import Cid from '../cid/Cid'
-import { colorForNode } from '../object-info/ObjectInfo'
+import { type CID } from 'multiformats/cid'
+import React, { type PropsWithChildren } from 'react'
+import { getCodecOrNull } from '../../lib/cid.js'
+import Cid from '../cid/Cid.jsx'
+import { colorForNode } from '../object-info/ObjectInfo.jsx'
 
-const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', className = '', ...props }) => {
+export interface GraphCrumbProps {
+  cid: CID
+  pathBoundaries: Array<{ path: string, source: CID, target: CID }>
+  localPath?: string
+  hrefBase?: string
+  className?: string
+}
+
+const GraphCrumb: React.FC<GraphCrumbProps> = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', className = '', ...props }) => {
   const [first, ...rest] = pathBoundaries
   const last = pathBoundaries[pathBoundaries.length - 1]
   const firstHrefBase = calculateHrefBase(hrefBase, cid, pathBoundaries, 0)
@@ -14,7 +23,7 @@ const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', cl
           <a href={firstHrefBase} className='monospace no-underline dark-gray o-50 glow'>
             <Cid value={cid} />
           </a>
-          {first
+          {first != null
             ? (
             <div className='dib'>
               <Divider />
@@ -22,7 +31,7 @@ const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', cl
             </div>
               )
             : null}
-          {localPath && pathBoundaries.length === 0
+          {localPath != null && pathBoundaries.length === 0
             ? (
             <div className='dib'>
               <Divider />
@@ -46,7 +55,7 @@ const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', cl
             </div>
           )
         })}
-        {localPath && pathBoundaries.length > 0
+        {localPath != null && pathBoundaries.length > 0
           ? (
           <div className='dib'>
             <Divider />
@@ -65,14 +74,15 @@ const GraphCrumb = ({ cid, pathBoundaries, localPath, hrefBase = '#/explore', cl
   )
 }
 
-function calculateHrefBase (hrefBase, cid, boundaries, boundaryIndex) {
-  const relPath = boundaries.slice(0, boundaryIndex).map(b => b.path).join('/')
-  const cidHref = hrefBase + '/' + cid
-  return relPath ? cidHref + '/' + relPath : cidHref
+function calculateHrefBase (hrefBase: string, cid: CID, boundaries: any, boundaryIndex: any): string {
+  const relPath: string = boundaries.slice(0, boundaryIndex).map((b: any) => b.path).join('/')
+  const cidHref = hrefBase + '/' + cid.toString()
+  return relPath != null ? cidHref + '/' + relPath : cidHref
 }
 
-const NodeUnderline = ({ cid, children }) => {
+const NodeUnderline: React.FC<PropsWithChildren<{ cid: CID }>> = ({ cid, children }) => {
   const type = getCodecOrNull(cid)
+  // @ts-expect-error - todo: resolve this type error
   const color = colorForNode(type)
   return (
     <div className='dib overflow-hidden'>
@@ -81,7 +91,7 @@ const NodeUnderline = ({ cid, children }) => {
   )
 }
 
-const Path = ({ path, hrefBase, sourceCid }) => {
+const Path: React.FC<{ path: string, hrefBase: string, sourceCid: CID }> = ({ path, hrefBase, sourceCid }) => {
   const parts = [path]
 
   return (
@@ -94,7 +104,7 @@ const Path = ({ path, hrefBase, sourceCid }) => {
             {i !== 0 && <Divider />}
             <a
               className='dib no-underline dark-gray o-50 glow'
-              title={sourceCid + '/' + relPath}
+              title={sourceCid.toString() + '/' + relPath}
               href={href}
             >
               {p}
@@ -106,6 +116,6 @@ const Path = ({ path, hrefBase, sourceCid }) => {
   )
 }
 
-const Divider = () => <div className='dib ph2 gray v-top'>/</div>
+const Divider: React.FC = () => <div className='dib ph2 gray v-top'>/</div>
 
 export default GraphCrumb
