@@ -1,4 +1,11 @@
-### [7.0.1](https://github.com/ipfs/ipld-explorer-components/compare/v7.0.1...v7.0.2)
+### [7.0.3](https://github.com/ipfs/ipld-explorer-components/compare/v7.0.2...v7.0.3)
+
+* fix: explore page can query local kubo by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/445
+* fix: use delegated routing over https by @lidel in https://github.com/ipfs/ipld-explorer-components/pull/443
+
+**Full Changelog**: https://github.com/ipfs/ipld-explorer-components/compare/v7.0.2...v7.0.3
+
+### [7.0.2](https://github.com/ipfs/ipld-explorer-components/compare/v7.0.1...v7.0.2)
 
 * fix: local only unless remote is enabled(default) by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/438
 
