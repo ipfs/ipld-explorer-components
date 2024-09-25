@@ -5,7 +5,31 @@ import './LinksTable.css'
 
 export interface LinksTableProps {
   links: any[]
-  onLinkClick(link: any): void
+  onLinkClick(evt: RowLinkClickEventData): void
+}
+
+export interface RowLinkClickEventData {
+  index: number
+  size: bigint
+
+  /**
+   * The path to the target CID from the current path
+   * This should be appended to the current path in order to get the target CID
+   */
+  path: string
+  /**
+   * string representation of the CID the row represents
+   */
+  source: string
+  /**
+   * string representation of the CID the row represents
+   */
+  target: string
+
+}
+
+export interface RowLinkClickEvent extends RowMouseEventHandlerParams {
+  rowData: RowLinkClickEventData
 }
 
 export const LinksTable: React.FC<LinksTableProps> = ({ links, onLinkClick }) => {
@@ -17,10 +41,10 @@ export const LinksTable: React.FC<LinksTableProps> = ({ links, onLinkClick }) =>
   const headerHeight = 32
   const tableHeight = Math.max(370, (Math.min(window.innerHeight - 500, links.length * rowHeight + headerHeight)))
 
-  // eslint-disable-next-line no-console
-  console.log('onLinkClick', onLinkClick)
-
-  const handleOnRowClick = useCallback(({ rowData }: RowMouseEventHandlerParams) => {
+  const handleOnRowClick = useCallback((evt: RowLinkClickEvent) => {
+    const { rowData } = evt
+    // eslint-disable-next-line no-debugger
+    debugger
     onLinkClick(rowData)
   }, [onLinkClick])
 

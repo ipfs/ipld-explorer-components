@@ -5,7 +5,9 @@ import { importCar } from '../lib/import-car.js'
 import { parseIpldPath } from '../lib/parse-ipld-path.js'
 import { resolveIpldPath } from '../lib/resolve-ipld-path.js'
 import { useHelia } from './helia.js'
+import type { RowLinkClickEventData } from '../components/object-info/LinksTable.jsx'
 import type IpldExploreError from '../lib/errors.js'
+import type { NormalizedDagNode } from '../types.js'
 
 interface ExploreContextProps {
   exploreState: ExploreState
@@ -18,8 +20,19 @@ interface ExploreContextProps {
 interface ExploreState {
   path: string | null
   rootCID: CID | null
-  targetNode: any
+  /**
+   * The NormalizedDagNode version of the currently viewed dag node
+   */
+  targetNode: NormalizedDagNode | null
+
+  /**
+   * The absolute, canonical, path to the currently viewed node, including the root CID.
+   */
   canonicalPath: string
+
+  /**
+   * The currently displayed path, relative to the root CID.
+   */
   localPath: string
   nodes: any[]
   pathBoundaries: any[]
@@ -90,7 +103,7 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
     }
   }, [helia])
 
-  const doExploreLink = (link: any): void => {
+  const doExploreLink = (link: RowLinkClickEventData): void => {
     const { nodes, pathBoundaries } = exploreState
     const cid = nodes[0].cid
     const pathParts = pathBoundaries.map((p) => p.path)

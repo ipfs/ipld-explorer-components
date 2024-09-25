@@ -129,14 +129,10 @@ export function findLink (node: NormalizedDagNode, linkPath: string | null): Nor
 }
 
 export function findLinkPath (fullPath?: string, remainderPath?: string): string | null {
-  // eslint-disable-next-line no-debugger
-  // debugger
-  if (fullPath == null || fullPath === '/') return null
-  if (remainderPath == null) return trimSlashes(fullPath)
+  if (fullPath == null || fullPath === '/' || fullPath === '') return null
+  if (remainderPath == null || remainderPath === '') return trimSlashes(fullPath)
   if (!fullPath.endsWith(remainderPath)) {
-    // quick hack to bypass this error.
-    remainderPath = ''
-    // throw new Error(`Requested IPLD path should end with the remainder path: fullPath=${fullPath}, remainderPath=${remainderPath}`)
+    throw new Error(`Requested IPLD path should end with the remainder path: fullPath=${fullPath}, remainderPath=${remainderPath}`)
   }
   // Remove remainder path from end of full path to get link path
   const linkPath = fullPath.substring(0, fullPath.length - remainderPath.length)
