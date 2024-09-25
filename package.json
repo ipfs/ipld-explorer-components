@@ -246,7 +246,7 @@
     "react-i18next": "^14.0.1",
     "react-virtualized": "^9.22.5",
     "rollup": "^4.9.6",
-    "storybook": "^7.6.12",
+    "storybook": "7.6.12",
     "tachyons": "^4.12.0",
     "typescript": "^5.0.4",
     "vite": "^4.3.7",

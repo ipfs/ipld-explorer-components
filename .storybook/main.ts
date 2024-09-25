@@ -16,9 +16,9 @@ const config: StorybookConfig = {
     options: {},
   },
   typescript: { reactDocgen: 'react-docgen-typescript' },
-  async viteFinal(config) {
-    // Merge custom configuration into the default config
-    return mergeConfig(config, viteConfig);
-  },
+  // async viteFinal(config) {
+  //   // Merge custom configuration into the default config
+  //   return mergeConfig(config, viteConfig);
+  // },
 };
 export default config;
