@@ -69,8 +69,9 @@ const defaultState: ExploreState = {
 }
 
 export const ExploreProvider = ({ children, state = defaultState }: { children?: ReactNode, state?: ExploreState }): React.ReactNode => {
-  const [exploreState, setExploreState] = useState<ExploreState>(state)
+  const [exploreState, setExploreState] = useState<ExploreState>({ ...state, explorePathFromHash: window.location.hash.slice('#/explore'.length) })
   const { helia } = useHelia()
+  const { explorePathFromHash } = exploreState
 
   const fetchExploreData = useCallback(async (path: string): Promise<void> => {
     // Clear the target node when a new path is requested
@@ -143,7 +144,6 @@ export const ExploreProvider = ({ children, state = defaultState }: { children?:
   useEffect(() => {
     const handleHashChange = (): void => {
       const explorePathFromHash = window.location.hash.slice('#/explore'.length)
-      // setExplorePathFromHash(explorePathFromHash)
 
       setExploreState((state) => ({
         ...state,
@@ -159,14 +159,15 @@ export const ExploreProvider = ({ children, state = defaultState }: { children?:
     }
   }, [])
 
-  const explorePathFromHash = exploreState.explorePathFromHash
   useEffect(() => {
-    if (explorePathFromHash != null) {
+    // if explorePathFromHash or helia change and are not null, fetch the data
+    // We need to check for helia because the helia provider is async and may not be ready yet
+    if (explorePathFromHash != null && helia != null) {
       void (async () => {
         await fetchExploreData(decodeURIComponent(explorePathFromHash))
       })()
     }
-  }, [explorePathFromHash])
+  }, [helia, explorePathFromHash])
 
   if (helia == null) {
     return null
