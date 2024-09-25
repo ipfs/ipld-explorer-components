@@ -3,9 +3,9 @@
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
 import * as raw from 'multiformats/codecs/raw'
-import { createHeliaMock } from '../../test/unit/heliaMock'
-import { addDagNodeToHelia } from './helpers'
-import resolveIpldPath, { findLinkPath } from './resolve-ipld-path'
+import { createHeliaMock } from '../../test/unit/heliaMock.js'
+import { addDagNodeToHelia } from './helpers.ts'
+import { resolveIpldPath, findLinkPath, ipldGetNodeAndRemainder } from './resolve-ipld-path.ts'
 
 // #WhenAddingNewCodec
 describe('resolveIpldPath', () => {
@@ -140,6 +140,74 @@ describe('resolveIpldPath', () => {
       source: rootNode.toString(),
       target: childNode.toString()
     }))
+  })
+})
+
+describe('ipldGetNodeAndRemainder', () => {
+  /**
+   * @type {import('@helia/interface').Helia}
+   */
+  let helia
+  beforeEach(async () => {
+    helia = await createHeliaMock()
+  })
+
+  it('should get node and remainder path successfully', async () => {
+    const node4Cid = await addDagNodeToHelia(helia, 'dag-pb', createDagPbNode('4th node', []))
+    const node3Cid = await addDagNodeToHelia(helia, 'dag-pb', createDagPbNode('3rd node', [{
+      name: 'a',
+      cid: node4Cid.toString(),
+      size: 101
+    }]))
+    const node2Cid = await addDagNodeToHelia(helia, 'dag-pb', createDagPbNode('2nd node', [{
+      name: 'b',
+      cid: node3Cid.toString(),
+      size: 101
+    }]))
+    const rootNodeCid = await addDagNodeToHelia(helia, 'dag-pb', createDagPbNode('root node', [{
+      name: 'a',
+      cid: node2Cid.toString(),
+      size: 101
+    }]))
+
+    const textEncoder = new TextEncoder()
+
+    let res = await ipldGetNodeAndRemainder(helia, rootNodeCid.toString(), '')
+    expect(res.value).toStrictEqual({
+      Data: textEncoder.encode('root node'),
+      Links: [{
+        Hash: node2Cid,
+        Name: 'a',
+        Tsize: 101
+      }]
+    })
+    // expect(res.remainderPath).toBe('')
+    res = await ipldGetNodeAndRemainder(helia, rootNodeCid.toString(), '/a')
+    expect(res.value).toStrictEqual({
+      Data: textEncoder.encode('2nd node'),
+      Links: [{
+        Hash: node3Cid,
+        Name: 'b',
+        Tsize: 101
+      }]
+    })
+    // expect(res.remainderPath).toBe('')
+    res = await ipldGetNodeAndRemainder(helia, rootNodeCid.toString(), '/a/b')
+    expect(res.value).toStrictEqual({
+      Data: textEncoder.encode('3rd node'),
+      Links: [{
+        Hash: node4Cid,
+        Name: 'a',
+        Tsize: 101
+      }]
+    })
+    // expect(res.remainderPath).toBe('')
+    res = await ipldGetNodeAndRemainder(helia, rootNodeCid.toString(), '/a/b/a')
+    expect(res.value).toStrictEqual({
+      Data: textEncoder.encode('4th node'),
+      Links: []
+    })
+    // expect(res.remainderPath).toBe('')
   })
 })
 

@@ -40,10 +40,13 @@ export function getCodecOrNull (value: CID | string | null): string | null {
 
 export function getCodeOrNull (value: CID | string | null): number | null {
   const cid = toCidOrNull(value)
-  return (cid != null) ? cid.code : null
+  if (cid == null) return null
+  return cid.code
 }
 
 export function toCidStrOrNull (value: CID | string | null): string | null {
   const cid = toCidOrNull(value)
-  return (cid != null) ? cid.toString() : null
+  if (cid == null) return null
+  // return cid?.toString() ?? null
+  return cid.toString()
 }

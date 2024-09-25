@@ -58,3 +58,21 @@ export interface DecodedCidMulticodec {
 export interface DecodedCidMultihash extends MultihashDigest {
   name: Awaited<ReturnType<typeof getHasherForCode>>['name']
 }
+
+export interface dagNodeLink {
+  cid: string
+  name: string
+  size: number
+}
+
+export interface dagNodeData {
+  blockSizes: unknown[]
+  data: unknown
+  type: string
+}
+
+export interface dagNode {
+  data: dagNodeData
+  links: dagNodeLink[]
+  size: number
+}

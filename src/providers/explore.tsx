@@ -86,6 +86,16 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
       // eslint-disable-next-line no-console
       console.log('getting ready to call resolveIpldPath with:', helia, cid, rest)
       const { targetNode, canonicalPath, localPath, nodes, pathBoundaries } = await resolveIpldPath(helia, cid, rest)
+      // eslint-disable-next-line no-console
+      console.log('targetNode:', targetNode)
+      // eslint-disable-next-line no-console
+      console.log('canonicalPath:', canonicalPath)
+      // eslint-disable-next-line no-console
+      console.log('localPath:', localPath)
+      // eslint-disable-next-line no-console
+      console.log('nodes:', nodes)
+      // eslint-disable-next-line no-console
+      console.log('pathBoundaries:', pathBoundaries)
 
       setExploreState({
         path,
@@ -107,9 +117,13 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
     const { nodes, pathBoundaries } = exploreState
     const cid = nodes[0].cid
     const pathParts = pathBoundaries.map((p) => p.path)
+    // eslint-disable-next-line no-console
+    console.log('pathParts', pathParts)
     if (link?.path != null) {
       pathParts.push(link.path)
     }
+    // eslint-disable-next-line no-console
+    console.log('pathParts', pathParts)
     pathParts.unshift(cid)
     const path = pathParts.map((part) => encodeURIComponent(part)).join('/')
     const hash = `#/explore/${path}`

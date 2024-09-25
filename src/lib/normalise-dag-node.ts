@@ -1,30 +1,15 @@
 // @ts-check
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
-import { type PBLink, type PBNode } from '@ipld/dag-pb'
 import { UnixFS } from 'ipfs-unixfs'
-import { type NormalizedDagPbNodeFormat, type CodecType, type NormalizedDagNode, type NormalizedDagLink } from '../types.js'
 import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid.js'
-
-interface dagNodeLink {
-  cid: string
-  name: string
-  size: number
-}
-interface dagNodeData {
-  blockSizes: unknown[]
-  data: unknown
-  type: string
-}
-interface dagNode {
-  data: dagNodeData
-  links: dagNodeLink[]
-  size: number
-}
+import { isTruthy } from './helpers.js'
+import type { NormalizedDagPbNodeFormat, CodecType, NormalizedDagNode, NormalizedDagLink, dagNode } from '../types.js'
+import type { PBLink, PBNode } from '@ipld/dag-pb'
 
 function isDagPbNode (node: dagNode | PBNode, cid: string): node is PBNode {
   const code = getCodeOrNull(cid)
-  return code === dagPb.code && (node as PBNode).Data !== undefined
+  return code === dagPb.code
 }
 
 /**
@@ -41,13 +26,13 @@ function isDagPbNode (node: dagNode | PBNode, cid: string): node is PBNode {
  * @returns {import('../types').NormalizedDagNode}
  */
 export default function normaliseDagNode (node: dagNode | PBNode, cidStr: string): NormalizedDagNode {
-  // const code = getCodeOrNull(cidStr)
+  const code = getCodeOrNull(cidStr)
   if (isDagPbNode(node, cidStr)) {
     return normaliseDagPb(node, cidStr, dagPb.code)
   }
   // try cbor style if we don't know any better
   // @ts-expect-error - todo: resolve node type error
-  return normaliseDagCbor(node, cidStr, dagCbor.code)
+  return normaliseDagCbor(node, cidStr, code ?? dagCbor.code)
 }
 
 /**
@@ -178,7 +163,7 @@ export function findAndReplaceDagCborLinks (obj: unknown, sourceCid: string, pat
   if (keys.length > 0) {
     return keys
       // @ts-expect-error - todo: resolve this type error
-      .map(key => findAndReplaceDagCborLinks(obj[key], sourceCid, path != null ? `${path}/${key}` : `${key}`))
+      .map(key => findAndReplaceDagCborLinks(obj[key], sourceCid, isTruthy(path) ? `${path}/${key}` : `${key}`))
       .reduce((a, b) => a.concat(b))
       .filter(a => Boolean(a))
   } else {

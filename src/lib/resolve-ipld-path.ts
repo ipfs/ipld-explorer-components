@@ -3,13 +3,14 @@ import { CID } from 'multiformats'
 import { type NormalizedDagLink, type NormalizedDagNode } from '../types.js'
 import getCodecForCid from './get-codec-for-cid.js'
 import { getRawBlock } from './get-raw-block.js'
+import { isFalsy, isNotFalsy, isTruthy } from './helpers'
 import normaliseDagNode from './normalise-dag-node.js'
 
 interface ResolvedIpldPathInfo {
   targetNode: NormalizedDagNode
   canonicalPath: string
   localPath: string
-  nodes: object[]
+  nodes: NormalizedDagNode[]
   pathBoundaries: object[]
 }
 
@@ -44,15 +45,9 @@ export interface IpldInterface {
  * - `localPath` is the tail part of the path that is local to the targetNode. May be ''
  * - `nodes` is the array of nodes that the path traverses.
  * - `pathBoundaries` is the array of links that the path traverses.
- *
- * @param {import('@helia/interface').Helia} helia
- * @param {string} sourceCid - the root hash
- * @param {string} path - everything after the hash
- * @param {object[]} nodes - accumulated node info
- * @param {object[]} pathBoundaries - accumulated path boundary info
- * @returns {ResolvedIpldPathInfo} resolved path info
  */
 export async function resolveIpldPath (helia: Helia, sourceCid: CID | string, path: string, nodes: NormalizedDagNode[] = [], pathBoundaries: NormalizedDagLink[] = []): Promise<ResolvedIpldPathInfo> {
+  debugger
   const { value, remainderPath } = await ipldGetNodeAndRemainder(helia, sourceCid, path)
   if (sourceCid == null) {
     // eslint-disable-next-line no-console
@@ -79,7 +74,19 @@ export async function resolveIpldPath (helia: Helia, sourceCid: CID | string, pa
   return { targetNode, canonicalPath, localPath: path, nodes, pathBoundaries }
 }
 
-export async function ipldGetNodeAndRemainder (helia: Helia, sourceCid: CID | string, path?: string): Promise<{ value: any, remainderPath: string }> {
+export interface IpldGetNodeAndRemainderResult {
+  /**
+   * The decoded value of the node at the given path
+   */
+  value: any
+
+  /**
+   * The path that was not resolved
+   */
+  remainderPath: string
+}
+
+export async function ipldGetNodeAndRemainder (helia: Helia, sourceCid: CID | string, path?: string): Promise<IpldGetNodeAndRemainderResult> {
   if (sourceCid == null) {
     // eslint-disable-next-line no-console
     console.trace('sourceCid is null')
@@ -121,16 +128,16 @@ export async function ipldGetNodeAndRemainder (helia: Helia, sourceCid: CID | st
  * @returns {import('./normalise-dag-node').NormalizedDagLink} the link object for `linkPath`
  */
 export function findLink (node: NormalizedDagNode, linkPath: string | null): NormalizedDagLink | null {
-  if (linkPath == null) return null
-  if (node == null) return null
+  if (isFalsy(linkPath)) return null
+  if (isFalsy(node)) return null
   const { links } = node
   const link = links.find((link) => link.path === linkPath)
   return link ?? null
 }
 
-export function findLinkPath (fullPath?: string, remainderPath?: string): string | null {
-  if (fullPath == null || fullPath === '/' || fullPath === '') return null
-  if (remainderPath == null || remainderPath === '') return trimSlashes(fullPath)
+export function findLinkPath (fullPath: string, remainderPath: string): string | null {
+  if (isFalsy(fullPath) || fullPath === '/') return null
+  if (isFalsy(remainderPath)) return trimSlashes(fullPath)
   if (!fullPath.endsWith(remainderPath)) {
     throw new Error(`Requested IPLD path should end with the remainder path: fullPath=${fullPath}, remainderPath=${remainderPath}`)
   }

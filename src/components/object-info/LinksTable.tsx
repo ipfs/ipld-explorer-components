@@ -43,8 +43,6 @@ export const LinksTable: React.FC<LinksTableProps> = ({ links, onLinkClick }) =>
 
   const handleOnRowClick = useCallback((evt: RowLinkClickEvent) => {
     const { rowData } = evt
-    // eslint-disable-next-line no-debugger
-    debugger
     onLinkClick(rowData)
   }, [onLinkClick])
 
