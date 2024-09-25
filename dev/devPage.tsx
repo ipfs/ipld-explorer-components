@@ -14,7 +14,7 @@ import { ExplorePage, StartExploringPage, IpldExploreForm, IpldCarExploreForm, E
 
 globalThis.Buffer = Buffer
 
-const HeaderComponent = ({ t }: { t: TFunction<'explore', undefined> }): JSX.Element => {
+const HeaderComponent = ({ t }: { t: TFunction<'explore', undefined> }): React.ReactElement => {
   const activeColor = 'navy 0-100'
   const inActiveColor = 'navy o-50'
   const [exploreFormType, setExploreFormType] = useState('cid')
@@ -68,7 +68,7 @@ const HeaderComponent = ({ t }: { t: TFunction<'explore', undefined> }): JSX.Ele
 
 const TranslatedHeaderComponent = withTranslation('explore')(HeaderComponent)
 
-const PageRenderer = (): JSX.Element => {
+const PageRenderer = (): React.ReactElement => {
   const [route, setRoute] = useState(window.location.hash.slice(1) ?? '/')
 
   useEffect(() => {
@@ -77,7 +77,7 @@ const PageRenderer = (): JSX.Element => {
     return () => { window.removeEventListener('hashchange', onHashChange) }
   }, [])
 
-  const renderPage = (): JSX.Element => {
+  const renderPage = (): React.ReactElement => {
     switch (true) {
       case route.startsWith('/explore'):
         return <ExplorePage />
@@ -96,7 +96,7 @@ const PageRenderer = (): JSX.Element => {
   )
 }
 
-const App = (): JSX.Element => {
+const App = (): React.ReactElement => {
   return (
     <HeliaProvider>
       <ExploreProvider>

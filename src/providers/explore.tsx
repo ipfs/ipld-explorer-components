@@ -11,15 +11,14 @@ import type { NormalizedDagNode } from '../types.js'
 
 interface ExploreContextProps {
   exploreState: ExploreState
-  explorePathFromHash: string | null
+  // explorePathFromHash: string | null
   doExploreLink(link: any): void
   doExploreUserProvidedPath(path: string): void
   doUploadUserProvidedCar(file: File, uploadImage: string): Promise<void>
 }
 
-interface ExploreState {
+export interface ExploreState {
   path: string | null
-  rootCID: CID | null
   /**
    * The NormalizedDagNode version of the currently viewed dag node
    */
@@ -37,6 +36,7 @@ interface ExploreState {
   nodes: any[]
   pathBoundaries: any[]
   error: IpldExploreError | null
+  explorePathFromHash: string | null
 }
 
 export const ExploreContext = createContext<ExploreContextProps | undefined>(undefined)
@@ -57,27 +57,27 @@ const getCidFromCidOrFqdn = (cidOrFqdn: CID | string): CID => {
   return CID.parse(cidOrFqdn)
 }
 
-export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
-  const [exploreState, setExploreState] = useState<ExploreState>({
-    path: null,
-    rootCID: null,
-    targetNode: null,
-    canonicalPath: '',
-    localPath: '',
-    nodes: [],
-    pathBoundaries: [],
-    error: null
-  })
-  const [explorePathFromHash, setExplorePathFromHash] = useState<string | null>(null)
+const defaultState: ExploreState = {
+  path: null,
+  targetNode: null,
+  canonicalPath: '',
+  localPath: '',
+  nodes: [],
+  pathBoundaries: [],
+  error: null,
+  explorePathFromHash: null
+}
 
+export const ExploreProvider = ({ children, state = defaultState }: { children?: ReactNode, state?: ExploreState }): React.ReactNode => {
+  const [exploreState, setExploreState] = useState<ExploreState>(state)
   const { helia } = useHelia()
 
   const fetchExploreData = useCallback(async (path: string): Promise<void> => {
     // Clear the target node when a new path is requested
-    setExploreState({
+    setExploreState((exploreState) => ({
       ...exploreState,
       targetNode: null
-    })
+    }))
     const pathParts = parseIpldPath(path)
     if (pathParts == null || helia == null) return
 
@@ -86,21 +86,21 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
       const cid = getCidFromCidOrFqdn(cidOrFqdn)
       const { targetNode, canonicalPath, localPath, nodes, pathBoundaries } = await resolveIpldPath(helia, cid, rest)
 
-      setExploreState({
+      setExploreState(({ explorePathFromHash }) => ({
+        explorePathFromHash,
         path,
-        rootCID: cid,
         targetNode,
         canonicalPath,
         localPath,
         nodes,
         pathBoundaries,
         error: null
-      })
+      }))
     } catch (error: any) {
       console.warn('Failed to resolve path', path, error)
       setExploreState((prevState) => ({ ...prevState, error }))
     }
-  }, [helia, exploreState])
+  }, [helia])
 
   const doExploreLink = (link: RowLinkClickEventData): void => {
     const { nodes, pathBoundaries } = exploreState
@@ -143,13 +143,12 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
   useEffect(() => {
     const handleHashChange = (): void => {
       const explorePathFromHash = window.location.hash.slice('#/explore'.length)
-      setExplorePathFromHash(explorePathFromHash)
+      // setExplorePathFromHash(explorePathFromHash)
 
-      if (explorePathFromHash != null) {
-        void (async () => {
-          await fetchExploreData(decodeURIComponent(explorePathFromHash))
-        })()
-      }
+      setExploreState((state) => ({
+        ...state,
+        explorePathFromHash
+      }))
     }
 
     window.addEventListener('hashchange', handleHashChange)
@@ -158,14 +157,23 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
     return () => {
       window.removeEventListener('hashchange', handleHashChange)
     }
-  }, [helia])
+  }, [])
+
+  const explorePathFromHash = exploreState.explorePathFromHash
+  useEffect(() => {
+    if (explorePathFromHash != null) {
+      void (async () => {
+        await fetchExploreData(decodeURIComponent(explorePathFromHash))
+      })()
+    }
+  }, [explorePathFromHash])
 
   if (helia == null) {
     return null
   }
 
   return (
-    <ExploreContext.Provider value={{ exploreState, explorePathFromHash, doExploreLink, doExploreUserProvidedPath, doUploadUserProvidedCar }}>
+    <ExploreContext.Provider value={{ exploreState, doExploreLink, doExploreUserProvidedPath, doUploadUserProvidedCar }}>
       {children}
     </ExploreContext.Provider>
   )

@@ -12,7 +12,6 @@ export const CidV0 = () => (
     <Cid
         className="db ma2 monospace"
         value="QmYPNmahJAvkMTU6tDx5zvhEkoLzEFeTDz6azDCSNqzKkW"
-        // onClick={action('click')}
     />
 )
 
@@ -24,7 +23,6 @@ export const CidV1 = () => (
     <Cid
         className="db ma2 monospace"
         value="zb2rhZMC2PFynWT7oBj7e6BpDpzge367etSQi6ZUA81EVVCxG"
-        // onClick={action('click')}
     />
 )
 
@@ -36,7 +34,6 @@ export const CidV1Sha3 = () => (
     <Cid
         className="db ma2 monospace"
         value="zB7NbGN5wyfSbNNNwo3smZczHZutiWERdvWuMcHXTj393RnbhwsHjrP7bPDRPA79YWPbS69cZLWXSANcwUMmk4Rp3hP9Y"
-        // onClick={action('click')}
     />
 )
 

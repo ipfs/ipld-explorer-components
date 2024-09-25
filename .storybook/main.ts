@@ -15,9 +15,7 @@ const config: StorybookConfig = {
     name: '@storybook/react-vite',
     options: {},
   },
-  docs: {
-    autodocs: 'tag',
-  },
+  typescript: { reactDocgen: 'react-docgen-typescript' },
   async viteFinal(config) {
     // Merge custom configuration into the default config
     return mergeConfig(config, viteConfig);

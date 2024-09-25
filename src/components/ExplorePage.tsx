@@ -26,19 +26,14 @@ export const ExplorePage = ({
 }): null | React.ReactNode => {
   const { t, ready: tReady } = useTranslation('explore')
 
-  const { exploreState, explorePathFromHash, doExploreLink } = useExplore()
+  const { exploreState, doExploreLink } = useExplore()
+  const { explorePathFromHash } = exploreState
 
   if (explorePathFromHash == null) {
     // No IPLD path to explore so show the intro page
     console.warn('[IPLD Explorer] ExplorePage loaded without a path to explore')
     return null
   }
-
-  // Hide the old data while we navigate to the new. We can get much fancier
-  // with showing that the request is loading, but for now, this'l hide the
-  // now stale info and show a loading spinner.
-  // explore = explore ?? {}
-  // explore = exploreIsLoading != null ? {} : explore
 
   const { error, targetNode, localPath, nodes, pathBoundaries } = exploreState
   const sourceNode = nodes?.[0] ?? null

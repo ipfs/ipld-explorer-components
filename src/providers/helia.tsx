@@ -1,5 +1,5 @@
 import { type Helia } from '@helia/interface'
-import React, { createContext, useContext, useReducer, useEffect, type ReactNode, useState } from 'react'
+import React, { createContext, useContext, useReducer, useEffect, useState } from 'react'
 import packageJson from '../../package.json'
 import initHelia from '../lib/init-helia.js'
 import type { KuboGatewayOptions } from '../types.js'
@@ -52,7 +52,7 @@ const heliaReducer = (state: HeliaBundleState, action: { type: string, payload?:
   }
 }
 
-export const HeliaProvider = ({ children }: { children: ReactNode }): any => {
+export const HeliaProvider = ({ children }: React.ComponentProps<any>): any => {
   const [state, dispatch] = useReducer(heliaReducer, defaultState)
   const [helia, setHelia] = useState<Helia | null>(null)
 

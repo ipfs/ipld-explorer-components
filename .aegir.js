@@ -9,6 +9,8 @@ export default {
       // 'src/**/*.js',
       // 'src/**/*.jsx',
       'dev/**/*.{js,jsx,ts,tsx}',
+      // TODO: re-enable linting of stories.
+      '!src/**/*.stories.*',
     ]
   },
   dependencyCheck: {
