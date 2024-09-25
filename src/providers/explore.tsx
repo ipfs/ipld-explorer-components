@@ -42,8 +42,6 @@ interface ExploreState {
 export const ExploreContext = createContext<ExploreContextProps | undefined>(undefined)
 
 const getCidFromCidOrFqdn = (cidOrFqdn: CID | string): CID => {
-  // eslint-disable-next-line no-console
-  console.log('cidOrFqdn', cidOrFqdn)
   if (typeof cidOrFqdn === 'object' && 'multihash' in cidOrFqdn) {
     return cidOrFqdn
   }
@@ -75,27 +73,18 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
   const { helia } = useHelia()
 
   const fetchExploreData = useCallback(async (path: string): Promise<void> => {
+    // Clear the target node when a new path is requested
+    setExploreState({
+      ...exploreState,
+      targetNode: null
+    })
     const pathParts = parseIpldPath(path)
     if (pathParts == null || helia == null) return
 
     const { cidOrFqdn, rest } = pathParts
     try {
       const cid = getCidFromCidOrFqdn(cidOrFqdn)
-      // eslint-disable-next-line no-console
-      console.log('cidOrFqdn', cidOrFqdn)
-      // eslint-disable-next-line no-console
-      console.log('getting ready to call resolveIpldPath with:', helia, cid, rest)
       const { targetNode, canonicalPath, localPath, nodes, pathBoundaries } = await resolveIpldPath(helia, cid, rest)
-      // eslint-disable-next-line no-console
-      console.log('targetNode:', targetNode)
-      // eslint-disable-next-line no-console
-      console.log('canonicalPath:', canonicalPath)
-      // eslint-disable-next-line no-console
-      console.log('localPath:', localPath)
-      // eslint-disable-next-line no-console
-      console.log('nodes:', nodes)
-      // eslint-disable-next-line no-console
-      console.log('pathBoundaries:', pathBoundaries)
 
       setExploreState({
         path,
@@ -111,19 +100,16 @@ export const ExploreProvider = ({ children }: { children: ReactNode }): any => {
       console.warn('Failed to resolve path', path, error)
       setExploreState((prevState) => ({ ...prevState, error }))
     }
-  }, [helia])
+  }, [helia, exploreState])
 
   const doExploreLink = (link: RowLinkClickEventData): void => {
     const { nodes, pathBoundaries } = exploreState
     const cid = nodes[0].cid
     const pathParts = pathBoundaries.map((p) => p.path)
-    // eslint-disable-next-line no-console
-    console.log('pathParts', pathParts)
+
     if (link?.path != null) {
       pathParts.push(link.path)
     }
-    // eslint-disable-next-line no-console
-    console.log('pathParts', pathParts)
     pathParts.unshift(cid)
     const path = pathParts.map((part) => encodeURIComponent(part)).join('/')
     const hash = `#/explore/${path}`

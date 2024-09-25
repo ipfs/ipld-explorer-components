@@ -23,7 +23,7 @@ export const ExplorePage = ({
   joyrideCallback?: any
   gatewayUrl?: any
   publicGatewayUrl?: string
-}): null | JSX.Element => {
+}): null | React.ReactNode => {
   const { t, ready: tReady } = useTranslation('explore')
 
   const { exploreState, explorePathFromHash, doExploreLink } = useExplore()

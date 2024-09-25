@@ -65,8 +65,6 @@ export const HeliaProvider = ({ children }: { children: ReactNode }): any => {
 
   const doInitHelia = async (): Promise<void> => {
     dispatch({ type: 'HELIA_INIT_STARTED' })
-    // eslint-disable-next-line no-console
-    console.log('state.kuboGatewayOptions', state.kuboGatewayOptions)
     try {
       const helia = await initHelia(state.kuboGatewayOptions)
       setHelia(helia)

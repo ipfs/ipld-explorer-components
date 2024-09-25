@@ -43,22 +43,22 @@ const nodeStyles = {
   'eth-state-trie': { shortName: 'ETH', name: 'Ethereum State Trie', color: theme.colors.charcoal },
 
   // fallback
-  default: { shortName: 'DAG', name: 'DAG Node', color: theme.colors.red }
+  unknown: { shortName: 'DAG', name: 'DAG Node', color: theme.colors.red }
 }
 
 export type NodeStyle = keyof typeof nodeStyles
 
-export function shortNameForNode (type: NodeStyle = 'default'): string {
+export function shortNameForNode (type: NodeStyle = 'unknown'): string {
   const style = nodeStyles[type]
   return style?.shortName ?? 'DAG'
 }
 
-export function nameForNode (type: NodeStyle = 'default'): string {
+export function nameForNode (type: NodeStyle = 'unknown'): string {
   const style = nodeStyles[type]
   return style?.name ?? 'DAG Node'
 }
 
-export function colorForNode (type: NodeStyle = 'default'): string {
+export function colorForNode (type: NodeStyle = 'unknown'): string {
   const style = nodeStyles[type]
   return style?.color ?? '#ea5037'
 }
@@ -76,7 +76,7 @@ export function toExpandPathsNotation (localPath: string): string[] {
   return expandPaths.slice(0, expandPaths.length - 1)
 }
 
-interface DagNodeIconProps extends React.SVGProps<SVGSVGElement> {
+interface DagNodeIconProps extends React.HTMLProps<SVGSVGElement>, React.SVGProps<SVGSVGElement> {
   type: NodeStyle
 }
 
@@ -102,12 +102,12 @@ const getObjectInspectorData = (data?: NormalizedDagNode['data']): NormalizedDag
   }
 }
 
-export interface ObjectInfoProps extends Omit<HTMLProps<HTMLElement>, 'data' | 'size'> {
+export interface ObjectInfoProps extends Omit<HTMLProps<HTMLElement>, 'data' | 'size' | 'type'> {
   className: string
-  type: NodeStyle
+  type: string | number
   cid: string
   localPath: string
-  size: bigint
+  size: bigint | undefined
   data: NormalizedDagNode['data']
   links: object[]
   format: string
@@ -121,11 +121,12 @@ export const ObjectInfo: React.FC<ObjectInfoProps> = ({ className, type, cid, lo
   const { t, ready: tReady } = useTranslation('explore')
   if (!tReady) return null
   const isUnixFs = format === 'unixfs' && !(data instanceof Uint8Array) && data?.type != null && ['directory', 'file'].some(x => x === data.type)
-  let nodeStyleType: NodeStyle = type
+  // TODO: we are piping up various codec codes, types, and strings as the type prop, we need to fix it.
+  let nodeStyleType: NodeStyle = type as NodeStyle
 
   // if (!isNaN(type) || isUnixFs || nameForNode(type) === 'DAG Node') {
-  if (isUnixFs || nameForNode(type) === 'DAG Node') {
-    nodeStyleType = getCodecNameFromCode(CID.parse(cid).code) as NodeStyle ?? type
+  if (isUnixFs || nameForNode(nodeStyleType) === 'DAG Node') {
+    nodeStyleType = getCodecNameFromCode(CID.parse(cid).code) ?? type
   }
 
   return (

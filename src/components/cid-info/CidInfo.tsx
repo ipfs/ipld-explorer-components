@@ -1,10 +1,9 @@
-import { type CID } from 'multiformats/cid'
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import extractInfo, { type ExtractedInfo } from '../../lib/extract-info.js'
 
 export interface CidInfoProps extends React.HTMLAttributes<HTMLDivElement> {
-  cid: CID | null
+  cid: string | null
 }
 
 export const CidInfo: React.FC<CidInfoProps> = ({ cid, className, ...props }) => {

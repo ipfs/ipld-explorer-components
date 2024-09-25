@@ -1,3 +1,4 @@
+import { type getHasherForCode } from './lib/hash-importer.js'
 import type { TrustlessGatewayBlockBrokerInit } from '@helia/block-brokers'
 import type { MultihashDigest } from 'multiformats'
 

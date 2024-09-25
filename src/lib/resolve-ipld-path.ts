@@ -3,7 +3,7 @@ import { CID } from 'multiformats'
 import { type NormalizedDagLink, type NormalizedDagNode } from '../types.js'
 import getCodecForCid from './get-codec-for-cid.js'
 import { getRawBlock } from './get-raw-block.js'
-import { isFalsy, isNotFalsy, isTruthy } from './helpers'
+import { isFalsy, isTruthy } from './helpers'
 import normaliseDagNode from './normalise-dag-node.js'
 
 interface ResolvedIpldPathInfo {
@@ -47,7 +47,6 @@ export interface IpldInterface {
  * - `pathBoundaries` is the array of links that the path traverses.
  */
 export async function resolveIpldPath (helia: Helia, sourceCid: CID | string, path: string, nodes: NormalizedDagNode[] = [], pathBoundaries: NormalizedDagLink[] = []): Promise<ResolvedIpldPathInfo> {
-  debugger
   const { value, remainderPath } = await ipldGetNodeAndRemainder(helia, sourceCid, path)
   if (sourceCid == null) {
     // eslint-disable-next-line no-console
@@ -105,7 +104,6 @@ export async function ipldGetNodeAndRemainder (helia: Helia, sourceCid: CID | st
   const { remainderPath } = codecWrapperResolveResult
 
   if (resolveValue?.Hash != null) {
-    debugger
     // this is never actually called because of above TODO callout
     // This is a PBLink, and we should resolve that link so we're returning PBNodes not PBLinks
     return ipldGetNodeAndRemainder(helia, value.Hash, remainderPath)
