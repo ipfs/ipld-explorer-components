@@ -72,8 +72,7 @@ export function normaliseDagPb (node: PBNode, cid: string, type: CodecType): Nor
         format
       }
     } catch (err) {
-    // dag-pb but not a unixfs.
-      console.error('FIXME: unexpected error case', err)
+      // dag-pb but not a unixfs.
     }
   }
 

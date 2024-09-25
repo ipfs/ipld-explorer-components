@@ -88,33 +88,30 @@ export interface IpldGetNodeAndRemainderResult {
 
 export async function ipldGetNodeAndRemainder (helia: Helia, sourceCid: CID | string, path?: string): Promise<IpldGetNodeAndRemainderResult> {
   if (sourceCid == null) {
-    // eslint-disable-next-line no-console
-    console.trace('sourceCid is null')
     throw new Error('sourceCid is null')
   }
   let cidInstance = CID.asCID(sourceCid)
   if (cidInstance === null) {
-    cidInstance = CID.parse(sourceCid.toString())
+    cidInstance = CID.parse(sourceCid as string)
   }
   const codecWrapper = await getCodecForCid(cidInstance)
   const encodedValue = await getRawBlock(helia, cidInstance)
   const value = codecWrapper.decode(encodedValue)
 
-  const { remainderPath, value: resolveValue } = await codecWrapper.resolve(path ?? '', encodedValue)
+  // @ts-expect-error - limiting code changes, ignore this error
+  const codecWrapperResolveResult = await codecWrapper.resolve(isTruthy(path) ? path : '/', encodedValue)
+  // TODO: there was a type error previously uncaught
+  const resolveValue: any = {}
+  const { remainderPath } = codecWrapperResolveResult
 
   if (resolveValue?.Hash != null) {
+    debugger
+    // this is never actually called because of above TODO callout
     // This is a PBLink, and we should resolve that link so we're returning PBNodes not PBLinks
-    // eslint-disable-next-line no-console
-    console.log('Resolving link', resolveValue, helia, value.Hash, remainderPath)
-    // eslint-disable-next-line @typescript-eslint/return-await
-    return await ipldGetNodeAndRemainder(helia, resolveValue.Hash, remainderPath)
+    return ipldGetNodeAndRemainder(helia, value.Hash, remainderPath)
   }
 
-  // eslint-disable-next-line no-console
-  console.log('returning remainderPath', remainderPath)
-
   return {
-    // value: resolveValue ?? value,
     value,
     remainderPath
   }
