@@ -5,7 +5,7 @@ import * as dagPb from '@ipld/dag-pb'
 import * as raw from 'multiformats/codecs/raw'
 import { createHeliaMock } from '../../test/unit/heliaMock.js'
 import { addDagNodeToHelia } from './helpers.ts'
-import { resolveIpldPath, findLinkPath } from './resolve-ipld-path.ts'
+import { resolveIpldPath, findLinkPath, ipldGetNodeAndRemainder } from './resolve-ipld-path.ts'
 
 // #WhenAddingNewCodec
 describe('resolveIpldPath', () => {
@@ -140,6 +140,104 @@ describe('resolveIpldPath', () => {
       source: rootNode.toString(),
       target: childNode.toString()
     }))
+  })
+})
+
+describe('ipldGetNodeAndRemainder', () => {
+  /**
+   * @type {import('@helia/interface').Helia}
+   */
+  let helia
+  let node4Cid
+  let node3Cid
+  let node2Cid
+  let rootNodeCid
+  beforeEach(async () => {
+    helia = await createHeliaMock()
+    node4Cid = await addDagNodeToHelia(helia, 'dag-pb', createDagPbNode('4th node', []))
+    node3Cid = await addDagNodeToHelia(helia, 'dag-pb', createDagPbNode('3rd node', [{
+      name: 'a',
+      cid: node4Cid.toString(),
+      size: 101
+    }]))
+    node2Cid = await addDagNodeToHelia(helia, 'dag-pb', createDagPbNode('2nd node', [{
+      name: 'b',
+      cid: node3Cid.toString(),
+      size: 101
+    }]))
+    rootNodeCid = await addDagNodeToHelia(helia, 'dag-pb', createDagPbNode('root node', [{
+      name: 'a',
+      cid: node2Cid.toString(),
+      size: 101
+    }]))
+  })
+
+  it('should return correct remainder path for rootNodeCid', async () => {
+    let res = await ipldGetNodeAndRemainder(helia, rootNodeCid.toString(), '')
+    expect(res.remainderPath).toBe('/')
+
+    res = await ipldGetNodeAndRemainder(helia, rootNodeCid.toString(), '/')
+    expect(res.remainderPath).toBe('/')
+
+    res = await ipldGetNodeAndRemainder(helia, rootNodeCid.toString(), '/a')
+    expect(res.remainderPath).toBe('')
+
+    res = await ipldGetNodeAndRemainder(helia, rootNodeCid.toString(), '/a/b')
+    expect(res.remainderPath).toBe('/b')
+
+    res = await ipldGetNodeAndRemainder(helia, rootNodeCid.toString(), '/a/b/c')
+    expect(res.remainderPath).toBe('/b/c')
+  })
+
+  it('should return correct remainder path for node2Cid', async () => {
+    let res = await ipldGetNodeAndRemainder(helia, node2Cid.toString(), '')
+    expect(res.remainderPath).toBe('/')
+
+    res = await ipldGetNodeAndRemainder(helia, node2Cid.toString(), '/')
+    expect(res.remainderPath).toBe('/')
+
+    res = await ipldGetNodeAndRemainder(helia, node2Cid.toString(), '/a')
+    expect(res.remainderPath).toBe('a/')
+
+    res = await ipldGetNodeAndRemainder(helia, node2Cid.toString(), '/a/b')
+    expect(res.remainderPath).toBe('a/b')
+
+    res = await ipldGetNodeAndRemainder(helia, node2Cid.toString(), '/a/b/c')
+    expect(res.remainderPath).toBe('a/b/c')
+  })
+
+  it('should return correct remainder path for node3Cid', async () => {
+    let res = await ipldGetNodeAndRemainder(helia, node3Cid.toString(), '')
+    expect(res.remainderPath).toBe('/')
+
+    res = await ipldGetNodeAndRemainder(helia, node3Cid.toString(), '/')
+    expect(res.remainderPath).toBe('/')
+
+    res = await ipldGetNodeAndRemainder(helia, node3Cid.toString(), '/a')
+    expect(res.remainderPath).toBe('')
+
+    res = await ipldGetNodeAndRemainder(helia, node3Cid.toString(), '/a/b')
+    expect(res.remainderPath).toBe('/b')
+
+    res = await ipldGetNodeAndRemainder(helia, node3Cid.toString(), '/a/b/c')
+    expect(res.remainderPath).toBe('/b/c')
+  })
+
+  it('should return correct remainder path for node4Cid', async () => {
+    let res = await ipldGetNodeAndRemainder(helia, node4Cid.toString(), '')
+    expect(res.remainderPath).toBe('/')
+
+    res = await ipldGetNodeAndRemainder(helia, node4Cid.toString(), '/')
+    expect(res.remainderPath).toBe('/')
+
+    res = await ipldGetNodeAndRemainder(helia, node4Cid.toString(), '/a')
+    expect(res.remainderPath).toBe('a/')
+
+    res = await ipldGetNodeAndRemainder(helia, node4Cid.toString(), '/a/b')
+    expect(res.remainderPath).toBe('a/b')
+
+    res = await ipldGetNodeAndRemainder(helia, node4Cid.toString(), '/a/b/c')
+    expect(res.remainderPath).toBe('a/b/c')
   })
 })
 
