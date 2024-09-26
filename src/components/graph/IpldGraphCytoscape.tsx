@@ -53,7 +53,7 @@ export interface IpldGraphCytoscapeProps extends React.HTMLAttributes<HTMLDivEle
   path: string
   // cid: string
   onNodeClick?(arg0: any): void
-  className: string
+  // className: string
 }
 
 interface IpldGraphCytoscapeState {

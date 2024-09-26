@@ -15,7 +15,7 @@ export default meta
 
 export const _ComponentLoader = () => (
     <div className="sans-serif pa4" style={{ height: 400 }}>
-      <ComponentLoader pastDelay={false} />
+      <ComponentLoader />
     </div>
 )
 

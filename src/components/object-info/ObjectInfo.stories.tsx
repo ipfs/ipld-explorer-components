@@ -13,9 +13,9 @@ const meta = {
   title: 'IPLD Node Info',
   component: ObjectInfo,
   decorators: [i18n],
-  render: () => (
-    <ObjectInfo />
-  )
+  // render: () => (
+  //   <ObjectInfo />
+  // )
 }
 export default meta
 
@@ -23,8 +23,9 @@ export const CidV0DagPb = () => (
     <ObjectInfo
         className="ma2"
         cid={dagNodeA.cid}
-        size={dagNodeA.size}
+        size={BigInt(dagNodeA.size)}
         links={dagNodeA.links}
+        // @ts-expect-error - data is not properly typed
         data={dagNodeA.data}
         type="dag-pb"
         gatewayUrl="https://ipfs.io"
@@ -41,8 +42,9 @@ export const CidV0DagPb36Links = () => (
     <ObjectInfo
         className="ma2"
         cid={dagNodeB.cid}
-        size={dagNodeB.size}
+        size={BigInt(dagNodeB.size)}
         links={dagNodeB.links}
+        // @ts-expect-error - data is not properly typed
         data={dagNodeB.data}
         type="dag-pb"
         gatewayUrl="https://ipfs.io"
@@ -59,8 +61,9 @@ export const CidV0DagPb1240Links = () => (
     <ObjectInfo
         className="ma2"
         cid={dagNodeC.cid}
-        size={dagNodeC.size}
+        size={BigInt(dagNodeC.size)}
         links={dagNodeC.links}
+        // @ts-expect-error - data is not properly typed
         data={dagNodeC.data}
         type="dag-pb"
         gatewayUrl="https://ipfs.io"

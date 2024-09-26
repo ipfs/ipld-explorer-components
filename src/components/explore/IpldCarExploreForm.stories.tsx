@@ -1,5 +1,5 @@
 import React from 'react'
-import i18n from '../../i18n-decorator'
+import i18n from '../../i18n-decorator.tsx'
 import { ExploreProvider } from '../../providers/explore.tsx'
 import { HeliaProvider } from '../../providers/helia.tsx'
 import IpldCarExploreForm from './IpldCarExploreForm.tsx'

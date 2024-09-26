@@ -37,6 +37,7 @@ export default {
       '@storybook/node-logger',
       '@storybook/react-dom-shim',
       '@storybook/types',
+      '@chromatic-com/storybook',
 
       // problem with deps
       '@typescript-eslint/eslint-plugin',

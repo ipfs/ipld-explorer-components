@@ -1,13 +1,10 @@
 import React from 'react'
 import i18n from '../i18n-decorator.tsx'
-import { ExploreProvider } from '../providers/explore.tsx'
+import { ExploreProvider, ExploreState } from '../providers/explore.tsx'
 import { HeliaProvider } from '../providers/helia.tsx'
 import ExplorePage from './ExplorePage.tsx'
 
-/**
- * @type {import('../providers/explore.tsx').ExploreState}
- */
-const defaultState = {
+const defaultState: ExploreState = {
   path: 'QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm',
   canonicalPath: 'QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm',
   error: null,

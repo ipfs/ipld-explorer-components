@@ -9,9 +9,9 @@ const meta = {
   title: 'CID Info',
   component: CidInfo,
   decorators: [i18n],
-  render: () => (
-    <CidInfo />
-  )
+  // render: () => (
+  //   <CidInfo />
+  // )
 }
 
 export default meta
@@ -72,6 +72,7 @@ CidError.story = {
   name: 'cid error'
 }
 
+// @ts-expect-error - purposefully invalid story
 export const NoCid = () => <CidInfo />
 
 NoCid.story = {
