@@ -4,12 +4,19 @@ import { ExploreProvider } from '../../providers/explore.tsx'
 import { HeliaProvider } from '../../providers/helia.tsx'
 import IpldCarExploreForm from './IpldCarExploreForm.tsx'
 
-export default {
+/**
+ * @type {import('@storybook/react').Meta<typeof IpldCarExploreForm>}
+ */
+const meta = {
   title: 'Explore Car form',
-  decorators: [
-    i18n
-  ]
+  component: IpldCarExploreForm,
+  decorators: [i18n],
+  render: () => (
+    <IpldCarExploreForm />
+  )
 }
+
+export default meta
 
 export const Default = () => (
   <div className="bg-navy pa3" style={{ height: '100vh' }}>

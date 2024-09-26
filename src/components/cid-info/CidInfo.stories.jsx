@@ -2,10 +2,19 @@ import React from 'react'
 import i18n from '../../i18n-decorator'
 import CidInfo from './CidInfo'
 
-export default {
+/**
+ * @type {import('@storybook/react').Meta<typeof CidInfo>}
+ */
+const meta = {
   title: 'CID Info',
-  decorators: [i18n]
+  component: CidInfo,
+  decorators: [i18n],
+  render: () => (
+    <CidInfo />
+  )
 }
+
+export default meta
 
 export const CidV0DagPb = () => <CidInfo className="ma2" cid="QmYPNmahJAvkMTU6tDx5zvhEkoLzEFeTDz6azDCSNqzKkW" />
 

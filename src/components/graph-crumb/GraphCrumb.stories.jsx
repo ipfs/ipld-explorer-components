@@ -1,10 +1,17 @@
 import React from 'react'
 import GraphCrumb from './GraphCrumb'
 
-export default {
-  title: 'IPLD Graph Crumbs'
-  // decorators: [checkA11y],
+/**
+ * @type {import('@storybook/react').Meta<typeof GraphCrumb>}
+ */
+const meta = {
+  title: 'IPLD Graph Crumbs',
+  component: GraphCrumb,
+  render: () => (
+    <GraphCrumb />
+  )
 }
+export default meta
 
 export const LotsOfPaths = () => (
     <div>

@@ -6,12 +6,18 @@ import dagNodeC from './fixtures/object-info-1240-links.json'
 import dagNodeB from './fixtures/object-info-36-links.json'
 import dagNodeA from './fixtures/object-info-8-links.json'
 
-export default {
+/**
+ * @type {import('@storybook/react').Meta<typeof ObjectInfo>}
+ */
+const meta = {
   title: 'IPLD Node Info',
-  decorators: [
-    i18n
-  ]
+  component: ObjectInfo,
+  decorators: [i18n],
+  render: () => (
+    <ObjectInfo />
+  )
 }
+export default meta
 
 export const CidV0DagPb = () => (
     <ObjectInfo

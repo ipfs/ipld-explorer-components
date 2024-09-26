@@ -1,12 +1,18 @@
 import React from 'react'
 import Cid from './Cid'
 
-export default {
+/**
+ * @type {import('@storybook/react').Meta<typeof Cid>}
+ */
+const meta = {
   title: 'CID',
-  decorators: [
-    // checkA11y
-  ]
+  component: Cid,
+  render: () => (
+    <Cid />
+  )
 }
+
+export default meta
 
 export const CidV0 = () => (
     <Cid

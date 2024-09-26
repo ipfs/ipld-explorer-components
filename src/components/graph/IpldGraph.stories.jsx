@@ -5,9 +5,19 @@ import dagNodeB from '../object-info/fixtures/object-info-36-links.json'
 import dagNodeA from '../object-info/fixtures/object-info-8-links.json'
 import IpldGraphCytoscape from './IpldGraphCytoscape'
 
-export default {
-  title: 'IPLD Graph'
+/**
+ * @type {import('@storybook/react').Meta<typeof IpldGraphCytoscape>}
+ */
+const meta = {
+  title: 'IPLD Graph',
+  component: IpldGraphCytoscape,
+  // decorators: [i18n],
+  render: () => (
+    <IpldGraphCytoscape />
+  )
 }
+
+export default meta
 
 export const Cytoscape8Links = () => (
     <IpldGraphCytoscape
