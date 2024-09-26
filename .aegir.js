@@ -1,5 +1,5 @@
 /** @type {import('aegir').PartialOptions} */
-module.exports = {
+export default {
   lint: {
     files: [
       // '!node_modules/**',
@@ -9,6 +9,8 @@ module.exports = {
       // 'src/**/*.js',
       // 'src/**/*.jsx',
       'dev/**/*.{js,jsx,ts,tsx}',
+      // TODO: re-enable linting of stories.
+      '!src/**/*.stories.*',
     ]
   },
   dependencyCheck: {
@@ -35,6 +37,7 @@ module.exports = {
       '@storybook/node-logger',
       '@storybook/react-dom-shim',
       '@storybook/types',
+      '@chromatic-com/storybook',
 
       // problem with deps
       '@typescript-eslint/eslint-plugin',

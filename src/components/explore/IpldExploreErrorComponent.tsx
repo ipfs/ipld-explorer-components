@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 import type IpldExploreError from '../../lib/errors'
 
 export interface IpldExploreErrorComponentProps {
-  error?: IpldExploreError
+  error: IpldExploreError | null
 }
 
 export function IpldExploreErrorComponent ({ error }: IpldExploreErrorComponentProps): JSX.Element | null {

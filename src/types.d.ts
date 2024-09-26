@@ -1,4 +1,7 @@
+import { type getHasherForCode } from './lib/hash-importer.js'
 import type { TrustlessGatewayBlockBrokerInit } from '@helia/block-brokers'
+import type { MultihashDigest } from 'multiformats'
+
 export type { CID } from 'multiformats/cid'
 
 export type CodecType = number
@@ -11,6 +14,10 @@ export interface UnixFsNodeData {
   type: UnixFsNodeTypes
   data: NodeData | undefined
   blockSizes: bigint[]
+}
+
+export interface UnixFsNodeDataWithNumbers extends Omit<UnixFsNodeData, 'blockSizes'> {
+  blockSizes: number[]
 }
 
 export interface NormalizedDagLink {
@@ -43,4 +50,30 @@ export interface KuboGatewayOptions {
     init?: TrustlessGatewayBlockBrokerInit
   }
 
+}
+
+export interface DecodedCidMulticodec {
+  name: number
+  code: string
+}
+export interface DecodedCidMultihash extends MultihashDigest {
+  name: Awaited<ReturnType<typeof getHasherForCode>>['name']
+}
+
+export interface dagNodeLink {
+  cid: string
+  name: string
+  size: number
+}
+
+export interface dagNodeData {
+  blockSizes: unknown[]
+  data: unknown
+  type: string
+}
+
+export interface dagNode {
+  data: dagNodeData
+  links: dagNodeLink[]
+  size: number
 }

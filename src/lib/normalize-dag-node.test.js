@@ -37,7 +37,7 @@ it('normalizes a cbor node with links', () => {
     bar: [CID.parse(cid2), CID.parse(cid3)]
   }
 
-  const res = normaliseDagNode(obj, cid1, dagCbor.code)
+  const res = normaliseDagNode(obj, cid1)
 
   expect(res).toEqual({
     cid: cid1,

@@ -3,9 +3,9 @@
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
 import * as raw from 'multiformats/codecs/raw'
-import { createHeliaMock } from '../../test/unit/heliaMock'
-import { addDagNodeToHelia } from './helpers'
-import resolveIpldPath, { findLinkPath, ipldGetNodeAndRemainder } from './resolve-ipld-path'
+import { createHeliaMock } from '../../test/unit/heliaMock.js'
+import { addDagNodeToHelia } from './helpers.ts'
+import { resolveIpldPath, findLinkPath, ipldGetNodeAndRemainder } from './resolve-ipld-path.ts'
 
 // #WhenAddingNewCodec
 describe('resolveIpldPath', () => {

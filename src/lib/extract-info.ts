@@ -1,10 +1,10 @@
 import { type CID } from 'multiformats'
-import { decodeCid } from '../components/cid-info/decode-cid'
+import { decodeCid } from '../components/cid-info/decode-cid.js'
 import getCodecNameFromCode from './get-codec-name-from-code'
 
 const toHex = (bytes: Uint8Array): string => Buffer.from(bytes.buffer, bytes.byteOffset, bytes.byteLength).toString('hex').toUpperCase()
 
-interface ExtractedInfo {
+export interface ExtractedInfo {
   base: string
   codecName: string
   hashFn: string
@@ -15,7 +15,7 @@ interface ExtractedInfo {
   hashValueIn32CharChunks: string[][]
   humanReadable: string
 }
-export default async function extractInfo (cid: CID): Promise<ExtractedInfo> {
+export default async function extractInfo (cid: CID | string): Promise<ExtractedInfo> {
   const cidInfo = await decodeCid(cid)
   if (cidInfo == null) {
     throw new Error(`CID could not be decoded for CID '${cid.toString()}'`)
