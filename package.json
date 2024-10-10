@@ -155,13 +155,12 @@
     "test": "run-s test:unit test:storybook:ci test:consumer",
     "test:node": "run-s test:unit",
     "test:unit": "vitest run --environment=node",
-    "storybook": "run-s storybook:build storybook:serve",
+    "storybook": "storybook dev",
     "storybook:build": "storybook build",
-    "storybook:serve": "http-server storybook-static --port 6006",
     "test:consumer": "run-s test:consumer:webui test:consumer:ipld.io",
     "test:consumer:webui": "aegir test-dependant https://github.com/ipfs/ipfs-webui",
     "test:consumer:ipld.io": "aegir test-dependant https://github.com/ipld/explore.ipld.io",
-    "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"storybook build --quiet && http-server storybook-static --port 6006 --silent\" \"wait-on 'tcp:127.0.0.1:6006' && test-storybook --coverage\""
+    "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"storybook dev -p 6006\" \"wait-on 'tcp:127.0.0.1:6006' && test-storybook --coverage\""
   },
   "dependencies": {
     "@helia/block-brokers": "^3.0.4",
@@ -231,7 +230,6 @@
     "eslint-config-ipfs": "^6.0.2",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.34.1",
-    "http-server": "^14.1.1",
     "i18next": "^23.8.2",
     "i18next-browser-languagedetector": "7.2.0",
     "i18next-http-backend": "2.4.3",
