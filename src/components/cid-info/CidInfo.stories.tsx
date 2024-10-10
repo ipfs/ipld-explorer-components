@@ -72,8 +72,7 @@ CidError.story = {
   name: 'cid error'
 }
 
-// @ts-expect-error - purposefully invalid story
-export const NoCid = () => <CidInfo />
+export const NoCid = () => <CidInfo cid={null}/>
 
 NoCid.story = {
   name: 'no cid'
