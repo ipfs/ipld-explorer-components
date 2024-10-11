@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react'
 import { Table, Column, AutoSizer, type RowMouseEventHandlerParams } from 'react-virtualized'
-
-import './LinksTable.css'
+import './links-table.css'
 
 export interface LinksTableProps {
   links: any[]

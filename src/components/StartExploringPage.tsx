@@ -27,42 +27,42 @@ interface StartExploringPageProps {
   links?: ExplorePageLink[]
 }
 
-export const StartExploringPage = ({ embed, runTour = false, joyrideCallback, links }: StartExploringPageProps): JSX.Element => {
+export const StartExploringPage: React.FC<StartExploringPageProps> = ({ embed, runTour = false, joyrideCallback, links }) => {
   const { t } = useTranslation('explore')
 
   return (
-  <div className='mw9 center explore-sug-2'>
-    <Helmet>
-      <title>{t('StartExploringPage.title')}</title>
-    </Helmet>
-    <div className='flex-l'>
-      <div className='flex-auto-l mr3-l'>
-        <div className='pl3 pl0-l pt4 pt2-l'>
-          <h1 className='f3 f2-l ma0 fw4 montserrat charcoal'>{t('StartExploringPage.header')}</h1>
-          <p className='lh-copy f5 avenir charcoal-muted'>{t('StartExploringPage.leadParagraph')}</p>
+    <div className='mw9 center explore-sug-2'>
+      <Helmet>
+        <title>{t('StartExploringPage.title')}</title>
+      </Helmet>
+      <div className='flex-l'>
+        <div className='flex-auto-l mr3-l'>
+          <div className='pl3 pl0-l pt4 pt2-l'>
+            <h1 className='f3 f2-l ma0 fw4 montserrat charcoal'>{t('StartExploringPage.header')}</h1>
+            <p className='lh-copy f5 avenir charcoal-muted'>{t('StartExploringPage.leadParagraph')}</p>
+          </div>
+          {embed != null ? <IpldExploreForm /> : null}
+          <ul className='list pl0 ma0 mt4 mt0-l bt bn-l b--black-10'>
+            {(links ?? explorePageLinks).map((suggestion) => (
+              <li key={suggestion.cid}>
+                <ExploreSuggestion name={suggestion.name} cid={suggestion.cid} type={suggestion.type} />
+              </li>
+            ))}
+          </ul>
         </div>
-        {embed != null ? <IpldExploreForm /> : null}
-        <ul className='list pl0 ma0 mt4 mt0-l bt bn-l b--black-10'>
-          {(links ?? explorePageLinks).map((suggestion) => (
-            <li key={suggestion.cid}>
-              <ExploreSuggestion name={suggestion.name} cid={suggestion.cid} type={suggestion.type} />
-            </li>
-          ))}
-        </ul>
+        <div className='pt2-l'>
+          <AboutIpld />
+        </div>
       </div>
-      <div className='pt2-l'>
-        <AboutIpld />
-      </div>
-    </div>
 
-    <ReactJoyride
-      run={runTour}
-      steps={projectsTour.getSteps({ t })}
-      styles={projectsTour.styles}
-      callback={joyrideCallback}
-      scrollToFirstStep
-    />
-  </div>
+      <ReactJoyride
+        run={runTour}
+        steps={projectsTour.getSteps({ t })}
+        styles={projectsTour.styles}
+        callback={joyrideCallback}
+        scrollToFirstStep
+      />
+    </div>
   )
 }
 

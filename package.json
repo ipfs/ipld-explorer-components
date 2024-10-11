@@ -19,8 +19,24 @@
   "files": [
     "dist"
   ],
-  "main": "dist/index.js",
-  "module": "dist/index.js",
+  "exports": {
+    ".": {
+      "types": "./dist/src/index.d.ts",
+      "import": "./dist/src/index.js"
+    },
+    "./providers": {
+      "import": "./dist/src/providers/index.js"
+    },
+    "./pages": {
+      "import": "./dist/src/pages.js"
+    },
+    "./pages/start-exploring": {
+      "import": "./dist/src/components/StartExploringPage.jsx"
+    },
+    "./pages/loadable-explore-page": {
+      "import": "./dist/src/components/LoadableExplorePage.jsx"
+    }
+  },
   "type": "module",
   "release": {
     "branches": [
@@ -141,17 +157,16 @@
     }
   },
   "scripts": {
-    "build": "run-s dep-check build:types lint build:esm storybook:build",
-    "build:esm": "cross-env NODE_ENV=production babel --quiet src -d dist --copy-files --no-copy-ignored --extensions '.ts,.tsx,.js,.jsx'",
-    "build:types": "tsc",
+    "build": "run-s dep-check lint build:esm storybook:build",
+    "build:esm": "aegir build",
     "release": "aegir release",
     "clean": "rm -rf dist",
     "dep-check": "aegir dep-check",
     "lint": "aegir lint",
     "lint:fix": "aegir lint -- --fix",
-    "prepare": "npm run build",
+    "prepublishOnly": "npm run build",
     "dev": "vite",
-    "start": "cross-env NODE_ENV=production babel src -d dist --copy-files --no-copy-ignored --extensions '.ts,.tsx,.js,.jsx' --watch",
+    "start": "vite",
     "test": "run-s test:unit test:storybook:ci test:consumer",
     "test:node": "run-s test:unit",
     "test:unit": "vitest run --environment=node",
@@ -187,7 +202,6 @@
     "stream-to-it": "^0.2.4"
   },
   "devDependencies": {
-    "@babel/cli": "^7.23.9",
     "@babel/core": "^7.23.9",
     "@babel/plugin-proposal-class-properties": "^7.18.6",
     "@babel/preset-env": "^7.23.9",
@@ -212,7 +226,7 @@
     "@storybook/react-vite": "^8.3.3",
     "@storybook/test-runner": "^0.19.1",
     "@storybook/types": "^8.3.3",
-    "@testing-library/jest-dom": "^5.16.5",
+    "@testing-library/jest-dom": "^5.17.0",
     "@testing-library/react": "^12.1.5",
     "@types/cytoscape": "^3.21.8",
     "@types/cytoscape-dagre": "^2.3.3",
@@ -226,8 +240,7 @@
     "@vitejs/plugin-react": "^4.0.0",
     "aegir": "^44.1.1",
     "concurrently": "^8.2.2",
-    "cross-env": "^6.0.0",
-    "eslint-config-ipfs": "^6.0.2",
+    "eslint-config-ipfs": "^7.0.6",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.34.1",
     "i18next": "^23.8.2",
@@ -245,6 +258,7 @@
     "react-i18next": "^14.0.1",
     "react-virtualized": "^9.22.5",
     "rollup": "^4.9.6",
+    "rollup-plugin-node-polyfills": "^0.2.1",
     "storybook": "^8.3.3",
     "tachyons": "^4.12.0",
     "typescript": "^5.0.4",

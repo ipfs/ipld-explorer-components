@@ -13,7 +13,17 @@ export interface PathBoundary {
 export interface GraphCrumbProps extends React.HTMLAttributes<HTMLDivElement> {
   cid: CID
   pathBoundaries: PathBoundary[]
+  /**
+   * Used to represent the current path segment that is being explored or displayed within the component. This path
+   * segment is typically appended to the existing path boundaries to form the complete path that the user is navigating
+   * through.
+   */
   localPath?: string
+
+  /**
+   * used to construct the base URL for the links generated within the breadcrumb navigation. This property is essential
+   * for creating the correct URLs that users can click on to navigate through different segments of the path.
+   */
   hrefBase?: string
   className?: string
 }
@@ -47,6 +57,7 @@ const GraphCrumb: React.FC<GraphCrumbProps> = ({ cid, pathBoundaries, localPath,
             : null}
         </NodeUnderline>
         {rest.map((link, i) => {
+          if (i === pathBoundaries.length - 1) return null
           const nextHrefBase = calculateHrefBase(hrefBase, cid, pathBoundaries, i + 1)
           return (
             <div className='dib' key={i}>

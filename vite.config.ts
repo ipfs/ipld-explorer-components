@@ -70,7 +70,7 @@ export default defineConfig(({ mode, command }) => {
   const viteBuild: UserConfig['build'] = {
     lib: {
       entry: [
-        pathResolve(__dirname, 'src/index.js')
+        pathResolve(__dirname, 'src/index.ts')
       ],
       fileName: (format, entryName) => `${format}/${entryName}.js`,
       formats: ['es']
@@ -86,7 +86,7 @@ export default defineConfig(({ mode, command }) => {
       ],
       preserveEntrySignatures: 'strict',
       input: {
-        index: pathResolve(__dirname, 'src/index.js')
+        index: pathResolve(__dirname, 'src/index.ts')
       },
       output: {
         preserveModules: true,
@@ -103,7 +103,8 @@ export default defineConfig(({ mode, command }) => {
       { find: /^process$/, replacement: 'rollup-plugin-node-polyfills/polyfills/process-es6' },
       { find: /^stream$/, replacement: 'rollup-plugin-node-polyfills/polyfills/stream' },
       { find: /^_stream_duplex$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/duplex' },
-      { find: /^_stream_transform$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/transform' }
+      { find: /^_stream_transform$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/transform' },
+      { find: /^buffer$/, replacement: 'rollup-plugin-node-polyfills/polyfills/buffer-es6' },
     ]
   }
   viteOptimizeDeps.include = []

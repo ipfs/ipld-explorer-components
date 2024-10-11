@@ -1,5 +1,5 @@
 import { type Helia } from '@helia/interface'
-import React, { createContext, useContext, useReducer, useEffect, useState } from 'react'
+import React, { createContext, useContext, useReducer, useEffect, useState, useCallback } from 'react'
 import packageJson from '../../package.json'
 import initHelia from '../lib/init-helia.js'
 import type { KuboGatewayOptions } from '../types.js'
@@ -63,7 +63,7 @@ export const HeliaProvider = ({ children }: React.ComponentProps<any>): any => {
     return `@helia/http@${heliaHttpVersion}`
   }
 
-  const doInitHelia = async (): Promise<void> => {
+  const doInitHelia = useCallback(async (): Promise<void> => {
     dispatch({ type: 'HELIA_INIT_STARTED' })
     try {
       const helia = await initHelia(state.kuboGatewayOptions)
@@ -73,7 +73,7 @@ export const HeliaProvider = ({ children }: React.ComponentProps<any>): any => {
       console.error('doInitHelia error', error)
       dispatch({ type: 'HELIA_INIT_FAILED', error })
     }
-  }
+  }, [state.kuboGatewayOptions, setHelia, dispatch])
 
   useEffect(() => {
     void doInitHelia()

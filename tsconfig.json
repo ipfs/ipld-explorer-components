@@ -9,7 +9,7 @@
       "dom.iterable",
       "es2021",
       "esnext"
-  ],
+    ],
     "types": [
       "vite/client",
       "vite-plugin-svgr/client",
@@ -28,15 +28,15 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "declaration": true,
-    "emitDeclarationOnly": true,
     "outDir": "dist",
     "declarationDir": "dist",
-    "jsx": "react",
+    "jsx": "preserve",
     "rootDir": "."
   },
   "include": [
     "src/**/*",
-    "dev/**/*"
+    "dev/**/*",
+    "test/**/*"
   ],
   "exclude": [
     "src/**/*.stories.*",

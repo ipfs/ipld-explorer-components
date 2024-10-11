@@ -7,8 +7,8 @@ globalThis.Buffer = Buffer
 import 'ipfs-css'
 import 'react-virtualized/styles.css'
 import 'tachyons'
-import '../src/components/loader/Loader.css'
-import '../src/components/object-info/LinksTable.css'
+import '../src/components/loader/loader.css'
+import '../src/components/object-info/links-table.css'
 
 const preview: Preview = {
   // tags: ['autodocs']

@@ -1,6 +1,5 @@
 import React from 'react'
-
-import './Loader.css'
+import './loader.css'
 
 export const Loader: React.FC<{ color: string }> = ({ color = 'light', ...props }) => {
   const className = `dib la-ball-triangle-path la-${color} la-sm`

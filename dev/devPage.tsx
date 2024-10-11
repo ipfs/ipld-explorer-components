@@ -1,18 +1,16 @@
 /* globals globalThis */
-import { Buffer } from 'buffer'
 import 'ipfs-css'
+import { Buffer } from 'buffer'
 import { type TFunction } from 'i18next'
 import React, { type MouseEvent, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
 import { I18nextProvider, withTranslation } from 'react-i18next'
 import 'react-virtualized/styles.css'
 import 'tachyons'
-import '../src/components/loader/Loader.css'
-import '../src/components/object-info/LinksTable.css'
 import i18n from '../src/i18n.js'
 import { ExplorePage, StartExploringPage, IpldExploreForm, IpldCarExploreForm, ExploreProvider, HeliaProvider } from '../src/index.js'
 
-globalThis.Buffer = Buffer
+globalThis.Buffer = globalThis.Buffer ?? Buffer
 
 const HeaderComponent = ({ t }: { t: TFunction<'explore', undefined> }): React.ReactElement => {
   const activeColor = 'navy 0-100'
@@ -77,7 +75,7 @@ const PageRenderer = (): React.ReactElement => {
     return () => { window.removeEventListener('hashchange', onHashChange) }
   }, [])
 
-  const renderPage = (): React.ReactElement => {
+  const RenderPage: React.FC = () => {
     switch (true) {
       case route.startsWith('/explore'):
         return <ExplorePage />
@@ -88,11 +86,7 @@ const PageRenderer = (): React.ReactElement => {
   }
 
   return (
-    <HeliaProvider>
-      <ExploreProvider>
-        {renderPage()}
-      </ExploreProvider>
-    </HeliaProvider>
+    <RenderPage />
   )
 }
 
