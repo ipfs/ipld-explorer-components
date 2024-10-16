@@ -163,7 +163,6 @@
   "scripts": {
     "build": "run-s dep-check lint build:esm-vite storybook:build",
     "build:esm": "aegir build",
-    "build:esm-old": "cross-env NODE_ENV=production babel --quiet src -d dist --copy-files --no-copy-ignored --extensions '.ts,.tsx,.js,.jsx'",
     "build:esm-vite": "vite build",
     "release": "aegir release",
     "clean": "rm -rf dist",
@@ -208,12 +207,6 @@
     "stream-to-it": "^1.0.1"
   },
   "devDependencies": {
-    "@babel/cli": "^7.25.7",
-    "@babel/core": "^7.23.9",
-    "@babel/plugin-proposal-class-properties": "^7.18.6",
-    "@babel/preset-env": "^7.23.9",
-    "@babel/preset-react": "^7.23.3",
-    "@babel/preset-typescript": "^7.23.3",
     "@chromatic-com/storybook": "^1.9.0",
     "@rollup/plugin-node-resolve": "^15.2.3",
     "@storybook/addon-actions": "^8.3.5",
@@ -238,7 +231,6 @@
     "@vitejs/plugin-react": "^4.0.0",
     "aegir": "^44.1.1",
     "concurrently": "^8.2.2",
-    "cross-env": "^7.0.3",
     "eslint-config-ipfs": "^7.0.6",
     "eslint-plugin-jsx-a11y": "^6.8.0",
     "eslint-plugin-react": "^7.34.1",
@@ -280,8 +272,5 @@
     "last 2 versions",
     "Firefox ESR",
     "not ie < 11"
-  ],
-  "standard": {
-    "parser": "babel-eslint"
-  }
+  ]
 }
