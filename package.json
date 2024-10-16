@@ -262,8 +262,8 @@
     "i18next-http-backend": "2.6.2",
     "i18next-icu": "^2.3.0",
     "ipfs-css": "^1.4.0",
-    "react": "^16.14.0",
-    "react-dom": "^16.14.0",
+    "react": ">=16.14.0",
+    "react-dom": ">=16.14.0",
     "react-i18next": "^15.0.2",
     "react-virtualized": "^9.22.5",
     "tachyons": "^4.12.0"
