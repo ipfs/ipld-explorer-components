@@ -1,5 +1,4 @@
 import { resolve as pathResolve } from 'node:path'
-import resolve from '@rollup/plugin-node-resolve'
 import react from '@vitejs/plugin-react'
 import { defineConfig, type PluginOption, type UserConfig, type UserConfigExport } from 'vite'
 import svgrPlugin from 'vite-plugin-svgr'
@@ -10,9 +9,6 @@ export default defineConfig(({ mode, command }) => {
   const vitePlugins: UserConfig['plugins'] = [
     react(),
     svgrPlugin(),
-    resolve({
-      extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
-    }) as PluginOption,
     dts()
   ]
   let viteResolve: UserConfig['resolve'] = {
