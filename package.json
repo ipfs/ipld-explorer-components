@@ -184,10 +184,10 @@
     "test:storybook:ci": "concurrently -k -s first -n \"SB,TEST\" -c \"magenta,blue\" \"storybook dev -p 6006\" \"wait-on 'tcp:127.0.0.1:6006' && test-storybook --coverage\""
   },
   "dependencies": {
-    "@helia/block-brokers": "^3.0.4",
-    "@helia/http": "^1.0.10",
-    "@helia/interface": "^4.3.1",
-    "@helia/routers": "^1.1.1",
+    "@helia/block-brokers": "^4.0.0",
+    "@helia/http": "^2.0.0",
+    "@helia/interface": "^5.0.0",
+    "@helia/routers": "^2.0.0",
     "@ipld/car": "^5.2.6",
     "@ipld/dag-cbor": "^9.1.0",
     "@ipld/dag-json": "^10.1.7",
