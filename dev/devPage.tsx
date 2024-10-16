@@ -2,7 +2,7 @@
 import 'ipfs-css'
 import { Buffer } from 'buffer'
 import React, { type MouseEvent, useEffect, useState } from 'react'
-import ReactDOM from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { I18nextProvider, useTranslation } from 'react-i18next'
 import 'react-virtualized/styles.css'
 import 'tachyons'
@@ -99,9 +99,13 @@ const App = (): React.ReactElement => {
   )
 }
 
-ReactDOM.render(
+const rootEl = document.getElementById('root')
+if (rootEl == null) {
+  throw new Error('No root element found with the id "root"')
+}
+const root = createRoot(rootEl)
+root.render(
   <I18nextProvider i18n={i18n}>
     <App />
-  </I18nextProvider>,
-  document.getElementById('root')
+  </I18nextProvider>
 )
