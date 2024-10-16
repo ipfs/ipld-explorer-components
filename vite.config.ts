@@ -3,7 +3,6 @@ import resolve from '@rollup/plugin-node-resolve'
 import react from '@vitejs/plugin-react'
 import { defineConfig, type PluginOption, type UserConfig, type UserConfigExport } from 'vite'
 import svgrPlugin from 'vite-plugin-svgr'
-// @ts-expect-error - no vite-plugin-dts types
 import dts from 'vite-plugin-dts';
 
 // https://vitejs.dev/config/
