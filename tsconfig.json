@@ -1,7 +1,5 @@
 {
-  /**
-   * NOTE: Babel is currently transpiling typescript.
-   */
+  // "extends": "aegir/src/config/tsconfig.aegir.json",
   "compilerOptions": {
     "target": "ESNext",
     "lib": [
@@ -30,7 +28,7 @@
     "declaration": true,
     "outDir": "dist",
     "declarationDir": "dist",
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "rootDir": "."
   },
   "include": [

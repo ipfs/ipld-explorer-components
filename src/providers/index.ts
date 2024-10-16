@@ -1,2 +1,2 @@
-export * from './explore.jsx'
-export * from './helia.jsx'
+export * from './explore.js'
+export * from './helia.js'

@@ -1,8 +1,8 @@
 import { type CID } from 'multiformats/cid'
 import React, { type PropsWithChildren } from 'react'
 import { getCodecOrNull } from '../../lib/cid.js'
-import Cid from '../cid/Cid.jsx'
-import { colorForNode } from '../object-info/ObjectInfo.jsx'
+import Cid from '../cid/Cid.js'
+import { colorForNode } from '../object-info/ObjectInfo.js'
 
 export interface PathBoundary {
   path: string

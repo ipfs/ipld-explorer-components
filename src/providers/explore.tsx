@@ -1,11 +1,12 @@
 import { CID } from 'multiformats/cid'
 import React, { createContext, useContext, useState, useEffect, type ReactNode, useCallback } from 'react'
+import { Loader } from '../components/loader/Loader.js'
 import { ensureLeadingSlash } from '../lib/helpers.js'
 import { importCar } from '../lib/import-car.js'
 import { parseIpldPath } from '../lib/parse-ipld-path.js'
 import { resolveIpldPath } from '../lib/resolve-ipld-path.js'
-import { useHelia } from './helia.jsx'
-import type { RowLinkClickEventData } from '../components/object-info/LinksTable.jsx'
+import { useHelia } from './helia.js'
+import type { RowLinkClickEventData } from '../components/object-info/LinksTable.js'
 import type IpldExploreError from '../lib/errors.js'
 import type { NormalizedDagNode } from '../types.js'
 
@@ -170,7 +171,7 @@ export const ExploreProvider = ({ children, state = defaultState }: { children?:
   }, [helia, explorePathFromHash])
 
   if (helia == null) {
-    return null
+    return <Loader color='dark' />
   }
 
   return (

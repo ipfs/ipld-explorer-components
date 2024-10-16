@@ -1,6 +1,6 @@
 import React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
-import Box from '../box/Box.jsx'
+import Box from '../box/Box.js'
 import ipldLogoSrc from './ipld.svg'
 
 export const AboutIpld: React.FC = () => {

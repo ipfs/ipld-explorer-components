@@ -1,7 +1,7 @@
 import React, { useCallback, type ChangeEvent, type FormEvent } from 'react'
 import { useTranslation } from 'react-i18next'
-import { useExplore } from '../../providers/explore.jsx'
-import { useHelia } from '../../providers/helia.jsx'
+import { useExplore } from '../../providers/explore.js'
+import { useHelia } from '../../providers/helia.js'
 import spinnerImage from './spinner.svg'
 import uploadImage from './upload.svg'
 

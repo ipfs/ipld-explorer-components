@@ -1,5 +1,5 @@
 /* global globalThis */
-import * as sha3 from '@multiformats/sha3'
+import { sha3512, keccak256 } from '@multiformats/sha3'
 import { type Hasher, from } from 'multiformats/hashes/hasher'
 import * as sha2 from 'multiformats/hashes/sha2'
 
@@ -53,10 +53,10 @@ export async function getHasherForCode (code: number): Promise<SupportedHashers>
           return new Uint8Array(hashBuffer)
         }
       }))
-    case sha3.sha3512.code: // sha3-512
-      return getBoundHasher(sha3.sha3512)
-    case sha3.keccak256.code: // keccak-256
-      return getBoundHasher(sha3.keccak256)
+    case sha3512.code: // sha3-512
+      return getBoundHasher(sha3512)
+    case keccak256.code: // keccak-256
+      return getBoundHasher(keccak256)
     case 30:
       return getBoundHasher(from({
         name: 'blake3',

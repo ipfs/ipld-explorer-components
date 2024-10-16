@@ -1,15 +1,10 @@
-import CidInfo from './components/cid-info/CidInfo.jsx'
-import IpldCarExploreForm from './components/explore/IpldCarExploreForm.jsx'
-import IpldExploreForm from './components/explore/IpldExploreForm.jsx'
-import IpldGraph from './components/graph/LoadableIpldGraph.jsx'
-import ObjectInfo from './components/object-info/ObjectInfo.jsx'
+import CidInfo from './components/cid-info/CidInfo.js'
+import ObjectInfo from './components/object-info/ObjectInfo.js'
 export * from './providers/index.js'
 export * from './pages.js'
+export * from './forms.js'
 
 export {
-  IpldExploreForm,
-  IpldCarExploreForm,
   CidInfo,
-  IpldGraph,
   ObjectInfo
 }

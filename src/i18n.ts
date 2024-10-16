@@ -7,8 +7,6 @@ import LocalStorageBackend from 'i18next-localstorage-backend'
 
 const chain = i18n
   .use(ICU)
-
-chain
   .use(Backend)
   .use(LanguageDetector)
 

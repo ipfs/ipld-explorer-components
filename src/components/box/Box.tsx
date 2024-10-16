@@ -1,5 +1,5 @@
 import React, { type CSSProperties, type PropsWithChildren } from 'react'
-import ErrorBoundary from '../error/ErrorBoundary.jsx'
+import ErrorBoundary from '../error/ErrorBoundary.js'
 
 interface BoxProps {
   className?: string

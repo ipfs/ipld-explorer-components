@@ -1,10 +1,9 @@
 /* globals globalThis */
 import 'ipfs-css'
 import { Buffer } from 'buffer'
-import { type TFunction } from 'i18next'
 import React, { type MouseEvent, useEffect, useState } from 'react'
 import ReactDOM from 'react-dom'
-import { I18nextProvider, withTranslation } from 'react-i18next'
+import { I18nextProvider, useTranslation } from 'react-i18next'
 import 'react-virtualized/styles.css'
 import 'tachyons'
 import i18n from '../src/i18n.js'
@@ -12,12 +11,13 @@ import { ExplorePage, StartExploringPage, IpldExploreForm, IpldCarExploreForm, E
 
 globalThis.Buffer = globalThis.Buffer ?? Buffer
 
-const HeaderComponent = ({ t }: { t: TFunction<'explore', undefined> }): React.ReactElement => {
+const HeaderComponent: React.FC = () => {
   const activeColor = 'navy 0-100'
   const inActiveColor = 'navy o-50'
   const [exploreFormType, setExploreFormType] = useState('cid')
   const [cidColor, setCidColor] = useState(activeColor)
   const [carColor, setCarColor] = useState(inActiveColor)
+  const { t } = useTranslation('explore')
 
   function handleOnChange (evt: MouseEvent<HTMLButtonElement>): void {
     const selectedType = evt.currentTarget.getAttribute('data-value')
@@ -64,8 +64,6 @@ const HeaderComponent = ({ t }: { t: TFunction<'explore', undefined> }): React.R
   )
 }
 
-const TranslatedHeaderComponent = withTranslation('explore')(HeaderComponent)
-
 const PageRenderer = (): React.ReactElement => {
   const [route, setRoute] = useState(window.location.hash.slice(1) ?? '/')
 
@@ -94,7 +92,7 @@ const App = (): React.ReactElement => {
   return (
     <HeliaProvider>
       <ExploreProvider>
-        <TranslatedHeaderComponent />
+        <HeaderComponent />
          <PageRenderer />
       </ExploreProvider>
     </HeliaProvider>

@@ -1,4 +1,4 @@
-import { type NodeStyle } from '../components/object-info/ObjectInfo.jsx'
+import { type NodeStyle } from '../components/object-info/ObjectInfo.js'
 
 /**
  * Converts supported codec codes from https://github.com/multiformats/multicodec/blob/master/table.csv to their names.

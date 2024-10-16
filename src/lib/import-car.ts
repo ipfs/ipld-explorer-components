@@ -1,7 +1,7 @@
 import { type Helia } from '@helia/interface'
 import { CarBlockIterator } from '@ipld/car'
 import { type CID } from 'multiformats'
-import toIterable from 'stream-to-it'
+import { source } from 'stream-to-it'
 
 /**
  * Given a file object representing a CAR archive, import it into the given Helia instance,
@@ -11,7 +11,7 @@ import toIterable from 'stream-to-it'
  */
 export async function importCar (file: File, helia: Helia): Promise<CID> {
   const inStream = file.stream()
-  const CarIterator = await CarBlockIterator.fromIterable(toIterable.source(inStream))
+  const CarIterator = await CarBlockIterator.fromIterable(source(inStream))
   for await (const { cid, bytes } of CarIterator) {
     // add blocks to helia to ensure they are available while navigating children
     await helia.blockstore.put(cid, bytes)

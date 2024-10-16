@@ -1,4 +1,4 @@
-import type { NodeStyle } from '../components/object-info/ObjectInfo.jsx'
+import type { NodeStyle } from '../components/object-info/ObjectInfo.js'
 
 /**
  * Default Explore page suggestions

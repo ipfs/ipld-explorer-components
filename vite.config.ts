@@ -7,6 +7,8 @@ import resolve from '@rollup/plugin-node-resolve'
 import react from '@vitejs/plugin-react'
 import { defineConfig, type PluginOption, type UserConfig, type UserConfigExport } from 'vite'
 import svgrPlugin from 'vite-plugin-svgr'
+// @ts-expect-error - no vite-plugin-dts types
+import dts from 'vite-plugin-dts';
 
 // https://github.com/bvaughn/react-virtualized/issues/1632#issuecomment-1483966063
 const WRONG_CODE = 'import { bpfrpt_proptype_WindowScroller } from "../WindowScroller.js";'
@@ -42,7 +44,8 @@ export default defineConfig(({ mode, command }) => {
     reactVirtualized(),
     resolve({
       extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
-    })
+    }) as PluginOption,
+    dts()
   ]
   let viteResolve: UserConfig['resolve'] = {
     alias: [{ find: '@', replacement: pathResolve(__dirname, '/src') }]
@@ -69,33 +72,53 @@ export default defineConfig(({ mode, command }) => {
   }
   const viteBuild: UserConfig['build'] = {
     lib: {
-      entry: [
-        pathResolve(__dirname, 'src/index.ts')
-      ],
+      // entry: [
+      //   pathResolve(__dirname, 'src/index.ts'),
+      // ],
+      entry: {
+        index: pathResolve(__dirname, 'src/index.ts'),
+        'providers/index': pathResolve(__dirname, 'src/providers/index.ts'),
+        pages: pathResolve(__dirname, 'src/pages.ts'),
+        forms: pathResolve(__dirname, 'src/forms.ts'),
+      },
+      name: 'ipld-explorer-components',
       fileName: (format, entryName) => `${format}/${entryName}.js`,
       formats: ['es']
     },
-    outDir: 'dist-vite',
+    outDir: 'dist',
     target: 'esnext',
     minify: false,
     cssCodeSplit: false,
     rollupOptions: {
       external: [
-        /node_modules/,
-        /\.stories\..+$/
+        // /node_modules/,
+        'react',
+        'react-dom',
+        'react-i18next',
+        /\.stories\..+$/,
+        /\.test\..+$/,
       ],
       preserveEntrySignatures: 'strict',
       input: {
-        index: pathResolve(__dirname, 'src/index.ts')
+        index: pathResolve(__dirname, 'src/index.ts'),
+        'providers/index': pathResolve(__dirname, 'src/providers/index.ts'),
+        pages: pathResolve(__dirname, 'src/pages.ts'),
+        forms: pathResolve(__dirname, 'src/forms.ts'),
       },
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',
-        entryFileNames: '[name].js'
+        entryFileNames: '[name].js',
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM'
+        },
       },
-      plugins: [
-      ]
-    }
+      // plugins: [
+      // ]
+    },
+    sourcemap: true,
+    emptyOutDir: true,
   }
 
   viteResolve = {

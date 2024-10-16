@@ -60,10 +60,10 @@ export default {
         '.eot': 'file',
         '.otf': 'file',
       },
-      // platform: 'browser',
-      // target: 'es2022',
-      // format: 'esm',
-      // metafile: true,
+      platform: 'browser',
+      target: 'es2022',
+      format: 'esm',
+      metafile: true,
       plugins: [
         copyPlugin({ext: 'css'}),
         copyPlugin({ext: 'svg'}),
@@ -121,7 +121,6 @@ export default {
       'vitest.config.js',
       '/test',
       '.storybook',
-      'dist-vite'
     ]
   }
 }

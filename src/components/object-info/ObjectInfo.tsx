@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { ObjectInspector, chromeLight } from 'react-inspector'
 import getCodecNameFromCode from '../../lib/get-codec-name-from-code'
 import { type NormalizedDagNode, type UnixFsNodeDataWithNumbers } from '../../types.js'
-import LinksTable, { type LinksTableProps } from './LinksTable.jsx'
+import LinksTable, { type LinksTableProps } from './LinksTable.js'
 
 const humansize = partial({ round: 0 })
 
