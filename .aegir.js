@@ -87,23 +87,15 @@ export default {
       'filesize',
       'react-inspector',
       'react-joyride',
+      'react-helmet',
 
       // storybook deps
+      '@chromatic-com/storybook',
       '@storybook/addon-actions',
       '@storybook/addon-coverage',
-      '@storybook/addon-essentials',
       '@storybook/addon-interactions',
       '@storybook/addon-links',
-      '@storybook/channels',
-      '@storybook/core-common',
-      '@storybook/core-events',
-      '@storybook/csf-plugin',
-      '@storybook/csf-tools',
-      '@storybook/docs-tools',
-      '@storybook/node-logger',
-      '@storybook/react-dom-shim',
       '@storybook/types',
-      '@chromatic-com/storybook',
 
       // problem with deps
       '@typescript-eslint/eslint-plugin',
@@ -121,6 +113,7 @@ export default {
       'vitest.config.js',
       '/test',
       '.storybook',
+      '**/*.stories.*',
     ]
   }
 }
