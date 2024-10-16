@@ -126,7 +126,7 @@
   "eslintConfig": {
     "settings": {
       "react": {
-        "version": "16.3"
+        "version": "18.3"
       }
     },
     "extends": [
@@ -193,14 +193,14 @@
     "@ipld/dag-json": "^10.2.2",
     "@ipld/dag-pb": "^4.1.2",
     "@multiformats/sha3": "^3.0.2",
-    "cytoscape": "^3.28.1",
+    "cytoscape": "^3.30.2",
     "cytoscape-dagre": "^2.5.0",
     "dag-jose": "^5.1.1",
     "filesize": "^10.1.6",
     "hash-wasm": "^4.11.0",
     "i18next-chained-backend": "^4.6.2",
     "i18next-localstorage-backend": "^4.2.0",
-    "ipfs-unixfs": "^11.1.3",
+    "ipfs-unixfs": "^11.2.0",
     "multiformats": "^13.3.0",
     "react-helmet": "^6.1.0",
     "react-inspector": "^6.0.2",
@@ -230,14 +230,14 @@
     "@types/react-virtualized": "^9.21.30",
     "@vitejs/plugin-react": "^4.3.2",
     "aegir": "^44.1.4",
-    "concurrently": "^8.2.2",
+    "concurrently": "^9.0.1",
     "eslint-config-ipfs": "^7.0.6",
     "eslint-plugin-jsx-a11y": "^6.10.0",
     "eslint-plugin-react": "^7.37.1",
     "eslint-plugin-react-hooks": "^5.0.0",
-    "i18next": "^23.15.2",
-    "i18next-browser-languagedetector": "8.0.0",
-    "i18next-http-backend": "2.6.2",
+    "i18next": "^23.16.0",
+    "i18next-browser-languagedetector": "^8.0.0",
+    "i18next-http-backend": "^2.6.2",
     "i18next-icu": "^2.3.0",
     "ipfs-css": "^1.4.0",
     "jsdom": "^25.0.1",
@@ -249,7 +249,7 @@
     "rollup-plugin-node-polyfills": "^0.2.1",
     "storybook": "^8.3.5",
     "tachyons": "^4.12.0",
-    "typescript": "^5.0.4",
+    "typescript": "^5.6.3",
     "vite": "^5.4.9",
     "vite-plugin-dts": "^4.2.4",
     "vite-plugin-svgr": "^4.2.0",
@@ -258,8 +258,8 @@
   },
   "peerDependencies": {
     "i18next": "^23.15.2",
-    "i18next-browser-languagedetector": "8.0.0",
-    "i18next-http-backend": "2.6.2",
+    "i18next-browser-languagedetector": "^8.0.0",
+    "i18next-http-backend": "^2.6.2",
     "i18next-icu": "^2.3.0",
     "ipfs-css": "^1.4.0",
     "react": ">=16.14.0",
