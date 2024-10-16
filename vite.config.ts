@@ -11,7 +11,7 @@ import svgrPlugin from 'vite-plugin-svgr'
 import dts from 'vite-plugin-dts';
 
 // https://github.com/bvaughn/react-virtualized/issues/1632#issuecomment-1483966063
-const WRONG_CODE = 'import { bpfrpt_proptype_WindowScroller } from "../WindowScroller.js";'
+const WRONG_CODE = `import { bpfrpt_proptype_WindowScroller } from '../WindowScroller.js';`
 function reactVirtualized (): PluginOption {
   return {
     name: 'flat:react-virtualized',
@@ -67,7 +67,7 @@ export default defineConfig(({ mode, command }) => {
     }
   }
   const viteEsBuild: UserConfig['esbuild'] = {
-    loader: 'tsx', // OR "tsx"
+    loader: 'tsx',
     include: /\.(tsx?|jsx?)$/
   }
   const viteBuild: UserConfig['build'] = {
@@ -95,6 +95,17 @@ export default defineConfig(({ mode, command }) => {
         'react',
         'react-dom',
         'react-i18next',
+        'i18next',
+        'i18next-browser-languagedetector',
+        'i18next-http-backend',
+        'i18next-icu',
+        'ipfs-css',
+        // 'react',
+        // 'react-dom',
+        // 'react-helmet',
+        // 'react-i18next',
+        // 'react-virtualized',
+        'tachyons',
         /\.stories\..+$/,
         /\.test\..+$/,
       ],
