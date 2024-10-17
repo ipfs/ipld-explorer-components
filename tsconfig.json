@@ -13,7 +13,9 @@
       "vite-plugin-svgr/client",
       "mocha",
       "jest",
-      "@storybook/types"
+      "@storybook/types",
+      "vitest/globals",
+      "@testing-library/jest-dom"
     ],
     "allowJs": false,
     "skipLibCheck": true,
