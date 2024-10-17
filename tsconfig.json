@@ -47,5 +47,13 @@
     "dist",
     "vite.config.ts",
     "package.json"
+  ],
+  "plugins": [
+    {
+      "name": "typescript-plugin-css-modules",
+      "options": {
+        "classnameTransform": "camelCaseOnly"
+      }
+    }
   ]
 }

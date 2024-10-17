@@ -9,7 +9,7 @@ import ErrorBoundary from './error/ErrorBoundary'
 import { IpldExploreErrorComponent } from './explore/IpldExploreErrorComponent'
 import IpldGraph from './graph/IpldGraphCytoscape.js'
 import GraphCrumb from './graph-crumb/GraphCrumb.js'
-import ComponentLoader from './loader/ComponentLoader.js'
+import ComponentLoader from './loader/component-loader.js'
 import { ObjectInfo } from './object-info/ObjectInfo.js'
 
 export const ExplorePage = ({

@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react'
-import './links-table.css'
+import styles from './links-table.module.css'
 
 export interface LinkObject {
   index: number
@@ -47,23 +47,22 @@ interface RowProps {
 const Row: React.FC<RowProps> = ({ onLinkClick, startIndex, index, rowHeight, link }) => {
   const key = startIndex + index
   const backgroundColor = key % 2 === 0 ? '#fff' : 'rgb(251, 251, 251);'
-  const pathRef = useRef<HTMLDivElement>(null)
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       key={key}
-      className='pv2 pointer items-center f7 row-grid bb b--near-white'
+      className={`pv2 pointer items-center f7 ${styles.rowGrid} bb b--near-white`}
       style={{ position: 'absolute', top: key * rowHeight, width: '100%', backgroundColor }}
       onClick={() => { onLinkClick(link as any) }}
     >
-      <div className=" mid-gray tr pr1 f7 grid-cell-row monospace">
+      <div className={`mid-gray tr pr1 f7 ${styles.gridCellRow} monospace}`}>
         {key}
       </div>
-      <div className="navy f6-ns f7 grid-cell-row" ref={pathRef}>
+      <div className={`navy f6-ns f7 ${styles.gridCellRow}`}>
         {link.path}
       </div>
-      <div className="mid-gray tl grid-cell-row ml1 f7 monospace">
+      <div className={`mid-gray tl ${styles.gridCellRow} ml1 f7 monospace}`}>
         {link.target}
       </div>
     </div>
@@ -76,14 +75,14 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = () => {
   return (
-    <div className="mid-gray header-grid items-center pv2 fw1 tracked bb b--near-white">
-      <div className="mid-gray tr pr1 f7 grid-cell-header">
+    <div className={`mid-gray ${styles.headerGrid} items-center pv2 fw1 tracked bb b--near-white`}>
+      <div className={`mid-gray tr pr1 f7 ${styles.gridCellHeader}`}>
         #
       </div>
-      <div className="navy tl tracked f7 grid-cell-header">
+      <div className={`navy tl tracked f7 ${styles.gridCellHeader}`}>
         PATH
       </div>
-      <div className="mid-gray tl tracked grid-cell-header">
+      <div className={`mid-gray tl tracked ${styles.gridCellHeader}`}>
         CID
       </div>
     </div>
@@ -132,7 +131,7 @@ const LargeLinksTable: React.FC<LargeLinksTableProps> = ({ onLinkClick, links, r
   const visibleLinks = links.slice(startIndex, endIndex)
 
   return (
-    <div className="collapse br2 pv2 ph3 mv2 nl3 nr3 mh0-l f7 links-table">
+    <div className={`collapse br2 pv2 ph3 mv2 nl3 nr3 mh0-l f7 ${styles.linksTable}`}>
       <Header cidRowStyle={cidRowStyle ?? { width: tableWidth }} />
       <div
         ref={containerRef}

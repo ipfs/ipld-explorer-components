@@ -111,6 +111,11 @@ export default defineConfig(({ mode, command }) => {
     build: viteBuild,
     server: {
       open: true
+    },
+    css: {
+      modules: {
+        localsConvention: 'camelCaseOnly'
+      }
     }
   }
 

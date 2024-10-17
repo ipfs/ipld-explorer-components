@@ -105,6 +105,9 @@ export default {
 
       // vite stuff
       'rollup-plugin-node-polyfills',
+
+      // typescript plugins
+      'typescript-plugin-css-modules'
     ],
     productionIgnorePatterns: [
       '.aegir.js',
