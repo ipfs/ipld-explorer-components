@@ -8,8 +8,8 @@ const cid2 = 'bafyreigej5njyhiye4rlhntifea6uwzkuwhkxvm2nxyyufnedzqqhhokpi'
 const cid3 = 'bafyreidyyt24wtr7q5plglwroysqzn3ph42nvna4iswllnha7xrwogme3q'
 
 it('normalizes a simple cbor node', () => {
-  const obj = { foo: 'bar' }
-  const res = normaliseDagNode(obj, cid1, dagCbor.code)
+  const obj: any = { foo: 'bar' }
+  const res = normaliseDagNode(obj, cid1)
 
   expect(res).toEqual(expect.objectContaining({
     cid: cid1,
@@ -20,8 +20,8 @@ it('normalizes a simple cbor node', () => {
 })
 
 it('normalizes a cbor node with an empty array', () => {
-  const obj = { foo: [] }
-  const res = normaliseDagNode(obj, cid1, dagCbor.code)
+  const obj: any = { foo: [] }
+  const res = normaliseDagNode(obj, cid1)
 
   expect(res).toEqual(expect.objectContaining({
     cid: cid1,
@@ -32,7 +32,7 @@ it('normalizes a cbor node with an empty array', () => {
 })
 
 it('normalizes a cbor node with links', () => {
-  const obj = {
+  const obj: any = {
     foo: CID.parse(cid2),
     bar: [CID.parse(cid2), CID.parse(cid3)]
   }

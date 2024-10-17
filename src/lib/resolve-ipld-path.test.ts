@@ -1,18 +1,18 @@
 /* global describe it expect beforeEach */
 // @ts-check
+import { type Helia } from '@helia/interface'
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
+import { type PBNode } from '@ipld/dag-pb'
+import { type CID } from 'multiformats/cid'
 import * as raw from 'multiformats/codecs/raw'
 import { createHeliaMock } from '../../test/unit/heliaMock.js'
-import { addDagNodeToHelia } from './helpers.ts'
-import { resolveIpldPath, findLinkPath, ipldGetNodeAndRemainder } from './resolve-ipld-path.ts'
+import { addDagNodeToHelia } from './helpers.js'
+import { resolveIpldPath, findLinkPath, ipldGetNodeAndRemainder } from './resolve-ipld-path.js'
 
 // #WhenAddingNewCodec
 describe('resolveIpldPath', () => {
-  /**
-   * @type {import('@helia/interface').Helia}
-   */
-  let helia
+  let helia: Helia
   beforeEach(async () => {
     helia = await createHeliaMock()
   })
@@ -51,10 +51,10 @@ describe('resolveIpldPath', () => {
   it('resolves thru dag-cbor to dag-pb to dag-pb', async () => {
     const path = '/a/b/pb1'
 
-    const dagNode3 = await createDagPbNode('the second pb node', [])
+    const dagNode3 = createDagPbNode('the second pb node', [])
     const dagNode3CID = await addDagNodeToHelia(helia, 'dag-pb', dagNode3)
 
-    const dagNode2 = await createDagPbNode('the first pb node', [{
+    const dagNode2 = createDagPbNode('the first pb node', [{
       name: 'pb1',
       cid: dagNode3CID.toString(),
       size: 101
@@ -144,14 +144,11 @@ describe('resolveIpldPath', () => {
 })
 
 describe('ipldGetNodeAndRemainder', () => {
-  /**
-   * @type {import('@helia/interface').Helia}
-   */
-  let helia
-  let node4Cid
-  let node3Cid
-  let node2Cid
-  let rootNodeCid
+  let helia: Helia
+  let node4Cid: CID
+  let node3Cid: CID
+  let node2Cid: CID
+  let rootNodeCid: CID
   beforeEach(async () => {
     helia = await createHeliaMock()
     node4Cid = await addDagNodeToHelia(helia, 'dag-pb', createDagPbNode('4th node', []))
@@ -241,20 +238,13 @@ describe('ipldGetNodeAndRemainder', () => {
   })
 })
 
-/**
- *
- * @typedef {object} OldDagPbLinkLiteral
- * @property {string} name
- * @property {string} cid
- * @property {number} size
- */
-/**
- *
- * @param {string|Uint8Array} data
- * @param {OldDagPbLinkLiteral[]} links
- * @returns {import('@ipld/dag-pb').PBNode}
- */
-function createDagPbNode (data, links) {
+interface OldDagPbLinkLiteral {
+  name: string
+  cid: string
+  size: number
+}
+
+function createDagPbNode (data: string | Uint8Array, links: OldDagPbLinkLiteral[]): PBNode {
   return dagPb.prepare({
     Data: data,
     Links: links.map(({ cid, name, size }) => {
