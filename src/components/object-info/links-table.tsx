@@ -67,17 +67,17 @@ const Row: React.FC<RowProps> = ({ onLinkClick, startIndex, index, rowHeight, li
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       key={key}
-      className={`${stripedBgColor} pv2 flex pointer items-center bb b--near-white f7 links-table--row`}
+      className={`${stripedBgColor} pv2 pointer items-center bb b--near-white f7 links-table--row row-grid`}
       style={{ position: 'absolute', top: key * rowHeight, width: '100%' }}
       onClick={() => { onLinkClick(link as any) }}
     >
-      <div className="links-table--row--cell mid-gray tr pr1 f7">
+      <div className=" mid-gray tr pr1 f7 grid-cell-row">
         {startIndex + index}
       </div>
-      <div className="links-table--row--cell pl3 navy tl tracked f7" ref={pathRef}>
+      <div className="navy f6-ns f7 grid-cell-row" ref={pathRef}>
         {link.path}
       </div>
-      <div className="links-table--row--cell mid-gray tl f7 pl1 pl3-m pl3-l">
+      <div className="mid-gray tracked tl grid-cell-row ml1">
         {link.target}
       </div>
     </div>
@@ -90,14 +90,14 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = () => {
   return (
-    <div className="mid-gray flex items-center pv2 fw1 tracked links-table--row">
-      <div className="links-table--row--cell mid-gray tr pr1 f7">
+    <div className="mid-gray header-grid items-center pv2 fw1 tracked links-table--row">
+      <div className="mid-gray tr pr1 f7 grid-cell-header">
         #
       </div>
-      <div className="links-table--row--cell pl3 navy tl tracked f7">
+      <div className="navy tl tracked f7 grid-cell-header">
         PATH
       </div>
-      <div className="links-table--row--cell mid-gray tl f7">
+      <div className="mid-gray tl tracked grid-cell-header">
         CID
       </div>
     </div>
@@ -148,13 +148,13 @@ const LargeLinksTable: React.FC<LargeLinksTableProps> = ({ onLinkClick, links, r
   const visibleLinks = links.slice(startIndex, endIndex)
 
   return (
-    <div className="collapse br2 pv2 ph3 mv2 nl3 nr3 mh0-l f7">
+    <div className="collapse br2 pv2 ph3 mv2 nl3 nr3 mh0-l f7 links-table">
       <Header cidRowStyle={cidRowStyle ?? { width: tableWidth }} />
       <div
         ref={containerRef}
-        style={{ height: tableHeight, overflowY: 'auto', position: 'relative' }}
+        style={{ height: tableHeight, overflowY: 'auto', overflowX: 'hidden', position: 'relative' }}
       >
-        <div className="flex items-center" style={{ width: tableWidth, height: links.length * rowHeight, position: 'relative' }}>
+        <div style={{ width: tableWidth, height: links.length * rowHeight }}>
           {visibleLinks.map((link, index) => (
             <Row onLinkClick={onLinkClick} key={startIndex + index} link={link} index={index} startIndex={startIndex} rowHeight={rowHeight} cidRowStyle={cidRowStyle ?? {}} />
           ))}
