@@ -6,7 +6,7 @@ import * as dagPb from '@ipld/dag-pb'
 import { type PBNode } from '@ipld/dag-pb'
 import { type CID } from 'multiformats/cid'
 import * as raw from 'multiformats/codecs/raw'
-import { createHeliaMock } from '../../test/unit/heliaMock.js'
+import { createHeliaMock } from '../../test/unit/helia-mock.js'
 import { addDagNodeToHelia } from './helpers.js'
 import { resolveIpldPath, findLinkPath, ipldGetNodeAndRemainder } from './resolve-ipld-path.js'
 
