@@ -1,7 +1,5 @@
 {
-  /**
-   * NOTE: Babel is currently transpiling typescript.
-   */
+  // "extends": "aegir/src/config/tsconfig.aegir.json",
   "compilerOptions": {
     "target": "ESNext",
     "lib": [
@@ -12,9 +10,14 @@
     ],
     "types": [
       "vite/client",
-      "vite-plugin-svgr/client"
+      "vite-plugin-svgr/client",
+      "mocha",
+      "jest",
+      "@storybook/types",
+      "vitest/globals",
+      "@testing-library/jest-dom"
     ],
-    "allowJs": true,
+    "allowJs": false,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -26,24 +29,23 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "declaration": true,
-    "emitDeclarationOnly": true,
     "outDir": "dist",
     "declarationDir": "dist",
-    "jsx": "react",
-    "rootDir": "src"
+    "jsx": "react-jsx",
+    "rootDir": "."
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    "dev/**/*",
+    "test/**/*"
   ],
   "exclude": [
-    "src/**/*.test.*",
     "src/**/*.stories.*",
     "node_modules",
     "storybook-static",
     "build",
     "dist",
     "vite.config.ts",
-    "package.json",
-    "dev"
+    "package.json"
   ]
 }

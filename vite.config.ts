@@ -1,48 +1,15 @@
-import fs from 'node:fs/promises'
-import { createRequire } from 'node:module'
-import path, { resolve as pathResolve } from 'node:path'
-import url from 'node:url'
-import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
-import resolve from '@rollup/plugin-node-resolve'
+import { resolve as pathResolve } from 'node:path'
 import react from '@vitejs/plugin-react'
-import { defineConfig, type PluginOption, type UserConfig, type UserConfigExport } from 'vite'
+import { defineConfig, type UserConfig, type UserConfigExport } from 'vite'
 import svgrPlugin from 'vite-plugin-svgr'
-
-// https://github.com/bvaughn/react-virtualized/issues/1632#issuecomment-1483966063
-const WRONG_CODE = 'import { bpfrpt_proptype_WindowScroller } from "../WindowScroller.js";'
-function reactVirtualized (): PluginOption {
-  return {
-    name: 'flat:react-virtualized',
-    // Note: we cannot use the `transform` hook here
-    //       because libraries are pre-bundled in vite directly,
-    //       plugins aren't able to hack that step currently.
-    //       so instead we manually edit the file in node_modules.
-    //       all we need is to find the timing before pre-bundling.
-    configResolved: async () => {
-      const require = createRequire(import.meta.url)
-      const reactVirtualizedPath = require.resolve('react-virtualized')
-      const { pathname: reactVirtualizedFilePath } = new url.URL(reactVirtualizedPath, import.meta.url)
-      const file = reactVirtualizedFilePath
-        .replace(
-          path.join('dist', 'commonjs', 'index.js'),
-          path.join('dist', 'es', 'WindowScroller', 'utils', 'onScroll.js')
-        )
-      const code = await fs.readFile(file, 'utf-8')
-      const modified = code.replace(WRONG_CODE, '')
-      await fs.writeFile(file, modified)
-    }
-  }
-}
+import dts from 'vite-plugin-dts';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode, command }) => {
   const vitePlugins: UserConfig['plugins'] = [
     react(),
     svgrPlugin(),
-    reactVirtualized(),
-    resolve({
-      extensions: ['.js', '.jsx', '.ts', '.tsx', '.json']
-    })
+    dts()
   ]
   let viteResolve: UserConfig['resolve'] = {
     alias: [{ find: '@', replacement: pathResolve(__dirname, '/src') }]
@@ -64,38 +31,60 @@ export default defineConfig(({ mode, command }) => {
     }
   }
   const viteEsBuild: UserConfig['esbuild'] = {
-    loader: 'tsx', // OR "tsx"
+    loader: 'tsx',
     include: /\.(tsx?|jsx?)$/
   }
   const viteBuild: UserConfig['build'] = {
     lib: {
-      entry: [
-        pathResolve(__dirname, 'src/index.js')
-      ],
+      entry: {
+        index: pathResolve(__dirname, 'src/index.ts'),
+        'providers/index': pathResolve(__dirname, 'src/providers/index.ts'),
+        pages: pathResolve(__dirname, 'src/pages.ts'),
+        forms: pathResolve(__dirname, 'src/forms.ts'),
+      },
+      name: 'ipld-explorer-components',
       fileName: (format, entryName) => `${format}/${entryName}.js`,
       formats: ['es']
     },
-    outDir: 'dist-vite',
+    outDir: 'dist',
     target: 'esnext',
     minify: false,
     cssCodeSplit: false,
     rollupOptions: {
       external: [
-        /node_modules/,
-        /\.stories\..+$/
+        'react',
+        'react-dom',
+        'react-i18next',
+        'i18next',
+        'i18next-browser-languagedetector',
+        'i18next-http-backend',
+        'i18next-icu',
+        'ipfs-css',
+        'tachyons',
+        /\.stories\..+$/,
+        // all test files (i.e. *.spec.{js,jsx,ts,tsx} or *.test.{js,jsx,ts,tsx})
+        /\.test\..+$/,
+        /\.spec\..+$/,
       ],
       preserveEntrySignatures: 'strict',
       input: {
-        index: pathResolve(__dirname, 'src/index.js')
+        index: pathResolve(__dirname, 'src/index.ts'),
+        'providers/index': pathResolve(__dirname, 'src/providers/index.ts'),
+        pages: pathResolve(__dirname, 'src/pages.ts'),
+        forms: pathResolve(__dirname, 'src/forms.ts'),
       },
       output: {
         preserveModules: true,
         preserveModulesRoot: 'src',
-        entryFileNames: '[name].js'
+        entryFileNames: '[name].js',
+        globals: {
+          react: 'React',
+          'react-dom': 'ReactDOM'
+        },
       },
-      plugins: [
-      ]
-    }
+    },
+    sourcemap: true,
+    emptyOutDir: true,
   }
 
   viteResolve = {
@@ -103,15 +92,14 @@ export default defineConfig(({ mode, command }) => {
       { find: /^process$/, replacement: 'rollup-plugin-node-polyfills/polyfills/process-es6' },
       { find: /^stream$/, replacement: 'rollup-plugin-node-polyfills/polyfills/stream' },
       { find: /^_stream_duplex$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/duplex' },
-      { find: /^_stream_transform$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/transform' }
+      { find: /^_stream_transform$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/transform' },
+      { find: /^buffer$/, replacement: 'rollup-plugin-node-polyfills/polyfills/buffer-es6' },
     ]
   }
   viteOptimizeDeps.include = []
   viteOptimizeDeps.esbuildOptions = {
     ...viteOptimizeDeps.esbuildOptions,
-    plugins: [
-      NodeGlobalsPolyfillPlugin({ buffer: true, process: true })
-    ]
+    plugins: []
   }
 
   const finalConfig: UserConfigExport = {

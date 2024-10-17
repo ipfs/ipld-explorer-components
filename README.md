@@ -17,46 +17,131 @@ This module was extracted from the [explore.ipld.io](https://github.com/ipfs/exp
 Install it from npm:
 
 ```console
-npm install ipld-explorer-components
+npm install --save ipld-explorer-components
 ```
 
-The ES5 friendly version of the `src` dir is generated to the `dist` dir and the
-page components are all provided as named exports so you can import them like so:
+There are `peerDependencies` so that the consuming app can pick the versions of common deps. You'll need to add relevant deps to your project.
+
+### Use it in your project
+
+You can see an example of how to use these components in the [devPage.jsx](./dev/devPage.jsx) file.
+
+```jsx
+// index.tsx
+import React from 'react'
+import {render} from 'react-dom'
+import MyHeader from './app'
+
+const PageRenderer = (): React.ReactElement => {
+  /**
+   * This is a simple example of listening to the hash change event that occurs when the user clicks around in the content rendered by ExplorePage.
+   */
+  const [route, setRoute] = useState(window.location.hash.slice(1) ?? '/')
+
+  useEffect(() => {
+    const onHashChange = (): void => { setRoute(window.location.hash.slice(1) ?? '/') }
+    window.addEventListener('hashchange', onHashChange)
+    return () => { window.removeEventListener('hashchange', onHashChange) }
+  }, [])
+
+  const RenderPage: React.FC = () => {
+    switch (true) {
+      case route.startsWith('/explore'):
+        return <ExplorePage />
+      case route === '/':
+      default:
+        return <StartExploringPage />
+    }
+  }
+
+  return (
+    <RenderPage />
+  )
+}
+const App = (): React.ReactElement => {
+  return (
+    <HeliaProvider>
+      <ExploreProvider>
+        <MyHeader />
+        <PageRenderer />
+      </ExploreProvider>
+    </HeliaProvider>
+  )
+}
+
+const rootEl = document.getElementById('root')
+if (rootEl == null) {
+  throw new Error('No root element found with the id "root"')
+}
+const root = createRoot(rootEl)
+root.render(
+  <I18nextProvider i18n={i18n}>
+    <App />
+  </I18nextProvider>
+)
+
+```
+
+### Exports provided by this library
 
 ```js
-import {ExplorePage, StartExploringPage} from `ipld-explorer-components`
+import { HeliaProvider, ExploreProvider } from 'ipld-explorer-components/providers'
+import { StartExploringPage, ExplorePage } from 'ipld-explorer-components/pages'
+import { IpldExploreForm, IpldCarExploreForm } from 'ipld-explorer-components/forms'
+// or import all components at once
+import { HeliaProvider, ExploreProvider, StartExploringPage, ExplorePage, IpldExploreForm, IpldCarExploreForm, CidInfo, ObjectInfo } from 'ipld-explorer-components'
 ```
 
 The following Components are available:
 
 ```js
 export {
+  /**
+   * Helia provider required for IPLD Explorer components
+   */
+  HeliaProvider,
+  /**
+   * A hook to gain access to the Helia node
+   */
+  useHelia,
+  /**
+   * Explore provider required for IPLD Explorer components. This must be a child  (direct or not) of HeliaProvider.
+   */
+  ExploreProvider,
+  /**
+   * A hook to gain access to the Explore state. You can programmatically set the CID or path to explore using the provided functions.
+   */
+  useExplore,
+  /**
+   * The page to render when you do not have an explicit CID in the URL to explore yet.
+   */
   StartExploringPage,
+  /**
+   * When there is a #/explore/CID in the URL, this component will render the ExplorePage
+   */
   ExplorePage,
+  /**
+   * The form to use to allow entry of a CID to explore. You can place this anywhere in your app within the ExploreProvider.
+   */
   IpldExploreForm,
+  /**
+   * The form to use to allow uploading of a CAR file to explore. You can place this anywhere in your app within the ExploreProvider.
+   */
   IpldCarExploreForm,
   CidInfo,
-  IpldGraph
   ObjectInfo,
-  exploreBundle,
-  heliaBundle
 }
 ```
 
-There are `peerDependencies` so that the parent app can pick the versions of common deps. You'll need to add relevant deps to your project.
 
+### Styling
 
 And, assuming you are using `create-react-app` or a similar webpack set up, you'll need the following CSS imports:
 
 ```js
 import 'tachyons'
 import 'ipfs-css'
-import 'react-virtualized/styles.css'
-import 'ipld-explorer-components/dist/components/object-info/LinksTable.css'
-import 'ipld-explorer-components/dist/components/loader/Loader.css'
 ```
-
-You can see an example of how to use these components in the [devPage.jsx](./dev/devPage.jsx) file.
 
 ### Customizing the links displayed in the StartExploringPage
 
@@ -69,6 +154,76 @@ To customize the links displayed in the start exploring page, you can pass a `li
   type: 'dag-pb' // or dag-json, etc...
 }
 ```
+
+### i18n support
+
+The translations used for this library are provided in `dist/locales`. You can use them in your project by importing them and passing them to the `i18n` instance in your project.
+
+```ts
+import i18n from 'i18next'
+import LanguageDetector from 'i18next-browser-languagedetector'
+import Backend from 'i18next-chained-backend'
+import HttpBackend from 'i18next-http-backend'
+import ICU from 'i18next-icu'
+import LocalStorageBackend from 'i18next-localstorage-backend'
+import { version } from '../package.json'
+import locales from './lib/languages.json'
+
+export const localesList = Object.values(locales)
+
+await i18n
+  .use(ICU)
+  .use(Backend)
+  .use(LanguageDetector)
+  .init({
+    backend: {
+      backends: [
+        LocalStorageBackend,
+        HttpBackend
+      ],
+      backendOptions: [
+        { // LocalStorageBackend
+          defaultVersion: version,
+          expirationTime: (!import.meta.env.NODE_ENV || imObjectInfo.publicGatewayport.meta.env.NODE_ENV === 'development') ? 1 : 7 * 24 * 60 * 60 * 1000
+        },
+        { // HttpBackend
+          // ensure a relative path is used to look up the locales, so it works when loaded from /ipfs/<cid>
+          loadPath: (lngs, namespaces) => {
+            const lang = lngs[0]
+            const ns = namespaces[0]
+            if (ns === 'explore') {
+              // use the ipld-explorer-components locales
+              return 'node_modules/ipld-explorer-components/dist/locales/{{lng}}/{{ns}}.json'
+            }
+
+            // you can override keys in the explore namespace with your own translations. If they are not found, the explore translations will be used.
+            return `locales/${lang}/${ns}.json`
+          }
+        }
+      ]
+    },
+    ns: ['explore', 'app'],
+    defaultNS: 'app',
+    fallbackNS: 'explore', // fallback to explore namespace if the key is not found in the app namespace
+    fallbackLng: {
+      'zh-Hans': ['zh-CN', 'en'],
+      'zh-Hant': ['zh-TW', 'en'],
+      zh: ['zh-CN', 'en'],
+      default: ['en']
+    },
+    debug: import.meta.env.DEBUG,
+    // react i18next special options (optional)
+    react: {
+      // wait: true,
+      // useSuspense: false,
+      bindI18n: 'languageChanged loaded',
+      bindStore: 'added removed',
+      nsMode: 'default'
+    }
+  })
+```
+
+## Development
 
 ### Adding another codec
 
@@ -95,20 +250,6 @@ To add another hasher, you will need to update all locations containing the comm
 1. Update the hasher codes used by the `hashers` property passed to Helia init in [./src/lib/init-helia.ts](./src/lib/init-helia.ts)
 
 see https://github.com/ipfs/ipld-explorer-components/pull/395 for an example.
-
-### Redux-bundler requirements
-
-These components use [redux-bundler](https://reduxbundler.com/), and your app will need to use a redux-bundler provider to propagate the properties and selectors. You can find a basic example in ./dev/devPage.jsx.
-
-In short, these components export two bundles found in ./src/bundles: `explore` and `heliaBundle`. The explore bundle and components herein have a few redux-bundler selector dependencies that you need to make sure exist and are called properly.
-
-| Dependent          | redux-bundler selector | Notes                                                                                                         |
-|--------------------|------------------------|---------------------------------------------------------------------------------------------------------------|
-| explore bundle     | selectHeliaReady        | The explore bundle depends on this selector so it knows when the Helia node is available for use               |
-| explore & other bundles     | selectHelia        | The explore bundle gets the Helia node via this selector |
-| Main page (or any) | doInitHelia             | A consuming app needs to call this selector to tell the bundle that provides the Helia node to instantiate it. |
-
-If you don't want to use the `heliaBundle`, you must adapt the selectors appropriately.
 
 ## Contribute
 

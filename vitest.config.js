@@ -7,15 +7,15 @@ export default defineConfig((configEnv) => mergeConfig(
     test: {
       globals: true,
       environment: 'jsdom',
-      setupFiles: './test/unit/setup.js',
+      setupFiles: './test/unit/setup.ts',
       include: [
         'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'
-      ],
-      deps: {
-        inline: [
-          'ipld-explorer-components'
-        ]
-      }
+      ]
+      // deps: {
+      //   inline: [
+      //     'ipld-explorer-components'
+      //   ]
+      // }
     }
   })
 ))
