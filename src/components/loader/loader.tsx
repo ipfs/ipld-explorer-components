@@ -1,8 +1,8 @@
 import React from 'react'
-import './loader.css'
+import styles from './loader.module.css'
 
 export const Loader: React.FC<{ color: string }> = ({ color = 'light', ...props }) => {
-  const className = `dib la-ball-triangle-path la-${color} la-sm`
+  const className = `dib ${styles.laBallTrianglePath} la-${color} la-sm`
   return (
     <div {...props}>
       <div

@@ -1,6 +1,6 @@
 import { CID } from 'multiformats/cid'
 import React, { createContext, useContext, useState, useEffect, type ReactNode, useCallback } from 'react'
-import { Loader } from '../components/loader/Loader.js'
+import { Loader } from '../components/loader/loader.js'
 import { type LinkObject } from '../components/object-info/links-table'
 import { ensureLeadingSlash } from '../lib/helpers.js'
 import { importCar } from '../lib/import-car.js'
