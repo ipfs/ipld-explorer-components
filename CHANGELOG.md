@@ -1,3 +1,9 @@
+## [8.0.1](https://github.com/ipfs/ipld-explorer-components/compare/v8.0.0...v8.0.1) (2024-10-17)
+
+### Bug Fixes
+
+* styles need to be imported by consumers ([#451](https://github.com/ipfs/ipld-explorer-components/issues/451)) ([b195bc0](https://github.com/ipfs/ipld-explorer-components/commit/b195bc0d45ce7f73d007b1e337eababdbdef9eaa))
+
 ## [8.0.0](https://github.com/ipfs/ipld-explorer-components/compare/v7.0.3...v8.0.0) (2024-10-17)
 
 ### ⚠ BREAKING CHANGES
