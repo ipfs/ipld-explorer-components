@@ -1,11 +1,7 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import './links-table.css'
 
 export interface LinkObject {
-  path: string;
-  target: string;
-}
-
-export interface RowLinkClickEventData {
   index: number
   size: bigint
 
@@ -26,159 +22,146 @@ export interface RowLinkClickEventData {
 }
 
 interface LargeLinksTableProps {
-  links: LinkObject[];
-  rowHeight?: number;
-  tableHeight?: number;
-  headerHeight?: number;
-  cidRowStyle?: React.CSSProperties;
-  onLinkClick(evt: RowLinkClickEventData): void
+  links: LinkObject[]
+  /**
+   * The maximum rows to render at a time. This may or may not be the actual number of rows rendered depending on the height of the table.
+   * i.e. this is the "window" of rows that are attached to the DOM at any given time.
+   */
+  maxRows?: number
+  rowHeight?: number
+  tableHeight?: number
+  headerHeight?: number
+  cidRowStyle?: React.CSSProperties
+  onLinkClick(link: LinkObject): void
 }
 
 interface RowProps {
-  link: LinkObject;
-  index: number;
-  startIndex: number;
-  rowHeight: number;
-  cidRowStyle: React.CSSProperties;
+  link: LinkObject
+  index: number
+  startIndex: number
+  rowHeight: number
+  cidRowStyle: React.CSSProperties
+  onLinkClick(link: LinkObject): void
 }
 
-const column1WrapperStyle: React.CSSProperties = {
-  flex: '0 0 34px'
-};
-const column2WrapperStyle: React.CSSProperties = {
-  flex: '1 1 150px',
-  textOverflow: 'ellipsis',
-  overflow: 'hidden',
-  whiteSpace: 'nowrap',
-  // marginRight: '10px',
-  // whiteSpaceCollapse: 'collapse'
-  minWidth: 0
-};
-const column3WrapperStyle: React.CSSProperties = {
-  flex: '0 1 420px'
-};
+const Row: React.FC<RowProps> = ({ onLinkClick, startIndex, index, rowHeight, link }) => {
+  const key = startIndex + index
+  const stripedBgColor = key % 2 === 0 ? 'bg-light-gray' : 'bg-white'
+  const pathRef = useRef<HTMLDivElement>(null)
 
-const Row: React.FC<RowProps> = ({ startIndex, index, rowHeight, link, cidRowStyle }) => {
-  const key = startIndex + index;
-  const stripedBgColor = key % 2 === 0 ? 'bg-light-gray' : 'bg-white';
-  return (
-    <div
-      key={key}
-      className={`${stripedBgColor} pv2 flex pointer bb b--near-white f7`}
-      style={{ position: 'absolute', top: key * rowHeight, width: '100%' }}
-    >
-      <div style={column1WrapperStyle}>
-        <span className='mid-gray monospace tr pr1 ml2' style={{ width: '34px', display: 'inline-block' }}>
-          {startIndex + index}
-        </span>
-      </div>
-      <div style={column2WrapperStyle} className="f6-ns">
-        {/* <span
-          className='ph2 navy tl'
-          style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'inline-block' }}
-        > */}
-          {link.path}
-        {/* </span> */}
-      </div>
-      <div style={column3WrapperStyle}>
-        <span
-          className='pl2 mid-gray tl'
-          style={{ ...cidRowStyle, width: '420px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-        >
-          {link.target}
-        </span>
-      </div>
-    </div>
-  );
-};
-
-interface HeaderProps {
-  cidRowStyle: React.CSSProperties;
-}
-
-const Header: React.FC<HeaderProps> = ({ cidRowStyle }) => {
-  return (
-    <div className="mid-gray flex items-center pv2 fw1 tracked">
-      <div style={column1WrapperStyle}>
-        <span className="mid-gray tr pr1 ml2 f7" style={{ width: '34px', display: 'inline-block' }}>
-          #
-        </span>
-      </div>
-      <div style={column2WrapperStyle}>
-        <span
-          className="ph2 navy tl tracked f7"
-          style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'inline-block' }}
-        >
-          PATH
-        </span>
-      </div>
-      <div style={column3WrapperStyle}>
-        <span
-          className="pl2 mid-gray tl f7"
-          style={{ ...cidRowStyle, width: '420px', display: 'inline-block', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}
-        >
-          CID
-        </span>
-      </div>
-    </div>
-  );
-};
-
-const LargeLinksTable: React.FC<LargeLinksTableProps> = ({ links, rowHeight = 29, tableHeight = 500, cidRowStyle }) => {
-  const [startIndex, setStartIndex] = useState(0);
-  // const [width, setWidth] = useState(0);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const maxWindowSize = 30;
-
-  const handleScroll = useCallback(() => {
-    if (containerRef.current) {
-      const scrollTop = containerRef.current.scrollTop;
-      const newStartIndex = Math.floor(scrollTop / rowHeight);
-      setStartIndex(newStartIndex);
+  const onResize = useCallback(() => {
+    if (pathRef.current != null) {
+      const pathWidth = pathRef.current.offsetWidth
+      console.log('pathWidth: ', pathWidth)
+      console.log('path clientWidth: ', pathRef.current.clientWidth)
     }
-  }, [rowHeight]);
-
-  // const handleWindowSizeChange = useCallback(() => {
-  //   setWidth(newWidth);
-  // }, []);
+  }, [])
 
   useEffect(() => {
-    const container = containerRef.current;
-    if (container) {
-      container.addEventListener('scroll', handleScroll);
-      return () => container.removeEventListener('scroll', handleScroll);
-    }
-  }, [handleScroll]);
-
-  // useEffect(() => {
-  //   handleWindowSizeChange(window.innerWidth);
-  //   window.addEventListener('resize', () => handleWindowSizeChange(window.innerWidth));
-  //   return () => window.removeEventListener('resize', () => handleWindowSizeChange(window.innerWidth));
-  // }, [handleWindowSizeChange])
-
-
-  const endIndex = Math.min(startIndex + maxWindowSize, links.length);
-  const visibleLinks = links.slice(startIndex, endIndex);
+    onResize()
+    window.addEventListener('resize', onResize)
+    return () => { window.removeEventListener('resize', onResize) }
+  }, [onResize])
 
   return (
-    // <AutoSizer disableHeight>
-      // {({ width }) => (
-        <div className="collapse br2 pv2 ph3 mv2 nl3 nr3 mh0-l">
-          <Header cidRowStyle={cidRowStyle ?? {}} />
-          <div
-            ref={containerRef}
-            style={{ height: tableHeight, overflowY: 'auto', position: 'relative' }}
-          >
-            <div className="flex" style={{ height: links.length * rowHeight, position: 'relative' }}>
-              {visibleLinks.map((link, index) => (
-                <Row key={startIndex + index} link={link} index={index} startIndex={startIndex} rowHeight={rowHeight} cidRowStyle={cidRowStyle} />
-              ))}
-            </div>
-          </div>
-        </div>
-    //   )}
-    // </AutoSizer>
-  );
-};
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+    <div
+      key={key}
+      className={`${stripedBgColor} pv2 flex pointer items-center bb b--near-white f7 links-table--row`}
+      style={{ position: 'absolute', top: key * rowHeight, width: '100%' }}
+      onClick={() => { onLinkClick(link as any) }}
+    >
+      <div className="links-table--row--cell mid-gray tr pr1 f7">
+        {startIndex + index}
+      </div>
+      <div className="links-table--row--cell pl3 navy tl tracked f7" ref={pathRef}>
+        {link.path}
+      </div>
+      <div className="links-table--row--cell mid-gray tl f7 pl1 pl3-m pl3-l">
+        {link.target}
+      </div>
+    </div>
+  )
+}
 
-export default LargeLinksTable;
+interface HeaderProps {
+  cidRowStyle?: React.CSSProperties
+}
+
+const Header: React.FC<HeaderProps> = () => {
+  return (
+    <div className="mid-gray flex items-center pv2 fw1 tracked links-table--row">
+      <div className="links-table--row--cell mid-gray tr pr1 f7">
+        #
+      </div>
+      <div className="links-table--row--cell pl3 navy tl tracked f7">
+        PATH
+      </div>
+      <div className="links-table--row--cell mid-gray tl f7">
+        CID
+      </div>
+    </div>
+  )
+}
+
+const LargeLinksTable: React.FC<LargeLinksTableProps> = ({ onLinkClick, links, rowHeight = 29, tableHeight = 650, cidRowStyle, maxRows = 50 }) => {
+  const [startIndex, setStartIndex] = useState(0)
+  const containerRef = useRef<HTMLDivElement>(null)
+  const [tableWidth, setTableWidth] = useState(0)
+
+  const handleScroll = useCallback((evt: Event) => {
+    // prevent scrolling the table from scrolling the entire page
+    evt.preventDefault()
+    if (containerRef.current != null) {
+      const scrollTop = containerRef.current.scrollTop
+      const newStartIndex = Math.floor(scrollTop / rowHeight)
+      setStartIndex(newStartIndex)
+    }
+  }, [rowHeight])
+
+  const handleWindowResize = useCallback(() => {
+    console.log('resize event. Width=', window.innerWidth)
+    const container = containerRef.current
+    if (container != null) {
+      console.log('table container width: ', container.clientWidth)
+      setTableWidth(container.clientWidth)
+    }
+  }, [])
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (container != null) {
+      container.addEventListener('scroll', handleScroll)
+      return () => { container.removeEventListener('scroll', handleScroll) }
+    }
+  }, [handleScroll])
+
+  useEffect(() => {
+    handleWindowResize()
+    window.addEventListener('resize', handleWindowResize)
+    return () => {
+      window.removeEventListener('resize', handleWindowResize)
+    }
+  }, [handleWindowResize, containerRef.current?.clientWidth])
+
+  const endIndex = Math.min(startIndex + maxRows, links.length)
+  const visibleLinks = links.slice(startIndex, endIndex)
+
+  return (
+    <div className="collapse br2 pv2 ph3 mv2 nl3 nr3 mh0-l f7">
+      <Header cidRowStyle={cidRowStyle ?? { width: tableWidth }} />
+      <div
+        ref={containerRef}
+        style={{ height: tableHeight, overflowY: 'auto', position: 'relative' }}
+      >
+        <div className="flex items-center" style={{ width: tableWidth, height: links.length * rowHeight, position: 'relative' }}>
+          {visibleLinks.map((link, index) => (
+            <Row onLinkClick={onLinkClick} key={startIndex + index} link={link} index={index} startIndex={startIndex} rowHeight={rowHeight} cidRowStyle={cidRowStyle ?? {}} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+export default LargeLinksTable

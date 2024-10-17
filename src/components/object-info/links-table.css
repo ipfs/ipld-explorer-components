@@ -5,3 +5,37 @@
 .LinksTable .ReactVirtualized__Table__rowColumn.no-ellipsis {
   text-overflow: unset;
 }
+
+.links-table--row {
+  /* display: flex;
+  flex-direction: row; */
+  /* justify-content: space-between; */
+  align-items: center;
+  /* padding: 0 10px; */
+  /* height: 40px; */
+  /* border-bottom: 1px solid #e0e0e0; */
+}
+
+.links-table--row--cell:nth-child(1) {
+  flex: 0 0 34px;
+}
+
+.links-table--row--cell:nth-child(2) {
+  flex: 1 1 150px;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  min-width: 0px;
+}
+
+.links-table--row--cell:nth-child(3) {
+  flex: 0 1 420px;
+  text-overflow: unset;
+  overflow: auto;
+}
+
+/* .links-table--row--cell {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+} */
