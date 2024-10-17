@@ -1,6 +1,7 @@
 import { type CID } from 'multiformats/cid'
 import React, { type PropsWithChildren } from 'react'
 import { getCodecOrNull } from '../../lib/cid.js'
+import { isTruthy } from '../../lib/helpers'
 import Cid from '../cid/Cid.js'
 import { colorForNode } from '../object-info/ObjectInfo.js'
 
@@ -94,7 +95,7 @@ const GraphCrumb: React.FC<GraphCrumbProps> = ({ cid, pathBoundaries, localPath,
 function calculateHrefBase (hrefBase: string, cid: CID, boundaries: any, boundaryIndex: any): string {
   const relPath: string = boundaries.slice(0, boundaryIndex).map((b: any) => b.path).join('/')
   const cidHref = hrefBase + '/' + cid.toString()
-  return relPath != null ? cidHref + '/' + relPath : cidHref
+  return isTruthy(relPath) ? cidHref + '/' + relPath : cidHref
 }
 
 const NodeUnderline: React.FC<PropsWithChildren<{ cid: CID }>> = ({ cid, children }) => {
