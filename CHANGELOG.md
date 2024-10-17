@@ -1,3 +1,17 @@
+## [8.0.0](https://github.com/ipfs/ipld-explorer-components/compare/v7.0.3...v8.0.0) (2024-10-17)
+
+### ⚠ BREAKING CHANGES
+
+* remove redux-bundler, full typescript (#448)
+
+### Features
+
+* remove redux-bundler, full typescript ([#448](https://github.com/ipfs/ipld-explorer-components/issues/448)) ([eeb15ec](https://github.com/ipfs/ipld-explorer-components/commit/eeb15ecfb0b81f07269bf94617b88492d0671f10)), closes [#449](https://github.com/ipfs/ipld-explorer-components/issues/449)
+
+### Tests
+
+* validate remainder path ([#449](https://github.com/ipfs/ipld-explorer-components/issues/449)) ([7748e75](https://github.com/ipfs/ipld-explorer-components/commit/7748e75f8fa7af52347518510f1e7caea2dbfb2d))
+
 ### [7.0.3](https://github.com/ipfs/ipld-explorer-components/compare/v7.0.2...v7.0.3)
 
 * fix: explore page can query local kubo by @SgtPooki in https://github.com/ipfs/ipld-explorer-components/pull/445
