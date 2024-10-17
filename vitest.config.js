@@ -10,12 +10,12 @@ export default defineConfig((configEnv) => mergeConfig(
       setupFiles: './test/unit/setup.js',
       include: [
         'src/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts,jsx,tsx}'
-      ],
-      deps: {
-        inline: [
-          'ipld-explorer-components'
-        ]
-      }
+      ]
+      // deps: {
+      //   inline: [
+      //     'ipld-explorer-components'
+      //   ]
+      // }
     }
   })
 ))

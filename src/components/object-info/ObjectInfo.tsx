@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { ObjectInspector, chromeLight } from 'react-inspector'
 import getCodecNameFromCode from '../../lib/get-codec-name-from-code'
 import { type NormalizedDagNode, type UnixFsNodeDataWithNumbers } from '../../types.js'
-import LinksTable, { type LinksTableProps } from './LinksTable.js'
+import LargeLinksTable, { type LinkObject, type LargeLinksTableProps } from './links-table'
 
 const humansize = partial({ round: 0 })
 
@@ -109,9 +109,9 @@ export interface ObjectInfoProps extends Omit<HTMLProps<HTMLElement>, 'data' | '
   localPath: string
   size: bigint | undefined
   data: NormalizedDagNode['data']
-  links: object[]
+  links: LinkObject[]
   format: string
-  onLinkClick: LinksTableProps['onLinkClick']
+  onLinkClick: LargeLinksTableProps['onLinkClick']
   gatewayUrl: string
   publicGatewayUrl: string
 }
@@ -202,7 +202,7 @@ export const ObjectInfo: React.FC<ObjectInfoProps> = ({ className, type, cid, lo
         ? null
         : (
         <div className='mv2 nl3 nr3 mh0-l'>
-          <LinksTable links={links} onLinkClick={onLinkClick} />
+          <LargeLinksTable links={links} onLinkClick={onLinkClick} />
         </div>
           )}
     </section>

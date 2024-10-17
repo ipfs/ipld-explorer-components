@@ -10,7 +10,7 @@ const chain = i18n
   .use(Backend)
   .use(LanguageDetector)
 
-void chain
+await chain
   .init({
     backend: {
       backends: [
@@ -30,7 +30,7 @@ void chain
     },
     ns: ['explore'],
     defaultNS: 'app', // 'app' is default in ipfs-webui, this ensures we always use explicit explore. ns
-    fallbackNS: 'app',
+    fallbackNS: 'explore',
     fallbackLng: {
       'zh-Hans': ['zh-CN', 'en'],
       'zh-Hant': ['zh-TW', 'en'],

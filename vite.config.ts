@@ -1,6 +1,6 @@
 import { resolve as pathResolve } from 'node:path'
 import react from '@vitejs/plugin-react'
-import { defineConfig, type PluginOption, type UserConfig, type UserConfigExport } from 'vite'
+import { defineConfig, type UserConfig, type UserConfigExport } from 'vite'
 import svgrPlugin from 'vite-plugin-svgr'
 import dts from 'vite-plugin-dts';
 
@@ -60,7 +60,6 @@ export default defineConfig(({ mode, command }) => {
         'i18next-http-backend',
         'i18next-icu',
         'ipfs-css',
-        'react-virtualized',
         'tachyons',
         /\.stories\..+$/,
         // all test files (i.e. *.spec.{js,jsx,ts,tsx} or *.test.{js,jsx,ts,tsx})

@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react'
+import React, { useState, useRef, useEffect, useCallback } from 'react'
 import './links-table.css'
 
 export interface LinkObject {
@@ -21,7 +21,7 @@ export interface LinkObject {
 
 }
 
-interface LargeLinksTableProps {
+export interface LargeLinksTableProps {
   links: LinkObject[]
   /**
    * The maximum rows to render at a time. This may or may not be the actual number of rows rendered depending on the height of the table.
@@ -46,38 +46,24 @@ interface RowProps {
 
 const Row: React.FC<RowProps> = ({ onLinkClick, startIndex, index, rowHeight, link }) => {
   const key = startIndex + index
-  const stripedBgColor = key % 2 === 0 ? 'bg-light-gray' : 'bg-white'
+  const backgroundColor = key % 2 === 0 ? '#fff' : 'rgb(251, 251, 251);'
   const pathRef = useRef<HTMLDivElement>(null)
-
-  const onResize = useCallback(() => {
-    if (pathRef.current != null) {
-      const pathWidth = pathRef.current.offsetWidth
-      console.log('pathWidth: ', pathWidth)
-      console.log('path clientWidth: ', pathRef.current.clientWidth)
-    }
-  }, [])
-
-  useEffect(() => {
-    onResize()
-    window.addEventListener('resize', onResize)
-    return () => { window.removeEventListener('resize', onResize) }
-  }, [onResize])
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       key={key}
-      className={`${stripedBgColor} pv2 pointer items-center bb b--near-white f7 links-table--row row-grid`}
-      style={{ position: 'absolute', top: key * rowHeight, width: '100%' }}
+      className='pv2 pointer items-center f7 row-grid bb b--near-white'
+      style={{ position: 'absolute', top: key * rowHeight, width: '100%', backgroundColor }}
       onClick={() => { onLinkClick(link as any) }}
     >
-      <div className=" mid-gray tr pr1 f7 grid-cell-row">
-        {startIndex + index}
+      <div className=" mid-gray tr pr1 f7 grid-cell-row monospace">
+        {key}
       </div>
       <div className="navy f6-ns f7 grid-cell-row" ref={pathRef}>
         {link.path}
       </div>
-      <div className="mid-gray tracked tl grid-cell-row ml1">
+      <div className="mid-gray tl grid-cell-row ml1 f7 monospace">
         {link.target}
       </div>
     </div>
@@ -90,7 +76,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = () => {
   return (
-    <div className="mid-gray header-grid items-center pv2 fw1 tracked links-table--row">
+    <div className="mid-gray header-grid items-center pv2 fw1 tracked bb b--near-white">
       <div className="mid-gray tr pr1 f7 grid-cell-header">
         #
       </div>
@@ -104,7 +90,7 @@ const Header: React.FC<HeaderProps> = () => {
   )
 }
 
-const LargeLinksTable: React.FC<LargeLinksTableProps> = ({ onLinkClick, links, rowHeight = 29, tableHeight = 650, cidRowStyle, maxRows = 50 }) => {
+const LargeLinksTable: React.FC<LargeLinksTableProps> = ({ onLinkClick, links, rowHeight = 35, tableHeight = 650, cidRowStyle, maxRows = 50 }) => {
   const [startIndex, setStartIndex] = useState(0)
   const containerRef = useRef<HTMLDivElement>(null)
   const [tableWidth, setTableWidth] = useState(0)
@@ -120,10 +106,8 @@ const LargeLinksTable: React.FC<LargeLinksTableProps> = ({ onLinkClick, links, r
   }, [rowHeight])
 
   const handleWindowResize = useCallback(() => {
-    console.log('resize event. Width=', window.innerWidth)
     const container = containerRef.current
     if (container != null) {
-      console.log('table container width: ', container.clientWidth)
       setTableWidth(container.clientWidth)
     }
   }, [])

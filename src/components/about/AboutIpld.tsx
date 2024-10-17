@@ -4,7 +4,7 @@ import Box from '../box/Box.js'
 import ipldLogoSrc from './ipld.svg'
 
 export const AboutIpld: React.FC = () => {
-  const { t } = useTranslation()
+  const { t } = useTranslation('explore')
 
   return (
     <Box className='tl dib pa4 avenir measure-wide-l lh-copy dark-gray ba-l b--black-10'>
