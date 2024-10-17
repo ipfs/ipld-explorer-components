@@ -39,6 +39,9 @@
     "./forms": {
       "import": "./dist/forms.js",
       "types": "./dist/src/forms.d.ts"
+    },
+    "./css": {
+      "import": "./dist/style.css"
     }
   },
   "type": "module",

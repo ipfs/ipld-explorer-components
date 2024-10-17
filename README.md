@@ -141,6 +141,7 @@ And, assuming you are using `create-react-app` or a similar webpack set up, you'
 ```js
 import 'tachyons'
 import 'ipfs-css'
+import 'ipld-explorer-components/css'
 ```
 
 ### Customizing the links displayed in the StartExploringPage
