@@ -1,60 +1,48 @@
 import { type Helia } from '@helia/interface'
-import React, { createContext, useContext, useReducer, useEffect, useState, useCallback } from 'react'
+import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import packageJson from '../../package.json'
 import initHelia from '../lib/init-helia.js'
 import type { KuboGatewayOptions } from '../types.js'
 
-interface HeliaBundleState {
+interface HeliaContextProps {
   kuboGatewayOptions: KuboGatewayOptions
   error: Error | null
-}
-
-interface HeliaContextProps {
-  state: HeliaBundleState
   helia: Helia | null
-  // selectHelia(): Helia | null
   selectHeliaReady(): boolean
   selectHeliaIdentity(): string
   doInitHelia(): Promise<void>
+  setKuboGatewayOptions(kuboGatewayOptions: Partial<KuboGatewayOptions>): void
 }
 
-const defaultState: HeliaBundleState = {
-  kuboGatewayOptions: {
-    host: '127.0.0.1',
-    port: '8080',
-    protocol: 'http',
-    trustlessBlockBrokerConfig: {
-      init: {
-        allowLocal: true
-      }
+const defaultKuboGatewayOptions: KuboGatewayOptions = {
+  host: '127.0.0.1',
+  port: '8080',
+  protocol: 'http',
+  trustlessBlockBrokerConfig: {
+    init: {
+      allowLocal: true
     }
-  },
-  error: null
+  }
+}
+
+const getDefaultKuboGatewayOptions = (): KuboGatewayOptions => {
+  const localStorageKuboGatewayOptions = localStorage.getItem('kuboGateway')
+  if (localStorageKuboGatewayOptions != null) {
+    try {
+      return JSON.parse(localStorageKuboGatewayOptions) as KuboGatewayOptions
+    } catch (e) {
+      console.error('getDefaultKuboGatewayOptions error', e)
+    }
+  }
+  return defaultKuboGatewayOptions
 }
 
 const HeliaContext = createContext<HeliaContextProps | undefined>(undefined)
 
-const heliaReducer = (state: HeliaBundleState, action: { type: string, payload?: Partial<HeliaBundleState>, error?: Error }): HeliaBundleState => {
-  switch (action.type) {
-    case 'HELIA_INIT_FINISHED':
-      return {
-        ...state,
-        kuboGatewayOptions: action.payload?.kuboGatewayOptions ?? state.kuboGatewayOptions,
-        error: null
-      }
-    case 'HELIA_INIT_FAILED':
-      return {
-        ...state,
-        error: action.error ?? null
-      }
-    default:
-      return state
-  }
-}
-
 export const HeliaProvider = ({ children }: React.ComponentProps<any>): any => {
-  const [state, dispatch] = useReducer(heliaReducer, defaultState)
   const [helia, setHelia] = useState<Helia | null>(null)
+  const [kuboGatewayOptions, setKuboGatewayOptions] = useState<KuboGatewayOptions>(getDefaultKuboGatewayOptions())
+  const [error, setError] = useState<Error | null>(null)
 
   const selectHeliaReady = (): boolean => helia !== null
 
@@ -63,24 +51,29 @@ export const HeliaProvider = ({ children }: React.ComponentProps<any>): any => {
     return `@helia/http@${heliaHttpVersion}`
   }
 
+  const setKuboGatewayOptionsPublic = (kuboGatewayOptions: Partial<KuboGatewayOptions>): void => {
+    setKuboGatewayOptions((current) => ({ ...current, ...kuboGatewayOptions }))
+  }
+
   const doInitHelia = useCallback(async (): Promise<void> => {
-    dispatch({ type: 'HELIA_INIT_STARTED' })
     try {
-      const helia = await initHelia(state.kuboGatewayOptions)
+      const helia = await initHelia(kuboGatewayOptions)
+      setError(null)
       setHelia(helia)
-      dispatch({ type: 'HELIA_INIT_FINISHED', payload: { kuboGatewayOptions: state.kuboGatewayOptions } })
     } catch (error: any) {
       console.error('doInitHelia error', error)
-      dispatch({ type: 'HELIA_INIT_FAILED', error })
+      setError(error)
+      setHelia(null)
     }
-  }, [state.kuboGatewayOptions, setHelia, dispatch])
+  }, [kuboGatewayOptions, setHelia])
 
   useEffect(() => {
     void doInitHelia()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   return (
-    <HeliaContext.Provider value={{ state, helia, selectHeliaReady, selectHeliaIdentity, doInitHelia }}>
+    <HeliaContext.Provider value={{ helia, error, kuboGatewayOptions, selectHeliaReady, selectHeliaIdentity, doInitHelia, setKuboGatewayOptions: setKuboGatewayOptionsPublic }}>
       {children}
     </HeliaContext.Provider>
   )
