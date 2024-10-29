@@ -124,9 +124,9 @@ export function normaliseDagCbor (data: NormalizedDagNode['data'], cid: string, 
  * A valid IPLD link in a dag-cbor node is an object with single "/" property.
  */
 export function findAndReplaceDagCborLinks (obj: unknown, sourceCid: string, path: string = ''): NormalizedDagLink[] {
-  if (obj == null || typeof obj !== 'object' || Buffer.isBuffer(obj) || typeof obj === 'string') {
-    return []
-  }
+    if (obj == null || (typeof obj !== 'object') || ((typeof obj == 'object' || !Buffer.isBuffer(obj)) && typeof obj === 'string')) {
+     return [] 
+    }
 
   // FIXME: remove as any cast
   const cid = toCidOrNull(obj as any)
