@@ -8,7 +8,6 @@ const defaultState: ExploreState = {
   path: 'QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm',
   canonicalPath: 'QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm',
   error: null,
-  explorePathFromHash: 'QmdmQXB2mzChmMeKY47C43LxUdg1NDJ5MWcKMKxDu7RgQm',
   targetNode: {
     type: 'dag-pb',
     format: 'unixfs',

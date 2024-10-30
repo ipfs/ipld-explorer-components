@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client'
 import { I18nextProvider, useTranslation } from 'react-i18next'
 import 'tachyons'
 import i18n from '../src/i18n.js'
-import { ExplorePage, StartExploringPage, IpldExploreForm, IpldCarExploreForm, ExploreProvider, HeliaProvider } from '../src/index.js'
+import { ExplorePage, StartExploringPage, IpldExploreForm, IpldCarExploreForm, ExploreProvider, HeliaProvider, useExplore } from '../src/index.js'
 
 globalThis.Buffer = globalThis.Buffer ?? Buffer
 
@@ -64,27 +64,22 @@ const HeaderComponent: React.FC = () => {
 }
 
 const PageRenderer = (): React.ReactElement => {
-  const [route, setRoute] = useState(window.location.hash.slice(1) ?? '/')
+  const { setExplorePath, exploreState: { path } } = useExplore()
 
   useEffect(() => {
-    const onHashChange = (): void => { setRoute(window.location.hash.slice(1) ?? '/') }
+    const onHashChange = (): void => {
+      const newRoute = window.location.hash ?? null
+      setExplorePath(newRoute)
+    }
     window.addEventListener('hashchange', onHashChange)
     return () => { window.removeEventListener('hashchange', onHashChange) }
-  }, [])
+  }, [setExplorePath])
 
-  const RenderPage: React.FC = () => {
-    switch (true) {
-      case route.startsWith('/explore'):
-        return <ExplorePage />
-      case route === '/':
-      default:
-        return <StartExploringPage />
-    }
+  if (path == null || path === '') {
+    return <StartExploringPage />
   }
 
-  return (
-    <RenderPage />
-  )
+  return <ExplorePage />
 }
 
 const App = (): React.ReactElement => {
