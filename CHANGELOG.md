@@ -1,3 +1,9 @@
+## [8.0.3](https://github.com/ipfs/ipld-explorer-components/compare/v8.0.2...v8.0.3) (2024-10-30)
+
+### Bug Fixes
+
+* allow explore state to be updated ([#457](https://github.com/ipfs/ipld-explorer-components/issues/457)) ([6299b86](https://github.com/ipfs/ipld-explorer-components/commit/6299b8615c1539372ec66482cde885488395ed16))
+
 ## [8.0.2](https://github.com/ipfs/ipld-explorer-components/compare/v8.0.1...v8.0.2) (2024-10-29)
 
 ### Bug Fixes
