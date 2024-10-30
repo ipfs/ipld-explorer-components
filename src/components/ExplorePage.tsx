@@ -26,9 +26,9 @@ export const ExplorePage = ({
   const { t, ready: tReady } = useTranslation('explore')
 
   const { exploreState, doExploreLink } = useExplore()
-  const { explorePathFromHash } = exploreState
+  const { path } = exploreState
 
-  if (explorePathFromHash == null) {
+  if (path == null) {
     // No IPLD path to explore so show the intro page
     console.warn('[IPLD Explorer] ExplorePage loaded without a path to explore')
     return null
