@@ -1,3 +1,9 @@
+## [8.0.2](https://github.com/ipfs/ipld-explorer-components/compare/v8.0.1...v8.0.2) (2024-10-29)
+
+### Bug Fixes
+
+* init Helia with localStorage.kuboGateway if they exist ([#456](https://github.com/ipfs/ipld-explorer-components/issues/456)) ([47c8935](https://github.com/ipfs/ipld-explorer-components/commit/47c8935cc065ea0422e93a0d24d2f12d9f12c7d4))
+
 ## [8.0.1](https://github.com/ipfs/ipld-explorer-components/compare/v8.0.0...v8.0.1) (2024-10-17)
 
 ### Bug Fixes
