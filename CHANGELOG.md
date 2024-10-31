@@ -1,3 +1,9 @@
+## [8.0.4](https://github.com/ipfs/ipld-explorer-components/compare/v8.0.3...v8.0.4) (2024-10-31)
+
+### Bug Fixes
+
+* various fixes for ipfs-webui consumption ([#458](https://github.com/ipfs/ipld-explorer-components/issues/458)) ([795633d](https://github.com/ipfs/ipld-explorer-components/commit/795633dbbef8a441e48af8c0f33d12a8cfb7a1f2))
+
 ## [8.0.3](https://github.com/ipfs/ipld-explorer-components/compare/v8.0.2...v8.0.3) (2024-10-30)
 
 ### Bug Fixes
