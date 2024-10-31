@@ -1,6 +1,6 @@
 import { trustlessGateway } from '@helia/block-brokers'
 import { createHeliaHTTP } from '@helia/http'
-import { type Helia } from '@helia/interface'
+import { type Routing, type Helia } from '@helia/interface'
 import { delegatedHTTPRouting, httpGatewayRouting } from '@helia/routers'
 import { addDagNodeToHelia } from '../lib/helpers.js'
 import { getHashersForCodes } from './hash-importer.js'
@@ -20,10 +20,16 @@ function areRemoteGatewaysEnabled (): boolean {
 }
 
 export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions): Promise<Helia> {
-  const routers = [
-    // Always add the Kubo gateway
-    httpGatewayRouting({ gateways: [`${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`] })
-  ]
+  const routers: Array<Partial<Routing>> = []
+  const kuboGatewayUrlString = `${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`
+  try {
+    const kuboGatewayUrl = new URL(kuboGatewayUrlString)
+    // Always try to add the Kubo gateway if we have a valid URL
+    routers.push(httpGatewayRouting({ gateways: [kuboGatewayUrl.href] }))
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Invalid kuboGateway url string: %s', kuboGatewayUrlString, error)
+  }
 
   if (areRemoteGatewaysEnabled()) {
     // eslint-disable-next-line no-console

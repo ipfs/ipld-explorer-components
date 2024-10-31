@@ -29,7 +29,8 @@ const getDefaultKuboGatewayOptions = (): KuboGatewayOptions => {
   const localStorageKuboGatewayOptions = localStorage.getItem('kuboGateway')
   if (localStorageKuboGatewayOptions != null) {
     try {
-      return JSON.parse(localStorageKuboGatewayOptions) as KuboGatewayOptions
+      const kuboGatewaySettings = JSON.parse(localStorageKuboGatewayOptions) as KuboGatewayOptions
+      return { ...defaultKuboGatewayOptions, ...kuboGatewaySettings }
     } catch (e) {
       console.error('getDefaultKuboGatewayOptions error', e)
     }
