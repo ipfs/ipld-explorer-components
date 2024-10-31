@@ -6,7 +6,7 @@ import { createRoot } from 'react-dom/client'
 import { I18nextProvider, useTranslation } from 'react-i18next'
 import 'tachyons'
 import i18n from '../src/i18n.js'
-import { ExplorePage, StartExploringPage, IpldExploreForm, IpldCarExploreForm, ExploreProvider, HeliaProvider, useExplore } from '../src/index.js'
+import { ExplorePage, StartExploringPage, IpldExploreForm, IpldCarExploreForm, ExploreProvider, HeliaProvider, useExplore, useHelia } from '../src/index.js'
 
 globalThis.Buffer = globalThis.Buffer ?? Buffer
 
@@ -65,6 +65,12 @@ const HeaderComponent: React.FC = () => {
 
 const PageRenderer = (): React.ReactElement => {
   const { setExplorePath, exploreState: { path } } = useExplore()
+  const { doInitHelia } = useHelia()
+
+  useEffect(() => {
+    void doInitHelia()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     const onHashChange = (): void => {
@@ -87,7 +93,7 @@ const App = (): React.ReactElement => {
     <HeliaProvider>
       <ExploreProvider>
         <HeaderComponent />
-         <PageRenderer />
+        <PageRenderer />
       </ExploreProvider>
     </HeliaProvider>
   )

@@ -1,6 +1,5 @@
 import { CID } from 'multiformats/cid'
 import React, { createContext, useContext, useState, useEffect, type ReactNode, useCallback } from 'react'
-import { Loader } from '../components/loader/loader.js'
 import { type LinkObject } from '../components/object-info/links-table'
 import { ensureLeadingSlash } from '../lib/helpers.js'
 import { importCar } from '../lib/import-car.js'
@@ -204,12 +203,8 @@ export const ExploreProvider = ({ children, state, explorePathPrefix = '#/explor
     }
   }, [explorePathPrefix, helia])
 
-  if (helia == null) {
-    return <Loader color='dark' />
-  }
-
   return (
-    <ExploreContext.Provider value={{ exploreState, explorePathPrefix, isLoading, doExploreLink, doExploreUserProvidedPath, doUploadUserProvidedCar, setExplorePath }} key={path}>
+    <ExploreContext.Provider value={{ exploreState, explorePathPrefix, isLoading, doExploreLink, doExploreUserProvidedPath, doUploadUserProvidedCar, setExplorePath }}>
       {children}
     </ExploreContext.Provider>
   )
