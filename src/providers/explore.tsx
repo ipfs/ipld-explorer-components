@@ -153,7 +153,7 @@ export const ExploreProvider = ({ children, state, explorePathPrefix = '#/explor
 
   const setExplorePath = (path: string | null): void => {
     const newPath = processPath(path, explorePathPrefix)
-    if (newPath != null && !window.location.href.includes(newPath)) {
+    if (newPath != null && !window.location.href.includes(encodeURI(newPath))) {
       throw new Error('setExplorePath should only be used to update the state, not the URL. If you are using a routing library that doesn\'t allow you to listen to hashchange events, ensure the URL is updated prior to calling setExplorePath.')
     }
     setExploreState((exploreState) => ({
