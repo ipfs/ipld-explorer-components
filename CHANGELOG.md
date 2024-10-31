@@ -1,3 +1,9 @@
+## [8.0.5](https://github.com/ipfs/ipld-explorer-components/compare/v8.0.4...v8.0.5) (2024-10-31)
+
+### Bug Fixes
+
+* always render provider children ([#459](https://github.com/ipfs/ipld-explorer-components/issues/459)) ([c0ae357](https://github.com/ipfs/ipld-explorer-components/commit/c0ae3575d76574cc39660c4ddd2edfd5dc3c1b4f))
+
 ## [8.0.4](https://github.com/ipfs/ipld-explorer-components/compare/v8.0.3...v8.0.4) (2024-10-31)
 
 ### Bug Fixes
