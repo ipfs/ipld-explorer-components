@@ -68,11 +68,6 @@ export const HeliaProvider = ({ children }: React.ComponentProps<any>): any => {
     }
   }, [kuboGatewayOptions, setHelia])
 
-  useEffect(() => {
-    void doInitHelia()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
   return (
     <HeliaContext.Provider value={{ helia, error, kuboGatewayOptions, selectHeliaReady, selectHeliaIdentity, doInitHelia, setKuboGatewayOptions: setKuboGatewayOptionsPublic }}>
       {children}
