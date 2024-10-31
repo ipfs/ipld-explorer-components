@@ -2,8 +2,10 @@ import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useTranslation } from 'react-i18next'
 import ReactJoyride from 'react-joyride'
+import { Loader } from '../components/loader/loader.js'
 import { explorerTour } from '../lib/tours.js'
 import { useExplore } from '../providers/explore.js'
+import { useHelia } from '../providers/helia.js'
 import CidInfo from './cid-info/CidInfo.js'
 import ErrorBoundary from './error/ErrorBoundary'
 import { IpldExploreErrorComponent } from './explore/IpldExploreErrorComponent'
@@ -25,6 +27,7 @@ export const ExplorePage = ({
 }): null | React.ReactNode => {
   const { t, ready: tReady } = useTranslation('explore')
 
+  const { helia } = useHelia()
   const { exploreState, doExploreLink } = useExplore()
   const { path } = exploreState
 
@@ -37,8 +40,8 @@ export const ExplorePage = ({
   const { error, targetNode, localPath, nodes, pathBoundaries } = exploreState
   const sourceNode = nodes?.[0] ?? null
 
-  if (!tReady) {
-    return null
+  if (!tReady || helia == null) {
+    return <Loader color='dark' />
   }
 
   return (
