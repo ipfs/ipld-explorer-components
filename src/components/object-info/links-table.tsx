@@ -46,7 +46,7 @@ interface RowProps {
 
 const Row: React.FC<RowProps> = ({ onLinkClick, startIndex, index, rowHeight, link }) => {
   const key = startIndex + index
-  const backgroundColor = key % 2 === 0 ? '#fff' : 'rgb(251, 251, 251);'
+  const backgroundColor = key % 2 === 0 ? '#fff' : 'rgb(251, 251, 251)'
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions

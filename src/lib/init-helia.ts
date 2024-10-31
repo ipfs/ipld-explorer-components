@@ -1,29 +1,36 @@
 import { trustlessGateway } from '@helia/block-brokers'
 import { createHeliaHTTP } from '@helia/http'
-import { type Helia } from '@helia/interface'
+import { type Routing, type Helia } from '@helia/interface'
 import { delegatedHTTPRouting, httpGatewayRouting } from '@helia/routers'
 import { addDagNodeToHelia } from '../lib/helpers.js'
 import { getHashersForCodes } from './hash-importer.js'
 import type { KuboGatewayOptions } from '../types.d.js'
 
+const localStorageKey = 'explore.ipld.gatewayEnabled'
+console.info(
+  `🎛️ Customise whether ipld-explorer-components fetches content from gateways by setting an '${localStorageKey}' value to true/false in localStorage. e.g. localStorage.setItem('${localStorageKey}', false) -- NOTE: defaults to true`
+)
+
 /**
  * Whether to enable remote gateways for fetching content. We default to true if the setting is not present.
  */
 function areRemoteGatewaysEnabled (): boolean {
-  const localStorageKey = 'explore.ipld.gatewayEnabled'
-  console.info(
-    `🎛️ Customise whether ipld-explorer-components fetches content from gateways by setting an '${localStorageKey}' value to true/false in localStorage. e.g. localStorage.setItem('explore.ipld.gatewayEnabled', false) -- NOTE: defaults to true`
-  )
   const gatewayEnabledSetting = localStorage.getItem(localStorageKey)
 
   return gatewayEnabledSetting != null ? JSON.parse(gatewayEnabledSetting) : true
 }
 
 export default async function initHelia (kuboGatewayOptions: KuboGatewayOptions): Promise<Helia> {
-  const routers = [
-    // Always add the Kubo gateway
-    httpGatewayRouting({ gateways: [`${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`] })
-  ]
+  const routers: Array<Partial<Routing>> = []
+  const kuboGatewayUrlString = `${kuboGatewayOptions.protocol ?? 'http'}://${kuboGatewayOptions.host}:${kuboGatewayOptions.port}`
+  try {
+    const kuboGatewayUrl = new URL(kuboGatewayUrlString)
+    // Always try to add the Kubo gateway if we have a valid URL
+    routers.push(httpGatewayRouting({ gateways: [kuboGatewayUrl.href] }))
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error('Invalid kuboGateway url string: %s', kuboGatewayUrlString, error)
+  }
 
   if (areRemoteGatewaysEnabled()) {
     // eslint-disable-next-line no-console

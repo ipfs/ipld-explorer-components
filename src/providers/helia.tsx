@@ -1,5 +1,5 @@
 import { type Helia } from '@helia/interface'
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
+import React, { createContext, useContext, useState, useCallback } from 'react'
 import packageJson from '../../package.json'
 import initHelia from '../lib/init-helia.js'
 import type { KuboGatewayOptions } from '../types.js'
@@ -29,7 +29,8 @@ const getDefaultKuboGatewayOptions = (): KuboGatewayOptions => {
   const localStorageKuboGatewayOptions = localStorage.getItem('kuboGateway')
   if (localStorageKuboGatewayOptions != null) {
     try {
-      return JSON.parse(localStorageKuboGatewayOptions) as KuboGatewayOptions
+      const kuboGatewaySettings = JSON.parse(localStorageKuboGatewayOptions) as KuboGatewayOptions
+      return { ...defaultKuboGatewayOptions, ...kuboGatewaySettings }
     } catch (e) {
       console.error('getDefaultKuboGatewayOptions error', e)
     }
@@ -66,11 +67,6 @@ export const HeliaProvider = ({ children }: React.ComponentProps<any>): any => {
       setHelia(null)
     }
   }, [kuboGatewayOptions, setHelia])
-
-  useEffect(() => {
-    void doInitHelia()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
 
   return (
     <HeliaContext.Provider value={{ helia, error, kuboGatewayOptions, selectHeliaReady, selectHeliaIdentity, doInitHelia, setKuboGatewayOptions: setKuboGatewayOptionsPublic }}>
