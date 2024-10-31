@@ -6,14 +6,15 @@ import { addDagNodeToHelia } from '../lib/helpers.js'
 import { getHashersForCodes } from './hash-importer.js'
 import type { KuboGatewayOptions } from '../types.d.js'
 
+const localStorageKey = 'explore.ipld.gatewayEnabled'
+console.info(
+  `🎛️ Customise whether ipld-explorer-components fetches content from gateways by setting an '${localStorageKey}' value to true/false in localStorage. e.g. localStorage.setItem('${localStorageKey}', false) -- NOTE: defaults to true`
+)
+
 /**
  * Whether to enable remote gateways for fetching content. We default to true if the setting is not present.
  */
 function areRemoteGatewaysEnabled (): boolean {
-  const localStorageKey = 'explore.ipld.gatewayEnabled'
-  console.info(
-    `🎛️ Customise whether ipld-explorer-components fetches content from gateways by setting an '${localStorageKey}' value to true/false in localStorage. e.g. localStorage.setItem('explore.ipld.gatewayEnabled', false) -- NOTE: defaults to true`
-  )
   const gatewayEnabledSetting = localStorage.getItem(localStorageKey)
 
   return gatewayEnabledSetting != null ? JSON.parse(gatewayEnabledSetting) : true
