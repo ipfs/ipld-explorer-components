@@ -25,7 +25,7 @@ function isDagPbNode (node: dagNode | PBNode, cid: string): node is PBNode {
  * @param {string} cidStr - the cid string passed to `ipfs.dag.get`
  * @returns {import('../types').NormalizedDagNode}
  */
-export default function normaliseDagNode (node: dagNode | PBNode, cidStr: string): NormalizedDagNode {
+export function normaliseDagNode (node: dagNode | PBNode, cidStr: string): NormalizedDagNode {
   const code = getCodeOrNull(cidStr)
   if (isDagPbNode(node, cidStr)) {
     return normaliseDagPb(node, cidStr, dagPb.code)
@@ -34,6 +34,7 @@ export default function normaliseDagNode (node: dagNode | PBNode, cidStr: string
   // @ts-expect-error - todo: resolve node type error
   return normaliseDagCbor(node, cidStr, code ?? dagCbor.code)
 }
+export default normaliseDagNode
 
 /**
  * Normalize links and add type info. Add unixfs info where available
