@@ -2,9 +2,10 @@
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
 import { UnixFS } from 'ipfs-unixfs'
+import { type CID } from 'multiformats/cid'
 import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid.js'
 import { isTruthy } from './helpers.js'
-import type { NormalizedDagPbNodeFormat, CodecType, NormalizedDagNode, NormalizedDagLink, dagNode, CID } from '../types.js'
+import type { NormalizedDagPbNodeFormat, CodecType, NormalizedDagNode, NormalizedDagLink, dagNode } from '../types.js'
 import type { PBLink, PBNode } from '@ipld/dag-pb'
 
 function isDagPbNode (node: dagNode | PBNode, cid: string): node is PBNode {
@@ -150,9 +151,12 @@ export function findAndReplaceDagCborLinks (obj: unknown, sourceCid: string, pat
     return []
   }
 
-  const cid = toCidOrNull(obj as string)
-  if (cid != null) {
-    return [{ path, source: sourceCid, target: cid.toString(), size: BigInt(0), index: 0 }]
+  const cid = toCidOrNull(obj)
+  if (typeof obj === 'string' || cid != null) {
+    if (cid != null) {
+      return [{ path, source: sourceCid, target: cid.toString(), size: BigInt(0), index: 0 }]
+    }
+    return []
   }
 
   if (Array.isArray(obj)) {
@@ -180,7 +184,7 @@ export function findAndReplaceDagCborLinks (obj: unknown, sourceCid: string, pat
 
   if (keys.length > 0) {
     return keys
-      .map(key => findAndReplaceDagCborLinks((obj as Record<string, unknown>)[key], sourceCid, isTruthy(path) ? `${path}/${key}` : `${key}`))
+      .map(key => findAndReplaceDagCborLinks(obj[key], sourceCid, isTruthy(path) ? `${path}/${key}` : `${key}`))
       .reduce((a, b) => a.concat(b))
       .filter(a => Boolean(a))
   } else {
