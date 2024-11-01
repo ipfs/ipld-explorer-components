@@ -2,6 +2,7 @@
 import * as dagCbor from '@ipld/dag-cbor'
 import * as dagPb from '@ipld/dag-pb'
 import { UnixFS } from 'ipfs-unixfs'
+import { type CID } from 'multiformats/cid'
 import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid.js'
 import { isTruthy } from './helpers.js'
 import type { NormalizedDagPbNodeFormat, CodecType, NormalizedDagNode, NormalizedDagLink, dagNode } from '../types.js'
@@ -25,7 +26,7 @@ function isDagPbNode (node: dagNode | PBNode, cid: string): node is PBNode {
  * @param {string} cidStr - the cid string passed to `ipfs.dag.get`
  * @returns {import('../types').NormalizedDagNode}
  */
-export default function normaliseDagNode (node: dagNode | PBNode, cidStr: string): NormalizedDagNode {
+export function normaliseDagNode (node: dagNode | PBNode, cidStr: string): NormalizedDagNode {
   const code = getCodeOrNull(cidStr)
   if (isDagPbNode(node, cidStr)) {
     return normaliseDagPb(node, cidStr, dagPb.code)
@@ -34,6 +35,7 @@ export default function normaliseDagNode (node: dagNode | PBNode, cidStr: string
   // @ts-expect-error - todo: resolve node type error
   return normaliseDagCbor(node, cidStr, code ?? dagCbor.code)
 }
+export default normaliseDagNode
 
 /**
  * Normalize links and add type info. Add unixfs info where available
@@ -120,18 +122,41 @@ export function normaliseDagCbor (data: NormalizedDagNode['data'], cid: string, 
   }
 }
 
+type PlainObjectOrArray = Record<string, unknown> | unknown[] | string
+
+function isPlainObjectOrArray (obj: unknown): obj is PlainObjectOrArray {
+  return (
+    obj !== null &&
+    typeof obj === 'object' &&
+    !(obj instanceof ArrayBuffer) &&
+    !ArrayBuffer.isView(obj) &&
+    !(typeof obj === 'string')
+  )
+}
+
+type DagCborNodeObject = Record<string, unknown> & { '/': string | CID | null }
+
+/**
+ * This should be called after `isPlainObjectOrArray` to avoid type errors.
+ */
+function isDagCborNodeObject (obj: PlainObjectOrArray): obj is DagCborNodeObject {
+  return Object.keys(obj).length === 1 && (obj as Record<string, unknown>)['/'] != null
+}
+
 /**
  * A valid IPLD link in a dag-cbor node is an object with single "/" property.
  */
 export function findAndReplaceDagCborLinks (obj: unknown, sourceCid: string, path: string = ''): NormalizedDagLink[] {
-  if (obj == null || typeof obj !== 'object' || Buffer.isBuffer(obj) || typeof obj === 'string') {
+  if (!isPlainObjectOrArray(obj)) {
     return []
   }
 
-  // FIXME: remove as any cast
-  const cid = toCidOrNull(obj as any)
-  if (cid != null) {
-    return [{ path, source: sourceCid, target: cid.toString(), size: BigInt(0), index: 0 }]
+  const cid = toCidOrNull(obj)
+  if (typeof obj === 'string' || cid != null) {
+    if (cid != null) {
+      return [{ path, source: sourceCid, target: cid.toString(), size: BigInt(0), index: 0 }]
+    }
+    return []
   }
 
   if (Array.isArray(obj)) {
@@ -146,14 +171,12 @@ export function findAndReplaceDagCborLinks (obj: unknown, sourceCid: string, pat
   const keys = Object.keys(obj)
 
   // Support older `{ "/": Buffer } style links until all the IPLD formats are updated.
-  if (keys.length === 1 && keys[0] === '/') {
-    // @ts-expect-error - todo: resolve this type error
+  if (isDagCborNodeObject(obj)) {
     const targetCid = toCidOrNull(obj['/'])
 
     if (targetCid == null) return []
 
     const target = targetCid.toString()
-    // @ts-expect-error - todo: resolve this type error
     obj['/'] = target
 
     return [{ path, source: sourceCid, target, size: BigInt(0), index: 0 }]
@@ -161,7 +184,6 @@ export function findAndReplaceDagCborLinks (obj: unknown, sourceCid: string, pat
 
   if (keys.length > 0) {
     return keys
-      // @ts-expect-error - todo: resolve this type error
       .map(key => findAndReplaceDagCborLinks(obj[key], sourceCid, isTruthy(path) ? `${path}/${key}` : `${key}`))
       .reduce((a, b) => a.concat(b))
       .filter(a => Boolean(a))

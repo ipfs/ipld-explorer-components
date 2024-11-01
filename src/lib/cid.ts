@@ -6,7 +6,7 @@ import { CID, type MultibaseDecoder } from 'multiformats/cid'
 /**
  * Converts a value to a CID or returns null if it cannot be converted.
  */
-export function toCidOrNull <T extends string> (value: CID | string | null, base?: MultibaseDecoder<T> | undefined): CID | null {
+export function toCidOrNull <T extends string> (value: CID | string | null | unknown, base?: MultibaseDecoder<T> | undefined): CID | null {
   if (value == null) return null
   try {
     return CID.asCID(value) ?? CID.parse(value as string, base)

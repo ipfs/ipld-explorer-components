@@ -93,7 +93,6 @@ export default defineConfig(({ mode, command }) => {
       { find: /^stream$/, replacement: 'rollup-plugin-node-polyfills/polyfills/stream' },
       { find: /^_stream_duplex$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/duplex' },
       { find: /^_stream_transform$/, replacement: 'rollup-plugin-node-polyfills/polyfills/readable-stream/transform' },
-      { find: /^buffer$/, replacement: 'rollup-plugin-node-polyfills/polyfills/buffer-es6' },
     ]
   }
   viteOptimizeDeps.include = []
