@@ -4,7 +4,7 @@ import * as dagPb from '@ipld/dag-pb'
 import { UnixFS } from 'ipfs-unixfs'
 import { toCidOrNull, getCodeOrNull, toCidStrOrNull } from './cid.js'
 import { isTruthy } from './helpers.js'
-import type { NormalizedDagPbNodeFormat, CodecType, NormalizedDagNode, NormalizedDagLink, dagNode } from '../types.js'
+import type { NormalizedDagPbNodeFormat, CodecType, NormalizedDagNode, NormalizedDagLink, dagNode, CID } from '../types.js'
 import type { PBLink, PBNode } from '@ipld/dag-pb'
 
 function isDagPbNode (node: dagNode | PBNode, cid: string): node is PBNode {
@@ -121,16 +121,36 @@ export function normaliseDagCbor (data: NormalizedDagNode['data'], cid: string, 
   }
 }
 
+type PlainObjectOrArray = Record<string, unknown> | unknown[] | string
+
+function isPlainObjectOrArray (obj: unknown): obj is PlainObjectOrArray {
+  return (
+    obj !== null &&
+    typeof obj === 'object' &&
+    !(obj instanceof ArrayBuffer) &&
+    !ArrayBuffer.isView(obj) &&
+    !(typeof obj === 'string')
+  )
+}
+
+type DagCborNodeObject = Record<string, unknown> & { '/': string | CID | null }
+
+/**
+ * This should be called after `isPlainObjectOrArray` to avoid type errors.
+ */
+function isDagCborNodeObject (obj: PlainObjectOrArray): obj is DagCborNodeObject {
+  return Object.keys(obj).length === 1 && (obj as Record<string, unknown>)['/'] != null
+}
+
 /**
  * A valid IPLD link in a dag-cbor node is an object with single "/" property.
  */
 export function findAndReplaceDagCborLinks (obj: unknown, sourceCid: string, path: string = ''): NormalizedDagLink[] {
-  if (obj == null || typeof obj !== 'object' || Buffer.isBuffer(obj) || typeof obj === 'string') {
+  if (!isPlainObjectOrArray(obj)) {
     return []
   }
 
-  // FIXME: remove as any cast
-  const cid = toCidOrNull(obj as any)
+  const cid = toCidOrNull(obj as string)
   if (cid != null) {
     return [{ path, source: sourceCid, target: cid.toString(), size: BigInt(0), index: 0 }]
   }
@@ -147,14 +167,12 @@ export function findAndReplaceDagCborLinks (obj: unknown, sourceCid: string, pat
   const keys = Object.keys(obj)
 
   // Support older `{ "/": Buffer } style links until all the IPLD formats are updated.
-  if (keys.length === 1 && keys[0] === '/') {
-    // @ts-expect-error - todo: resolve this type error
+  if (isDagCborNodeObject(obj)) {
     const targetCid = toCidOrNull(obj['/'])
 
     if (targetCid == null) return []
 
     const target = targetCid.toString()
-    // @ts-expect-error - todo: resolve this type error
     obj['/'] = target
 
     return [{ path, source: sourceCid, target, size: BigInt(0), index: 0 }]
@@ -162,8 +180,7 @@ export function findAndReplaceDagCborLinks (obj: unknown, sourceCid: string, pat
 
   if (keys.length > 0) {
     return keys
-      // @ts-expect-error - todo: resolve this type error
-      .map(key => findAndReplaceDagCborLinks(obj[key], sourceCid, isTruthy(path) ? `${path}/${key}` : `${key}`))
+      .map(key => findAndReplaceDagCborLinks((obj as Record<string, unknown>)[key], sourceCid, isTruthy(path) ? `${path}/${key}` : `${key}`))
       .reduce((a, b) => a.concat(b))
       .filter(a => Boolean(a))
   } else {

@@ -97,13 +97,17 @@ describe('findAndReplaceDagCborLinks', () => {
   })
 
   it('should return an empty array for non-object input', () => {
-    const result = findAndReplaceDagCborLinks('notAnObject', sourceCid)
-    expect(result).toStrictEqual([])
+    expect(findAndReplaceDagCborLinks('notAnObject', sourceCid)).toStrictEqual([])
   })
 
   it('should return an empty array for an empty object', () => {
-    const result = findAndReplaceDagCborLinks({}, sourceCid)
-    expect(result).toStrictEqual([])
+    expect(findAndReplaceDagCborLinks({}, sourceCid)).toStrictEqual([])
+  })
+
+  it('should return an empty array for a buffer-like object', () => {
+    expect(findAndReplaceDagCborLinks(Buffer.from('some data'), sourceCid)).toStrictEqual([])
+    expect(findAndReplaceDagCborLinks(new Uint8Array([1, 2, 3]), sourceCid)).toStrictEqual([])
+    expect(findAndReplaceDagCborLinks(new ArrayBuffer(8), sourceCid)).toStrictEqual([])
   })
 
   it('should return an empty array for an object without "/" property', () => {

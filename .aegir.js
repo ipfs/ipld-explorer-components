@@ -105,6 +105,7 @@ export default {
 
       // vite stuff
       'rollup-plugin-node-polyfills',
+      '@vitest/coverage-v8',
 
       // typescript plugins
       'typescript-plugin-css-modules'
