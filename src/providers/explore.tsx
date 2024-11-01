@@ -151,10 +151,10 @@ export const ExploreProvider = ({ children, state, explorePathPrefix = '#/explor
   }, [helia, path])
 
   const setExplorePath = (path: string | null): void => {
-    const newPath = processPath(path, explorePathPrefix)
-    if (newPath != null && !window.location.href.includes(encodeURI(newPath))) {
+    if (path != null && !window.location.href.includes(path)) {
       throw new Error('setExplorePath should only be used to update the state, not the URL. If you are using a routing library that doesn\'t allow you to listen to hashchange events, ensure the URL is updated prior to calling setExplorePath.')
     }
+    const newPath = processPath(path, explorePathPrefix)
     setExploreState((exploreState) => ({
       ...exploreState,
       path: newPath
