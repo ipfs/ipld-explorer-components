@@ -1,3 +1,9 @@
+## [8.1.0](https://github.com/ipfs/ipld-explorer-components/compare/v8.0.5...v8.1.0) (2024-11-01)
+
+### Features
+
+* remove buffer dependency ([#460](https://github.com/ipfs/ipld-explorer-components/issues/460)) ([f4905d2](https://github.com/ipfs/ipld-explorer-components/commit/f4905d2983fb2e94f268de8b8aebdb0c14df9b18))
+
 ## [8.0.5](https://github.com/ipfs/ipld-explorer-components/compare/v8.0.4...v8.0.5) (2024-10-31)
 
 ### Bug Fixes
