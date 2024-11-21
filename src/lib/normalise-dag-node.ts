@@ -93,7 +93,7 @@ export function normaliseDagPb (node: PBNode, cid: string, type: CodecType): Nor
  */
 export function normaliseDagPbLinks (links: PBLink[], sourceCid: string): NormalizedDagLink[] {
   return links.map((link, index) => ({
-    path: link.Name ?? `Links/${index}`,
+    path: isTruthy(link.Name) ? link.Name : `Links/${index}`,
     source: sourceCid,
     target: toCidStrOrNull(link.Hash) ?? '',
     size: BigInt(link.Tsize ?? 0),
