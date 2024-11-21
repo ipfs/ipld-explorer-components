@@ -103,6 +103,9 @@ export default {
       // scripts
       'wait-on',
 
+      // playwright deps
+      'tsx',
+
       // vite stuff
       'rollup-plugin-node-polyfills',
       '@vitest/coverage-v8',
