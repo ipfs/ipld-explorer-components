@@ -17,6 +17,20 @@ save_fixture() {
 # Originally intended for helping save fixtures for e2e explore.test.js so we could test files in offline mode. i.e.
 # not making network requests.
 main () {
+  # if RUNNING='null', kubo daemon is not running
+  EXISTING_NODE=$(npx kubo id | jq .Addresses)
+  if [ "$EXISTING_NODE" == "null" ]; then
+    echo "Kubo daemon is not running. Starting it."
+    mkfifo /tmp/kubo_daemon_fifo
+    npx kubo daemon >& /tmp/kubo_daemon_fifo &
+    # wait for 'Daemon is ready' message
+    while read daemon; do
+      if [[ $daemon == *"Daemon is ready"* ]]; then
+        echo "Daemon is ready"
+        break
+      fi
+    done < /tmp/kubo_daemon_fifo
+  fi
   local DIR
   local FILE
   FILE="${BASH_SOURCE[0]:-${(%):-%x}}"
@@ -36,6 +50,12 @@ main () {
   #   echo -e "\$cid: $cid \n"
   #   save_fixture $cid $save_path
   # done
+
+  if [ "$EXISTING_NODE" == "null" ]; then
+    echo "Kubo daemon was started by us. Stopping it."
+    npx kubo shutdown
+    rm /tmp/kubo_daemon_fifo
+  fi
 }
 
 main $@
