@@ -1,3 +1,9 @@
+## [8.1.1](https://github.com/ipfs/ipld-explorer-components/compare/v8.1.0...v8.1.1) (2024-11-21)
+
+### Bug Fixes
+
+* links without paths can be navigated ([#462](https://github.com/ipfs/ipld-explorer-components/issues/462)) ([1effbe7](https://github.com/ipfs/ipld-explorer-components/commit/1effbe7f193d29f38f325a6b635c7c8248a87d9a)), closes [#461](https://github.com/ipfs/ipld-explorer-components/issues/461)
+
 ## [8.1.0](https://github.com/ipfs/ipld-explorer-components/compare/v8.0.5...v8.1.0) (2024-11-01)
 
 ### Features
