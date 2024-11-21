@@ -97,7 +97,6 @@ export async function ipldGetNodeAndRemainder (helia: Helia, sourceCid: CID | st
   const encodedValue = await getRawBlock(helia, cidInstance)
   const value = codecWrapper.decode(encodedValue)
 
-  // @ts-expect-error - limiting code changes, ignore this error
   const codecWrapperResolveResult = await codecWrapper.resolve(isTruthy(path) ? path : '/', encodedValue)
   // TODO: there was a type error previously uncaught
   const resolveValue: any = {}

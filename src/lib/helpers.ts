@@ -19,7 +19,7 @@ export function isFalsy <T> (str: T | null | string | undefined): str is null {
   return false
 }
 
-export function isTruthy <T> (str: T | null | string | undefined): boolean {
+export function isTruthy <T> (str: T | null | string | undefined): str is string {
   return !isFalsy(str)
 }
 
