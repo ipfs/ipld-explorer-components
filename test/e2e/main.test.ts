@@ -2,44 +2,17 @@ import { readFileSync } from 'fs'
 import { join, dirname } from 'path'
 import { fileURLToPath } from 'url'
 import * as dagPb from '@ipld/dag-pb'
-import { type Page } from '@playwright/test'
 import { test, expect } from '@playwright/test'
 import { create, type KuboRPCClient } from 'kubo-rpc-client'
 import { sha256 } from 'multiformats/hashes/sha2'
 import { createCID } from './fixtures/create-cid.js'
 import { loadBlockFixtures } from './fixtures/load-block-fixtures.js'
+import { testExploredCid } from './fixtures/test-explore-cid.js'
 
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const __filename = fileURLToPath(import.meta.url)
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = dirname(__filename)
-
-interface TestExploreCidOptions {
-  page: Page
-  cid: string
-  type: string
-  humanReadableCID?: string
-  fillOutForm?: boolean
-}
-/**
- * Fills out the explore form (optional), waits for CID of given type to be loaded, and checks if CID details are correct.
- */
-async function testExploredCid ({ cid, type, humanReadableCID, page, fillOutForm = true }: TestExploreCidOptions): Promise<void> {
-  if (fillOutForm) {
-    await page.fill('[data-id="IpldExploreForm"] input[id="ipfs-path"]', cid)
-    await page.press('[data-id="IpldExploreForm"] button[type="submit"]', 'Enter')
-  }
-
-  await page.waitForSelector(`.joyride-explorer-cid [title="${cid}"]`) // cid is displayed in the CID INFO section.
-  await page.waitForSelector(`[title="${type}"]`)
-
-  if (humanReadableCID != null) {
-    // expect cid details
-    await page.waitForSelector('#CidInfo-human-readable-cid')
-    const actualHumanReadableCID = await page.$eval('#CidInfo-human-readable-cid', firstRes => firstRes.textContent)
-    expect(actualHumanReadableCID).toBe(humanReadableCID)
-  }
-}
 
 test.describe('Explore screen', () => {
   test.beforeEach(async ({ page }) => {
@@ -55,9 +28,6 @@ test.describe('Explore screen', () => {
   })
 
   test.describe('Inspecting CID', () => {
-    /**
-     * @type {ReturnType<import('kubo-rpc-client')['create']>}
-     */
     let ipfs: KuboRPCClient
     test.beforeEach(async () => {
       ipfs = create(process.env.IPFS_RPC_ADDR)
