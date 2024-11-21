@@ -54,7 +54,7 @@ const Row: React.FC<RowProps> = ({ onLinkClick, startIndex, index, rowHeight, li
       key={key}
       className={`pv2 pointer items-center f7 ${styles.rowGrid} bb b--near-white`}
       style={{ position: 'absolute', top: key * rowHeight, width: '100%', backgroundColor }}
-      onClick={() => { onLinkClick(link as any) }}
+      onClick={() => { onLinkClick(link) }}
     >
       <div className={`mid-gray tr pr1 f7 ${styles.gridCellRow} monospace}`}>
         {key}
