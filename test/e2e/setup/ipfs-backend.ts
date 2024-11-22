@@ -55,13 +55,11 @@ async function run (rpcPort?: string): Promise<void> {
   const { address: apiHost, port: apiPort } = rpcApiMaddr.nodeAddress()
   const { hostname: gatewayHost, port: gatewayPort } = new URL(gateway)
 
-
   if (String(apiPort) !== rpcPort) {
     console.error(`Invalid RPC port returned by IPFS backend: ${apiPort} != ${rpcPort}`)
     await ipfsd.stop()
     process.exit(1)
   }
-
 
   // persist details for e2e tests
   fs.writeFileSync(path.join(__dirname, 'ipfs-backend.json'), JSON.stringify({
