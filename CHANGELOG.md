@@ -1,3 +1,9 @@
+## [8.1.2](https://github.com/ipfs/ipld-explorer-components/compare/v8.1.1...v8.1.2) (2024-11-22)
+
+### Tests
+
+* add e2e tests ([#463](https://github.com/ipfs/ipld-explorer-components/issues/463)) ([c865b5f](https://github.com/ipfs/ipld-explorer-components/commit/c865b5f64fb5555ffd521d11a82027fac1ad6b2e)), closes [#461](https://github.com/ipfs/ipld-explorer-components/issues/461)
+
 ## [8.1.1](https://github.com/ipfs/ipld-explorer-components/compare/v8.1.0...v8.1.1) (2024-11-21)
 
 ### Bug Fixes
