@@ -1,4 +1,3 @@
-// @ts-check
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'url'
@@ -15,7 +14,6 @@ const { console } = globalThis
 let ipfsd: KuboNode
 let ipfs: KuboRPCClient
 async function run (rpcPort?: string): Promise<void> {
-  // let gatewayPort = 8080
   if (ipfsd != null && ipfs != null) {
     throw new Error('IPFS backend already running')
   }
@@ -25,7 +23,6 @@ async function run (rpcPort?: string): Promise<void> {
     ipfs = create(endpoint)
   } else {
     // use ipfds-ctl to spawn daemon to expose http api used for e2e tests
-    // gatewayPort = await getPort(gatewayPort, '0.0.0.0')
     const factory = createFactory({
       rpc: create,
       type: 'kubo',
@@ -58,8 +55,6 @@ async function run (rpcPort?: string): Promise<void> {
   const { address: apiHost, port: apiPort } = rpcApiMaddr.nodeAddress()
   const { hostname: gatewayHost, port: gatewayPort } = new URL(gateway)
 
-  // some temporary hardcoding until https://github.com/ipfs/js-ipfsd-ctl/issues/831 is resolved.
-  // const { apiHost, apiPort } = { apiHost: '127.0.0.1', apiPort: rpcPort }
 
   if (String(apiPort) !== rpcPort) {
     console.error(`Invalid RPC port returned by IPFS backend: ${apiPort} != ${rpcPort}`)
@@ -67,8 +62,6 @@ async function run (rpcPort?: string): Promise<void> {
     process.exit(1)
   }
 
-  // const rpcAddr = `/ip4/${apiHost}/tcp/${apiPort}`
-  // const gatewayAddr = endpoint ?? rpcAddr
 
   // persist details for e2e tests
   fs.writeFileSync(path.join(__dirname, 'ipfs-backend.json'), JSON.stringify({

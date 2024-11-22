@@ -4,9 +4,6 @@ import { loadBlockFixtures } from './fixtures/load-block-fixtures.js'
 import { testExploredCid } from './fixtures/test-explore-cid.js'
 
 test.describe('edge-cases', () => {
-  /**
-   * @type {ReturnType<import('kubo-rpc-client')['create']>}
-   */
   let ipfs: KuboRPCClient
   test.beforeEach(async () => {
     ipfs = create(process.env.IPFS_RPC_ADDR)

@@ -8,12 +8,12 @@ const __filename = fileURLToPath(import.meta.url)
 // eslint-disable-next-line @typescript-eslint/naming-convention
 const __dirname = path.dirname(__filename)
 
-// make sure that ipfs-backend is fully running
 interface ApiOpts {
   protocol: string
   host: string
   port: number
 }
+// make sure that ipfs-backend is fully running
 const ensureKuboDaemon = async (apiOpts: ApiOpts): Promise<void> => {
   const backendEndpoint = `${apiOpts.protocol}://${apiOpts.host}:${apiOpts.port}`
   const body = new FormData()
@@ -47,8 +47,6 @@ const globalSetup = async (config: PlaywrightTestConfig): Promise<void> => {
 
   await ensureKuboDaemon(apiOpts)
 
-  // Set and save RPC API endpoint in storageState, so test start against
-  // desired endpoint
   // @ts-expect-error - broken types for projects from playwright config
   const { baseURL, storageState } = config.projects[0].use
   const browser = await chromium.launch()
