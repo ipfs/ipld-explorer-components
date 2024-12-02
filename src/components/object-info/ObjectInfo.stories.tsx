@@ -75,3 +75,23 @@ export const CidV0DagPb1240Links = () => (
 CidV0DagPb1240Links.story = {
   name: 'cid v0 dag-pb 1240 links...'
 }
+
+export const identityCID = () => (
+  <ObjectInfo
+    format="identity"
+    localPath="/"
+    className="ma2"
+    cid="bafkqaddjnzzxazldoqwxizltoq"
+    size={BigInt(0)}
+    links={[]}
+    data={new Uint8Array([105, 110, 115, 112, 101, 99, 116, 45, 116, 101, 115, 116])}
+    type="identity"
+    gatewayUrl="https://ipfs.io"
+    publicGatewayUrl="https://dweb.link"
+    onLinkClick={action('link clicked')}
+  />
+)
+identityCID.story = {
+  name: 'identity CID'
+}
+

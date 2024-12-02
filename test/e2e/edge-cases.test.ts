@@ -36,4 +36,19 @@ test.describe('edge-cases', () => {
       type: 'dag-pb'
     })
   })
+
+  test('identity CIDs render object info properly', async ({ page }) => {
+    // Test for https://github.com/ipfs/ipld-explorer-components/issues/464
+    const cid = 'bafkqaddjnzzxazldoqwxizltoq'
+
+    await page.goto('/#/explore/bafkqaddjnzzxazldoqwxizltoq')
+
+    await testExploredCid({
+      fillOutForm: false,
+      page,
+      cid,
+      humanReadableCID: 'base32 - cidv1 - raw - identity~96~696E73706563742D74657374',
+      type: 'raw'
+    })
+  })
 })

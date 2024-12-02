@@ -1,11 +1,13 @@
 /* global globalThis */
 import { sha3512, keccak256 } from '@multiformats/sha3'
 import { type Hasher, from } from 'multiformats/hashes/hasher'
+import { identity } from 'multiformats/hashes/identity'
 import * as sha2 from 'multiformats/hashes/sha2'
 
 // #WhenAddingNewHasher
 export type SupportedHashers = typeof sha2.sha256 |
   typeof sha2.sha512 |
+  Hasher<'identity', 0x0> |
   Hasher<'keccak-256', 27> |
   Hasher<'sha1', 17> |
   Hasher<'blake2b-256', 0xb220> |
@@ -39,6 +41,11 @@ function getBoundHasher <T extends SupportedHashers> (hasher: T): T {
 export async function getHasherForCode (code: number): Promise<SupportedHashers> {
   // #WhenAddingNewHasher
   switch (code) {
+    case identity.code:
+      return getBoundHasher({
+        ...identity,
+        name: 'identity' // multiformats/hashes/identity doesn't export a proper Hasher<Name, Code> type. See https://github.com/multiformats/js-multiformats/issues/313
+      })
     case sha2.sha256.code:
       return getBoundHasher(sha2.sha256)
     case sha2.sha512.code:
