@@ -1,3 +1,9 @@
+## [8.1.3](https://github.com/ipfs/ipld-explorer-components/compare/v8.1.2...v8.1.3) (2024-12-03)
+
+### Bug Fixes
+
+* identity hashes display object info ([#465](https://github.com/ipfs/ipld-explorer-components/issues/465)) ([c159ca4](https://github.com/ipfs/ipld-explorer-components/commit/c159ca49de40e27a9c63c9ea57ee50e79e468bad))
+
 ## [8.1.2](https://github.com/ipfs/ipld-explorer-components/compare/v8.1.1...v8.1.2) (2024-11-22)
 
 ### Tests
