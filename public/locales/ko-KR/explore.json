@@ -69,6 +69,7 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID."
+    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID.",
+    "checkIpfsNetwork": "IPFS 네트워크에서 콘텐츠 가용성 확인"
   }
 }

@@ -69,6 +69,7 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Nepodařilo se načíst obsah do {timeout} s. Obnovte prosím stránku a zkuste to znovu nebo zkuste jiný CID."
+    "BlockFetchTimeoutError": "Nepodařilo se načíst obsah do {timeout} s. Obnovte prosím stránku a zkuste to znovu nebo zkuste jiný CID.",
+    "checkIpfsNetwork": "Zkontrolujte dostupnost obsahu na IPFS síti"
   }
 }
