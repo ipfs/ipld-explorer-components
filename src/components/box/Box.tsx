@@ -12,7 +12,7 @@ export const Box: React.FC<PropsWithChildren<BoxProps>> = ({
   children
 }) => {
   return (
-    <div className={className} style={{ background: '#fbfbfb', ...style }}>
+    <div className={className} style={{ background: 'var(--element-bg, #fbfbfb)', ...style }}>
       <ErrorBoundary>
         {children}
       </ErrorBoundary>
