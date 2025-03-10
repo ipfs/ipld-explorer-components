@@ -1,0 +1,16 @@
+/* dark theme styles for the explore page */
+:root {
+  --element-bg: #fbfbfb;
+  --text: #111111;
+  --border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+  --background: #181a1b;
+  --text: #e8e6e3;
+  --element-bg: #1a1c1e;
+  --navy-dark: #0b3a53;
+  --navy-text-color: rgb(202, 198, 191);
+  --snow-muted: rgb(28, 30, 31);
+  --border-color: rgba(140, 130, 115, 0.5);
+}
