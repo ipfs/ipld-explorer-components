@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import extractInfo, { type ExtractedInfo } from '../../lib/extract-info.js'
+import { DocLink } from '../common/DocLink'
 
 export interface CidInfoProps extends React.HTMLAttributes<HTMLDivElement> {
   cid: string | null
@@ -31,9 +32,9 @@ export const CidInfo: React.FC<CidInfoProps> = ({ cid, className, ...props }) =>
   return (
     <section className={`ph3 pv4 sans-serif ${className}`} {...props}>
       <label className='db pb2'>
-        <a className='tracked ttu f5 fw2 teal-muted hover-aqua link' href='https://docs.ipfs.io/concepts/glossary/#cid' rel='external' target='_external'>
+        <DocLink term='cid' className='tracked ttu f5 fw2'>
           {t('CidInfo.header')}
-        </a>
+        </DocLink>
       </label>
       {(cidInfo == null)
         ? null
@@ -48,12 +49,9 @@ export const CidInfo: React.FC<CidInfoProps> = ({ cid, className, ...props }) =>
           <label htmlFor='CidInfo-human-readable-cid' className='db fw2 ma0 mid-gray ttu f7 tracked'>
             {t('base')} - {t('version')} - {t('codec')} - {t('multihash')}
           </label>
-          <a
-            href='https://docs.ipfs.io/concepts/glossary/#multihash' rel='external' target='_external'
-            className='dib tracked ttu f6 fw2 teal-muted hover-aqua link mt4'
-          >
+          <DocLink term='multihash' className='dib tracked ttu f6 fw2 mt4'>
             {t('multihash')}
-          </a>
+          </DocLink>
           <div>
             <div className='dib monospace f6 pt2 tr dark-gray lh-title ph2'>
               <code className='gray'>0x</code>
@@ -68,10 +66,10 @@ export const CidInfo: React.FC<CidInfoProps> = ({ cid, className, ...props }) =>
                 {t('CidInfo.hashDigest')}
               </label>
               <div className='tl lh-copy'>
-                <a className='db orange no-underline pt2' href='https://docs.ipfs.io/concepts/glossary/#multicodec' rel='external' target='_external' title="Multicodec">
+                <DocLink term='multicodec' className='db orange no-underline pt2' title='Multicodec'>
                   <code className='gray'>0x</code>
                   <code>{cidInfo.hashFnCode}</code> = {cidInfo.hashFn}
-                </a>
+                </DocLink>
                 <div id='CidInfo-multihash' className='green'>
                   <code className='gray'>0x</code>
                   <code>{cidInfo.hashLengthCode}</code> = {cidInfo.hashLengthInBits} bits
