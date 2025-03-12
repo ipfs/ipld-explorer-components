@@ -69,7 +69,6 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "在{timeout}内抓取内容失败. 请刷新页面或尝试一个不同的CID",
-    "checkIpfsNetwork": "检查IPFS网络上的内容可用性"
+    "BlockFetchTimeoutError": "在{timeout}内抓取内容失败. 请刷新页面或尝试一个不同的CID"
   }
 }

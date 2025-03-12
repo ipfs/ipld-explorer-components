@@ -69,7 +69,6 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID.",
-    "checkIpfsNetwork": "İçerik IPFS ağında mevcut mu kontrol edin"
+    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID."
   }
 }

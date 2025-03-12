@@ -69,7 +69,6 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Falha ao buscar conteúdo em {timeout}s. Atualize a página para tentar novamente ou tente um CID diferente.",
-    "checkIpfsNetwork": "Verifique a disponibilidade do conteúdo na rede IPFS"
+    "BlockFetchTimeoutError": "Falha ao buscar conteúdo em {timeout}s. Atualize a página para tentar novamente ou tente um CID diferente."
   }
 }

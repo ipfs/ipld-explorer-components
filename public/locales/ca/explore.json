@@ -69,7 +69,6 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID.",
-    "checkIpfsNetwork": "Comprova la disponibilitat del contingut a la xarxa IPFS"
+    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID."
   }
 }

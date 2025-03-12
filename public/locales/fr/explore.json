@@ -69,7 +69,6 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Impossible d'obtenir le contenu après {timeout}s. Merci de rafraîchir la page pour réessayer ou d'essayer avec un autre CID.",
-    "checkIpfsNetwork": "Vérifier la disponibilité du contenu sur le réseau IPFS"
+    "BlockFetchTimeoutError": "Impossible d'obtenir le contenu après {timeout}s. Merci de rafraîchir la page pour réessayer ou d'essayer avec un autre CID."
   }
 }
