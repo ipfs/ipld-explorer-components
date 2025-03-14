@@ -1,3 +1,9 @@
+## [8.1.4](https://github.com/ipfs/ipld-explorer-components/compare/v8.1.3...v8.1.4) (2025-03-10)
+
+### Trivial Changes
+
+* update devPage file reference to .tsx extension ([#470](https://github.com/ipfs/ipld-explorer-components/issues/470)) ([e1d798c](https://github.com/ipfs/ipld-explorer-components/commit/e1d798cb03c22202a123c9294dcd4a08e26d6578))
+
 ## [8.1.3](https://github.com/ipfs/ipld-explorer-components/compare/v8.1.2...v8.1.3) (2024-12-03)
 
 ### Bug Fixes

@@ -24,7 +24,7 @@ There are `peerDependencies` so that the consuming app can pick the versions of 
 
 ### Use it in your project
 
-You can see an example of how to use these components in the [devPage.jsx](./dev/devPage.jsx) file.
+You can see an example of how to use these components in the [devPage.tsx](./dev/devPage.tsx) file.
 
 ```jsx
 // index.tsx
