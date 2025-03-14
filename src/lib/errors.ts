@@ -1,7 +1,7 @@
 import { type TFunction } from 'i18next'
 
 export default class IpldExploreError extends Error {
-  constructor (protected readonly options: Record<string, string | number>) {
+  constructor (private readonly options: Record<string, string | number>) {
     super()
     this.name = this.constructor.name
   }
@@ -18,10 +18,6 @@ export default class IpldExploreError extends Error {
    */
   toString (t: TFunction<'translation', 'translation'>): string {
     return t(this.name, this.options)
-  }
-
-  get cid (): string | undefined {
-    return this.options.cid as string | undefined
   }
 }
 

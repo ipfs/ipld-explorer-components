@@ -1,6 +1,6 @@
 import React from 'react'
 import { useTranslation } from 'react-i18next'
-import { BlockFetchTimeoutError } from '../../lib/errors'
+import { useExplore } from '../../providers/explore'
 import type IpldExploreError from '../../lib/errors'
 
 export interface IpldExploreErrorComponentProps {
@@ -8,18 +8,28 @@ export interface IpldExploreErrorComponentProps {
 }
 
 export function IpldExploreErrorComponent ({ error }: IpldExploreErrorComponentProps): JSX.Element | null {
+  const { exploreState } = useExplore()
+  const { path } = exploreState
+  const [cid] = path?.split('/') ?? []
   const { t } = useTranslation('explore', { keyPrefix: 'errors' })
   if (error == null) return null
 
-  const isBlockError = error instanceof BlockFetchTimeoutError
-
+  // more self service
   return (
     <div className='bg-red white pa3 lh-copy'>
       <div>{error.toString(t)}</div>
-      {isBlockError && (
+      {cid != null && <><div className='mt3'>
+        <h4 className='ma0 mb2'>{t('troubleshootingTips.title')}</h4>
+        <ul className='ma0 pl3'>
+          <li>{t('troubleshootingTips.refresh')}</li>
+          <li>{t('troubleshootingTips.checkConnection')}</li>
+          <li>{t('troubleshootingTips.tryLater')}</li>
+          <li>{t('troubleshootingTips.checkCidSyntax')}</li>
+        </ul>
+      </div>
         <div className='mt2'>
           <a
-            href={`https://check.ipfs.network/#/ipfs/${error.cid ?? ''}`}
+            href={`https://check.ipfs.network/?cid=${cid}`}
             target="_blank"
             rel="noopener noreferrer"
             className='white underline hover-white'
@@ -27,7 +37,7 @@ export function IpldExploreErrorComponent ({ error }: IpldExploreErrorComponentP
             {t('checkIpfsNetwork')}
           </a>
         </div>
-      )}
+      </>}
     </div>
   )
 }
