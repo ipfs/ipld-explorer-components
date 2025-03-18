@@ -20,15 +20,39 @@
   }
 
   /* style for the react-inpector package that ObjectInfo uses */
-  .r-inspector ol, li {
-    background-color: var(--gray-muted) !important;
+  .r-inspector {
+    background-color: var(--navy-dark) !important;
   }
 
-  .breadcrumb {
-    color: var(--gray-muted) !important;
+  .r-inspector ol *, li * {
+    background-color: var(--element-bg) !important;
+    color: var(--navy-text-color) !important;
   }
 
-  .links-table {
-    background: var(--gray-muted) !important;
+  .joyride-explorer-crumbs * {
+    color: var(--text) !important;
+    background-color: var(--navy-dark) !important;
+  }
+
+  .links-table * {
+    background: var(--element-bg) !important;
+    color: var(--text) !important;
+  }
+
+  /* stripe links-table-row */
+  .links-table-row:nth-child(odd) {
+    background-color: var(--navy-dark) !important;
+  }
+
+  .links-table .r-table-row * {
+    background-color: var(--navy-dark) !important;
+  }
+
+  #root {
+    background-color: var(--navy-dark) !important;
+  }
+
+  body {
+    background-color: var(--navy-dark) !important;
   }
 }

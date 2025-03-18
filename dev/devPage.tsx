@@ -47,7 +47,7 @@ const HeaderComponent: React.FC = () => {
   }
 
   return (
-    <header className='flex-l items-center pa3 bg-navy bb bw3 border-aqua tc tl-l'>
+    <header className='flex-l items-center pa3 bg-navy bb bw3 border-aqua tc tl-l mb4'>
       <a href='#/' title={t('homeLink')} className='flex-none v-mid'>
         {/* <img src={ipfsLogo} alt='IPFS' style={{height: 50, width: 117.5}} /> */}
       </a>
