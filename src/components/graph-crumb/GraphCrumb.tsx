@@ -37,7 +37,7 @@ const GraphCrumb: React.FC<GraphCrumbProps> = ({ cid, pathBoundaries, localPath,
     <div {...props}>
       <div className={`sans-serif ${className}`}>
         <NodeUnderline cid={cid}>
-          <a href={firstHrefBase} className='monospace no-underline dark-gray o-50 glow'>
+          <a href={firstHrefBase} className='monospace no-underline dark-gray o-50 glow' style={{ color: 'var(--gray-muted)' }}>
             <Cid value={cid} />
           </a>
           {first != null
@@ -124,6 +124,7 @@ const Path: React.FC<{ path: string, hrefBase: string, sourceCid: CID }> = ({ pa
               className='dib no-underline dark-gray o-50 glow'
               title={sourceCid.toString() + '/' + relPath}
               href={href}
+              style={{ color: 'var(--gray-muted)' }}
             >
               {p}
             </a>

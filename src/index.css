@@ -13,4 +13,22 @@
   --navy-text-color: rgb(202, 198, 191);
   --snow-muted: rgb(28, 30, 31);
   --border-color: rgba(140, 130, 115, 0.5);
+  --gray-muted: #d9dbe2;
+
+  .gray-muted {
+    color: var(--gray-muted)
+  }
+
+  /* style for the react-inpector package that ObjectInfo uses */
+  .r-inspector ol, li {
+    background-color: var(--gray-muted) !important;
+  }
+
+  .breadcrumb {
+    color: var(--gray-muted) !important;
+  }
+
+  .links-table {
+    background: var(--gray-muted) !important;
+  }
 }

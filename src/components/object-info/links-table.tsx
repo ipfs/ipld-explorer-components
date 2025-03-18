@@ -131,7 +131,7 @@ const LargeLinksTable: React.FC<LargeLinksTableProps> = ({ onLinkClick, links, r
   const visibleLinks = links.slice(startIndex, endIndex)
 
   return (
-    <div className={`collapse br2 pv2 ph3 mv2 nl3 nr3 mh0-l f7 ${styles.linksTable}`}>
+    <div className={`collapse links-table br2 pv2 ph3 mv2 nl3 nr3 mh0-l f7 ${styles.linksTable}`} style={{ backgroundColor: 'red' }}>
       <Header cidRowStyle={cidRowStyle ?? { width: tableWidth }} />
       <div
         ref={containerRef}

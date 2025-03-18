@@ -192,7 +192,7 @@ export const ObjectInfo: React.FC<ObjectInfoProps> = ({ className, type, cid, lo
         {data == null
           ? null
           : (
-          <div className='pa3 mt2 bg-white f5 nl3 nr3 mh0-l overflow-x-auto'>
+          <div className='pa3 mt2 r-inspector bg-white f5 nl3 nr3 mh0-l overflow-x-auto' style={{ background: 'var(--gray-muted)' }}>
             {/* @ts-expect-error - object inspector types are wrong. see https://www.npmjs.com/package/react-inspector#theme  */}
             <ObjectInspector showMaxKeys={100} data={getObjectInspectorData(data)} theme={objectInspectorTheme} expandPaths={toExpandPathsNotation(localPath)} />
           </div>

@@ -39,13 +39,13 @@ export const CidInfo: React.FC<CidInfoProps> = ({ cid, className, ...props }) =>
         ? null
         : (
         <div>
-          <div className='f7 monospace fw4 ma0 pb2 truncate mid-gray force-select' title={cid.toString()}>
+          <div className='f7 monospace fw4 ma0 pb2 truncate mid-gray gray-muted force-select' title={cid.toString()}>
             {cid.toString()}
           </div>
           <div className='f6 sans-serif fw4 ma0 pb2 truncate' id='CidInfo-human-readable-cid'>
             {cidInfo.humanReadable}
           </div>
-          <label htmlFor='CidInfo-human-readable-cid' className='db fw2 ma0 mid-gray ttu f7 tracked'>
+          <label htmlFor='CidInfo-human-readable-cid' className='db fw2 ma0 mid-gray ttu f7 tracked gray-muted'>
             {t('base')} - {t('version')} - {t('codec')} - {t('multihash')}
           </label>
           <a
@@ -55,7 +55,7 @@ export const CidInfo: React.FC<CidInfoProps> = ({ cid, className, ...props }) =>
             {t('multihash')}
           </a>
           <div>
-            <div className='dib monospace f6 pt2 tr dark-gray lh-title ph2'>
+            <div className='dib monospace f6 pt2 tr dark-gray gray-muted lh-title ph2'>
               <code className='gray'>0x</code>
               <span className='orange force-select'>{cidInfo.hashFnCode}</span>
               <span className='green force-select'>{cidInfo.hashLengthCode}</span>
@@ -64,7 +64,7 @@ export const CidInfo: React.FC<CidInfoProps> = ({ cid, className, ...props }) =>
                   <span key={chunk.join('')}>{chunk.join('')}<br /></span>
                 ))}
               </span>
-              <label htmlFor='CidInfo-multihash' className='sans-serif fw2 ma0 mid-gray ttu f7 tracked'>
+              <label htmlFor='CidInfo-multihash' className='sans-serif fw2 ma0 mid-gray gray-muted ttu f7 tracked'>
                 {t('CidInfo.hashDigest')}
               </label>
               <div className='tl lh-copy'>
