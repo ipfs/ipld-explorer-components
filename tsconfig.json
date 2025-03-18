@@ -37,7 +37,8 @@
   "include": [
     "src/**/*",
     "dev/**/*",
-    "test/**/*"
+    "test/**/*",
+    "vite.config.ts"
   ],
   "exclude": [
     "src/**/*.stories.*",

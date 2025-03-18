@@ -63,7 +63,7 @@ export const ExplorePage = ({
           : <div style={{ height: 54 }} />}
 
         <div className='dt-l dt--fixed'>
-          <div className='dtc-l w-100 w-two-thirds-l pr3-l v-top'>
+          <div className={`${error != null ? 'w-100 dt-row-l' : 'dtc-l w-100 w-two-thirds-l pr3-l'} v-top`}>
             <IpldExploreErrorComponent error={error} />
 
             {targetNode != null
