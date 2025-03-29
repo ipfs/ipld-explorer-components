@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next'
 import { ObjectInspector, chromeLight } from 'react-inspector'
 import getCodecNameFromCode from '../../lib/get-codec-name-from-code'
 import { type NormalizedDagNode, type UnixFsNodeDataWithNumbers } from '../../types.js'
+import { DocLink } from '../common/DocLink.js'
 import LargeLinksTable, { type LinkObject, type LargeLinksTableProps } from './links-table'
 
 const humansize = partial({ round: 0 })
@@ -138,7 +139,7 @@ export const ObjectInfo: React.FC<ObjectInfoProps> = ({ className, type, cid, lo
         </span>
         {format === 'unixfs'
           ? (
-          <a className='dn di-ns no-underline charcoal ml2' href='https://docs.ipfs.io/concepts/glossary/#unixfs' rel='external' target='_external'>UnixFS</a>
+          <DocLink style={{ color: '#34373f' }} term='unixfs' className='dn di-ns charcoal ml2'>UnixFS</DocLink>
             )
           : null}
         {isUnixFs

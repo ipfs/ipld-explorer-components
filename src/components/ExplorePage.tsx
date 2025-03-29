@@ -45,7 +45,8 @@ export const ExplorePage = ({
   }
 
   return (
-      <div className='nt4-l'>
+      // <div className='nt4-l'>
+      <div>
         <Helmet>
           <title>{t('ExplorePage.title')}</title>
         </Helmet>
