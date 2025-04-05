@@ -38,8 +38,8 @@ export async function importCar (file: File, helia: Helia, timeout = 30000): Pro
     // @todo: Handle multiple roots
     return cidRoots[0]
   } catch (err) {
-    if (err instanceof BlockFetchTimeoutError) {
-      throw err
+    if (err instanceof Error && err.message === 'Unexpected end of data') {
+      throw new Error('Invalid CAR file')
     }
     throw new Error(err instanceof Error ? err.message : 'Failed to import CAR file')
   } finally {
