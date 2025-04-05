@@ -46,10 +46,12 @@ export function IpldExploreErrorComponent ({ error }: IpldExploreErrorComponentP
   const { t } = useTranslation('explore', { keyPrefix: 'errors' })
   if (error == null) return null
 
-  return <div className='bg-red white pa3 lh-copy'>
+  return <div className="flex justify-center w-100 pa3">
+  <div className="bg-red-muted red-dark pa3 br2 lh-copy mw7">
     {error instanceof CARFetchError
       ? <CIDTroubleshootingTips />
-      : <div>{error?.toString(t)}</div>
+      : <div>{error.toString(t)}</div>
     }
   </div>
+</div>
 }
