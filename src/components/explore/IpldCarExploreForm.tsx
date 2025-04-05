@@ -7,7 +7,6 @@ import uploadImage from './upload.svg'
 
 export const IpldCarExploreForm: React.FC = () => {
   const { t } = useTranslation('explore')
-  // const [file, setFile] = useState({})
   const { doUploadUserProvidedCar } = useExplore()
   const { selectHeliaReady } = useHelia()
 
@@ -35,6 +34,7 @@ export const IpldCarExploreForm: React.FC = () => {
       console.error('no file selected')
       return
     }
+
     void doUploadUserProvidedCar(selectedFile, uploadImage)
   }, [doUploadUserProvidedCar])
 

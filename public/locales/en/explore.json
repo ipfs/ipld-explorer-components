@@ -69,6 +69,14 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID."
+    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID.",
+    "CARFetchError": "Failed to import CAR file: {{message}}",
+    "checkIpfsNetwork": "Check content availability on IPFS Network",
+    "troubleshootingTips": {
+      "title": "Troubleshooting Tips",
+      "checkCarFormat": "Check if the file is a valid CAR format",
+      "tryDifferentCar": "Try uploading a different CAR file"
+    },
+    "clearError": "Okay, take me back to start exploring page"
   }
 }
