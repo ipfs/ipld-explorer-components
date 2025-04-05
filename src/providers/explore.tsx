@@ -198,7 +198,12 @@ export const ExploreProvider = ({ children, state, explorePathPrefix = '#/explor
       console.error('FIXME: Helia not ready yet, but user tried to upload a car file')
       return
     }
+
     try {
+      if (file.size === 0) {
+        throw new Error('CAR file is empty')
+      }
+
       const rootCid = await importCar(file, helia)
       const hash = rootCid.toString() != null ? `${explorePathPrefix}${ensureLeadingSlash(rootCid.toString())}` : explorePathPrefix
       window.location.hash = hash
@@ -210,9 +215,7 @@ export const ExploreProvider = ({ children, state, explorePathPrefix = '#/explor
       setExploreState((prevState) => ({
         ...prevState,
         targetNode: null,
-        error: new CARFetchError({
-          message: err instanceof Error ? err.message : 'Failed to import CAR file'
-        })
+        error: new CARFetchError({ message: err instanceof Error ? err.message : 'Failed to import CAR file' })
       }))
 
       resolveLoader(uploadImage)

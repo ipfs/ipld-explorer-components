@@ -25,7 +25,7 @@ export async function importCar (file: File, helia: Helia, timeout = 30000): Pro
 
     for await (const { cid, bytes } of CarIterator) {
       if (signal.aborted) {
-        throw new BlockFetchTimeoutError({ timeout: timeout / 1000, cid: 'CAR_IMPORT' })
+        throw new BlockFetchTimeoutError({ timeout: timeout / 1000 })
       }
       // add blocks to helia to ensure they are available while navigating children
       await helia.blockstore.put(cid, bytes)

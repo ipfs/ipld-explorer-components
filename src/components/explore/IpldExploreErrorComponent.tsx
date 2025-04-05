@@ -48,10 +48,10 @@ export function IpldExploreErrorComponent ({ error }: IpldExploreErrorComponentP
 
   return <div className="flex justify-center w-100 pa3">
   <div className="bg-red-muted red-dark pa3 br2 lh-copy mw7">
+    <div>{error.toString(t)}</div>
     {error instanceof CARFetchError
       ? <CIDTroubleshootingTips />
-      : <div>{error.toString(t)}</div>
-    }
+      : null}
   </div>
 </div>
 }
