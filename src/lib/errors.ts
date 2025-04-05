@@ -22,3 +22,5 @@ export default class IpldExploreError extends Error {
 }
 
 export class BlockFetchTimeoutError extends IpldExploreError {}
+
+export class CARFetchError extends IpldExploreError {}

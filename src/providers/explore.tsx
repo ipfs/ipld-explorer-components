@@ -1,6 +1,7 @@
 import { CID } from 'multiformats/cid'
 import React, { createContext, useContext, useState, useEffect, type ReactNode, useCallback } from 'react'
 import { type LinkObject } from '../components/object-info/links-table'
+import { CARFetchError } from '../lib/errors.js'
 import { ensureLeadingSlash } from '../lib/helpers.js'
 import { importCar } from '../lib/import-car.js'
 import { parseIpldPath } from '../lib/parse-ipld-path.js'
@@ -17,6 +18,7 @@ interface ExploreContextProps {
   doExploreLink(link: any): void
   doExploreUserProvidedPath(path: string): void
   doUploadUserProvidedCar(file: File, uploadImage: string): Promise<void>
+  setExploreState: React.Dispatch<React.SetStateAction<ExploreState>>
 }
 
 export interface ExploreState {
@@ -185,26 +187,48 @@ export const ExploreProvider = ({ children, state, explorePathPrefix = '#/explor
   }
 
   const doUploadUserProvidedCar = useCallback(async (file: File, uploadImage: string): Promise<void> => {
+    const resolveLoader = (image: string): void => {
+      const imageFileLoader = document.getElementById('car-loader-image') as HTMLImageElement
+      if (imageFileLoader != null) {
+        imageFileLoader.src = image
+      }
+    }
+
     if (helia == null) {
       console.error('FIXME: Helia not ready yet, but user tried to upload a car file')
       return
     }
+
     try {
+      if (file.size === 0) {
+        throw new Error('CAR file is empty')
+      }
+
       const rootCid = await importCar(file, helia)
       const hash = rootCid.toString() != null ? `${explorePathPrefix}${ensureLeadingSlash(rootCid.toString())}` : explorePathPrefix
       window.location.hash = hash
 
-      const imageFileLoader = document.getElementById('car-loader-image') as HTMLImageElement
-      if (imageFileLoader != null) {
-        imageFileLoader.src = uploadImage
-      }
+      resolveLoader(uploadImage)
     } catch (err) {
       console.error('Could not import car file', err)
+
+      setExploreState((prevState) => ({
+        ...prevState,
+        targetNode: null,
+        error: new CARFetchError({ message: err instanceof Error ? err.message : 'Failed to import CAR file' })
+      }))
+
+      resolveLoader(uploadImage)
+
+      const carFileInputEl = document.getElementById('car-file') as HTMLInputElement
+      if (carFileInputEl != null) {
+        carFileInputEl.value = ''
+      }
     }
   }, [explorePathPrefix, helia])
 
   return (
-    <ExploreContext.Provider value={{ exploreState, explorePathPrefix, isLoading, doExploreLink, doExploreUserProvidedPath, doUploadUserProvidedCar, setExplorePath }}>
+    <ExploreContext.Provider value={{ exploreState, explorePathPrefix, isLoading, doExploreLink, doExploreUserProvidedPath, doUploadUserProvidedCar, setExplorePath, setExploreState }}>
       {children}
     </ExploreContext.Provider>
   )
