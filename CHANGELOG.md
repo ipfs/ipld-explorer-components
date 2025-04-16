@@ -1,3 +1,9 @@
+## [8.2.0](https://github.com/ipfs/ipld-explorer-components/compare/v8.1.4...v8.2.0) (2025-04-16)
+
+### Features
+
+* add link to check.ipfs.network on block fetch failure ([#469](https://github.com/ipfs/ipld-explorer-components/issues/469)) ([a6dc200](https://github.com/ipfs/ipld-explorer-components/commit/a6dc20099ba775fc2d5e3fa7da7c6cf021d28b2c))
+
 ## [8.1.4](https://github.com/ipfs/ipld-explorer-components/compare/v8.1.3...v8.1.4) (2025-03-10)
 
 ### Trivial Changes
