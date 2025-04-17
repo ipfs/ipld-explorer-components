@@ -2,12 +2,13 @@ import React from 'react'
 import { Trans, useTranslation } from 'react-i18next'
 import Box from '../box/Box.js'
 import ipldLogoSrc from './ipld.svg'
+import '../../index.css'
 
 export const AboutIpld: React.FC = () => {
   const { t } = useTranslation('explore')
 
   return (
-    <Box className='tl dib pa4 avenir measure-wide-l lh-copy dark-gray ba-l b--black-10'>
+    <Box className='tl dib pa4 avenir measure-wide-l lh-copy ba-l' style={{ color: 'var(--text)', borderColor: 'var(--border-color)', border: '1px solid var(--border-color)' }}>
       <div className='tc'>
         <a className='link' href='https://ipld.io'>
           <img src={ipldLogoSrc} alt='IPLD' style={{ height: 60 }} />

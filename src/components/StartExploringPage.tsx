@@ -15,7 +15,7 @@ const ExploreSuggestion = ({ cid, name, type }: { cid: string, name: string, typ
     </span>
     <span className='pl3 truncate'>
       <h2 className='ma0 fw4 f5 db black montserrat'>{name}</h2>
-      <span className='f7 db blue truncate monospace'>{cid}</span>
+      <span className='f7 db blue truncate monospace' style={{ color: 'var(--gray-muted, "")' }}>{cid}</span>
     </span>
   </a>
 )
@@ -31,14 +31,14 @@ export const StartExploringPage: React.FC<StartExploringPageProps> = ({ embed, r
   const { t } = useTranslation('explore')
 
   return (
-    <div className='mw9 center explore-sug-2'>
+    <div className='mw9 center explore-sug-2' style={{ background: 'var(--background, "")' }}>
       <Helmet>
         <title>{t('StartExploringPage.title')}</title>
       </Helmet>
       <div className='flex-l'>
         <div className='flex-auto-l mr3-l'>
           <div className='pl3 pl0-l pt4 pt2-l'>
-            <h1 className='f3 f2-l ma0 fw4 montserrat charcoal'>{t('StartExploringPage.header')}</h1>
+            <h1 className='f3 f2-l ma0 fw4 montserrat charcoal' style={{ color: 'var(--text, --charcoal)' }}>{t('StartExploringPage.header')}</h1>
             <p className='lh-copy f5 avenir charcoal-muted'>{t('StartExploringPage.leadParagraph')}</p>
           </div>
           {embed != null ? <IpldExploreForm /> : null}
