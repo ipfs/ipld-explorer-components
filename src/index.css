@@ -14,6 +14,7 @@
   --snow-muted: rgb(28, 30, 31);
   --border-color: rgba(140, 130, 115, 0.5);
   --gray-muted: #d9dbe2;
+  --charcoal: #34373f;
 
   .gray-muted {
     color: var(--gray-muted)
@@ -41,18 +42,19 @@
 
   /* stripe links-table-row */
   .links-table-row:nth-child(odd) {
-    background-color: var(--navy-dark) !important;
+    background-color: var(--background) !important;
   }
 
   .links-table .r-table-row * {
     background-color: var(--navy-dark) !important;
   }
 
+  /* --navy-dark sets the bg to a blue-ish background in dark mode */
   #root {
-    background-color: var(--navy-dark) !important;
+    background-color: var(--background) !important;
   }
 
   body {
-    background-color: var(--navy-dark) !important;
+    background-color: var(--background) !important;
   }
 }
