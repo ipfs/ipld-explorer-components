@@ -1,0 +1,60 @@
+/* dark theme styles for the explore page */
+:root {
+  --element-bg: #fbfbfb;
+  --text: #111111;
+  --border-color: rgba(0, 0, 0, 0.1);
+}
+
+[data-theme="dark"] {
+  --background: #181a1b;
+  --text: #e8e6e3;
+  --element-bg: #1a1c1e;
+  --navy-dark: #0b3a53;
+  --navy-text-color: rgb(202, 198, 191);
+  --snow-muted: rgb(28, 30, 31);
+  --border-color: rgba(140, 130, 115, 0.5);
+  --gray-muted: #d9dbe2;
+  --charcoal: #34373f;
+
+  .gray-muted {
+    color: var(--gray-muted)
+  }
+
+  /* style for the react-inpector package that ObjectInfo uses */
+  .r-inspector {
+    background-color: var(--navy-dark) !important;
+  }
+
+  .r-inspector ol *, li * {
+    background-color: var(--element-bg) !important;
+    color: var(--navy-text-color) !important;
+  }
+
+  .joyride-explorer-crumbs * {
+    color: var(--text) !important;
+    background-color: var(--navy-dark) !important;
+  }
+
+  .links-table * {
+    background: var(--element-bg) !important;
+    color: var(--text) !important;
+  }
+
+  /* stripe links-table-row */
+  .links-table-row:nth-child(odd) {
+    background-color: var(--background) !important;
+  }
+
+  .links-table .r-table-row * {
+    background-color: var(--navy-dark) !important;
+  }
+
+  /* --navy-dark sets the bg to a blue-ish background in dark mode */
+  #root {
+    background-color: var(--background) !important;
+  }
+
+  body {
+    background-color: var(--background) !important;
+  }
+}
