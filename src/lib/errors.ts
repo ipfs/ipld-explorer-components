@@ -1,9 +1,12 @@
 import { type TFunction } from 'i18next'
 
 export default class IpldExploreError extends Error {
+  // translation key to prevent minification issues
+  readonly translationKey: string
+
   constructor (private readonly options: Record<string, string | number>) {
     super()
-    this.name = this.constructor.name
+    this.translationKey ??= this.constructor.name
   }
 
   /**
@@ -17,8 +20,18 @@ export default class IpldExploreError extends Error {
    * t('NameOfErrorClassThatExtendsIpldExploreError')
    */
   toString (t: TFunction<'translation', 'translation'>): string {
-    return t(this.name, this.options)
+    return t(this.translationKey, this.options)
   }
 }
 
-export class BlockFetchTimeoutError extends IpldExploreError {}
+export class BlockFetchTimeoutError extends IpldExploreError {
+  readonly translationKey = 'BlockFetchTimeoutError'
+}
+
+export class BlockFetchError extends IpldExploreError {
+  readonly translationKey = 'BlockFetchError'
+}
+
+export class CidSyntaxError extends IpldExploreError {
+  readonly translationKey = 'CidSyntaxError'
+}
