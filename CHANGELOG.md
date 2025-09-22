@@ -1,3 +1,9 @@
+## [8.2.2](https://github.com/ipfs/ipld-explorer-components/compare/v8.2.1...v8.2.2) (2025-09-22)
+
+### Bug Fixes
+
+* error translation based on explicit string ([#482](https://github.com/ipfs/ipld-explorer-components/issues/482)) ([347d38c](https://github.com/ipfs/ipld-explorer-components/commit/347d38cca1b390c7bf70a1b24a6637adf6a2b12d))
+
 ## [8.2.1](https://github.com/ipfs/ipld-explorer-components/compare/v8.2.0...v8.2.1) (2025-09-22)
 
 ### Bug Fixes
