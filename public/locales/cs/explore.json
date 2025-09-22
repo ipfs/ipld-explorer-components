@@ -9,7 +9,7 @@
     "title": "Průzkumník - IPLD",
     "header": "Prozkoumejte Merkelův les",
     "leadParagraph": "Pro zobrazeni informací o IPLD uzlu vložte do pole vaše CID nebo si vyberte z několika příkladů.",
-    "noDataAvailable": "Nejsou k dispozici žádná data"
+    "noDataAvailable": "Žádná dostupná data"
   },
   "AboutIpld": {
     "paragraph1":"<0>IPLD je <1>datový model obsahově-adresovaného webu</1>. Umožňuje nám to zacházet se všemi datovými strukturami spojenými s hashem jako s podmnožinami jednotného informačního prostoru a sjednotit všechny datové modely, které propojují data s hashemi, jako instance IPLD.</0>",
@@ -69,6 +69,16 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Nepodařilo se načíst obsah do {timeout} s. Obnovte prosím stránku a zkuste to znovu nebo zkuste jiný CID."
+    "BlockFetchTimeoutError": "Nepodařilo se načíst obsah do {timeout} s. Obnovte prosím stránku a zkuste to znovu nebo zkuste jiný CID.",
+    "BlockFetchError": "Failed to fetch content: {error}. This could mean the content is not available on the network or there are connectivity issues.",
+    "CidSyntaxError": "Invalid CID format: {cid}. Please ensure you are using a valid CID.",
+    "checkIpfsNetwork": "Check content availability on IPFS Network",
+    "troubleshootingTips": {
+      "title": "Troubleshooting Tips",
+      "refresh": "Try refreshing the page",
+      "checkConnection": "Check your internet connection",
+      "tryLater": "Try again later - the content may still be propagating through the network",
+      "checkCidSyntax": "Verify that your CID is formatted correctly or that your CAR file is valid"
+    }
   }
 }

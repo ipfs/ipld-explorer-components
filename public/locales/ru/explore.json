@@ -9,7 +9,7 @@
     "title": "Обзор - IPLD",
     "header": "Обзор Merkle Forest",
     "leadParagraph": "Вставьте CID в поле, чтобы получить узел IPLD, на который он ссылается, или выберите отдельный набор данных.",
-    "noDataAvailable": "Нет доступных данных"
+    "noDataAvailable": "No data available"
   },
   "AboutIpld": {
     "paragraph1":"<0>IPLD это <1>модель данных веб с адресацией по содержимому.</1> Она предоставляет возможность обрабатывать все структуры данных с хеш-ссылками как предметы единого иформационного пространства, объединяя все модели данных, которые ссылаются на данные через хеш как экземпляры IPLD.</0>",
@@ -69,6 +69,16 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID."
+    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID.",
+    "BlockFetchError": "Failed to fetch content: {error}. This could mean the content is not available on the network or there are connectivity issues.",
+    "CidSyntaxError": "Invalid CID format: {cid}. Please ensure you are using a valid CID.",
+    "checkIpfsNetwork": "Check content availability on IPFS Network",
+    "troubleshootingTips": {
+      "title": "Troubleshooting Tips",
+      "refresh": "Try refreshing the page",
+      "checkConnection": "Check your internet connection",
+      "tryLater": "Try again later - the content may still be propagating through the network",
+      "checkCidSyntax": "Verify that your CID is formatted correctly or that your CAR file is valid"
+    }
   }
 }
