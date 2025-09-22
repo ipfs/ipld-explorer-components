@@ -20,8 +20,7 @@ export default class IpldExploreError extends Error {
    * t('NameOfErrorClassThatExtendsIpldExploreError')
    */
   toString (t: TFunction<'translation', 'translation'>): string {
-    const translationKey = this.translationKey ?? this.name
-    return t(translationKey, this.options)
+    return t(this.translationKey, this.options)
   }
 }
 
