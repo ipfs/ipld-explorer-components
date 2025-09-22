@@ -1,3 +1,9 @@
+## [8.2.1](https://github.com/ipfs/ipld-explorer-components/compare/v8.2.0...v8.2.1) (2025-09-22)
+
+### Bug Fixes
+
+* update ipld/helia/multiformat and peer deps ([#480](https://github.com/ipfs/ipld-explorer-components/issues/480)) ([9279891](https://github.com/ipfs/ipld-explorer-components/commit/92798916a4e9a9962485399a5383f139f8d5dfc9))
+
 ## [8.2.0](https://github.com/ipfs/ipld-explorer-components/compare/v8.1.4...v8.2.0) (2025-04-16)
 
 ### Features
