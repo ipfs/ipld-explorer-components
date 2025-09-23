@@ -10,9 +10,24 @@ const HeaderComponent: React.FC = () => {
   const activeColor = 'navy 0-100'
   const inActiveColor = 'navy o-50'
   const [exploreFormType, setExploreFormType] = useState('cid')
+  const [isDarkTheme, setIsDarkTheme] = useState(false)
   const [cidColor, setCidColor] = useState(activeColor)
   const [carColor, setCarColor] = useState(inActiveColor)
   const { t } = useTranslation('explore')
+
+  function toggleTheme (): void {
+    setIsDarkTheme(prev => {
+      const newTheme = !prev
+      document.documentElement.setAttribute('data-theme', newTheme ? 'dark' : 'light')
+      return newTheme
+    })
+  }
+
+  // apply theme on component mount
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', isDarkTheme ? 'dark' : 'light')
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   function handleOnChange (evt: MouseEvent<HTMLButtonElement>): void {
     const selectedType = evt.currentTarget.getAttribute('data-value')
@@ -32,7 +47,7 @@ const HeaderComponent: React.FC = () => {
   }
 
   return (
-    <header className='flex-l items-center pa3 bg-navy bb bw3 border-aqua tc tl-l'>
+    <header className='flex-l items-center pa3 bg-navy bb bw3 border-aqua tc tl-l mb4'>
       <a href='#/' title={t('homeLink')} className='flex-none v-mid'>
         {/* <img src={ipfsLogo} alt='IPFS' style={{height: 50, width: 117.5}} /> */}
       </a>
@@ -54,6 +69,12 @@ const HeaderComponent: React.FC = () => {
             </svg>
           </a>
         </div>
+        <button
+          onClick={toggleTheme}
+          className='f6 pointer ml3 ph3 pv2 dib white bg-navy br2 ba'
+          aria-label={isDarkTheme ? 'Switch to light theme' : 'Switch to dark theme'}>
+          {isDarkTheme ? '☀️' : '🌙'}
+        </button>
       </div>
     </header>
   )
