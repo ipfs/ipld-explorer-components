@@ -9,7 +9,7 @@
     "title": "Udforsk - IPLD",
     "header": "Udforsk Merkle-skoven",
     "leadParagraph": "Indsæt et CID i boksen for at fremsøge IPLD-klienten som adresseres, eller vælg fra et udstillet datasæt.",
-    "noDataAvailable": "Ingen data tilgængelige"
+    "noDataAvailable": "No data available"
   },
   "AboutIpld": {
     "paragraph1":"<0>IPLD er <1>datamodellen for det indholds-adresserbare net.</1> Hvilket gør os i stand til at behandle alle hash-linkede data-strukturer som undergrupper hjemhørende under et fælles informations-rum, der kan kombinere alle datamodeller som linker til data via hashes, som instanser af IPLD</0> ",
@@ -69,6 +69,16 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID."
+    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID.",
+    "BlockFetchError": "Failed to fetch content: {error}. This could mean the content is not available on the network or there are connectivity issues.",
+    "CidSyntaxError": "Invalid CID format: {cid}. Please ensure you are using a valid CID.",
+    "checkIpfsNetwork": "Check content availability on IPFS Network",
+    "troubleshootingTips": {
+      "title": "Troubleshooting Tips",
+      "refresh": "Try refreshing the page",
+      "checkConnection": "Check your internet connection",
+      "tryLater": "Try again later - the content may still be propagating through the network",
+      "checkCidSyntax": "Verify that your CID is formatted correctly or that your CAR file is valid"
+    }
   }
 }
