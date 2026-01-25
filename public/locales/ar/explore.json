@@ -9,7 +9,7 @@
     "title": "استكشاف - IPLD",
     "header": "استكشاف غابة ميركل",
     "leadParagraph": "قم بلصق CID في المربع لجلب عقدة IPLD التي تتناولها ، أو اختر مجموعة بيانات مميزة.",
-    "noDataAvailable": "لا توجد بيانات متاحة"
+    "noDataAvailable": "No data available"
   },
   "AboutIpld": {
     "paragraph1":" <0> IPLD هو <1> نموذج البيانات للويب القابل للمحتوى. </1> يسمح لنا بمعالجة جميع تراكيب البيانات المرتبطة بالتجزئة على أنها مجموعات فرعية من مساحة المعلومات الموحدة ، وتوحيد جميع نماذج البيانات التي تربط البيانات بالتجزئة مثل أمثلة IPLD.</0>",
@@ -69,6 +69,16 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID."
+    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID.",
+    "BlockFetchError": "Failed to fetch content: {error}. This could mean the content is not available on the network or there are connectivity issues.",
+    "CidSyntaxError": "Invalid CID format: {cid}. Please ensure you are using a valid CID.",
+    "checkIpfsNetwork": "Check content availability on IPFS Network",
+    "troubleshootingTips": {
+      "title": "Troubleshooting Tips",
+      "refresh": "Try refreshing the page",
+      "checkConnection": "Check your internet connection",
+      "tryLater": "Try again later - the content may still be propagating through the network",
+      "checkCidSyntax": "Verify that your CID is formatted correctly or that your CAR file is valid"
+    }
   }
 }

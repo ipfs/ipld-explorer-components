@@ -9,7 +9,7 @@
     "title": "Explorează - IPDL",
     "header": "Explorează Pădurea Merkle",
     "leadParagraph": "Introdu un CID pentru a obține un nod IPLD adresat sau alege un set de date reprezentativ.",
-    "noDataAvailable": "Nu sunt date disponibile"
+    "noDataAvailable": "No data available"
   },
   "AboutIpld": {
     "paragraph1":"<0>IPLD este <1>modelul de date a web-ului a cărui conținut este adresabil.</1> Ne permite să tratăm toate structurile de date hash-linked ca subseturi ale unui spațiu informațional unificat, unificând toate modelele de date care leagă datele cu hash-urile ca instanțe ale IPLD.</0>",
@@ -69,6 +69,16 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID."
+    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID.",
+    "BlockFetchError": "Failed to fetch content: {error}. This could mean the content is not available on the network or there are connectivity issues.",
+    "CidSyntaxError": "Invalid CID format: {cid}. Please ensure you are using a valid CID.",
+    "checkIpfsNetwork": "Check content availability on IPFS Network",
+    "troubleshootingTips": {
+      "title": "Troubleshooting Tips",
+      "refresh": "Try refreshing the page",
+      "checkConnection": "Check your internet connection",
+      "tryLater": "Try again later - the content may still be propagating through the network",
+      "checkCidSyntax": "Verify that your CID is formatted correctly or that your CAR file is valid"
+    }
   }
 }

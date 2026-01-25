@@ -9,7 +9,7 @@
     "title": "Esplora - IPLD",
     "header": "Esplora la Merkle Forest",
     "leadParagraph": "Incolla un CID nella casella di testo per recuperare il nodo IPDL, oppure scegli un dataset in primo piano.",
-    "noDataAvailable": "Nessun dato disponibile"
+    "noDataAvailable": "No data available"
   },
   "AboutIpld": {
     "paragraph1":"<0>IPLD è <1>il modello di dati del web content-addressable.</1> Esso ci permette di trattare tutte le strutture di dati hash-linked come sottoinsieme di uno spazio d'informazione unificato, unendo tutti i modelli di dati che collegano dati con gli hash come istanze di IPLD.</0>",
@@ -69,6 +69,16 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID."
+    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID.",
+    "BlockFetchError": "Failed to fetch content: {error}. This could mean the content is not available on the network or there are connectivity issues.",
+    "CidSyntaxError": "Invalid CID format: {cid}. Please ensure you are using a valid CID.",
+    "checkIpfsNetwork": "Check content availability on IPFS Network",
+    "troubleshootingTips": {
+      "title": "Troubleshooting Tips",
+      "refresh": "Try refreshing the page",
+      "checkConnection": "Check your internet connection",
+      "tryLater": "Try again later - the content may still be propagating through the network",
+      "checkCidSyntax": "Verify that your CID is formatted correctly or that your CAR file is valid"
+    }
   }
 }
