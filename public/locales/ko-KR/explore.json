@@ -9,7 +9,7 @@
     "title": "탐색 - IPLD",
     "header": "Merkle Forest 탐색",
     "leadParagraph": "CID를 붙여 넣고 주소가 지정된 IPLD 노드를 가져오거나, 추천 데이터셋을 선택하세요.",
-    "noDataAvailable": "데이터가 없습니다"
+    "noDataAvailable": "No data available"
   },
   "AboutIpld": {
     "paragraph1":"<0>IPLD는 <1>콘텐츠에 주소를 지정가능한 웹의 데이터 모델입니다.</1>이를 통해서 모든 해시-연결된 데이터 구조는 통합된 정보 공간에서 서브셋으로 존재할 수 있습니다. 해시가 있는 데이터를 IPLD의 인스턴스로 모든 데이터 모델을 통합 할 수 있습니다.</0>",
@@ -69,6 +69,16 @@
     }
   },
   "errors": {
-    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID."
+    "BlockFetchTimeoutError": "Failed to fetch content in {timeout}s. Please refresh the page to retry or try a different CID.",
+    "BlockFetchError": "Failed to fetch content: {error}. This could mean the content is not available on the network or there are connectivity issues.",
+    "CidSyntaxError": "Invalid CID format: {cid}. Please ensure you are using a valid CID.",
+    "checkIpfsNetwork": "Check content availability on IPFS Network",
+    "troubleshootingTips": {
+      "title": "Troubleshooting Tips",
+      "refresh": "Try refreshing the page",
+      "checkConnection": "Check your internet connection",
+      "tryLater": "Try again later - the content may still be propagating through the network",
+      "checkCidSyntax": "Verify that your CID is formatted correctly or that your CAR file is valid"
+    }
   }
 }
