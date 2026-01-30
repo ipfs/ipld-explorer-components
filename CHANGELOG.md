@@ -1,3 +1,9 @@
+## [8.2.3](https://github.com/ipfs/ipld-explorer-components/compare/v8.2.2...v8.2.3) (2026-01-30)
+
+### Trivial Changes
+
+* pull new translations ([#481](https://github.com/ipfs/ipld-explorer-components/issues/481)) ([9423644](https://github.com/ipfs/ipld-explorer-components/commit/94236443ea41ad25e873e732aa621b603885baa1))
+
 ## [8.2.2](https://github.com/ipfs/ipld-explorer-components/compare/v8.2.1...v8.2.2) (2025-09-22)
 
 ### Bug Fixes
