@@ -46,14 +46,16 @@ interface RowProps {
 
 const Row: React.FC<RowProps> = ({ onLinkClick, startIndex, index, rowHeight, link }) => {
   const key = startIndex + index
-  const backgroundColor = key % 2 === 0 ? '#fff' : 'rgb(251, 251, 251)'
+  // const backgroundColor = key % 2 === 0 ? '#fff' : 'rgb(251, 251, 251)'
+
+  const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark'
 
   return (
     // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
     <div
       key={key}
-      className={`pv2 pointer items-center f7 ${styles.rowGrid} bb b--near-white`}
-      style={{ position: 'absolute', top: key * rowHeight, width: '100%', backgroundColor }}
+      className={`links-table-row pv2 pointer items-center f7 ${styles.rowGrid} bb`}
+      style={{ position: 'absolute', top: key * rowHeight, width: '100%', backgroundColor: isDarkTheme ? 'var(--navy-dark)' : '' }}
       onClick={() => { onLinkClick(link) }}
     >
       <div className={`mid-gray tr pr1 f7 ${styles.gridCellRow} monospace}`}>
@@ -75,7 +77,7 @@ interface HeaderProps {
 
 const Header: React.FC<HeaderProps> = () => {
   return (
-    <div className={`mid-gray ${styles.headerGrid} items-center pv2 fw1 tracked bb b--near-white`}>
+    <div className={`mid-gray ${styles.headerGrid} items-center pv2 fw1 tracked bb`}>
       <div className={`mid-gray tr pr1 f7 ${styles.gridCellHeader}`}>
         #
       </div>
@@ -131,7 +133,7 @@ const LargeLinksTable: React.FC<LargeLinksTableProps> = ({ onLinkClick, links, r
   const visibleLinks = links.slice(startIndex, endIndex)
 
   return (
-    <div className={`collapse br2 pv2 ph3 mv2 nl3 nr3 mh0-l f7 ${styles.linksTable}`}>
+    <div className={`collapse links-table br2 pv2 ph3 mv2 nl3 nr3 mh0-l f7 ${styles.linksTable}`}>
       <Header cidRowStyle={cidRowStyle ?? { width: tableWidth }} />
       <div
         ref={containerRef}

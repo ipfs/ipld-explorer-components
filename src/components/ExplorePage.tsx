@@ -13,6 +13,7 @@ import IpldGraph from './graph/IpldGraphCytoscape.js'
 import GraphCrumb from './graph-crumb/GraphCrumb.js'
 import ComponentLoader from './loader/component-loader.js'
 import { ObjectInfo } from './object-info/ObjectInfo.js'
+import '../index.css'
 
 export const ExplorePage = ({
   runTour = false,
@@ -70,7 +71,7 @@ export const ExplorePage = ({
               ? (
                 <ObjectInfo
                   className='joyride-explorer-node'
-                  style={{ background: '#FBFBFB' }}
+                  style={{ background: 'var(--element-bg, #fbfbfb)' }}
                   cid={targetNode.cid}
                   localPath={localPath}
                   size={targetNode.size}
@@ -95,7 +96,7 @@ export const ExplorePage = ({
               ? (
                 <CidInfo
                   className='joyride-explorer-cid'
-                  style={{ background: '#FBFBFB', overflow: 'hidden' }}
+                  style={{ background: 'var(--element-bg, #fbfbfb)', overflow: 'hidden' }}
                   cid={targetNode.cid}
                 />
                 )

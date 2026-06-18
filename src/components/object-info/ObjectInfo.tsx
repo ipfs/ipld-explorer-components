@@ -3,21 +3,23 @@ import theme from 'ipfs-css/theme.json'
 import { CID } from 'multiformats'
 import React, { type HTMLProps } from 'react'
 import { useTranslation } from 'react-i18next'
-import { ObjectInspector, chromeLight } from 'react-inspector'
+import { ObjectInspector, chromeDark, chromeLight } from 'react-inspector'
 import getCodecNameFromCode from '../../lib/get-codec-name-from-code'
 import { type NormalizedDagNode, type UnixFsNodeDataWithNumbers } from '../../types.js'
 import LargeLinksTable, { type LinkObject, type LargeLinksTableProps } from './links-table'
 
 const humansize = partial({ round: 0 })
 
-const objectInspectorTheme = {
-  ...chromeLight,
-  BASE_FONT_FAMILY: 'Consolas, Menlo, monospace',
-  TREENODE_FONT_FAMILY: 'Consolas, Menlo, monospace',
-  BASE_FONT_SIZE: '13px',
-  BASE_LINE_HEIGHT: '19px',
-  TREENODE_FONT_SIZE: '13px',
-  TREENODE_LINE_HEIGHT: '19px'
+const getObjectInspectorTheme = (isDarkTheme: boolean): typeof chromeDark | typeof chromeLight => {
+  return {
+    ...(isDarkTheme ? chromeDark : chromeLight),
+    BASE_FONT_FAMILY: 'Consolas, Menlo, monospace',
+    TREENODE_FONT_FAMILY: 'Consolas, Menlo, monospace',
+    BASE_FONT_SIZE: '13px',
+    BASE_LINE_HEIGHT: 15,
+    TREENODE_FONT_SIZE: '13px',
+    TREENODE_LINE_HEIGHT: 1.5
+  }
 }
 
 // Use https://github.com/multiformats/multicodec/blob/master/table.csv to get full name.
@@ -129,6 +131,8 @@ export const ObjectInfo: React.FC<ObjectInfoProps> = ({ className, type, cid, lo
     nodeStyleType = getCodecNameFromCode(CID.parse(cid).code) ?? type
   }
 
+  const isDarkTheme = document.documentElement.getAttribute('data-theme') === 'dark'
+
   return (
     <section className={`pa4 sans-serif ${className}`} {...props}>
       <h2 className='ma0 lh-title f4 fw4 montserrat pb2' title={nodeStyleType}>
@@ -192,9 +196,9 @@ export const ObjectInfo: React.FC<ObjectInfoProps> = ({ className, type, cid, lo
         {data == null
           ? null
           : (
-          <div className='pa3 mt2 bg-white f5 nl3 nr3 mh0-l overflow-x-auto'>
+          <div className='pa3 mt2 r-inspector bg-white f5 nl3 nr3 mh0-l overflow-x-auto' style={{ background: 'var(--gray-muted)' }}>
             {/* @ts-expect-error - object inspector types are wrong. see https://www.npmjs.com/package/react-inspector#theme  */}
-            <ObjectInspector showMaxKeys={100} data={getObjectInspectorData(data)} theme={objectInspectorTheme} expandPaths={toExpandPathsNotation(localPath)} />
+            <ObjectInspector showMaxKeys={100} data={getObjectInspectorData(data)} theme={getObjectInspectorTheme(isDarkTheme)} expandPaths={toExpandPathsNotation(localPath)} />
           </div>
             )}
       </div>
